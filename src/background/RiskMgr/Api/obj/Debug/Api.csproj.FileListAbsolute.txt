@@ -1,1 +1,8 @@
 F:\Source Codes\RiskMgr\RiskMgr\src\background\RiskMgr\Api\bin\Debug\Api.exe.config
+E:\AppLib\RiskMgr\src\background\RiskMgr\Bin\Api.dll
+E:\AppLib\RiskMgr\src\background\RiskMgr\Bin\Api.pdb
+E:\AppLib\RiskMgr\src\background\RiskMgr\Api\obj\Debug\Api.csprojResolveAssemblyReference.cache
+E:\AppLib\RiskMgr\src\background\RiskMgr\Api\obj\Debug\Api.Properties.Resources.resources
+E:\AppLib\RiskMgr\src\background\RiskMgr\Api\obj\Debug\Api.csproj.GenerateResource.Cache
+E:\AppLib\RiskMgr\src\background\RiskMgr\Api\obj\Debug\Api.dll
+E:\AppLib\RiskMgr\src\background\RiskMgr\Api\obj\Debug\Api.pdb
