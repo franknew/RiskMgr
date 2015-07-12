@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>风险管理</title>
+  <title>管理</title>
   <link href="style/bootstrap/css/bootstrap.css" rel="stylesheet" />
   <link href="style/font-awesome/css/font-awesome.css" rel="stylesheet">
   <link href="style/cleanzone.css" rel="stylesheet" />
@@ -20,7 +20,7 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="fa fa-gear"></span>
         </button>
-        <a class="navbar-brand" href="#"><span>风险管理</span></a>
+        <a class="navbar-brand" href="#"><span>manager</span></a>
       </div>
       <div class="navbar-collapse collapse">
         <!--
@@ -73,7 +73,7 @@
         -->
         <ul class="nav navbar-nav navbar-right user-nav">
           <li class="dropdown profile_menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="images/demo/avatar2.jpg" /><span>Jeff Hanneman</span> <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="images/avatar/10.png" width="30" height="30" /><span>username</span> <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="#">My Account</a></li>
               <li><a href="#">Profile</a></li>
@@ -95,27 +95,15 @@
         <div class="menu-space">
           <div class="content">
             <div class="side-user">
-              <div class="avatar"><img src="images/demo/avatar1_50.jpg" alt="Avatar" /></div>
+              <div class="avatar"><img src="images/avatar/10.png" width="50" height="50" alt="Avatar" /></div>
               <div class="info">
-                <a href="#">李振文</a>
+                <a href="#">username</a>
               </div>
             </div>
             <ul class="cl-vnavigation">
-              <li><a href="#"><i class="fa fa-home"></i><span>首页</span></a></li>
-              <li><a href="#"><i class="fa fa-smile-o"></i><span>UI Elements</span></a>
-                <ul class="sub-menu">
-                  <li><a href="ui-elements.html">General</a></li>
-                  <li><a href="ui-buttons.html">Buttons</a></li>
-                  <li><a href="ui-modals.html"><span class="label label-primary pull-right">New</span> Modals</a></li>
-                  <li><a href="ui-notifications.html"><span class="label label-primary pull-right">New</span> Notifications</a></li>
-                  <li><a href="ui-icons.html">Icons</a></li>
-                  <li><a href="ui-grid.html">Grid</a></li>
-                  <li><a href="ui-tabs-accordions.html">Tabs & Acordions</a></li>
-                  <li><a href="ui-nestable-lists.html">Nestable Lists</a></li>
-                  <li><a href="ui-treeview.html">Tree View</a></li>
-                </ul>
-              </li>
-              <li><a href="#"><i class="fa fa-list-alt"></i><span>Forms</span></a>
+              <li><a href="#page=home"><i class="fa fa-home"></i><span>首页</span></a></li>
+              <li><a href="#page=page2"><i class="fa fa-smile-o"></i><span>UI Elements</span></a></li>
+              <li><a href="#page=xxx"><i class="fa fa-list-alt"></i><span>Forms</span></a>
                 <ul class="sub-menu">
                   <li><a href="form-elements.html">Components</a></li>
                   <li><a href="form-validation.html">Validation</a></li>
@@ -168,23 +156,27 @@
             </ul>
           </div>
         </div>
+        <!--
         <div class="text-right collapse-button" style="padding:7px 9px;">
           <input type="text" class="form-control search" placeholder="Search..." />
           <button id="sidebar-collapse" class="btn btn-default" style=""><i style="color:#fff;" class="fa fa-angle-left"></i></button>
         </div>
+        -->
       </div>
     </div>
 
     <div class="container-fluid" id="pcont">
       <div class="cl-mcont">
-        内容内容
-
+        <div id="J_Body">
+          <h3 class="text-center">Loading...</h3>
+        </div>
       </div>
     </div> 
     
   </div>
 
-
+  <script src="script/lib/seajs-3.0.0/sea-debug.js"></script>
+  <script src="script/site.js"></script>
 </body>
 
 </html>
