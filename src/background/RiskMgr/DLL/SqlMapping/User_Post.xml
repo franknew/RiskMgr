@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="User_Post" type="RiskMgr.Model.User_Post" />
+    <typeAlias alias="User_PostQueryForm" type="RiskMgr.Form.User_PostQueryForm" />
+    <typeAlias alias="User_PostUpdateForm" type="RiskMgr.Form.User_PostUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryUser_Post" resultClass="User_Post" parameterClass="User_PostQueryForm">
+    SELECT * FROM User_Post WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        [UserID]=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostID">
+        [PostID]=#PostID#
+    </isNotNull>
+  </select>
+  <insert id="AddUser_Post" parameterClass="User_Post">
+  INSERT INTO User_Post
+  (
+    [ID],
+    [UserID],
+    [PostID]
+  )
+  VALUES
+  (
+        #ID#,
+        #UserID#,
+        #PostID#
+  )
+  </insert>
+  <update id="UpdateUser_Post" parameterClass="User_PostUpdateForm">
+  <isNotNull property="User_Post">
+  UPDATE User_Post SET 
+        <isNotNull property="User_Post.UserID">
+        [UserID]=#User_Post.UserID#,
+        </isNotNull>
+        <isNotNull property="User_Post.PostID">
+        [PostID]=#User_Post.PostID#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="User_PostQueryForm.ID">
+        [ID]=#User_PostQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="User_PostQueryForm.UserID">
+        [UserID]=#User_PostQueryForm.UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="User_PostQueryForm.PostID">
+        [PostID]=#User_PostQueryForm.PostID#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteUser_Post" parameterClass="User_PostQueryForm">
+    DELETE FROM User_Post WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        [UserID]=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostID">
+        [PostID]=#PostID#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

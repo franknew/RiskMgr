@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IBatisNet.Common, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\IBatisNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="IBatisNet.DataMapper, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\IBatisNet.DataMapper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,7 +47,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="sql.sql" />
+    <Compile Include="Dao\BaseDao.cs" />
+    <Compile Include="Dao\MenuDao.cs" />
+    <Compile Include="Dao\Menu_RoleDao.cs" />
+    <Compile Include="Dao\PostDao.cs" />
+    <Compile Include="Dao\RoleDao.cs" />
+    <Compile Include="Dao\UserDao.cs" />
+    <Compile Include="Dao\UserInfoDao.cs" />
+    <Compile Include="Dao\User_PostDao.cs" />
+    <Compile Include="Dao\User_RoleDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="SqlMapping\Menu.xml" />
+    <Content Include="SqlMapping\Menu_Role.xml" />
+    <Content Include="SqlMapping\Post.xml" />
+    <Content Include="SqlMapping\Role.xml" />
+    <Content Include="SqlMapping\User.xml" />
+    <Content Include="SqlMapping\UserInfo.xml" />
+    <Content Include="SqlMapping\User_Post.xml" />
+    <Content Include="SqlMapping\User_Role.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Model\RiskMgr.Model.csproj">
+      <Project>{d4979401-dab1-4043-9aa2-3fba238103e0}</Project>
+      <Name>RiskMgr.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

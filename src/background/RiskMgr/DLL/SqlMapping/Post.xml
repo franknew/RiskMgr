@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Post" type="RiskMgr.Model.Post" />
+    <typeAlias alias="PostQueryForm" type="RiskMgr.Form.PostQueryForm" />
+    <typeAlias alias="PostUpdateForm" type="RiskMgr.Form.PostUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryPost" resultClass="Post" parameterClass="PostQueryForm">
+    SELECT * FROM Post WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name] LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        [Remark] LIKE '%$Remark$%'
+    </isNotNull>
+  </select>
+  <insert id="AddPost" parameterClass="Post">
+  INSERT INTO Post
+  (
+    [ID],
+    [Name],
+    [Creator],
+    [CreateTime],
+    [Remark]
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#
+  )
+  </insert>
+  <update id="UpdatePost" parameterClass="PostUpdateForm">
+  <isNotNull property="Post">
+  UPDATE Post SET 
+        <isNotNull property="Post.Name">
+        [Name]=#Post.Name#,
+        </isNotNull>
+        <isNotNull property="Post.Creator">
+        [Creator]=#Post.Creator#,
+        </isNotNull>
+        <isNotNull property="Post.CreateTime">
+        [CreateTime]=#Post.CreateTime#,
+        </isNotNull>
+        <isNotNull property="Post.Remark">
+        [Remark]=#Post.Remark#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="PostQueryForm.ID">
+        [ID]=#PostQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostQueryForm.Name">
+        [Name] LIKE '%$PostQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostQueryForm.Creator">
+        [Creator]=#PostQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostQueryForm.CreateTime_Start">
+        [CreateTime]&gt;=#PostQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostQueryForm.CreateTime_End">
+        [CreateTime]&lt;=#PostQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostQueryForm.Remark">
+        [Remark] LIKE '%$PostQueryForm.Remark$%'
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeletePost" parameterClass="PostQueryForm">
+    DELETE FROM Post WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name]=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        [Remark]=#Remark#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

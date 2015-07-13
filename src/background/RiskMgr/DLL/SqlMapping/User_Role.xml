@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="User_Role" type="RiskMgr.Model.User_Role" />
+    <typeAlias alias="User_RoleQueryForm" type="RiskMgr.Form.User_RoleQueryForm" />
+    <typeAlias alias="User_RoleUpdateForm" type="RiskMgr.Form.User_RoleUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryUser_Role" resultClass="User_Role" parameterClass="User_RoleQueryForm">
+    SELECT * FROM User_Role WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        [UserID]=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleID">
+        [RoleID]=#RoleID#
+    </isNotNull>
+  </select>
+  <insert id="AddUser_Role" parameterClass="User_Role">
+  INSERT INTO User_Role
+  (
+    [ID],
+    [UserID],
+    [RoleID]
+  )
+  VALUES
+  (
+        #ID#,
+        #UserID#,
+        #RoleID#
+  )
+  </insert>
+  <update id="UpdateUser_Role" parameterClass="User_RoleUpdateForm">
+  <isNotNull property="User_Role">
+  UPDATE User_Role SET 
+        <isNotNull property="User_Role.UserID">
+        [UserID]=#User_Role.UserID#,
+        </isNotNull>
+        <isNotNull property="User_Role.RoleID">
+        [RoleID]=#User_Role.RoleID#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="User_RoleQueryForm.ID">
+        [ID]=#User_RoleQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="User_RoleQueryForm.UserID">
+        [UserID]=#User_RoleQueryForm.UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="User_RoleQueryForm.RoleID">
+        [RoleID]=#User_RoleQueryForm.RoleID#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteUser_Role" parameterClass="User_RoleQueryForm">
+    DELETE FROM User_Role WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        [UserID]=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleID">
+        [RoleID]=#RoleID#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>
