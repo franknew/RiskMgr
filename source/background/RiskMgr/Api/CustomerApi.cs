@@ -1,10 +1,12 @@
-﻿using System;
+﻿using SOAFramework.Service.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace RiskMgr.Api
 {
+    [ServiceLayer(Module="RiskMgr.CustomerApi")]
     public class CustomerApi
     {
         public int Add()

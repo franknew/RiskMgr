@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\Bin\RiskMgr.Api.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,7 +47,8 @@
     <Reference Include="SOAFramework.Service.Core">
       <HintPath>..\CommonDll\SOAFramework.Service.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SOAFramework.Service.Core.Model">
+    <Reference Include="SOAFramework.Service.Core.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9a50c39ae211549b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CommonDll\SOAFramework.Service.Core.Model.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -62,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthFilter.cs" />
     <Compile Include="CustomerApi.cs" />
     <Compile Include="LogonApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

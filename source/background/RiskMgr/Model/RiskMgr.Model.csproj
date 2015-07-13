@@ -46,6 +46,7 @@
     <Compile Include="Entity\Role.cs" />
     <Compile Include="Entity\SimpleEntity.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Entity\UserEntireInfo.cs" />
     <Compile Include="Entity\UserInfo.cs" />
     <Compile Include="Entity\User_Post.cs" />
     <Compile Include="Entity\User_Role.cs" />
