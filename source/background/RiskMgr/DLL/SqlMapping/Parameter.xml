@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Parameter" type="RiskMgr.Model.Parameter" />
+    <typeAlias alias="ParameterQueryForm" type="RiskMgr.Form.ParameterQueryForm" />
+    <typeAlias alias="ParameterUpdateForm" type="RiskMgr.Form.ParameterUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryParameter" resultClass="Parameter" parameterClass="ParameterQueryForm">
+    SELECT * FROM Parameter WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ContextID">
+        [ContextID]=#ContextID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Key">
+        [Key]=#Key#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Value">
+        [Value]=#Value#
+    </isNotNull>
+  </select>
+  <insert id="AddParameter" parameterClass="Parameter">
+  INSERT INTO Parameter
+  (
+    [ID],
+    [ContextID],
+    [Key],
+    [Value]
+  )
+  VALUES
+  (
+        #ID#,
+        #ContextID#,
+        #Key#,
+        #Value#
+  )
+  </insert>
+  <update id="UpdateParameter" parameterClass="ParameterUpdateForm">
+  <isNotNull property="Parameter">
+  UPDATE Parameter SET 
+        <isNotNull property="Parameter.ContextID">
+        [ContextID]=#Parameter.ContextID#,
+        </isNotNull>
+        <isNotNull property="Parameter.Key">
+        [Key]=#Parameter.Key#,
+        </isNotNull>
+        <isNotNull property="Parameter.Value">
+        [Value]=#Parameter.Value#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="ParameterQueryForm.ID">
+        [ID]=#ParameterQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ParameterQueryForm.ContextID">
+        [ContextID]=#ParameterQueryForm.ContextID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ParameterQueryForm.Key">
+        [Key]=#ParameterQueryForm.Key#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ParameterQueryForm.Value">
+        [Value]=#ParameterQueryForm.Value#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteParameter" parameterClass="ParameterQueryForm">
+    DELETE FROM Parameter WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ContextID">
+        [ContextID]=#ContextID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Key">
+        [Key]=#Key#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Value">
+        [Value]=#Value#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

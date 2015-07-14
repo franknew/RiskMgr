@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="User" type="RiskMgr.Model.User" />
+    <typeAlias alias="UserQueryForm" type="RiskMgr.Form.UserQueryForm" />
+    <typeAlias alias="UserUpdateForm" type="RiskMgr.Form.UserUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryUser" resultClass="User" parameterClass="UserQueryForm">
+    SELECT * FROM User WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name] LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Password">
+        [Password]=#Password#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        [Enabled]=#Enabled#
+    </isNotNull>
+  </select>
+  <insert id="AddUser" parameterClass="User">
+  INSERT INTO User
+  (
+    [ID],
+    [Name],
+    [Creator],
+    [CreateTime],
+    [Password],
+    [Enabled]
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Password#,
+        #Enabled#
+  )
+  </insert>
+  <update id="UpdateUser" parameterClass="UserUpdateForm">
+  <isNotNull property="User">
+  UPDATE User SET 
+        <isNotNull property="User.Name">
+        [Name]=#User.Name#,
+        </isNotNull>
+        <isNotNull property="User.Creator">
+        [Creator]=#User.Creator#,
+        </isNotNull>
+        <isNotNull property="User.CreateTime">
+        [CreateTime]=#User.CreateTime#,
+        </isNotNull>
+        <isNotNull property="User.Password">
+        [Password]=#User.Password#,
+        </isNotNull>
+        <isNotNull property="User.Enabled">
+        [Enabled]=#User.Enabled#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="UserQueryForm.ID">
+        [ID]=#UserQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserQueryForm.Name">
+        [Name] LIKE '%$UserQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserQueryForm.Creator">
+        [Creator]=#UserQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserQueryForm.CreateTime_Start">
+        [CreateTime]&gt;=#UserQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserQueryForm.CreateTime_End">
+        [CreateTime]&lt;=#UserQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserQueryForm.Password">
+        [Password]=#UserQueryForm.Password#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserQueryForm.Enabled">
+        [Enabled]=#UserQueryForm.Enabled#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteUser" parameterClass="UserQueryForm">
+    DELETE FROM User WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name]=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Password">
+        [Password]=#Password#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        [Enabled]=#Enabled#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

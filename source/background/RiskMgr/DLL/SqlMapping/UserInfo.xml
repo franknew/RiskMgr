@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="UserInfo" type="RiskMgr.Model.UserInfo" />
+    <typeAlias alias="UserInfoQueryForm" type="RiskMgr.Form.UserInfoQueryForm" />
+    <typeAlias alias="UserInfoUpdateForm" type="RiskMgr.Form.UserInfoUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryUserInfo" resultClass="UserInfo" parameterClass="UserInfoQueryForm">
+    SELECT * FROM UserInfo WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="QQ">
+        [QQ]=#QQ#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Mobile">
+        [Mobile]=#Mobile#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WX">
+        [WX]=#WX#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        [Address]=#Address#
+    </isNotNull>
+  </select>
+  <insert id="AddUserInfo" parameterClass="UserInfo">
+  INSERT INTO UserInfo
+  (
+    [ID],
+    [QQ],
+    [Mobile],
+    [WX],
+    [Address]
+  )
+  VALUES
+  (
+        #ID#,
+        #QQ#,
+        #Mobile#,
+        #WX#,
+        #Address#
+  )
+  </insert>
+  <update id="UpdateUserInfo" parameterClass="UserInfoUpdateForm">
+  <isNotNull property="UserInfo">
+  UPDATE UserInfo SET 
+        <isNotNull property="UserInfo.QQ">
+        [QQ]=#UserInfo.QQ#,
+        </isNotNull>
+        <isNotNull property="UserInfo.Mobile">
+        [Mobile]=#UserInfo.Mobile#,
+        </isNotNull>
+        <isNotNull property="UserInfo.WX">
+        [WX]=#UserInfo.WX#,
+        </isNotNull>
+        <isNotNull property="UserInfo.Address">
+        [Address]=#UserInfo.Address#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="UserInfoQueryForm.ID">
+        [ID]=#UserInfoQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserInfoQueryForm.QQ">
+        [QQ]=#UserInfoQueryForm.QQ#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserInfoQueryForm.Mobile">
+        [Mobile]=#UserInfoQueryForm.Mobile#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserInfoQueryForm.WX">
+        [WX]=#UserInfoQueryForm.WX#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserInfoQueryForm.Address">
+        [Address]=#UserInfoQueryForm.Address#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteUserInfo" parameterClass="UserInfoQueryForm">
+    DELETE FROM UserInfo WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="QQ">
+        [QQ]=#QQ#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Mobile">
+        [Mobile]=#Mobile#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WX">
+        [WX]=#WX#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        [Address]=#Address#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

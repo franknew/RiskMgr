@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Activity" type="RiskMgr.Model.Activity" />
+    <typeAlias alias="ActivityQueryForm" type="RiskMgr.Form.ActivityQueryForm" />
+    <typeAlias alias="ActivityUpdateForm" type="RiskMgr.Form.ActivityUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryActivity" resultClass="Activity" parameterClass="ActivityQueryForm">
+    SELECT * FROM Activity WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionID">
+        [ActivityDefinitionID]=#ActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name] LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        [Page]=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        [Type]=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        [WorkflowID]=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Status">
+        [Status]=#Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_Start">
+        [ReadTime]&gt;=#ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_End">
+        [ReadTime]&lt;=#ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_Start">
+        [ProcessTime]&gt;=#ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_End">
+        [ProcessTime]&lt;=#ProcessTime_End#
+    </isNotNull>
+  </select>
+  <insert id="AddActivity" parameterClass="Activity">
+  INSERT INTO Activity
+  (
+    [ID],
+    [ActivityDefinitionID],
+    [Name],
+    [Page],
+    [Creator],
+    [CreateTime],
+    [Type],
+    [WorkflowID],
+    [Status],
+    [ReadTime],
+    [ProcessTime]
+  )
+  VALUES
+  (
+        #ID#,
+        #ActivityDefinitionID#,
+        #Name#,
+        #Page#,
+        #Creator#,
+        #CreateTime#,
+        #Type#,
+        #WorkflowID#,
+        #Status#,
+        #ReadTime#,
+        #ProcessTime#
+  )
+  </insert>
+  <update id="UpdateActivity" parameterClass="ActivityUpdateForm">
+  <isNotNull property="Activity">
+  UPDATE Activity SET 
+        <isNotNull property="Activity.ActivityDefinitionID">
+        [ActivityDefinitionID]=#Activity.ActivityDefinitionID#,
+        </isNotNull>
+        <isNotNull property="Activity.Name">
+        [Name]=#Activity.Name#,
+        </isNotNull>
+        <isNotNull property="Activity.Page">
+        [Page]=#Activity.Page#,
+        </isNotNull>
+        <isNotNull property="Activity.Creator">
+        [Creator]=#Activity.Creator#,
+        </isNotNull>
+        <isNotNull property="Activity.CreateTime">
+        [CreateTime]=#Activity.CreateTime#,
+        </isNotNull>
+        <isNotNull property="Activity.Type">
+        [Type]=#Activity.Type#,
+        </isNotNull>
+        <isNotNull property="Activity.WorkflowID">
+        [WorkflowID]=#Activity.WorkflowID#,
+        </isNotNull>
+        <isNotNull property="Activity.Status">
+        [Status]=#Activity.Status#,
+        </isNotNull>
+        <isNotNull property="Activity.ReadTime">
+        [ReadTime]=#Activity.ReadTime#,
+        </isNotNull>
+        <isNotNull property="Activity.ProcessTime">
+        [ProcessTime]=#Activity.ProcessTime#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="ActivityQueryForm.ID">
+        [ID]=#ActivityQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ActivityDefinitionID">
+        [ActivityDefinitionID]=#ActivityQueryForm.ActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Name">
+        [Name] LIKE '%$ActivityQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Page">
+        [Page]=#ActivityQueryForm.Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Creator">
+        [Creator]=#ActivityQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.CreateTime_Start">
+        [CreateTime]&gt;=#ActivityQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.CreateTime_End">
+        [CreateTime]&lt;=#ActivityQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Type">
+        [Type]=#ActivityQueryForm.Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.WorkflowID">
+        [WorkflowID]=#ActivityQueryForm.WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Status">
+        [Status]=#ActivityQueryForm.Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ReadTime_Start">
+        [ReadTime]&gt;=#ActivityQueryForm.ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ReadTime_End">
+        [ReadTime]&lt;=#ActivityQueryForm.ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ProcessTime_Start">
+        [ProcessTime]&gt;=#ActivityQueryForm.ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ProcessTime_End">
+        [ProcessTime]&lt;=#ActivityQueryForm.ProcessTime_End#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteActivity" parameterClass="ActivityQueryForm">
+    DELETE FROM Activity WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionID">
+        [ActivityDefinitionID]=#ActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name]=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        [Page]=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        [Type]=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        [WorkflowID]=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Status">
+        [Status]=#Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_Start">
+        [ReadTime]&gt;=#ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_End">
+        [ReadTime]&lt;=#ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_Start">
+        [ProcessTime]&gt;=#ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_End">
+        [ProcessTime]&lt;=#ProcessTime_End#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

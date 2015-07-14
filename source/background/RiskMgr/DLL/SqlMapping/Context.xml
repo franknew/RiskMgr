@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Context" type="RiskMgr.Model.Context" />
+    <typeAlias alias="ContextQueryForm" type="RiskMgr.Form.ContextQueryForm" />
+    <typeAlias alias="ContextUpdateForm" type="RiskMgr.Form.ContextUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryContext" resultClass="Context" parameterClass="ContextQueryForm">
+    SELECT * FROM Context WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        [WorkflowID]=#WorkflowID#
+    </isNotNull>
+  </select>
+  <insert id="AddContext" parameterClass="Context">
+  INSERT INTO Context
+  (
+    [ID],
+    [WorkflowID]
+  )
+  VALUES
+  (
+        #ID#,
+        #WorkflowID#
+  )
+  </insert>
+  <update id="UpdateContext" parameterClass="ContextUpdateForm">
+  <isNotNull property="Context">
+  UPDATE Context SET 
+        <isNotNull property="Context.WorkflowID">
+        [WorkflowID]=#Context.WorkflowID#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="ContextQueryForm.ID">
+        [ID]=#ContextQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ContextQueryForm.WorkflowID">
+        [WorkflowID]=#ContextQueryForm.WorkflowID#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteContext" parameterClass="ContextQueryForm">
+    DELETE FROM Context WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        [WorkflowID]=#WorkflowID#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

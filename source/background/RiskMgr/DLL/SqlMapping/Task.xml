@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Task" type="RiskMgr.Model.Task" />
+    <typeAlias alias="TaskQueryForm" type="RiskMgr.Form.TaskQueryForm" />
+    <typeAlias alias="TaskUpdateForm" type="RiskMgr.Form.TaskUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryTask" resultClass="Task" parameterClass="TaskQueryForm">
+    SELECT * FROM Task WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AcitivityID">
+        [AcitivityID]=#AcitivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name] LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        [Remark] LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Status">
+        [Status]=#Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_Start">
+        [ReadTime]&gt;=#ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_End">
+        [ReadTime]&lt;=#ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_Start">
+        [ProcessTime]&gt;=#ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_End">
+        [ProcessTime]&lt;=#ProcessTime_End#
+    </isNotNull>
+  </select>
+  <insert id="AddTask" parameterClass="Task">
+  INSERT INTO Task
+  (
+    [ID],
+    [AcitivityID],
+    [Name],
+    [Creator],
+    [CreateTime],
+    [Remark],
+    [Status],
+    [ReadTime],
+    [ProcessTime]
+  )
+  VALUES
+  (
+        #ID#,
+        #AcitivityID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#,
+        #Status#,
+        #ReadTime#,
+        #ProcessTime#
+  )
+  </insert>
+  <update id="UpdateTask" parameterClass="TaskUpdateForm">
+  <isNotNull property="Task">
+  UPDATE Task SET 
+        <isNotNull property="Task.AcitivityID">
+        [AcitivityID]=#Task.AcitivityID#,
+        </isNotNull>
+        <isNotNull property="Task.Name">
+        [Name]=#Task.Name#,
+        </isNotNull>
+        <isNotNull property="Task.Creator">
+        [Creator]=#Task.Creator#,
+        </isNotNull>
+        <isNotNull property="Task.CreateTime">
+        [CreateTime]=#Task.CreateTime#,
+        </isNotNull>
+        <isNotNull property="Task.Remark">
+        [Remark]=#Task.Remark#,
+        </isNotNull>
+        <isNotNull property="Task.Status">
+        [Status]=#Task.Status#,
+        </isNotNull>
+        <isNotNull property="Task.ReadTime">
+        [ReadTime]=#Task.ReadTime#,
+        </isNotNull>
+        <isNotNull property="Task.ProcessTime">
+        [ProcessTime]=#Task.ProcessTime#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="TaskQueryForm.ID">
+        [ID]=#TaskQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.AcitivityID">
+        [AcitivityID]=#TaskQueryForm.AcitivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.Name">
+        [Name] LIKE '%$TaskQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.Creator">
+        [Creator]=#TaskQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.CreateTime_Start">
+        [CreateTime]&gt;=#TaskQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.CreateTime_End">
+        [CreateTime]&lt;=#TaskQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.Remark">
+        [Remark] LIKE '%$TaskQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.Status">
+        [Status]=#TaskQueryForm.Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.ReadTime_Start">
+        [ReadTime]&gt;=#TaskQueryForm.ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.ReadTime_End">
+        [ReadTime]&lt;=#TaskQueryForm.ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.ProcessTime_Start">
+        [ProcessTime]&gt;=#TaskQueryForm.ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TaskQueryForm.ProcessTime_End">
+        [ProcessTime]&lt;=#TaskQueryForm.ProcessTime_End#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteTask" parameterClass="TaskQueryForm">
+    DELETE FROM Task WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AcitivityID">
+        [AcitivityID]=#AcitivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name]=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        [Remark]=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Status">
+        [Status]=#Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_Start">
+        [ReadTime]&gt;=#ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_End">
+        [ReadTime]&lt;=#ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_Start">
+        [ProcessTime]&gt;=#ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_End">
+        [ProcessTime]&lt;=#ProcessTime_End#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

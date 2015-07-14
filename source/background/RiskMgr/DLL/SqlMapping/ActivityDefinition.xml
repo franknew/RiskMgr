@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="ActivityDefinition" type="RiskMgr.Model.ActivityDefinition" />
+    <typeAlias alias="ActivityDefinitionQueryForm" type="RiskMgr.Form.ActivityDefinitionQueryForm" />
+    <typeAlias alias="ActivityDefinitionUpdateForm" type="RiskMgr.Form.ActivityDefinitionUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryActivityDefinition" resultClass="ActivityDefinition" parameterClass="ActivityDefinitionQueryForm">
+    SELECT * FROM ActivityDefinition WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowDefinitionID">
+        [WorkflowDefinitionID]=#WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        [Page]=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name] LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        [Enabled]=#Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        [Type]=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        [Remark] LIKE '%$Remark$%'
+    </isNotNull>
+  </select>
+  <insert id="AddActivityDefinition" parameterClass="ActivityDefinition">
+  INSERT INTO ActivityDefinition
+  (
+    [ID],
+    [WorkflowDefinitionID],
+    [Page],
+    [Name],
+    [Enabled],
+    [Type],
+    [Creator],
+    [CreateTime],
+    [Remark]
+  )
+  VALUES
+  (
+        #ID#,
+        #WorkflowDefinitionID#,
+        #Page#,
+        #Name#,
+        #Enabled#,
+        #Type#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#
+  )
+  </insert>
+  <update id="UpdateActivityDefinition" parameterClass="ActivityDefinitionUpdateForm">
+  <isNotNull property="ActivityDefinition">
+  UPDATE ActivityDefinition SET 
+        <isNotNull property="ActivityDefinition.WorkflowDefinitionID">
+        [WorkflowDefinitionID]=#ActivityDefinition.WorkflowDefinitionID#,
+        </isNotNull>
+        <isNotNull property="ActivityDefinition.Page">
+        [Page]=#ActivityDefinition.Page#,
+        </isNotNull>
+        <isNotNull property="ActivityDefinition.Name">
+        [Name]=#ActivityDefinition.Name#,
+        </isNotNull>
+        <isNotNull property="ActivityDefinition.Enabled">
+        [Enabled]=#ActivityDefinition.Enabled#,
+        </isNotNull>
+        <isNotNull property="ActivityDefinition.Type">
+        [Type]=#ActivityDefinition.Type#,
+        </isNotNull>
+        <isNotNull property="ActivityDefinition.Creator">
+        [Creator]=#ActivityDefinition.Creator#,
+        </isNotNull>
+        <isNotNull property="ActivityDefinition.CreateTime">
+        [CreateTime]=#ActivityDefinition.CreateTime#,
+        </isNotNull>
+        <isNotNull property="ActivityDefinition.Remark">
+        [Remark]=#ActivityDefinition.Remark#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.ID">
+        [ID]=#ActivityDefinitionQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.WorkflowDefinitionID">
+        [WorkflowDefinitionID]=#ActivityDefinitionQueryForm.WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Page">
+        [Page]=#ActivityDefinitionQueryForm.Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Name">
+        [Name] LIKE '%$ActivityDefinitionQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Enabled">
+        [Enabled]=#ActivityDefinitionQueryForm.Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Type">
+        [Type]=#ActivityDefinitionQueryForm.Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Creator">
+        [Creator]=#ActivityDefinitionQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.CreateTime_Start">
+        [CreateTime]&gt;=#ActivityDefinitionQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.CreateTime_End">
+        [CreateTime]&lt;=#ActivityDefinitionQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Remark">
+        [Remark] LIKE '%$ActivityDefinitionQueryForm.Remark$%'
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteActivityDefinition" parameterClass="ActivityDefinitionQueryForm">
+    DELETE FROM ActivityDefinition WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowDefinitionID">
+        [WorkflowDefinitionID]=#WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        [Page]=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name]=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        [Enabled]=#Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        [Type]=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        [Remark]=#Remark#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

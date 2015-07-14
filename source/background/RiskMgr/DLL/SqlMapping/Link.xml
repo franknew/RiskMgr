@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Link" type="RiskMgr.Model.Link" />
+    <typeAlias alias="LinkQueryForm" type="RiskMgr.Form.LinkQueryForm" />
+    <typeAlias alias="LinkUpdateForm" type="RiskMgr.Form.LinkUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryLink" resultClass="Link" parameterClass="LinkQueryForm">
+    SELECT * FROM Link WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionID">
+        [LinkDefinitionID]=#LinkDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FromActivityID">
+        [FromActivityID]=#FromActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ToAcivityID">
+        [ToAcivityID]=#ToAcivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name] LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Passed">
+        [Passed]=#Passed#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_Start">
+        [PassedTime]&gt;=#PassedTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_End">
+        [PassedTime]&lt;=#PassedTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        [WorkflowID]=#WorkflowID#
+    </isNotNull>
+  </select>
+  <insert id="AddLink" parameterClass="Link">
+  INSERT INTO Link
+  (
+    [ID],
+    [LinkDefinitionID],
+    [FromActivityID],
+    [ToAcivityID],
+    [Name],
+    [Creator],
+    [CreateTime],
+    [Passed],
+    [PassedTime],
+    [WorkflowID]
+  )
+  VALUES
+  (
+        #ID#,
+        #LinkDefinitionID#,
+        #FromActivityID#,
+        #ToAcivityID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Passed#,
+        #PassedTime#,
+        #WorkflowID#
+  )
+  </insert>
+  <update id="UpdateLink" parameterClass="LinkUpdateForm">
+  <isNotNull property="Link">
+  UPDATE Link SET 
+        <isNotNull property="Link.LinkDefinitionID">
+        [LinkDefinitionID]=#Link.LinkDefinitionID#,
+        </isNotNull>
+        <isNotNull property="Link.FromActivityID">
+        [FromActivityID]=#Link.FromActivityID#,
+        </isNotNull>
+        <isNotNull property="Link.ToAcivityID">
+        [ToAcivityID]=#Link.ToAcivityID#,
+        </isNotNull>
+        <isNotNull property="Link.Name">
+        [Name]=#Link.Name#,
+        </isNotNull>
+        <isNotNull property="Link.Creator">
+        [Creator]=#Link.Creator#,
+        </isNotNull>
+        <isNotNull property="Link.CreateTime">
+        [CreateTime]=#Link.CreateTime#,
+        </isNotNull>
+        <isNotNull property="Link.Passed">
+        [Passed]=#Link.Passed#,
+        </isNotNull>
+        <isNotNull property="Link.PassedTime">
+        [PassedTime]=#Link.PassedTime#,
+        </isNotNull>
+        <isNotNull property="Link.WorkflowID">
+        [WorkflowID]=#Link.WorkflowID#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="LinkQueryForm.ID">
+        [ID]=#LinkQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.LinkDefinitionID">
+        [LinkDefinitionID]=#LinkQueryForm.LinkDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.FromActivityID">
+        [FromActivityID]=#LinkQueryForm.FromActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.ToAcivityID">
+        [ToAcivityID]=#LinkQueryForm.ToAcivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.Name">
+        [Name] LIKE '%$LinkQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.Creator">
+        [Creator]=#LinkQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.CreateTime_Start">
+        [CreateTime]&gt;=#LinkQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.CreateTime_End">
+        [CreateTime]&lt;=#LinkQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.Passed">
+        [Passed]=#LinkQueryForm.Passed#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.PassedTime_Start">
+        [PassedTime]&gt;=#LinkQueryForm.PassedTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.PassedTime_End">
+        [PassedTime]&lt;=#LinkQueryForm.PassedTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.WorkflowID">
+        [WorkflowID]=#LinkQueryForm.WorkflowID#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteLink" parameterClass="LinkQueryForm">
+    DELETE FROM Link WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        [ID]=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionID">
+        [LinkDefinitionID]=#LinkDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FromActivityID">
+        [FromActivityID]=#FromActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ToAcivityID">
+        [ToAcivityID]=#ToAcivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        [Name]=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        [Creator]=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        [CreateTime]&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        [CreateTime]&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Passed">
+        [Passed]=#Passed#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_Start">
+        [PassedTime]&gt;=#PassedTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_End">
+        [PassedTime]&lt;=#PassedTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        [WorkflowID]=#WorkflowID#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>
