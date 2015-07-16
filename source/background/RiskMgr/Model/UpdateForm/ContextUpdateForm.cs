@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.Form
 {
-    public class ContextUpdateForm
+    public class ContextUpdateForm : BaseUpdateForm<Context>
     {
-        public Context Context { get; set; }
-
         public ContextQueryForm ContextQueryForm { get; set; }
     }
 }

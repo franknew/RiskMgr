@@ -9,21 +9,21 @@
   <select id="QueryMenu_Role" resultClass="Menu_Role" parameterClass="Menu_RoleQueryForm">
     SELECT * FROM Menu_Role WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuID">
-        [MenuID]=#MenuID#
+        `MenuID`=#MenuID#
     </isNotNull>
     <isNotNull prepend="AND" property="RoleID">
-        [RoleID]=#RoleID#
+        `RoleID`=#RoleID#
     </isNotNull>
   </select>
   <insert id="AddMenu_Role" parameterClass="Menu_Role">
   INSERT INTO Menu_Role
   (
-    [ID],
-    [MenuID],
-    [RoleID]
+    `ID`,
+    `MenuID`,
+    `RoleID`
   )
   VALUES
   (
@@ -33,36 +33,36 @@
   )
   </insert>
   <update id="UpdateMenu_Role" parameterClass="Menu_RoleUpdateForm">
-  <isNotNull property="Menu_Role">
-  UPDATE Menu_Role SET 
-        <isNotNull property="Menu_Role.MenuID">
-        [MenuID]=#Menu_Role.MenuID#,
+  UPDATE Menu_Role
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.MenuID">
+        `MenuID`=#Entity.MenuID#
         </isNotNull>
-        <isNotNull property="Menu_Role.RoleID">
-        [RoleID]=#Menu_Role.RoleID#
+        <isNotNull prepend="," property="Entity.RoleID">
+        `RoleID`=#Entity.RoleID#
         </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="Menu_RoleQueryForm.ID">
-        [ID]=#Menu_RoleQueryForm.ID#
+        `ID`=#Menu_RoleQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Menu_RoleQueryForm.MenuID">
-        [MenuID]=#Menu_RoleQueryForm.MenuID#
+        `MenuID`=#Menu_RoleQueryForm.MenuID#
     </isNotNull>
     <isNotNull prepend="AND" property="Menu_RoleQueryForm.RoleID">
-        [RoleID]=#Menu_RoleQueryForm.RoleID#
-    </isNotNull>
+        `RoleID`=#Menu_RoleQueryForm.RoleID#
     </isNotNull>
   </update>
   <delete id="DeleteMenu_Role" parameterClass="Menu_RoleQueryForm">
     DELETE FROM Menu_Role WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuID">
-        [MenuID]=#MenuID#
+        `MenuID`=#MenuID#
     </isNotNull>
     <isNotNull prepend="AND" property="RoleID">
-        [RoleID]=#RoleID#
+        `RoleID`=#RoleID#
     </isNotNull>
   </delete>
   </statements>

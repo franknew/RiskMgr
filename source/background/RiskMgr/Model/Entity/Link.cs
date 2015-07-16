@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.Model
 {
     public class Link : SimpleEntity
@@ -12,7 +14,7 @@ namespace RiskMgr.Model
         
         public string ToAcivityID { get; set; }
         
-        public Boolean? Passed { get; set; }
+        public UInt64? Passed { get; set; }
         
         public DateTime? PassedTime { get; set; }
         

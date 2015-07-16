@@ -13,12 +13,13 @@ namespace RiskMgr.BLL
 {
     public class LogonBLL
     {
-        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache, "RiskMgr.User");
+        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache);
 
         public string Logon(string username, string password)
         {
             UserDao userdao = new UserDao();
             UserInfoDao userInfoDao = new UserInfoDao();
+            RoleDao roleDao = new RoleDao();
             var users = userdao.Query(new UserQueryForm { Name = username, Password = password });
             if (users.Count > 0)
             {
@@ -61,6 +62,12 @@ namespace RiskMgr.BLL
                 u = item.Value as UserEntireInfo;
             }
             return u;
+        }
+
+        public bool CheckAuth(string userid)
+        {
+            
+            return true;
         }
     }
 }

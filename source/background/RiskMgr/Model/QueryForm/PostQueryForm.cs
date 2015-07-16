@@ -8,5 +8,11 @@ namespace RiskMgr.Form
     {
         public string Remark { get; set; }
         
+        public DateTime? LastUpdateTime_Start { get; set; }
+        
+        public DateTime? LastUpdateTime_End { get; set; }
+        
+        public string LastUpdator { get; set; }
+        
     }
 }

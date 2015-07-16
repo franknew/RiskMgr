@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.DAL
 {
-    public class TaskDao : BaseDao<Task, TaskQueryForm, TaskUpdateForm>
+    public partial class TaskDao : SimpleDao<Task, TaskQueryForm, TaskUpdateForm>
     {
         public TaskDao(ISqlMapper mapper = null)
             : base(mapper)

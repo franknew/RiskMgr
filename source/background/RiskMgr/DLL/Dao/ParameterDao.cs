@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.DAL
 {
-    public class ParameterDao : BaseDao<Parameter, ParameterQueryForm, ParameterUpdateForm>
+    public partial class ParameterDao : BaseDao<Parameter, ParameterQueryForm, ParameterUpdateForm>
     {
         public ParameterDao(ISqlMapper mapper = null)
             : base(mapper)

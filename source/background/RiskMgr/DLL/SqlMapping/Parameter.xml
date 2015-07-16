@@ -9,25 +9,25 @@
   <select id="QueryParameter" resultClass="Parameter" parameterClass="ParameterQueryForm">
     SELECT * FROM Parameter WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="ContextID">
-        [ContextID]=#ContextID#
+        `ContextID`=#ContextID#
     </isNotNull>
     <isNotNull prepend="AND" property="Key">
-        [Key]=#Key#
+        `Key`=#Key#
     </isNotNull>
     <isNotNull prepend="AND" property="Value">
-        [Value]=#Value#
+        `Value`=#Value#
     </isNotNull>
   </select>
   <insert id="AddParameter" parameterClass="Parameter">
   INSERT INTO Parameter
   (
-    [ID],
-    [ContextID],
-    [Key],
-    [Value]
+    `ID`,
+    `ContextID`,
+    `Key`,
+    `Value`
   )
   VALUES
   (
@@ -38,45 +38,45 @@
   )
   </insert>
   <update id="UpdateParameter" parameterClass="ParameterUpdateForm">
-  <isNotNull property="Parameter">
-  UPDATE Parameter SET 
-        <isNotNull property="Parameter.ContextID">
-        [ContextID]=#Parameter.ContextID#,
+  UPDATE Parameter
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.ContextID">
+        `ContextID`=#Entity.ContextID#
         </isNotNull>
-        <isNotNull property="Parameter.Key">
-        [Key]=#Parameter.Key#,
+        <isNotNull prepend="," property="Entity.Key">
+        `Key`=#Entity.Key#
         </isNotNull>
-        <isNotNull property="Parameter.Value">
-        [Value]=#Parameter.Value#
+        <isNotNull prepend="," property="Entity.Value">
+        `Value`=#Entity.Value#
         </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="ParameterQueryForm.ID">
-        [ID]=#ParameterQueryForm.ID#
+        `ID`=#ParameterQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="ParameterQueryForm.ContextID">
-        [ContextID]=#ParameterQueryForm.ContextID#
+        `ContextID`=#ParameterQueryForm.ContextID#
     </isNotNull>
     <isNotNull prepend="AND" property="ParameterQueryForm.Key">
-        [Key]=#ParameterQueryForm.Key#
+        `Key`=#ParameterQueryForm.Key#
     </isNotNull>
     <isNotNull prepend="AND" property="ParameterQueryForm.Value">
-        [Value]=#ParameterQueryForm.Value#
-    </isNotNull>
+        `Value`=#ParameterQueryForm.Value#
     </isNotNull>
   </update>
   <delete id="DeleteParameter" parameterClass="ParameterQueryForm">
     DELETE FROM Parameter WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="ContextID">
-        [ContextID]=#ContextID#
+        `ContextID`=#ContextID#
     </isNotNull>
     <isNotNull prepend="AND" property="Key">
-        [Key]=#Key#
+        `Key`=#Key#
     </isNotNull>
     <isNotNull prepend="AND" property="Value">
-        [Value]=#Value#
+        `Value`=#Value#
     </isNotNull>
   </delete>
   </statements>

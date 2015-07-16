@@ -44,6 +44,8 @@ namespace RiskMgr.Api
         public List<Menu> GetMenu()
         {
             string token = ServiceSession.Current.Context.Parameters["token"].ToString();
+            MenuBLL menubll = new MenuBLL();
+            var menulist = menubll.GetAllMenu();
             return null;
         }
     }

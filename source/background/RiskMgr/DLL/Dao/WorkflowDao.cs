@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.DAL
 {
-    public class WorkflowDao : BaseDao<Workflow, WorkflowQueryForm, WorkflowUpdateForm>
+    public partial class WorkflowDao : SimpleDao<Workflow, WorkflowQueryForm, WorkflowUpdateForm>
     {
         public WorkflowDao(ISqlMapper mapper = null)
             : base(mapper)

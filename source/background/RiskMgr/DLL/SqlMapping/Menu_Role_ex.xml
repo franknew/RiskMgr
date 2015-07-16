@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <statements>
+    <select id="QueryMenu_RoleByUserName" resultClass="Menu_Role" parameterClass="string">
+      SELECT mr.* FROM Menu_Role mr
+      INNER JOIN User_Role ur ON mr.RoleID=ur.RoleID
+      INNER JOIN User u ON ur.UserID=u.ID
+      WHERE u.ID=#UserID#
+    </select>
+  </statements>
+</sqlMap>

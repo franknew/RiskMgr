@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.DAL
 {
-    public class RoleDao : BaseDao<Role, RoleQueryForm, RoleUpdateForm>
+    public partial class RoleDao : SimpleDao<Role, RoleQueryForm, RoleUpdateForm>
     {
         public RoleDao(ISqlMapper mapper = null)
             : base(mapper)

@@ -10,5 +10,7 @@ namespace RiskMgr.Model
         public User User { get; set; }
 
         public UserInfo UserInfo { get; set; }
+
+        public List<Role> Role { get; set; }
     }
 }

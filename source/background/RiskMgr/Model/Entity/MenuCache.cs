@@ -5,8 +5,11 @@ using System.Text;
 
 namespace RiskMgr.Model
 {
-    public class BaseEntity
+    public class MenuCache
     {
-        public string ID { get; set; }
+        public List<Menu> Menus { get; set; }
+
+        public DateTime LastUpdateTime { get; set; }
+
     }
 }

@@ -9,17 +9,17 @@
   <select id="QueryContext" resultClass="Context" parameterClass="ContextQueryForm">
     SELECT * FROM Context WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="WorkflowID">
-        [WorkflowID]=#WorkflowID#
+        `WorkflowID`=#WorkflowID#
     </isNotNull>
   </select>
   <insert id="AddContext" parameterClass="Context">
   INSERT INTO Context
   (
-    [ID],
-    [WorkflowID]
+    `ID`,
+    `WorkflowID`
   )
   VALUES
   (
@@ -28,27 +28,27 @@
   )
   </insert>
   <update id="UpdateContext" parameterClass="ContextUpdateForm">
-  <isNotNull property="Context">
-  UPDATE Context SET 
-        <isNotNull property="Context.WorkflowID">
-        [WorkflowID]=#Context.WorkflowID#
+  UPDATE Context
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.WorkflowID">
+        `WorkflowID`=#Entity.WorkflowID#
         </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="ContextQueryForm.ID">
-        [ID]=#ContextQueryForm.ID#
+        `ID`=#ContextQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="ContextQueryForm.WorkflowID">
-        [WorkflowID]=#ContextQueryForm.WorkflowID#
-    </isNotNull>
+        `WorkflowID`=#ContextQueryForm.WorkflowID#
     </isNotNull>
   </update>
   <delete id="DeleteContext" parameterClass="ContextQueryForm">
     DELETE FROM Context WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="WorkflowID">
-        [WorkflowID]=#WorkflowID#
+        `WorkflowID`=#WorkflowID#
     </isNotNull>
   </delete>
   </statements>

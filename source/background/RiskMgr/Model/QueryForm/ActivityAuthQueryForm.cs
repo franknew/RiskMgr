@@ -16,5 +16,11 @@ namespace RiskMgr.Form
         
         public string WorkflowID { get; set; }
         
+        public DateTime? LastUpdateTime_Start { get; set; }
+        
+        public DateTime? LastUpdateTime_End { get; set; }
+        
+        public string LastUpdator { get; set; }
+        
     }
 }

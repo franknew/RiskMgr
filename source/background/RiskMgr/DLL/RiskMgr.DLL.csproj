@@ -38,6 +38,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CommonDll\IBatisNet.DataMapper.dll</HintPath>
     </Reference>
+    <Reference Include="SOAFramework.Library.DAL">
+      <HintPath>..\CommonDll\SOAFramework.Library.DAL.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,20 +51,31 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="sql.sql" />
-    <Compile Include="Dao\BaseDao.cs" />
+    <Compile Include="DaoExtension\MenuDao_ex.cs" />
+    <Compile Include="DaoExtension\Menu_RoleDao_ex.cs" />
+    <Compile Include="DaoExtension\RoleDao_ex.cs" />
+    <Compile Include="Dao\ActionDao.cs" />
     <Compile Include="Dao\MenuDao.cs" />
     <Compile Include="Dao\Menu_RoleDao.cs" />
+    <Compile Include="Dao\ModuleDao.cs" />
     <Compile Include="Dao\PostDao.cs" />
     <Compile Include="Dao\RoleDao.cs" />
+    <Compile Include="Dao\Role_Module_ActionDao.cs" />
     <Compile Include="Dao\UserDao.cs" />
     <Compile Include="Dao\UserInfoDao.cs" />
     <Compile Include="Dao\User_PostDao.cs" />
     <Compile Include="Dao\User_RoleDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="SqlMapping\Action.xml" />
     <Content Include="SqlMapping\Menu.xml" />
+    <Content Include="SqlMapping\Menu_Ex.xml" />
     <Content Include="SqlMapping\Menu_Role.xml" />
+    <Content Include="SqlMapping\Menu_Role_ex.xml" />
+    <Content Include="SqlMapping\Module.xml" />
     <Content Include="SqlMapping\Post.xml" />
     <Content Include="SqlMapping\Role.xml" />
+    <Content Include="SqlMapping\Role_ex.xml" />
+    <Content Include="SqlMapping\Role_Module_Action.xml" />
     <Content Include="SqlMapping\User.xml" />
     <Content Include="SqlMapping\UserInfo.xml" />
     <Content Include="SqlMapping\User_Post.xml" />

@@ -7,6 +7,7 @@ using System.Text;
 namespace RiskMgr.Api
 {
     [ServiceLayer(Module="RiskMgr.CustomerApi")]
+    [AuthFilter]
     public class CustomerApi
     {
         public int Add()

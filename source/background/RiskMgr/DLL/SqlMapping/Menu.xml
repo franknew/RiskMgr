@@ -9,44 +9,55 @@
   <select id="QueryMenu" resultClass="Menu" parameterClass="MenuQueryForm">
     SELECT * FROM Menu WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        [Name] LIKE '%$Name$%'
+        `Name` LIKE '%$Name$%'
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
-        [Creator]=#Creator#
+        `Creator`=#Creator#
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
-        [CreateTime]&gt;=#CreateTime_Start#
+        `CreateTime`&gt;=#CreateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_End">
-        [CreateTime]&lt;=#CreateTime_End#
+        `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="Page">
-        [Page]=#Page#
+        `Page`=#Page#
     </isNotNull>
     <isNotNull prepend="AND" property="ParentID">
-        [ParentID]=#ParentID#
+        `ParentID`=#ParentID#
     </isNotNull>
     <isNotNull prepend="AND" property="Enabled">
-        [Enabled]=#Enabled#
+        `Enabled`=#Enabled#
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
-        [Remark] LIKE '%$Remark$%'
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
     </isNotNull>
   </select>
   <insert id="AddMenu" parameterClass="Menu">
   INSERT INTO Menu
   (
-    [ID],
-    [Name],
-    [Creator],
-    [CreateTime],
-    [Page],
-    [ParentID],
-    [Enabled],
-    [Remark]
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Page`,
+    `ParentID`,
+    `Enabled`,
+    `Remark`,
+    `LastUpdateTime`,
+    `LastUpdator`
   )
   VALUES
   (
@@ -57,91 +68,117 @@
         #Page#,
         #ParentID#,
         #Enabled#,
-        #Remark#
+        #Remark#,
+        #LastUpdateTime#,
+        #LastUpdator#
   )
   </insert>
   <update id="UpdateMenu" parameterClass="MenuUpdateForm">
-  <isNotNull property="Menu">
-  UPDATE Menu SET 
-        <isNotNull property="Menu.Name">
-        [Name]=#Menu.Name#,
+  UPDATE Menu
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
         </isNotNull>
-        <isNotNull property="Menu.Creator">
-        [Creator]=#Menu.Creator#,
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
         </isNotNull>
-        <isNotNull property="Menu.CreateTime">
-        [CreateTime]=#Menu.CreateTime#,
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
         </isNotNull>
-        <isNotNull property="Menu.Page">
-        [Page]=#Menu.Page#,
+        <isNotNull prepend="," property="Entity.Page">
+        `Page`=#Entity.Page#
         </isNotNull>
-        <isNotNull property="Menu.ParentID">
-        [ParentID]=#Menu.ParentID#,
+        <isNotNull prepend="," property="Entity.ParentID">
+        `ParentID`=#Entity.ParentID#
         </isNotNull>
-        <isNotNull property="Menu.Enabled">
-        [Enabled]=#Menu.Enabled#,
+        <isNotNull prepend="," property="Entity.Enabled">
+        `Enabled`=#Entity.Enabled#
         </isNotNull>
-        <isNotNull property="Menu.Remark">
-        [Remark]=#Menu.Remark#
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
         </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="MenuQueryForm.ID">
-        [ID]=#MenuQueryForm.ID#
+        `ID`=#MenuQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Name">
-        [Name] LIKE '%$MenuQueryForm.Name$%'
+        `Name` LIKE '%$MenuQueryForm.Name$%'
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Creator">
-        [Creator]=#MenuQueryForm.Creator#
+        `Creator`=#MenuQueryForm.Creator#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.CreateTime_Start">
-        [CreateTime]&gt;=#MenuQueryForm.CreateTime_Start#
+        `CreateTime`&gt;=#MenuQueryForm.CreateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.CreateTime_End">
-        [CreateTime]&lt;=#MenuQueryForm.CreateTime_End#
+        `CreateTime`&lt;=#MenuQueryForm.CreateTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Page">
-        [Page]=#MenuQueryForm.Page#
+        `Page`=#MenuQueryForm.Page#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.ParentID">
-        [ParentID]=#MenuQueryForm.ParentID#
+        `ParentID`=#MenuQueryForm.ParentID#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Enabled">
-        [Enabled]=#MenuQueryForm.Enabled#
+        `Enabled`=#MenuQueryForm.Enabled#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Remark">
-        [Remark] LIKE '%$MenuQueryForm.Remark$%'
+        `Remark` LIKE '%$MenuQueryForm.Remark$%'
     </isNotNull>
+    <isNotNull prepend="AND" property="MenuQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#MenuQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MenuQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#MenuQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MenuQueryForm.LastUpdator">
+        `LastUpdator`=#MenuQueryForm.LastUpdator#
     </isNotNull>
   </update>
   <delete id="DeleteMenu" parameterClass="MenuQueryForm">
     DELETE FROM Menu WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        [Name]=#Name#
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
-        [Creator]=#Creator#
+        `Creator`=#Creator#
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
-        [CreateTime]&gt;=#CreateTime_Start#
+        `CreateTime`&gt;=#CreateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_End">
-        [CreateTime]&lt;=#CreateTime_End#
+        `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="Page">
-        [Page]=#Page#
+        `Page`=#Page#
     </isNotNull>
     <isNotNull prepend="AND" property="ParentID">
-        [ParentID]=#ParentID#
+        `ParentID`=#ParentID#
     </isNotNull>
     <isNotNull prepend="AND" property="Enabled">
-        [Enabled]=#Enabled#
+        `Enabled`=#Enabled#
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
-        [Remark]=#Remark#
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
   </statements>

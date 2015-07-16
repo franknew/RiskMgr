@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.DAL
 {
-    public class ActivityAuthDao : BaseDao<ActivityAuth, ActivityAuthQueryForm, ActivityAuthUpdateForm>
+    public partial class ActivityAuthDao : SimpleDao<ActivityAuth, ActivityAuthQueryForm, ActivityAuthUpdateForm>
     {
         public ActivityAuthDao(ISqlMapper mapper = null)
             : base(mapper)

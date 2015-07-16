@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Role" type="RiskMgr.Model.Role" />
+    <typeAlias alias="RoleQueryForm" type="RiskMgr.Form.RoleQueryForm" />
+    <typeAlias alias="RoleUpdateForm" type="RiskMgr.Form.RoleUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryRole" resultClass="Role" parameterClass="RoleQueryForm">
+    SELECT * FROM Role WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+  </select>
+  <insert id="AddRole" parameterClass="Role">
+  INSERT INTO Role
+  (
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Remark`,
+    `LastUpdateTime`,
+    `LastUpdator`
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#,
+        #LastUpdateTime#,
+        #LastUpdator#
+  )
+  </insert>
+  <update id="UpdateRole" parameterClass="RoleUpdateForm">
+  <isNotNull property="Role">
+  UPDATE Role SET 
+        <isNotNull property="Role.Name">
+        `Name`=#Role.Name#,
+        </isNotNull>
+        <isNotNull property="Role.Creator">
+        `Creator`=#Role.Creator#,
+        </isNotNull>
+        <isNotNull property="Role.CreateTime">
+        `CreateTime`=#Role.CreateTime#,
+        </isNotNull>
+        <isNotNull property="Role.Remark">
+        `Remark`=#Role.Remark#,
+        </isNotNull>
+        <isNotNull property="Role.LastUpdateTime">
+        `LastUpdateTime`=#Role.LastUpdateTime#,
+        </isNotNull>
+        <isNotNull property="Role.LastUpdator">
+        `LastUpdator`=#Role.LastUpdator#
+        </isNotNull>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="RoleQueryForm.ID">
+        `ID`=#RoleQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.Name">
+        `Name` LIKE '%$RoleQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.Creator">
+        `Creator`=#RoleQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#RoleQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#RoleQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.Remark">
+        `Remark` LIKE '%$RoleQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#RoleQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#RoleQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.LastUpdator">
+        `LastUpdator`=#RoleQueryForm.LastUpdator#
+    </isNotNull>
+    </isNotNull>
+  </update>
+  <delete id="DeleteRole" parameterClass="RoleQueryForm">
+    DELETE FROM Role WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

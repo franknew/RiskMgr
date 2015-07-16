@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.DAL
 {
-    public class ApprovalDao : BaseDao<Approval, ApprovalQueryForm, ApprovalUpdateForm>
+    public partial class ApprovalDao : SimpleDao<Approval, ApprovalQueryForm, ApprovalUpdateForm>
     {
         public ApprovalDao(ISqlMapper mapper = null)
             : base(mapper)

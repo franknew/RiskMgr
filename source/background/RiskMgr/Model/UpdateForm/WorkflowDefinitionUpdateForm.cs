@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.Form
 {
-    public class WorkflowDefinitionUpdateForm
+    public class WorkflowDefinitionUpdateForm : SimpleUpdateForm<WorkflowDefinition>
     {
-        public WorkflowDefinition WorkflowDefinition { get; set; }
-
         public WorkflowDefinitionQueryForm WorkflowDefinitionQueryForm { get; set; }
     }
 }

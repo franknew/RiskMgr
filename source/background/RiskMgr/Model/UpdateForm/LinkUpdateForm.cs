@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.Form
 {
-    public class LinkUpdateForm
+    public class LinkUpdateForm : SimpleUpdateForm<Link>
     {
-        public Link Link { get; set; }
-
         public LinkQueryForm LinkQueryForm { get; set; }
     }
 }

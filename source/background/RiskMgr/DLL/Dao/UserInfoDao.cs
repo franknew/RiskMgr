@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.DAL
 {
-    public class UserInfoDao : BaseDao<UserInfo, UserInfoQueryForm, UserInfoUpdateForm>
+    public partial class UserInfoDao : BaseDao<UserInfo, UserInfoQueryForm, UserInfoUpdateForm>
     {
         public UserInfoDao(ISqlMapper mapper = null)
             : base(mapper)

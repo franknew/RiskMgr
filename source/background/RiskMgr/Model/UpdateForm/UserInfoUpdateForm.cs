@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.Form
 {
-    public class UserInfoUpdateForm
+    public class UserInfoUpdateForm : BaseUpdateForm<UserInfo>
     {
-        public UserInfo UserInfo { get; set; }
-
         public UserInfoQueryForm UserInfoQueryForm { get; set; }
     }
 }

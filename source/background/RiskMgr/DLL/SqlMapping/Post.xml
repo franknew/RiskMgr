@@ -9,32 +9,43 @@
   <select id="QueryPost" resultClass="Post" parameterClass="PostQueryForm">
     SELECT * FROM Post WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        [Name] LIKE '%$Name$%'
+        `Name` LIKE '%$Name$%'
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
-        [Creator]=#Creator#
+        `Creator`=#Creator#
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
-        [CreateTime]&gt;=#CreateTime_Start#
+        `CreateTime`&gt;=#CreateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_End">
-        [CreateTime]&lt;=#CreateTime_End#
+        `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
-        [Remark] LIKE '%$Remark$%'
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
     </isNotNull>
   </select>
   <insert id="AddPost" parameterClass="Post">
   INSERT INTO Post
   (
-    [ID],
-    [Name],
-    [Creator],
-    [CreateTime],
-    [Remark]
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Remark`,
+    `LastUpdateTime`,
+    `LastUpdator`
   )
   VALUES
   (
@@ -42,64 +53,90 @@
         #Name#,
         #Creator#,
         #CreateTime#,
-        #Remark#
+        #Remark#,
+        #LastUpdateTime#,
+        #LastUpdator#
   )
   </insert>
   <update id="UpdatePost" parameterClass="PostUpdateForm">
-  <isNotNull property="Post">
-  UPDATE Post SET 
-        <isNotNull property="Post.Name">
-        [Name]=#Post.Name#,
+  UPDATE Post
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
         </isNotNull>
-        <isNotNull property="Post.Creator">
-        [Creator]=#Post.Creator#,
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
         </isNotNull>
-        <isNotNull property="Post.CreateTime">
-        [CreateTime]=#Post.CreateTime#,
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
         </isNotNull>
-        <isNotNull property="Post.Remark">
-        [Remark]=#Post.Remark#
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
         </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="PostQueryForm.ID">
-        [ID]=#PostQueryForm.ID#
+        `ID`=#PostQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="PostQueryForm.Name">
-        [Name] LIKE '%$PostQueryForm.Name$%'
+        `Name` LIKE '%$PostQueryForm.Name$%'
     </isNotNull>
     <isNotNull prepend="AND" property="PostQueryForm.Creator">
-        [Creator]=#PostQueryForm.Creator#
+        `Creator`=#PostQueryForm.Creator#
     </isNotNull>
     <isNotNull prepend="AND" property="PostQueryForm.CreateTime_Start">
-        [CreateTime]&gt;=#PostQueryForm.CreateTime_Start#
+        `CreateTime`&gt;=#PostQueryForm.CreateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="PostQueryForm.CreateTime_End">
-        [CreateTime]&lt;=#PostQueryForm.CreateTime_End#
+        `CreateTime`&lt;=#PostQueryForm.CreateTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="PostQueryForm.Remark">
-        [Remark] LIKE '%$PostQueryForm.Remark$%'
+        `Remark` LIKE '%$PostQueryForm.Remark$%'
     </isNotNull>
+    <isNotNull prepend="AND" property="PostQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#PostQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#PostQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostQueryForm.LastUpdator">
+        `LastUpdator`=#PostQueryForm.LastUpdator#
     </isNotNull>
   </update>
   <delete id="DeletePost" parameterClass="PostQueryForm">
     DELETE FROM Post WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        [Name]=#Name#
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
-        [Creator]=#Creator#
+        `Creator`=#Creator#
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
-        [CreateTime]&gt;=#CreateTime_Start#
+        `CreateTime`&gt;=#CreateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_End">
-        [CreateTime]&lt;=#CreateTime_End#
+        `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
-        [Remark]=#Remark#
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
   </statements>

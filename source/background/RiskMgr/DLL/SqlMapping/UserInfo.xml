@@ -9,29 +9,29 @@
   <select id="QueryUserInfo" resultClass="UserInfo" parameterClass="UserInfoQueryForm">
     SELECT * FROM UserInfo WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="QQ">
-        [QQ]=#QQ#
+        `QQ`=#QQ#
     </isNotNull>
     <isNotNull prepend="AND" property="Mobile">
-        [Mobile]=#Mobile#
+        `Mobile`=#Mobile#
     </isNotNull>
     <isNotNull prepend="AND" property="WX">
-        [WX]=#WX#
+        `WX`=#WX#
     </isNotNull>
     <isNotNull prepend="AND" property="Address">
-        [Address]=#Address#
+        `Address`=#Address#
     </isNotNull>
   </select>
   <insert id="AddUserInfo" parameterClass="UserInfo">
   INSERT INTO UserInfo
   (
-    [ID],
-    [QQ],
-    [Mobile],
-    [WX],
-    [Address]
+    `ID`,
+    `QQ`,
+    `Mobile`,
+    `WX`,
+    `Address`
   )
   VALUES
   (
@@ -43,54 +43,54 @@
   )
   </insert>
   <update id="UpdateUserInfo" parameterClass="UserInfoUpdateForm">
-  <isNotNull property="UserInfo">
-  UPDATE UserInfo SET 
-        <isNotNull property="UserInfo.QQ">
-        [QQ]=#UserInfo.QQ#,
+  UPDATE UserInfo
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.QQ">
+        `QQ`=#Entity.QQ#
         </isNotNull>
-        <isNotNull property="UserInfo.Mobile">
-        [Mobile]=#UserInfo.Mobile#,
+        <isNotNull prepend="," property="Entity.Mobile">
+        `Mobile`=#Entity.Mobile#
         </isNotNull>
-        <isNotNull property="UserInfo.WX">
-        [WX]=#UserInfo.WX#,
+        <isNotNull prepend="," property="Entity.WX">
+        `WX`=#Entity.WX#
         </isNotNull>
-        <isNotNull property="UserInfo.Address">
-        [Address]=#UserInfo.Address#
+        <isNotNull prepend="," property="Entity.Address">
+        `Address`=#Entity.Address#
         </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="UserInfoQueryForm.ID">
-        [ID]=#UserInfoQueryForm.ID#
+        `ID`=#UserInfoQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="UserInfoQueryForm.QQ">
-        [QQ]=#UserInfoQueryForm.QQ#
+        `QQ`=#UserInfoQueryForm.QQ#
     </isNotNull>
     <isNotNull prepend="AND" property="UserInfoQueryForm.Mobile">
-        [Mobile]=#UserInfoQueryForm.Mobile#
+        `Mobile`=#UserInfoQueryForm.Mobile#
     </isNotNull>
     <isNotNull prepend="AND" property="UserInfoQueryForm.WX">
-        [WX]=#UserInfoQueryForm.WX#
+        `WX`=#UserInfoQueryForm.WX#
     </isNotNull>
     <isNotNull prepend="AND" property="UserInfoQueryForm.Address">
-        [Address]=#UserInfoQueryForm.Address#
-    </isNotNull>
+        `Address`=#UserInfoQueryForm.Address#
     </isNotNull>
   </update>
   <delete id="DeleteUserInfo" parameterClass="UserInfoQueryForm">
     DELETE FROM UserInfo WHERE 1=1
     <isNotNull prepend="AND" property="ID">
-        [ID]=#ID#
+        `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="QQ">
-        [QQ]=#QQ#
+        `QQ`=#QQ#
     </isNotNull>
     <isNotNull prepend="AND" property="Mobile">
-        [Mobile]=#Mobile#
+        `Mobile`=#Mobile#
     </isNotNull>
     <isNotNull prepend="AND" property="WX">
-        [WX]=#WX#
+        `WX`=#WX#
     </isNotNull>
     <isNotNull prepend="AND" property="Address">
-        [Address]=#Address#
+        `Address`=#Address#
     </isNotNull>
   </delete>
   </statements>

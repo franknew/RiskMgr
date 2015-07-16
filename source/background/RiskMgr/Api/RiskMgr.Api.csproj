@@ -41,6 +41,10 @@
     <Reference Include="SOAFramework.Library.Cache">
       <HintPath>..\CommonDll\SOAFramework.Library.Cache.dll</HintPath>
     </Reference>
+    <Reference Include="SOAFramework.Library.DAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\SOAFramework.Library.DAL.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Library.Json">
       <HintPath>..\CommonDll\SOAFramework.Library.Json.dll</HintPath>
     </Reference>
@@ -68,6 +72,7 @@
     <Compile Include="CustomerApi.cs" />
     <Compile Include="LogonApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserApi.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

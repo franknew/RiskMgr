@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.Form
 {
-    public class ActivityDefinitionUpdateForm
+    public class ActivityDefinitionUpdateForm : SimpleUpdateForm<ActivityDefinition>
     {
-        public ActivityDefinition ActivityDefinition { get; set; }
-
         public ActivityDefinitionQueryForm ActivityDefinitionQueryForm { get; set; }
     }
 }

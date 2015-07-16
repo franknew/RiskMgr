@@ -12,13 +12,19 @@ namespace RiskMgr.Form
         
         public string ToAcivityID { get; set; }
         
-        public Boolean? Passed { get; set; }
+        public UInt64? Passed { get; set; }
         
         public DateTime? PassedTime_Start { get; set; }
         
         public DateTime? PassedTime_End { get; set; }
         
         public string WorkflowID { get; set; }
+        
+        public DateTime? LastUpdateTime_Start { get; set; }
+        
+        public DateTime? LastUpdateTime_End { get; set; }
+        
+        public string LastUpdator { get; set; }
         
     }
 }
