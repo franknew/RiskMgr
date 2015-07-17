@@ -39,7 +39,16 @@ namespace RiskMgr.Api
                 return false;
             }
             //验证有没有权限访问
-
+            var attr = context.MethodInfo.GetCustomAttribute<BaseActionAttribute>(true);
+            if (attr != null)
+            {
+                string actionName = attr.Action;
+                var servicelayer = context.MethodInfo.DeclaringType.GetCustomAttribute<ServiceLayer>(true);
+                if (servicelayer != null)
+                {
+                    string moduleName = servicelayer.Module;
+                }
+            }
 
             return true;
         }
