@@ -6,4 +6,6 @@
 
 define(function(require, exports, module){
 	//初始化
+	
+	
 });

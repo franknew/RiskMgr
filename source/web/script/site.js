@@ -6,19 +6,20 @@
 
 (function  () {
     
-    var CDN = '/';
+    var CDN = location.origin+location.pathname;
     seajs.config({
       alias:{
-        'jquery':CDN+'script/lib/jquery-2.1.4/jquery.js'
+        'jquery':CDN+'script/lib/jquery-2.1.4/jquery.js',
+        'bootstrap':CDN+'script/lib/bootstrap.js'
       },
       paths:{
-        'risk':CDN+'script/',
+        'risk':CDN+'script',
         'cdn':CDN
       }
     });
 
-    //初始化框架页
-    seajs.use('risk/page/frame/index');
+    seajs.use(['jquery','bootstrap','risk/page/frame/index'],function() {
+    });
 
     //初始化路由
     seajs.use(['jquery','risk/unit/route'],function($,route){

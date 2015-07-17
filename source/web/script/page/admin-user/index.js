@@ -31,46 +31,39 @@ define.pack = function(){
 };
 })();
 //all file list:
-//home/src/index.js
-//home/src/home.tmpl.html
+//admin-user/src/index.js
+//admin-user/src/list.tmpl.html
 
 //js file list:
-//home/src/index.js
+//admin-user/src/index.js
 /**
- * 首页
+ * 用户管理，增删改用户
  * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-08 22:28:39
- * @version $Id$
+ * @date    2015-07-15 21:41:52
  */
 
 define.pack("./index",["jquery","risk/unit/route","./tmpl"],function(require, exports, module){
-	var $ = require('jquery');
-	var route = require('risk/unit/route'),
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
 		tmpl = require('./tmpl');
- 
+
 	var MOD = {
 		initPage:function() {
-			var html = tmpl.home();
+			var html = tmpl.list();
 			route.show(html);
-
-			$('#LOGIN').click(function(e) {
-				e.preventDefault();
-				seajs.use('risk/components/login/index',function(m) {
-					m.show();
-				});
-			});
 		}
-	}; 
+	};
+
 	return MOD;
 });
 //tmpl file list:
-//home/src/home.tmpl.html
+//admin-user/src/list.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
-'home': function(data){
+'list': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div>adsfadsf</div>\n<p><a href="###" id="LOGIN">登录</a>\n<p><a href="http://203.195.163.209/ServiceDiscovery/ServiceDiscovery/Index/Default" target="_blank">后台文档</a>');
+__p.push('<div class="list-group todo">\n	<li class="list-group-item" href="#">\n		<span class="label label-primary pull-right">Normal</span> <img class="avatar" src="images/avatar_50.jpg"> \n		<h4 class="name">Jeff Hanneman</h4>\n		<p>My vMaps plugin doesn\'t work</p> \n		<span class="date">17 Feb</span>\n	</li>\n	<li class="list-group-item" href="#">\n		<span class="label label-danger pull-right">Urgent</span> <img class="avatar" src="images/avatar4_50.jpg"> \n		<h4 class="name">Jhon Doe</h4>\n		<p>My vMaps plugin doesn\'t work</p> \n		<span class="date">15 Feb</span>\n	</li>\n	<li class="list-group-item" href="#">\n		<span class="label label-warning pull-right">Medium</span> <img class="avatar" src="images/avatar1_50.jpg"> \n		<h4 class="name">Victor Jara</h4>\n		<p>My vMaps plugin doesn\'t work</p> \n		<span class="date">15 Feb</span>\n	</li>\n</div>');
 
 return __p.join("");
 }

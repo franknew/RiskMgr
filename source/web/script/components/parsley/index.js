@@ -6,9 +6,12 @@
 *
 */
 !(function (factory) {
-  if (typeof define === 'function' && define.amd) {
+  if (typeof define === 'function' && (define.amd||define.cmd)) {
     // AMD. Register as an anonymous module depending on jQuery.
-    define(['jquery'], factory);
+    define(function(require, exports, module) {
+      require('jquery');
+      factory($);
+    });
   } else if (typeof exports === 'object') {
     // Node/CommonJS
     module.exports = factory(require('jquery'));
@@ -2128,28 +2131,29 @@ window.ParsleyConfig = window.ParsleyConfig || {};
 window.ParsleyConfig.i18n = window.ParsleyConfig.i18n || {};
 // Define then the messages
 window.ParsleyConfig.i18n.en = jQuery.extend(window.ParsleyConfig.i18n.en || {}, {
-  defaultMessage: "This value seems to be invalid.",
+  defaultMessage: "不正确的值",
   type: {
-    email:        "This value should be a valid email.",
-    url:          "This value should be a valid url.",
-    number:       "This value should be a valid number.",
-    integer:      "This value should be a valid integer.",
-    digits:       "This value should be digits.",
-    alphanum:     "This value should be alphanumeric."
+    email:        "请输入一个有效的电子邮箱地址",
+    url:          "请输入一个有效的链接",
+    number:       "请输入正确的数字",
+    integer:      "请输入正确的整数",
+    digits:       "请输入正确的号码",
+    alphanum:     "请输入字母或数字"
   },
-  notblank:       "This value should not be blank.",
-  required:       "This value is required.",
-  pattern:        "This value seems to be invalid.",
-  min:            "This value should be greater than or equal to %s.",
-  max:            "This value should be lower than or equal to %s.",
-  range:          "This value should be between %s and %s.",
-  minlength:      "This value is too short. It should have %s characters or more.",
-  maxlength:      "This value is too long. It should have %s characters or fewer.",
-  length:         "This value length is invalid. It should be between %s and %s characters long.",
-  mincheck:       "You must select at least %s choices.",
-  maxcheck:       "You must select %s choices or fewer.",
-  check:          "You must select between %s and %s choices.",
-  equalto:        "This value should be the same."
+  notblank:       "请输入值",
+  required:       "必填项",
+  pattern:        "格式不正确",
+  min:            "输入值请大于或等于 %s",
+  max:            "输入值请小于或等于 %s",
+  range:          "输入值应该在 %s 到 %s 之间",
+  minlength:      "请输入至少 %s 个字符",
+  maxlength:      "请输入至多 %s 个字符",
+  length:         "字符长度应该在 %s 到 %s 之间",
+  mincheck:       "请至少选择 %s 个选项",
+  maxcheck:       "请选择不超过 %s 个选项",
+  check:          "请选择 %s 到 %s 个选项",
+  equalto:        "输入值不同",
+  dateiso: "请输入正确格式的日期 (YYYY-MM-DD)."
 });
 // If file is loaded after Parsley main file, auto-load locale
 if ('undefined' !== typeof window.ParsleyValidator)

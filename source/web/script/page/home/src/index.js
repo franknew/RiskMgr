@@ -6,11 +6,21 @@
  */
 
 define(function(require, exports, module){
-	var route = require('risk/unit/route');
+	var $ = require('jquery');
+	var route = require('risk/unit/route'),
+		tmpl = require('./tmpl');
  
 	var MOD = {
 		initPage:function() {
-			route.show('<p>这是首页</p>');
+			var html = tmpl.home();
+			route.show(html);
+
+			$('#LOGIN').click(function(e) {
+				e.preventDefault();
+				seajs.use('risk/components/login/index',function(m) {
+					m.show();
+				});
+			});
 		}
 	}; 
 	return MOD;

@@ -31,49 +31,27 @@ define.pack = function(){
 };
 })();
 //all file list:
-//home/src/index.js
-//home/src/home.tmpl.html
+//customer-list/src/index.js
 
 //js file list:
-//home/src/index.js
+//customer-list/src/index.js
 /**
- * 首页
+ * 客户信息列表
  * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-08 22:28:39
- * @version $Id$
+ * @date    2015-07-15 21:41:52
  */
 
 define.pack("./index",["jquery","risk/unit/route","./tmpl"],function(require, exports, module){
-	var $ = require('jquery');
-	var route = require('risk/unit/route'),
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
 		tmpl = require('./tmpl');
- 
+
 	var MOD = {
-		initPage:function() {
-			var html = tmpl.home();
+		initPage:function() { 
+			var html = '客户列表';
 			route.show(html);
-
-			$('#LOGIN').click(function(e) {
-				e.preventDefault();
-				seajs.use('risk/components/login/index',function(m) {
-					m.show();
-				});
-			});
 		}
-	}; 
+	};
+
 	return MOD;
-});
-//tmpl file list:
-//home/src/home.tmpl.html
-define.pack("./tmpl",[],function(require, exports, module){
-var tmpl = { 
-'home': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div>adsfadsf</div>\n<p><a href="###" id="LOGIN">登录</a>\n<p><a href="http://203.195.163.209/ServiceDiscovery/ServiceDiscovery/Index/Default" target="_blank">后台文档</a>');
-
-return __p.join("");
-}
-};
-return tmpl;
 });
