@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class UserDao : SimpleDao<User, UserQueryForm, UserUpdateForm>
     {
-        public UserDao(ISqlMapper mapper = null)
+        public UserDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public UserDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryUserLastUpdateTime", null);
         }
     }
 }

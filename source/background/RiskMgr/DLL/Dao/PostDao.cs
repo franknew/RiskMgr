@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class PostDao : SimpleDao<Post, PostQueryForm, PostUpdateForm>
     {
-        public PostDao(ISqlMapper mapper = null)
+        public PostDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public PostDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryPostLastUpdateTime", null);
         }
     }
 }

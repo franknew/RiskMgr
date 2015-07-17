@@ -11,10 +11,15 @@ namespace RiskMgr.DAL
 {
     public partial class Role_Module_ActionDao : BaseDao<Role_Module_Action, Role_Module_ActionQueryForm, Role_Module_ActionUpdateForm>
     {
-        public Role_Module_ActionDao(ISqlMapper mapper = null)
+        public Role_Module_ActionDao(ISqlMapper mapper)
             : base(mapper)
         {
-
         }
+        
+        public Role_Module_ActionDao()
+            : base(null)
+        {
+        }
+        
     }
 }

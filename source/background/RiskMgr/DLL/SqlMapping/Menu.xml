@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryMenu" resultClass="Menu" parameterClass="MenuQueryForm">
-    SELECT * FROM Menu WHERE 1=1
+    SELECT * FROM `Menu` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -46,7 +46,7 @@
     </isNotNull>
   </select>
   <insert id="AddMenu" parameterClass="Menu">
-  INSERT INTO Menu
+  INSERT INTO `Menu`
   (
     `ID`,
     `Name`,
@@ -74,7 +74,7 @@
   )
   </insert>
   <update id="UpdateMenu" parameterClass="MenuUpdateForm">
-  UPDATE Menu
+  UPDATE `Menu`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.Name">
         `Name`=#Entity.Name#
@@ -143,7 +143,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteMenu" parameterClass="MenuQueryForm">
-    DELETE FROM Menu WHERE 1=1
+    DELETE FROM `Menu` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -181,5 +181,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`Menu`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Menu`
+   </select>
   </statements>
 </sqlMap>

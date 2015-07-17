@@ -2,7 +2,6 @@
 using RiskMgr.DAL;
 using RiskMgr.Form;
 using RiskMgr.Model;
-using RiskMgr.Model.Form;
 using SOAFramework.Library.Cache;
 using System;
 using System.Collections.Generic;
@@ -54,7 +53,7 @@ namespace RiskMgr.BLL
                     ID = user.User.ID,
                     Enabled = user.User.Enabled,
                 };
-                dao.Update(new UserUpdateForm{ Entity = entity });
+                dao.Update(new UserUpdateForm { Entity = entity });
             }
             if (user.UserInfo != null)
             {
@@ -86,7 +85,7 @@ namespace RiskMgr.BLL
         {
             UserDao dao = new UserDao();
             var userList = dao.Query(new UserQueryForm { ID = form.UserID, Password = form.OldPassword });
-            if (userList != null || userList.Count == 0)
+            if (userList == null || userList.Count == 0)
             {
                 throw new Exception("用户名或者旧密码错误！");
             }
@@ -97,6 +96,18 @@ namespace RiskMgr.BLL
             };
             dao.Update(new UserUpdateForm { Entity = user });
             return true;
+        }
+
+        /// <summary>
+        /// 查询所有用户
+        /// </summary>
+        /// <returns></returns>
+        public List<FullUser> QueryAllUser()
+        {
+            FullUserDao dao = new FullUserDao();
+            var userlist = dao.Query(new FullUserQueryForm());
+
+            return userlist;
         }
     }
 }

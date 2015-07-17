@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryPost" resultClass="Post" parameterClass="PostQueryForm">
-    SELECT * FROM Post WHERE 1=1
+    SELECT * FROM `Post` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -37,7 +37,7 @@
     </isNotNull>
   </select>
   <insert id="AddPost" parameterClass="Post">
-  INSERT INTO Post
+  INSERT INTO `Post`
   (
     `ID`,
     `Name`,
@@ -59,7 +59,7 @@
   )
   </insert>
   <update id="UpdatePost" parameterClass="PostUpdateForm">
-  UPDATE Post
+  UPDATE `Post`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.Name">
         `Name`=#Entity.Name#
@@ -110,7 +110,7 @@
     </isNotNull>
   </update>
   <delete id="DeletePost" parameterClass="PostQueryForm">
-    DELETE FROM Post WHERE 1=1
+    DELETE FROM `Post` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -139,5 +139,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`Post`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Post`
+   </select>
   </statements>
 </sqlMap>

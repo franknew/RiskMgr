@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dao\FullUserDao.cs" />
+    <Compile Include="Dao\LogonHistoryDao.cs" />
     <Content Include="sql.sql" />
     <Compile Include="DaoExtension\MenuDao_ex.cs" />
     <Compile Include="DaoExtension\Menu_RoleDao_ex.cs" />
@@ -67,11 +69,14 @@
     <Compile Include="Dao\User_RoleDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="SqlMapping\Action.xml" />
+    <Content Include="SqlMapping\FullUser.xml" />
+    <Content Include="SqlMapping\LogonHistory.xml" />
     <Content Include="SqlMapping\Menu.xml" />
     <Content Include="SqlMapping\Menu_Ex.xml" />
     <Content Include="SqlMapping\Menu_Role.xml" />
     <Content Include="SqlMapping\Menu_Role_ex.xml" />
     <Content Include="SqlMapping\Module.xml" />
+    <Content Include="SqlMapping\Module_ex.xml" />
     <Content Include="SqlMapping\Post.xml" />
     <Content Include="SqlMapping\Role.xml" />
     <Content Include="SqlMapping\Role_ex.xml" />

@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryMenu_Role" resultClass="Menu_Role" parameterClass="Menu_RoleQueryForm">
-    SELECT * FROM Menu_Role WHERE 1=1
+    SELECT * FROM `Menu_Role` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -19,7 +19,7 @@
     </isNotNull>
   </select>
   <insert id="AddMenu_Role" parameterClass="Menu_Role">
-  INSERT INTO Menu_Role
+  INSERT INTO `Menu_Role`
   (
     `ID`,
     `MenuID`,
@@ -33,7 +33,7 @@
   )
   </insert>
   <update id="UpdateMenu_Role" parameterClass="Menu_RoleUpdateForm">
-  UPDATE Menu_Role
+  UPDATE `Menu_Role`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.MenuID">
         `MenuID`=#Entity.MenuID#
@@ -54,7 +54,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteMenu_Role" parameterClass="Menu_RoleQueryForm">
-    DELETE FROM Menu_Role WHERE 1=1
+    DELETE FROM `Menu_Role` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>

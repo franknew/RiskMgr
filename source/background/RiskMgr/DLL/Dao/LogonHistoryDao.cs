@@ -9,14 +9,14 @@ using SOAFramework.Library.DAL;
 
 namespace RiskMgr.DAL
 {
-    public partial class Menu_RoleDao : BaseDao<Menu_Role, Menu_RoleQueryForm, Menu_RoleUpdateForm>
+    public partial class LogonHistoryDao : BaseDao<LogonHistory, LogonHistoryQueryForm, LogonHistoryUpdateForm>
     {
-        public Menu_RoleDao(ISqlMapper mapper)
+        public LogonHistoryDao(ISqlMapper mapper)
             : base(mapper)
         {
         }
         
-        public Menu_RoleDao()
+        public LogonHistoryDao()
             : base(null)
         {
         }

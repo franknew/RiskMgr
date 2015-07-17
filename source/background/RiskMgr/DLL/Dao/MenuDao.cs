@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class MenuDao : SimpleDao<Menu, MenuQueryForm, MenuUpdateForm>
     {
-        public MenuDao(ISqlMapper mapper = null)
+        public MenuDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public MenuDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryMenuLastUpdateTime", null);
         }
     }
 }

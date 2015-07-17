@@ -11,10 +11,15 @@ namespace RiskMgr.DAL
 {
     public partial class ParameterDao : BaseDao<Parameter, ParameterQueryForm, ParameterUpdateForm>
     {
-        public ParameterDao(ISqlMapper mapper = null)
+        public ParameterDao(ISqlMapper mapper)
             : base(mapper)
         {
-
         }
+        
+        public ParameterDao()
+            : base(null)
+        {
+        }
+        
     }
 }

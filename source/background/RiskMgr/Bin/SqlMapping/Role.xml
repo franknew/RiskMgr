@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryRole" resultClass="Role" parameterClass="RoleQueryForm">
-    SELECT * FROM Role WHERE 1=1
+    SELECT * FROM `Role` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -37,7 +37,7 @@
     </isNotNull>
   </select>
   <insert id="AddRole" parameterClass="Role">
-  INSERT INTO Role
+  INSERT INTO `Role`
   (
     `ID`,
     `Name`,
@@ -59,26 +59,27 @@
   )
   </insert>
   <update id="UpdateRole" parameterClass="RoleUpdateForm">
-  <isNotNull property="Role">
-  UPDATE Role SET 
-        <isNotNull property="Role.Name">
-        `Name`=#Role.Name#,
+  UPDATE `Role`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
         </isNotNull>
-        <isNotNull property="Role.Creator">
-        `Creator`=#Role.Creator#,
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
         </isNotNull>
-        <isNotNull property="Role.CreateTime">
-        `CreateTime`=#Role.CreateTime#,
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
         </isNotNull>
-        <isNotNull property="Role.Remark">
-        `Remark`=#Role.Remark#,
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
         </isNotNull>
-        <isNotNull property="Role.LastUpdateTime">
-        `LastUpdateTime`=#Role.LastUpdateTime#,
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
         </isNotNull>
-        <isNotNull property="Role.LastUpdator">
-        `LastUpdator`=#Role.LastUpdator#
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
         </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="RoleQueryForm.ID">
         `ID`=#RoleQueryForm.ID#
@@ -107,10 +108,9 @@
     <isNotNull prepend="AND" property="RoleQueryForm.LastUpdator">
         `LastUpdator`=#RoleQueryForm.LastUpdator#
     </isNotNull>
-    </isNotNull>
   </update>
   <delete id="DeleteRole" parameterClass="RoleQueryForm">
-    DELETE FROM Role WHERE 1=1
+    DELETE FROM `Role` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -139,5 +139,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`Role`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Role`
+   </select>
   </statements>
 </sqlMap>

@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class ActionDao : SimpleDao<RiskMgr.Model.Action, ActionQueryForm, ActionUpdateForm>
     {
-        public ActionDao(ISqlMapper mapper = null)
+        public ActionDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public ActionDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryActionLastUpdateTime", null);
         }
     }
 }

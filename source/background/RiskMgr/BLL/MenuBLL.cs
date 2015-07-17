@@ -1,4 +1,5 @@
 ﻿
+using DreamWorkflow.Engine;
 using RiskMgr.DAL;
 using RiskMgr.Form;
 using RiskMgr.Model;
@@ -20,36 +21,9 @@ namespace RiskMgr.BLL
         public List<Menu> GetAllMenu()
         {
             MenuDao dao = new MenuDao();
-            
-            List<Menu> list = null;
-            DateTime lastUpdateTime = dao.QueryLastUpdateTime();
-            var item = cache.GetItem("RiskMgr.Menu");
-            
-            if (item == null)
-            {
-                list = dao.Query(new MenuQueryForm());
-                MenuCache menuCache = new MenuCache
-                {
-                    LastUpdateTime = lastUpdateTime,
-                    Menus = list,
-                };
-                item = new CacheItem("RiskMgr.Menu", menuCache);
-                cache.AddItem(item, 60 * 60);
-            }
-            else
-            {
-                MenuCache menuCache = item.Value as MenuCache;
-                if (lastUpdateTime > menuCache.LastUpdateTime)
-                {
-                    list = dao.Query(new MenuQueryForm());
-                    menuCache.LastUpdateTime = lastUpdateTime;
-                    cache.UpdateItem(item);
-                }
-                else
-                {
-                    list = menuCache.Menus;
-                }
-            }
+
+            List<Menu> list = TableCacheHelper.GetDataFromCache<Menu>(typeof(MenuDao));
+
             return list;
         }
 

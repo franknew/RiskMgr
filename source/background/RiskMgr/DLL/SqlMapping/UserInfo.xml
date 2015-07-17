@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryUserInfo" resultClass="UserInfo" parameterClass="UserInfoQueryForm">
-    SELECT * FROM UserInfo WHERE 1=1
+    SELECT * FROM `UserInfo` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -25,7 +25,7 @@
     </isNotNull>
   </select>
   <insert id="AddUserInfo" parameterClass="UserInfo">
-  INSERT INTO UserInfo
+  INSERT INTO `UserInfo`
   (
     `ID`,
     `QQ`,
@@ -43,7 +43,7 @@
   )
   </insert>
   <update id="UpdateUserInfo" parameterClass="UserInfoUpdateForm">
-  UPDATE UserInfo
+  UPDATE `UserInfo`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.QQ">
         `QQ`=#Entity.QQ#
@@ -76,7 +76,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteUserInfo" parameterClass="UserInfoQueryForm">
-    DELETE FROM UserInfo WHERE 1=1
+    DELETE FROM `UserInfo` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>

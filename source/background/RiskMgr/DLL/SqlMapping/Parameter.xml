@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryParameter" resultClass="Parameter" parameterClass="ParameterQueryForm">
-    SELECT * FROM Parameter WHERE 1=1
+    SELECT * FROM `Parameter` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -22,7 +22,7 @@
     </isNotNull>
   </select>
   <insert id="AddParameter" parameterClass="Parameter">
-  INSERT INTO Parameter
+  INSERT INTO `Parameter`
   (
     `ID`,
     `ContextID`,
@@ -38,7 +38,7 @@
   )
   </insert>
   <update id="UpdateParameter" parameterClass="ParameterUpdateForm">
-  UPDATE Parameter
+  UPDATE `Parameter`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.ContextID">
         `ContextID`=#Entity.ContextID#
@@ -65,7 +65,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteParameter" parameterClass="ParameterQueryForm">
-    DELETE FROM Parameter WHERE 1=1
+    DELETE FROM `Parameter` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>

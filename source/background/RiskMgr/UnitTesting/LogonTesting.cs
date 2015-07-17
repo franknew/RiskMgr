@@ -13,15 +13,18 @@ namespace UnitTesting
     {
         private User initU = null;
         UserDao dao = new UserDao();
+        LogonHistoryDao historydao = new LogonHistoryDao();
         private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache);
         private string token = null;
 
         [TestInitialize]
         public void Init()
         {
+            string id = Guid.NewGuid().ToString().Replace("-", "");
+            dao.Delete(new UserQueryForm { ID = id });
             initU = new User
             {
-                ID = Guid.NewGuid().ToString().Replace("-",""),
+                ID = id,
                 Name = "unittestuser",
                 Password = "unittestuser",
                 CreateTime = DateTime.Now,
@@ -35,6 +38,7 @@ namespace UnitTesting
         public void CleanUp()
         {
             dao.Delete(new UserQueryForm { ID = initU.ID });
+            historydao.Delete(new LogonHistoryQueryForm { UserID = initU.ID });
         }
 
 
@@ -43,7 +47,17 @@ namespace UnitTesting
         {
             LogonBLL bll = new LogonBLL();
             token = bll.Logon(initU.Name, initU.Password);
+            var history = historydao.Query(new LogonHistoryQueryForm { UserID = initU.ID });
             Assert.IsNotNull(token);
+            Assert.IsTrue(history.Count > 0);
+            try
+            {
+                bll.Logon(initU.Name, "wrongpassword");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("用户名或者密码错误！请输入正确的用户名和密码！", ex.Message);
+            }
         }
 
         [TestMethod]

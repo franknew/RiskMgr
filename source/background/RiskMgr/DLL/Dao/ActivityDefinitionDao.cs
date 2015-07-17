@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class ActivityDefinitionDao : SimpleDao<ActivityDefinition, ActivityDefinitionQueryForm, ActivityDefinitionUpdateForm>
     {
-        public ActivityDefinitionDao(ISqlMapper mapper = null)
+        public ActivityDefinitionDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public ActivityDefinitionDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryActivityDefinitionLastUpdateTime", null);
         }
     }
 }

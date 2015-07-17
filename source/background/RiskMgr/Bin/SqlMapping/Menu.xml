@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryMenu" resultClass="Menu" parameterClass="MenuQueryForm">
-    SELECT * FROM Menu WHERE 1=1
+    SELECT * FROM `Menu` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -46,7 +46,7 @@
     </isNotNull>
   </select>
   <insert id="AddMenu" parameterClass="Menu">
-  INSERT INTO Menu
+  INSERT INTO `Menu`
   (
     `ID`,
     `Name`,
@@ -74,35 +74,36 @@
   )
   </insert>
   <update id="UpdateMenu" parameterClass="MenuUpdateForm">
-  <isNotNull property="Menu">
-  UPDATE Menu SET 
-        <isNotNull property="Menu.Name">
-        `Name`=#Menu.Name#,
+  UPDATE `Menu`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
         </isNotNull>
-        <isNotNull property="Menu.Creator">
-        `Creator`=#Menu.Creator#,
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
         </isNotNull>
-        <isNotNull property="Menu.CreateTime">
-        `CreateTime`=#Menu.CreateTime#,
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
         </isNotNull>
-        <isNotNull property="Menu.Page">
-        `Page`=#Menu.Page#,
+        <isNotNull prepend="," property="Entity.Page">
+        `Page`=#Entity.Page#
         </isNotNull>
-        <isNotNull property="Menu.ParentID">
-        `ParentID`=#Menu.ParentID#,
+        <isNotNull prepend="," property="Entity.ParentID">
+        `ParentID`=#Entity.ParentID#
         </isNotNull>
-        <isNotNull property="Menu.Enabled">
-        `Enabled`=#Menu.Enabled#,
+        <isNotNull prepend="," property="Entity.Enabled">
+        `Enabled`=#Entity.Enabled#
         </isNotNull>
-        <isNotNull property="Menu.Remark">
-        `Remark`=#Menu.Remark#,
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
         </isNotNull>
-        <isNotNull property="Menu.LastUpdateTime">
-        `LastUpdateTime`=#Menu.LastUpdateTime#,
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
         </isNotNull>
-        <isNotNull property="Menu.LastUpdator">
-        `LastUpdator`=#Menu.LastUpdator#
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
         </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="MenuQueryForm.ID">
         `ID`=#MenuQueryForm.ID#
@@ -140,10 +141,9 @@
     <isNotNull prepend="AND" property="MenuQueryForm.LastUpdator">
         `LastUpdator`=#MenuQueryForm.LastUpdator#
     </isNotNull>
-    </isNotNull>
   </update>
   <delete id="DeleteMenu" parameterClass="MenuQueryForm">
-    DELETE FROM Menu WHERE 1=1
+    DELETE FROM `Menu` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -181,5 +181,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`Menu`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Menu`
+   </select>
   </statements>
 </sqlMap>

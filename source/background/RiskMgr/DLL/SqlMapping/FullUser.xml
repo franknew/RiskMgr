@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="FullUser" type="RiskMgr.Model.FullUser" />
+    <typeAlias alias="FullUserQueryForm" type="RiskMgr.Form.FullUserQueryForm" />
+  </alias>
+  <statements>
+    <select id="QueryFullUser" resultClass="FullUser" parameterClass="FullUserQueryForm">
+      SELECT u.Enabled,u.CreateTime,u.Creator,u.LastUpdateTime,u.LastUpdator,u.Name,ui.* FROM `User` u INNER JOIN `UserInfo` ui ON u.ID=ui.ID  WHERE 1=1
+      <isNotNull prepend="AND" property="ID">
+        u.`ID`=#ID#
+      </isNotNull>
+      <isNotNull prepend="AND" property="Name">
+        u.`Name` LIKE '%$Name$%'
+      </isNotNull>
+      <isNotNull prepend="AND" property="Creator">
+        u.`Creator`=#Creator#
+      </isNotNull>
+      <isNotNull prepend="AND" property="CreateTime_Start">
+        u.`CreateTime`&gt;=#CreateTime_Start#
+      </isNotNull>
+      <isNotNull prepend="AND" property="CreateTime_End">
+        u.`CreateTime`&lt;=#CreateTime_End#
+      </isNotNull>
+      <isNotNull prepend="AND" property="Enabled">
+        u.`Enabled`=#Enabled#
+      </isNotNull>
+      <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        u.`LastUpdateTime`&gt;=#LastUpdateTime_Start#
+      </isNotNull>
+      <isNotNull prepend="AND" property="LastUpdateTime_End">
+        u.`LastUpdateTime`&lt;=#LastUpdateTime_End#
+      </isNotNull>
+      <isNotNull prepend="AND" property="LastUpdator">
+        u.`LastUpdator`=#LastUpdator#
+      </isNotNull>
+      <isNotNull prepend="AND" property="QQ">
+        ur.`QQ` LIKE '%QQ%'
+      </isNotNull>
+      <isNotNull prepend="AND" property="WX">
+        ur.`WX` LIKE '%WX%'
+      </isNotNull>
+      <isNotNull prepend="AND" property="Mobile">
+        ur.`Mobile` LIKE '%Mobile%'
+      </isNotNull>
+      <isNotNull prepend="AND" property="Address">
+        ur.`Address` LIKE '%Address%'
+      </isNotNull>
+    </select>
+  </statements>
+</sqlMap>

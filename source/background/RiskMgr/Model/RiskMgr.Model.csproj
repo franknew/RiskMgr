@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Action.cs" />
+    <Compile Include="Entity\FullUser.cs" />
+    <Compile Include="Entity\LogonHistory.cs" />
     <Compile Include="Entity\Menu.cs" />
     <Compile Include="Entity\MenuCache.cs" />
     <Compile Include="Entity\Menu_Role.cs" />
@@ -59,6 +61,8 @@
     <Compile Include="QueryForm\ActionQueryForm.cs" />
     <Compile Include="QueryForm\ActivityAuthDefinitionQueryForm.cs" />
     <Compile Include="QueryForm\BaseQueryForm.cs" />
+    <Compile Include="QueryForm\FullUserQueryForm.cs" />
+    <Compile Include="QueryForm\LogonHistoryQueryForm.cs" />
     <Compile Include="UpdateForm\ChangePasswordUpdateForm.cs" />
     <Compile Include="QueryForm\MenuQueryForm.cs" />
     <Compile Include="QueryForm\Menu_RoleQueryForm.cs" />
@@ -71,6 +75,7 @@
     <Compile Include="QueryForm\User_PostQueryForm.cs" />
     <Compile Include="QueryForm\User_RoleQueryForm.cs" />
     <Compile Include="UpdateForm\ActionUpdateForm.cs" />
+    <Compile Include="UpdateForm\LogonHistoryUpdateForm.cs" />
     <Compile Include="UpdateForm\MenuUpdateForm.cs" />
     <Compile Include="UpdateForm\Menu_RoleUpdateForm.cs" />
     <Compile Include="UpdateForm\ModuleUpdateForm.cs" />

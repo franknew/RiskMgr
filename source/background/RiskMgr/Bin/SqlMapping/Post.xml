@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryPost" resultClass="Post" parameterClass="PostQueryForm">
-    SELECT * FROM Post WHERE 1=1
+    SELECT * FROM `Post` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -37,7 +37,7 @@
     </isNotNull>
   </select>
   <insert id="AddPost" parameterClass="Post">
-  INSERT INTO Post
+  INSERT INTO `Post`
   (
     `ID`,
     `Name`,
@@ -59,26 +59,27 @@
   )
   </insert>
   <update id="UpdatePost" parameterClass="PostUpdateForm">
-  <isNotNull property="Post">
-  UPDATE Post SET 
-        <isNotNull property="Post.Name">
-        `Name`=#Post.Name#,
+  UPDATE `Post`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
         </isNotNull>
-        <isNotNull property="Post.Creator">
-        `Creator`=#Post.Creator#,
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
         </isNotNull>
-        <isNotNull property="Post.CreateTime">
-        `CreateTime`=#Post.CreateTime#,
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
         </isNotNull>
-        <isNotNull property="Post.Remark">
-        `Remark`=#Post.Remark#,
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
         </isNotNull>
-        <isNotNull property="Post.LastUpdateTime">
-        `LastUpdateTime`=#Post.LastUpdateTime#,
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
         </isNotNull>
-        <isNotNull property="Post.LastUpdator">
-        `LastUpdator`=#Post.LastUpdator#
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
         </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="PostQueryForm.ID">
         `ID`=#PostQueryForm.ID#
@@ -107,10 +108,9 @@
     <isNotNull prepend="AND" property="PostQueryForm.LastUpdator">
         `LastUpdator`=#PostQueryForm.LastUpdator#
     </isNotNull>
-    </isNotNull>
   </update>
   <delete id="DeletePost" parameterClass="PostQueryForm">
-    DELETE FROM Post WHERE 1=1
+    DELETE FROM `Post` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -139,5 +139,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`Post`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Post`
+   </select>
   </statements>
 </sqlMap>

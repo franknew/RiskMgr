@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class TaskDao : SimpleDao<Task, TaskQueryForm, TaskUpdateForm>
     {
-        public TaskDao(ISqlMapper mapper = null)
+        public TaskDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public TaskDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryTaskLastUpdateTime", null);
         }
     }
 }

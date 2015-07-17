@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class RoleDao : SimpleDao<Role, RoleQueryForm, RoleUpdateForm>
     {
-        public RoleDao(ISqlMapper mapper = null)
+        public RoleDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public RoleDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryRoleLastUpdateTime", null);
         }
     }
 }

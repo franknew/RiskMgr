@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class ApprovalDao : SimpleDao<Approval, ApprovalQueryForm, ApprovalUpdateForm>
     {
-        public ApprovalDao(ISqlMapper mapper = null)
+        public ApprovalDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public ApprovalDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryApprovalLastUpdateTime", null);
         }
     }
 }

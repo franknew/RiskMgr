@@ -40,12 +40,11 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [AuthFilter]
-
         public List<Menu> GetMenu()
         {
             string token = ServiceSession.Current.Context.Parameters["token"].ToString();
             MenuBLL menubll = new MenuBLL();
-            var menulist = menubll.GetAllMenu();
+            var menulist = menubll.GetCurrentUserMenu(token);
             return null;
         }
     }

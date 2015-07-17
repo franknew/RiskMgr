@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryAction" resultClass="Action" parameterClass="ActionQueryForm">
-    SELECT * FROM Action WHERE 1=1
+    SELECT * FROM `Action` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -37,7 +37,7 @@
     </isNotNull>
   </select>
   <insert id="AddAction" parameterClass="Action">
-  INSERT INTO Action
+  INSERT INTO `Action`
   (
     `ID`,
     `Name`,
@@ -59,7 +59,7 @@
   )
   </insert>
   <update id="UpdateAction" parameterClass="ActionUpdateForm">
-  UPDATE Action
+  UPDATE `Action`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.Name">
         `Name`=#Entity.Name#
@@ -110,7 +110,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteAction" parameterClass="ActionQueryForm">
-    DELETE FROM Action WHERE 1=1
+    DELETE FROM `Action` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -139,5 +139,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`Action`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Action`
+   </select>
   </statements>
 </sqlMap>

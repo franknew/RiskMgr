@@ -11,10 +11,15 @@ namespace RiskMgr.DAL
 {
     public partial class UserInfoDao : BaseDao<UserInfo, UserInfoQueryForm, UserInfoUpdateForm>
     {
-        public UserInfoDao(ISqlMapper mapper = null)
+        public UserInfoDao(ISqlMapper mapper)
             : base(mapper)
         {
-
         }
+        
+        public UserInfoDao()
+            : base(null)
+        {
+        }
+        
     }
 }

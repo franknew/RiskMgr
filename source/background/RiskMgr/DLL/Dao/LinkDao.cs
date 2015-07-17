@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class LinkDao : SimpleDao<Link, LinkQueryForm, LinkUpdateForm>
     {
-        public LinkDao(ISqlMapper mapper = null)
+        public LinkDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public LinkDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryLinkLastUpdateTime", null);
         }
     }
 }

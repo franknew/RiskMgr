@@ -1,4 +1,5 @@
-﻿using RiskMgr.DAL;
+﻿using IBatisNet.DataMapper;
+using RiskMgr.DAL;
 using RiskMgr.Form;
 using RiskMgr.Model;
 using SOAFramework.Library.Cache;
@@ -17,29 +18,52 @@ namespace RiskMgr.BLL
 
         public string Logon(string username, string password)
         {
-            UserDao userdao = new UserDao();
-            UserInfoDao userInfoDao = new UserInfoDao();
-            RoleDao roleDao = new RoleDao();
+            var mapper = Mapper.Instance();
+            mapper.BeginTransaction();
+            UserDao userdao = new UserDao(mapper);
+            UserInfoDao userInfoDao = new UserInfoDao(mapper);
+            RoleDao roleDao = new RoleDao(mapper);
+            LogonHistoryDao historyDao = new LogonHistoryDao(mapper);
             var users = userdao.Query(new UserQueryForm { Name = username, Password = password });
             if (users.Count > 0)
             {
-                string token = Guid.NewGuid().ToString().Replace("-", "");
-                var userinfo = userInfoDao.Query(new UserInfoQueryForm { ID = users[0].ID });
-                UserEntireInfo u = new UserEntireInfo
+                try
                 {
-                    User = users[0],
-                };
-                if (userinfo.Count > 0)
-                {
-                    u.UserInfo = userinfo[0];
+                    if (users[0].Enabled == 0)
+                    {
+                        throw new Exception("该用户已被禁用，请联系管理员！");
+                    }
+                    string token = Guid.NewGuid().ToString().Replace("-", "");
+                    var userinfo = userInfoDao.Query(new UserInfoQueryForm { ID = users[0].ID });
+                    UserEntireInfo u = new UserEntireInfo
+                    {
+                        User = users[0],
+                    };
+                    if (userinfo.Count > 0)
+                    {
+                        u.UserInfo = userinfo[0];
+                    }
+                    CacheItem item = new CacheItem(token, u);
+                    LogonHistory history = new LogonHistory
+                    {
+                        LogonTime = DateTime.Now,
+                        Token = token,
+                        UserID = users[0].ID,
+                    };
+                    historyDao.Add(history);
+                    mapper.CommitTransaction();
+                    cache.AddItem(item, 30 * 60);
+                    return token;
                 }
-                CacheItem item = new CacheItem(token, u);
-                cache.AddItem(item, 30 * 60);
-                return token;
+                catch (Exception ex)
+                {
+                    mapper.RollBackTransaction();
+                    throw ex;
+                }
             }
             else
             {
-                return null;
+                throw new Exception("用户名或者密码错误！请输入正确的用户名和密码！");
             }
         }
 
@@ -64,9 +88,9 @@ namespace RiskMgr.BLL
             return u;
         }
 
-        public bool CheckAuth(string userid)
+        public bool CheckAuth(string token, string module, string action)
         {
-            
+            Role_Module_ActionDao rmadao = new Role_Module_ActionDao();
             return true;
         }
     }

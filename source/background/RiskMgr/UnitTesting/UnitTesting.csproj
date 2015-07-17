@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="LogonTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Api\RiskMgr.Api.csproj">

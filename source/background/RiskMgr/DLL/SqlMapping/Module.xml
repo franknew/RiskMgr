@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryModule" resultClass="Module" parameterClass="ModuleQueryForm">
-    SELECT * FROM Module WHERE 1=1
+    SELECT * FROM `Module` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -37,7 +37,7 @@
     </isNotNull>
   </select>
   <insert id="AddModule" parameterClass="Module">
-  INSERT INTO Module
+  INSERT INTO `Module`
   (
     `ID`,
     `Name`,
@@ -59,7 +59,7 @@
   )
   </insert>
   <update id="UpdateModule" parameterClass="ModuleUpdateForm">
-  UPDATE Module
+  UPDATE `Module`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.Name">
         `Name`=#Entity.Name#
@@ -110,7 +110,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteModule" parameterClass="ModuleQueryForm">
-    DELETE FROM Module WHERE 1=1
+    DELETE FROM `Module` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -139,5 +139,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`Module`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Module`
+   </select>
   </statements>
 </sqlMap>

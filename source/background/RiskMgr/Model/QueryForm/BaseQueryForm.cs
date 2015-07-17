@@ -16,5 +16,11 @@ namespace RiskMgr.Form
         public DateTime? CreateTime_Start { get; set; }
 
         public DateTime? CreateTime_End { get; set; }
+
+        public string LastUpdator { get; set; }
+
+        public DateTime? LastUpdateTime_Start { get; set; }
+
+        public DateTime? LastUpdateTime_End { get; set; }
     }
 }

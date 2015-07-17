@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryRole" resultClass="Role" parameterClass="RoleQueryForm">
-    SELECT * FROM Role WHERE 1=1
+    SELECT * FROM `Role` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -37,7 +37,7 @@
     </isNotNull>
   </select>
   <insert id="AddRole" parameterClass="Role">
-  INSERT INTO Role
+  INSERT INTO `Role`
   (
     `ID`,
     `Name`,
@@ -59,7 +59,7 @@
   )
   </insert>
   <update id="UpdateRole" parameterClass="RoleUpdateForm">
-  UPDATE Role
+  UPDATE `Role`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.Name">
         `Name`=#Entity.Name#
@@ -110,7 +110,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteRole" parameterClass="RoleQueryForm">
-    DELETE FROM Role WHERE 1=1
+    DELETE FROM `Role` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -139,5 +139,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`Role`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Role`
+   </select>
   </statements>
 </sqlMap>

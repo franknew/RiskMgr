@@ -11,10 +11,15 @@ namespace RiskMgr.DAL
 {
     public partial class User_PostDao : BaseDao<User_Post, User_PostQueryForm, User_PostUpdateForm>
     {
-        public User_PostDao(ISqlMapper mapper = null)
+        public User_PostDao(ISqlMapper mapper)
             : base(mapper)
         {
-
         }
+        
+        public User_PostDao()
+            : base(null)
+        {
+        }
+        
     }
 }

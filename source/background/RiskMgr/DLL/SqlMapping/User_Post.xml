@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryUser_Post" resultClass="User_Post" parameterClass="User_PostQueryForm">
-    SELECT * FROM User_Post WHERE 1=1
+    SELECT * FROM `User_Post` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -19,7 +19,7 @@
     </isNotNull>
   </select>
   <insert id="AddUser_Post" parameterClass="User_Post">
-  INSERT INTO User_Post
+  INSERT INTO `User_Post`
   (
     `ID`,
     `UserID`,
@@ -33,7 +33,7 @@
   )
   </insert>
   <update id="UpdateUser_Post" parameterClass="User_PostUpdateForm">
-  UPDATE User_Post
+  UPDATE `User_Post`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.UserID">
         `UserID`=#Entity.UserID#
@@ -54,7 +54,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteUser_Post" parameterClass="User_PostQueryForm">
-    DELETE FROM User_Post WHERE 1=1
+    DELETE FROM `User_Post` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>

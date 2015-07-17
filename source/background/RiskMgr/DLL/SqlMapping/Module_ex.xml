@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <statements>
+    <select id="QueryModuleByUserID" resultClass="Module">
+      SELECT * FROM Module
+    </select>
+  </statements>
+</sqlMap>

@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryContext" resultClass="Context" parameterClass="ContextQueryForm">
-    SELECT * FROM Context WHERE 1=1
+    SELECT * FROM `Context` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -16,7 +16,7 @@
     </isNotNull>
   </select>
   <insert id="AddContext" parameterClass="Context">
-  INSERT INTO Context
+  INSERT INTO `Context`
   (
     `ID`,
     `WorkflowID`
@@ -28,7 +28,7 @@
   )
   </insert>
   <update id="UpdateContext" parameterClass="ContextUpdateForm">
-  UPDATE Context
+  UPDATE `Context`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.WorkflowID">
         `WorkflowID`=#Entity.WorkflowID#
@@ -43,7 +43,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteContext" parameterClass="ContextQueryForm">
-    DELETE FROM Context WHERE 1=1
+    DELETE FROM `Context` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>

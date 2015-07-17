@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryUser" resultClass="User" parameterClass="UserQueryForm">
-    SELECT * FROM User WHERE 1=1
+    SELECT * FROM `User` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -40,7 +40,7 @@
     </isNotNull>
   </select>
   <insert id="AddUser" parameterClass="User">
-  INSERT INTO User
+  INSERT INTO `User`
   (
     `ID`,
     `Name`,
@@ -64,29 +64,30 @@
   )
   </insert>
   <update id="UpdateUser" parameterClass="UserUpdateForm">
-  <isNotNull property="User">
-  UPDATE User SET 
-        <isNotNull property="User.Name">
-        `Name`=#User.Name#,
+  UPDATE `User`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
         </isNotNull>
-        <isNotNull property="User.Creator">
-        `Creator`=#User.Creator#,
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
         </isNotNull>
-        <isNotNull property="User.CreateTime">
-        `CreateTime`=#User.CreateTime#,
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
         </isNotNull>
-        <isNotNull property="User.Password">
-        `Password`=#User.Password#,
+        <isNotNull prepend="," property="Entity.Password">
+        `Password`=#Entity.Password#
         </isNotNull>
-        <isNotNull property="User.Enabled">
-        `Enabled`=#User.Enabled#,
+        <isNotNull prepend="," property="Entity.Enabled">
+        `Enabled`=#Entity.Enabled#
         </isNotNull>
-        <isNotNull property="User.LastUpdateTime">
-        `LastUpdateTime`=#User.LastUpdateTime#,
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
         </isNotNull>
-        <isNotNull property="User.LastUpdator">
-        `LastUpdator`=#User.LastUpdator#
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
         </isNotNull>
+    </dynamic>
     WHERE 1=1
     <isNotNull prepend="AND" property="UserQueryForm.ID">
         `ID`=#UserQueryForm.ID#
@@ -118,10 +119,9 @@
     <isNotNull prepend="AND" property="UserQueryForm.LastUpdator">
         `LastUpdator`=#UserQueryForm.LastUpdator#
     </isNotNull>
-    </isNotNull>
   </update>
   <delete id="DeleteUser" parameterClass="UserQueryForm">
-    DELETE FROM User WHERE 1=1
+    DELETE FROM `User` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -153,5 +153,8 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
+   <select id="Query`User`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `User`
+   </select>
   </statements>
 </sqlMap>

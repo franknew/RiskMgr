@@ -11,10 +11,19 @@ namespace RiskMgr.DAL
 {
     public partial class WorkflowDefinitionDao : SimpleDao<WorkflowDefinition, WorkflowDefinitionQueryForm, WorkflowDefinitionUpdateForm>
     {
-        public WorkflowDefinitionDao(ISqlMapper mapper = null)
+        public WorkflowDefinitionDao(ISqlMapper mapper)
             : base(mapper)
         {
-
+        }
+        
+        public WorkflowDefinitionDao()
+            : base(null)
+        {
+        }
+        
+        public DateTime QueryMaxLastUpdateTime()
+        {
+            return Mapper.QueryForObject<DateTime>("QueryWorkflowDefinitionLastUpdateTime", null);
         }
     }
 }

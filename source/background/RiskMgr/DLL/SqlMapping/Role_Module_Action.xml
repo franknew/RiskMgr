@@ -7,7 +7,7 @@
   </alias>
   <statements>
   <select id="QueryRole_Module_Action" resultClass="Role_Module_Action" parameterClass="Role_Module_ActionQueryForm">
-    SELECT * FROM Role_Module_Action WHERE 1=1
+    SELECT * FROM `Role_Module_Action` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -22,7 +22,7 @@
     </isNotNull>
   </select>
   <insert id="AddRole_Module_Action" parameterClass="Role_Module_Action">
-  INSERT INTO Role_Module_Action
+  INSERT INTO `Role_Module_Action`
   (
     `ID`,
     `RoleID`,
@@ -38,7 +38,7 @@
   )
   </insert>
   <update id="UpdateRole_Module_Action" parameterClass="Role_Module_ActionUpdateForm">
-  UPDATE Role_Module_Action
+  UPDATE `Role_Module_Action`
     <dynamic prepend="SET">
         <isNotNull prepend="," property="Entity.RoleID">
         `RoleID`=#Entity.RoleID#
@@ -65,7 +65,7 @@
     </isNotNull>
   </update>
   <delete id="DeleteRole_Module_Action" parameterClass="Role_Module_ActionQueryForm">
-    DELETE FROM Role_Module_Action WHERE 1=1
+    DELETE FROM `Role_Module_Action` WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
