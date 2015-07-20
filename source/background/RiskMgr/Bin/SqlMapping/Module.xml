@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Module" type="RiskMgr.Model.Module" />
+    <typeAlias alias="ModuleQueryForm" type="RiskMgr.Form.ModuleQueryForm" />
+    <typeAlias alias="ModuleUpdateForm" type="RiskMgr.Form.ModuleUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryModule" resultClass="Module" parameterClass="ModuleQueryForm">
+    SELECT * FROM `Module` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+  </select>
+  <insert id="AddModule" parameterClass="Module">
+  INSERT INTO `Module`
+  (
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Remark`,
+    `LastUpdateTime`,
+    `LastUpdator`
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#,
+        #LastUpdateTime#,
+        #LastUpdator#
+  )
+  </insert>
+  <update id="UpdateModule" parameterClass="ModuleUpdateForm">
+  UPDATE `Module`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+    </dynamic>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="ModuleQueryForm.ID">
+        `ID`=#ModuleQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleQueryForm.Name">
+        `Name` LIKE '%$ModuleQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleQueryForm.Creator">
+        `Creator`=#ModuleQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#ModuleQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#ModuleQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleQueryForm.Remark">
+        `Remark` LIKE '%$ModuleQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#ModuleQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#ModuleQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleQueryForm.LastUpdator">
+        `LastUpdator`=#ModuleQueryForm.LastUpdator#
+    </isNotNull>
+  </update>
+  <delete id="DeleteModule" parameterClass="ModuleQueryForm">
+    DELETE FROM `Module` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+  </delete>
+   <select id="Query`Module`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Module`
+   </select>
+  </statements>
+</sqlMap>

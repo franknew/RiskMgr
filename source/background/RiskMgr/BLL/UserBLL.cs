@@ -3,27 +3,65 @@ using RiskMgr.DAL;
 using RiskMgr.Form;
 using RiskMgr.Model;
 using SOAFramework.Library.Cache;
+using SOAFramework.Service.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
+using SOAFramework.Service.Core;
 
 namespace RiskMgr.BLL
 {
     public class UserBLL
     {
-        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache, CacheEnum.User);
+        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache);
         private ISqlMapper mapper = Mapper.Instance();
 
-        public User GetUserFormCache(string token)
+        public UserEntireInfo GetUserFormCache(string token)
         {
             CacheItem item = cache.GetItem(token);
             if (item == null)
             {
                 return null;
             }
-            User u = item.Value as User;
+            UserEntireInfo u = item.Value as UserEntireInfo;
+            return u;
+        }
+
+        public UserEntireInfo GetUserEntireInfoFromCache(string token)
+        {
+            var item = cache.GetItem(token);
+            UserEntireInfo u = null;
+            if (item != null)
+            {
+                u = item.Value as UserEntireInfo;
+            }
+            return u;
+        }
+
+        public UserEntireInfo GetCurrentUser(string token)
+        {
+            var u = GetUserEntireInfoFromCache(token);
+            if (u == null)
+            {
+                mapper.BeginTransaction();
+                UserDao userdao = new UserDao(mapper);
+                RoleDao roledao = new RoleDao(mapper);
+                UserInfoDao uidao = new UserInfoDao(mapper);
+                LogonHistoryDao lhdao = new LogonHistoryDao(mapper);
+                var logonhistory = lhdao.Query(new LogonHistoryQueryForm { Token = token }).FirstOrDefault();
+                string userid = logonhistory.UserID;
+                var user = userdao.Query(new UserQueryForm { ID = userid }).FirstOrDefault();
+                var userinfo = uidao.Query(new UserInfoQueryForm { ID = userid }).FirstOrDefault();
+                var roles = roledao.QueryRoleByUserID(userid);
+                u = new UserEntireInfo
+                {
+                    User = user,
+                    Role = roles,
+                    UserInfo = userinfo,
+                };
+            }
             return u;
         }
 
@@ -108,6 +146,38 @@ namespace RiskMgr.BLL
             var userlist = dao.Query(new FullUserQueryForm());
 
             return userlist;
+        }
+
+        public int CheckUserAuth(string token)
+        {
+            //验证有没有登录
+            UserEntireInfo user = GetUserEntireInfoFromCache(token);
+            if (user == null)
+            {
+                LogonHistoryDao dao = new LogonHistoryDao();
+                var logonList = dao.Query(new LogonHistoryQueryForm { Token = token });
+                if (logonList.Count == 0 || DateTime.Now - logonList[0].ActiveTime > new TimeSpan(0, 30, 0))
+                {
+                    return 3;
+                }
+                dao.Update(new LogonHistoryUpdateForm
+                {
+                    Entity = new LogonHistory { ActiveTime = DateTime.Now },
+                    LogonHistoryQueryForm = new LogonHistoryQueryForm { Token = token },
+                });
+            }
+            //验证有没有权限访问
+            var attr = ServiceSession.Current.Method.GetCustomAttribute<BaseActionAttribute>(true);
+            if (attr != null)
+            {
+                string actionName = attr.Action;
+                var servicelayer = ServiceSession.Current.Method.DeclaringType.GetCustomAttribute<ServiceLayer>(true);
+                if (servicelayer != null)
+                {
+                    string moduleName = servicelayer.Module;
+                }
+            }
+            return -1;
         }
     }
 }

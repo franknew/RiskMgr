@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Action" type="RiskMgr.Model.Action" />
+    <typeAlias alias="ActionQueryForm" type="RiskMgr.Form.ActionQueryForm" />
+    <typeAlias alias="ActionUpdateForm" type="RiskMgr.Form.ActionUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryAction" resultClass="Action" parameterClass="ActionQueryForm">
+    SELECT * FROM `Action` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+  </select>
+  <insert id="AddAction" parameterClass="Action">
+  INSERT INTO `Action`
+  (
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Remark`,
+    `LastUpdateTime`,
+    `LastUpdator`
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#,
+        #LastUpdateTime#,
+        #LastUpdator#
+  )
+  </insert>
+  <update id="UpdateAction" parameterClass="ActionUpdateForm">
+  UPDATE `Action`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+    </dynamic>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="ActionQueryForm.ID">
+        `ID`=#ActionQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionQueryForm.Name">
+        `Name` LIKE '%$ActionQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionQueryForm.Creator">
+        `Creator`=#ActionQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#ActionQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#ActionQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionQueryForm.Remark">
+        `Remark` LIKE '%$ActionQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#ActionQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#ActionQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionQueryForm.LastUpdator">
+        `LastUpdator`=#ActionQueryForm.LastUpdator#
+    </isNotNull>
+  </update>
+  <delete id="DeleteAction" parameterClass="ActionQueryForm">
+    DELETE FROM `Action` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+  </delete>
+   <select id="Query`Action`LastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Action`
+   </select>
+  </statements>
+</sqlMap>

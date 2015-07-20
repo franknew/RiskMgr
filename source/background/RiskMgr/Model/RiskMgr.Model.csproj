@@ -63,6 +63,7 @@
     <Compile Include="QueryForm\ActivityAuthDefinitionQueryForm.cs" />
     <Compile Include="QueryForm\BaseQueryForm.cs" />
     <Compile Include="QueryForm\FullUserQueryForm.cs" />
+    <Compile Include="QueryForm\IndexQueryForm.cs" />
     <Compile Include="QueryForm\LogonHistoryQueryForm.cs" />
     <Compile Include="UpdateForm\ChangePasswordUpdateForm.cs" />
     <Compile Include="QueryForm\MenuQueryForm.cs" />

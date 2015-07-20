@@ -15,6 +15,10 @@ namespace RiskMgr.Form
         public DateTime? LogonTime_End { get; set; }
         
         public string IP { get; set; }
+
+        public DateTime? ActiveTime_Start { get; set; }
+
+        public DateTime? ActiveTime_End { get; set; }
         
     }
 }

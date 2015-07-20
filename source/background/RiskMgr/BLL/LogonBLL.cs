@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace RiskMgr.BLL
 {
@@ -49,7 +51,10 @@ namespace RiskMgr.BLL
                         LogonTime = DateTime.Now,
                         Token = token,
                         UserID = users[0].ID,
+                        ActiveTime = DateTime.Now,
                     };
+                    //var endpoint = ServiceSession.Current.Context.Context.IncomingMessageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+                    //history.IP = endpoint.Address;
                     historyDao.Add(history);
                     mapper.CommitTransaction();
                     cache.AddItem(item, 30 * 60);
@@ -75,17 +80,6 @@ namespace RiskMgr.BLL
                 cache.DelItem(item);
             }
             return true;
-        }
-
-        public UserEntireInfo GetUserEntireInfo(string token)
-        {
-            var item = cache.GetItem(token);
-            UserEntireInfo u =null;
-            if (item != null)
-            {
-                u = item.Value as UserEntireInfo;
-            }
-            return u;
         }
 
         public bool CheckAuth(string token, string module, string action)

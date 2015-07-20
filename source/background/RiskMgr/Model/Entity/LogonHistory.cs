@@ -15,6 +15,7 @@ namespace RiskMgr.Model
         public DateTime? LogonTime { get; set; }
         
         public string IP { get; set; }
-        
+
+        public DateTime? ActiveTime { get; set; }
     }
 }

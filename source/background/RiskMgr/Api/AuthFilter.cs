@@ -13,17 +13,18 @@ namespace RiskMgr.Api
     [ServiceLayer(IsHiddenDiscovery = true)]
     public class AuthFilter : BaseFilter
     {
-        LogonBLL bll = new LogonBLL();
+        LogonBLL logonbll = new LogonBLL();
+        UserBLL userbll = new UserBLL();
 
         /// <summary>
         /// 验证是否登录，Code返回1为没有登录或者token失效，要重新登录
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override bool OnActionExecuted(ActionContext context)
+        public override bool OnActionExecuting(ActionContext context)
         {
             //验证没有token
-            if (!context.Parameters.ContainsKey("token"))
+            if (!context.Parameters.ContainsKey("token") || context.Parameters["token"] == null)
             {
                 this.Message = "没有token！";
                 context.Code = 2;
@@ -31,24 +32,16 @@ namespace RiskMgr.Api
             }
             //验证有没有登录
             string token = context.Parameters["token"].ToString();
-            UserEntireInfo user = bll.GetUserEntireInfo(token);
-            if (user == null)
+
+            int result = userbll.CheckUserAuth(token);
+            switch (result)
             {
-                this.Message = "token失效，请重新登录！";
-                context.Code = 3;
-                return false;
+                case 3:
+                    this.Message = "token失效，请重新登录！";
+                    context.Code = result;
+                    break;
             }
-            //验证有没有权限访问
-            var attr = context.MethodInfo.GetCustomAttribute<BaseActionAttribute>(true);
-            if (attr != null)
-            {
-                string actionName = attr.Action;
-                var servicelayer = context.MethodInfo.DeclaringType.GetCustomAttribute<ServiceLayer>(true);
-                if (servicelayer != null)
-                {
-                    string moduleName = servicelayer.Module;
-                }
-            }
+
 
             return true;
         }

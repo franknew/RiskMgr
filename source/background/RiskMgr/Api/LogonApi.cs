@@ -34,18 +34,5 @@ namespace RiskMgr.Api
             string token = ServiceSession.Current.Context.Parameters["token"].ToString();
             return bll.Logout(token);
         }
-
-        /// <summary>
-        /// 获得菜单
-        /// </summary>
-        /// <returns></returns>
-        [AuthFilter]
-        public List<Menu> GetMenu()
-        {
-            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
-            MenuBLL menubll = new MenuBLL();
-            var menulist = menubll.GetCurrentUserMenu(token);
-            return null;
-        }
     }
 }

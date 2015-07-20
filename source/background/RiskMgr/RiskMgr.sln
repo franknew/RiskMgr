@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiskMgr.BLL", "BLL\RiskMgr.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{D5CC4C6E-6FDC-492D-8152-013016246C2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiskMgr.WinformTest", "RiskMgr.WinformTest\RiskMgr.WinformTest.csproj", "{D36A7985-9AC7-4933-8AA4-739351708DB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D5CC4C6E-6FDC-492D-8152-013016246C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5CC4C6E-6FDC-492D-8152-013016246C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5CC4C6E-6FDC-492D-8152-013016246C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D36A7985-9AC7-4933-8AA4-739351708DB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36A7985-9AC7-4933-8AA4-739351708DB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36A7985-9AC7-4933-8AA4-739351708DB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36A7985-9AC7-4933-8AA4-739351708DB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

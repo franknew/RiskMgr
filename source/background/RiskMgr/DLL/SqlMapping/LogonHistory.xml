@@ -23,27 +23,35 @@
     <isNotNull prepend="AND" property="LogonTime_End">
         `LogonTime`&lt;=#LogonTime_End#
     </isNotNull>
+    <isNotNull prepend="AND" property="ActiveTime_Start">
+      `ActiveTime`&gt;=#ActiveTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonTime_End">
+      `ActiveTime`&lt;=#ActiveTime_End#
+    </isNotNull>
     <isNotNull prepend="AND" property="IP">
         `IP`=#IP#
     </isNotNull>
   </select>
   <insert id="AddLogonHistory" parameterClass="LogonHistory">
-  INSERT INTO `LogonHistory`
-  (
+    INSERT INTO `LogonHistory`
+    (
     `ID`,
     `UserID`,
     `Token`,
     `LogonTime`,
-    `IP`
-  )
-  VALUES
-  (
-        #ID#,
-        #UserID#,
-        #Token#,
-        #LogonTime#,
-        #IP#
-  )
+    `IP`,
+    ActiveTime
+    )
+    VALUES
+    (
+    #ID#,
+    #UserID#,
+    #Token#,
+    #LogonTime#,
+    #IP#,
+    #ActiveTime#
+    )
   </insert>
   <update id="UpdateLogonHistory" parameterClass="LogonHistoryUpdateForm">
   UPDATE `LogonHistory`
@@ -57,6 +65,9 @@
         <isNotNull prepend="," property="Entity.LogonTime">
         `LogonTime`=#Entity.LogonTime#
         </isNotNull>
+      <isNotNull prepend="," property="Entity.ActiveTime">
+        `ActiveTime`=#Entity.ActiveTime#
+      </isNotNull>
         <isNotNull prepend="," property="Entity.IP">
         `IP`=#Entity.IP#
         </isNotNull>
@@ -80,6 +91,12 @@
     <isNotNull prepend="AND" property="LogonHistoryQueryForm.IP">
         `IP`=#LogonHistoryQueryForm.IP#
     </isNotNull>
+    <isNotNull prepend="AND" property="LogonHistoryQueryForm.ActiveTime_Start">
+      `ActiveTime`&gt;=#LogonHistoryQueryForm.ActiveTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonHistoryQueryForm.LogonTime_End">
+      `ActiveTime`&lt;=#LogonHistoryQueryForm.ActiveTime_End#
+    </isNotNull>
   </update>
   <delete id="DeleteLogonHistory" parameterClass="LogonHistoryQueryForm">
     DELETE FROM `LogonHistory` WHERE 1=1
@@ -100,6 +117,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IP">
         `IP`=#IP#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActiveTime_Start">
+      `ActiveTime`&gt;=#ActiveTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonTime_End">
+      `ActiveTime`&lt;=#ActiveTime_End#
     </isNotNull>
   </delete>
   </statements>

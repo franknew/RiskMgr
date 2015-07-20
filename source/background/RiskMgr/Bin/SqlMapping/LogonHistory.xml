@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="LogonHistory" type="RiskMgr.Model.LogonHistory" />
+    <typeAlias alias="LogonHistoryQueryForm" type="RiskMgr.Form.LogonHistoryQueryForm" />
+    <typeAlias alias="LogonHistoryUpdateForm" type="RiskMgr.Form.LogonHistoryUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryLogonHistory" resultClass="LogonHistory" parameterClass="LogonHistoryQueryForm">
+    SELECT * FROM `LogonHistory` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        `UserID`=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Token">
+        `Token`=#Token#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonTime_Start">
+        `LogonTime`&gt;=#LogonTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonTime_End">
+        `LogonTime`&lt;=#LogonTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IP">
+        `IP`=#IP#
+    </isNotNull>
+  </select>
+  <insert id="AddLogonHistory" parameterClass="LogonHistory">
+  INSERT INTO `LogonHistory`
+  (
+    `ID`,
+    `UserID`,
+    `Token`,
+    `LogonTime`,
+    `IP`
+  )
+  VALUES
+  (
+        #ID#,
+        #UserID#,
+        #Token#,
+        #LogonTime#,
+        #IP#
+  )
+  </insert>
+  <update id="UpdateLogonHistory" parameterClass="LogonHistoryUpdateForm">
+  UPDATE `LogonHistory`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.UserID">
+        `UserID`=#Entity.UserID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Token">
+        `Token`=#Entity.Token#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LogonTime">
+        `LogonTime`=#Entity.LogonTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IP">
+        `IP`=#Entity.IP#
+        </isNotNull>
+    </dynamic>
+    WHERE 1=1
+    <isNotNull prepend="AND" property="LogonHistoryQueryForm.ID">
+        `ID`=#LogonHistoryQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonHistoryQueryForm.UserID">
+        `UserID`=#LogonHistoryQueryForm.UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonHistoryQueryForm.Token">
+        `Token`=#LogonHistoryQueryForm.Token#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonHistoryQueryForm.LogonTime_Start">
+        `LogonTime`&gt;=#LogonHistoryQueryForm.LogonTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonHistoryQueryForm.LogonTime_End">
+        `LogonTime`&lt;=#LogonHistoryQueryForm.LogonTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonHistoryQueryForm.IP">
+        `IP`=#LogonHistoryQueryForm.IP#
+    </isNotNull>
+  </update>
+  <delete id="DeleteLogonHistory" parameterClass="LogonHistoryQueryForm">
+    DELETE FROM `LogonHistory` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        `UserID`=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Token">
+        `Token`=#Token#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonTime_Start">
+        `LogonTime`&gt;=#LogonTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonTime_End">
+        `LogonTime`&lt;=#LogonTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IP">
+        `IP`=#IP#
+    </isNotNull>
+  </delete>
+  </statements>
+</sqlMap>

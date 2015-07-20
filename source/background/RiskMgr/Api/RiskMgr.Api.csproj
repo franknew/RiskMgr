@@ -57,6 +57,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,6 +71,8 @@
   <ItemGroup>
     <Compile Include="AuthFilter.cs" />
     <Compile Include="CustomerApi.cs" />
+    <Compile Include="IndexApi.cs" />
+    <Compile Include="MenuApi.cs" />
     <Compile Include="LogonApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserApi.cs" />

@@ -16,7 +16,7 @@ namespace RiskMgr.BLL
     public class MenuBLL
     {
 
-        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache, "RiskMgr.Menu");
+        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache);
 
         public List<Menu> GetAllMenu()
         {
@@ -31,10 +31,18 @@ namespace RiskMgr.BLL
         {
             UserBLL userbll = new UserBLL();
             Menu_RoleDao dao = new Menu_RoleDao();
-            User u = userbll.GetUserFormCache(token);
-            var userroles = dao.QueryByUserID(u.ID);
+            UserEntireInfo u = userbll.GetUserFormCache(token);
+            if (u == null)
+            {
+                u = userbll.GetCurrentUser(token);
+            }
+            if (u == null)
+            {
+                throw new Exception("该用户信息不存在！");
+            }
+            var menurole = dao.QueryByUserID(u.User.ID);
             var list = GetAllMenu();
-            var userMenu = list.FindAll(t => userroles.Exists(p => p.MenuID == t.ID));
+            var userMenu = list.FindAll(t => menurole.Exists(p => p.MenuID == t.ID));
             return userMenu;
         }
     }
