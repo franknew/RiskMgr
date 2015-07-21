@@ -38,6 +38,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DreamWorkflow.Engine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\DreamWorkflow.Engine.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Library.Cache">
       <HintPath>..\CommonDll\SOAFramework.Library.Cache.dll</HintPath>
     </Reference>
@@ -72,7 +76,6 @@
     <Compile Include="AuthFilter.cs" />
     <Compile Include="CustomerApi.cs" />
     <Compile Include="IndexApi.cs" />
-    <Compile Include="MenuApi.cs" />
     <Compile Include="LogonApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserApi.cs" />

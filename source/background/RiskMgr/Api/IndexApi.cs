@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DreamWorkflow.Engine.DAL;
+using DreamWorkflow.Engine.Form;
 
 namespace RiskMgr.Api
 {
@@ -25,6 +27,7 @@ namespace RiskMgr.Api
             IndexQueryForm form = new IndexQueryForm();
             MenuBLL menubll = new MenuBLL();
             UserBLL userbll = new UserBLL();
+            TaskDao taskdao = new TaskDao();
             form.Menu = menubll.GetCurrentUserMenu(token);
             form.User = userbll.GetCurrentUser(token);
             return form;

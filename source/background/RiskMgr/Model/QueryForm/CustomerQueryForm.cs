@@ -1,0 +1,42 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+namespace RiskMgr.Form
+{
+    public class CustomerQueryForm : BaseQueryForm
+    {
+        public string LastUpdator { get; set; }
+        
+        public DateTime? LastUpdateTime_Start { get; set; }
+        
+        public DateTime? LastUpdateTime_End { get; set; }
+        
+        public UInt64? Gender { get; set; }
+        
+        public Int32? Marrage { get; set; }
+        
+        public Int32? CardType { get; set; }
+        
+        public string IdentityCode { get; set; }
+        
+        public string Phone { get; set; }
+        
+        public string OrignalName { get; set; }
+        
+        public string OrignalIdentityCode { get; set; }
+        
+        public Int32? BankType { get; set; }
+        
+        public string BankCode { get; set; }
+        
+        public string Address { get; set; }
+        
+        public string WorkUnit { get; set; }
+        
+        public string Remark { get; set; }
+        
+        public UInt64? Enabled { get; set; }
+        
+    }
+}

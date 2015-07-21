@@ -42,7 +42,7 @@ namespace RiskMgr.BLL
             }
             var menurole = dao.QueryByUserID(u.User.ID);
             var list = GetAllMenu();
-            var userMenu = list.FindAll(t => menurole.Exists(p => p.MenuID == t.ID));
+            var userMenu = list.FindAll(t => menurole.Exists(p => p.MenuID == t.ID) && t.Enabled == 1);
             return userMenu;
         }
     }

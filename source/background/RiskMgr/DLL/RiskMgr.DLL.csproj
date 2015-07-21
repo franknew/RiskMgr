@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dao\AssetDao.cs" />
+    <Compile Include="Dao\CustomerDao.cs" />
     <Compile Include="Dao\FullUserDao.cs" />
     <Compile Include="Dao\LogonHistoryDao.cs" />
     <Content Include="sql.sql" />
@@ -69,6 +71,8 @@
     <Compile Include="Dao\User_RoleDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="SqlMapping\Action.xml" />
+    <Content Include="SqlMapping\Asset.xml" />
+    <Content Include="SqlMapping\Customer.xml" />
     <Content Include="SqlMapping\FullUser.xml" />
     <Content Include="SqlMapping\LogonHistory.xml" />
     <Content Include="SqlMapping\Menu.xml" />

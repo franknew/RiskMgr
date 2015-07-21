@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheEnum.cs" />
+    <Compile Include="CustomerBLL.cs" />
     <Compile Include="LogonBLL.cs" />
     <Compile Include="MenuBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DreamWorkflow.Engine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\DreamWorkflow.Engine.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Library.DAL">
       <HintPath>..\CommonDll\SOAFramework.Library.DAL.dll</HintPath>
     </Reference>
@@ -44,6 +48,8 @@
   <ItemGroup>
     <Compile Include="ActionAttribute.cs" />
     <Compile Include="Entity\Action.cs" />
+    <Compile Include="Entity\Asset.cs" />
+    <Compile Include="Entity\Customer.cs" />
     <Compile Include="Entity\FullUser.cs" />
     <Compile Include="Entity\LogonHistory.cs" />
     <Compile Include="Entity\Menu.cs" />
@@ -61,10 +67,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryForm\ActionQueryForm.cs" />
     <Compile Include="QueryForm\ActivityAuthDefinitionQueryForm.cs" />
+    <Compile Include="QueryForm\AssetQueryForm.cs" />
     <Compile Include="QueryForm\BaseQueryForm.cs" />
+    <Compile Include="QueryForm\CustomerQueryForm.cs" />
     <Compile Include="QueryForm\FullUserQueryForm.cs" />
-    <Compile Include="QueryForm\IndexQueryForm.cs" />
+    <Compile Include="ResultForm\CustomerInitResultForm.cs" />
+    <Compile Include="ResultForm\IndexInitResultForm.cs" />
     <Compile Include="QueryForm\LogonHistoryQueryForm.cs" />
+    <Compile Include="UpdateForm\AssetUpdateForm.cs" />
     <Compile Include="UpdateForm\ChangePasswordUpdateForm.cs" />
     <Compile Include="QueryForm\MenuQueryForm.cs" />
     <Compile Include="QueryForm\Menu_RoleQueryForm.cs" />
@@ -77,6 +87,7 @@
     <Compile Include="QueryForm\User_PostQueryForm.cs" />
     <Compile Include="QueryForm\User_RoleQueryForm.cs" />
     <Compile Include="UpdateForm\ActionUpdateForm.cs" />
+    <Compile Include="UpdateForm\CustomerUpdateForm.cs" />
     <Compile Include="UpdateForm\LogonHistoryUpdateForm.cs" />
     <Compile Include="UpdateForm\MenuUpdateForm.cs" />
     <Compile Include="UpdateForm\Menu_RoleUpdateForm.cs" />
