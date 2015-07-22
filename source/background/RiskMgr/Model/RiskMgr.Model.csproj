@@ -64,6 +64,7 @@
     <Compile Include="Entity\UserInfo.cs" />
     <Compile Include="Entity\User_Post.cs" />
     <Compile Include="Entity\User_Role.cs" />
+    <Compile Include="PagingEntity\UserPaingForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryForm\ActionQueryForm.cs" />
     <Compile Include="QueryForm\ActivityAuthDefinitionQueryForm.cs" />

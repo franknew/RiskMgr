@@ -13,6 +13,8 @@ namespace RiskMgr.Form
         public string WX { get; set; }
         
         public string Address { get; set; }
+
+        public string Identity { get; set; }
         
     }
 }

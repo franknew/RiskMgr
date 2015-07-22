@@ -15,7 +15,7 @@ namespace RiskMgr.BLL
 {
     public class UserBLL
     {
-        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache);
+        private ICache cache = CacheFactory.Create();
         private ISqlMapper mapper = Mapper.Instance();
 
         public UserEntireInfo GetUserFormCache(string token)
@@ -40,8 +40,9 @@ namespace RiskMgr.BLL
             return u;
         }
 
-        public UserEntireInfo GetCurrentUser(string token)
+        public UserEntireInfo GetCurrentUser()
         {
+            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
             var u = GetUserEntireInfoFromCache(token);
             if (u == null)
             {
@@ -67,9 +68,15 @@ namespace RiskMgr.BLL
 
         public string Add(User user)
         {
+            var userinfo = GetCurrentUser()
             mapper.BeginTransaction();
             UserDao dao = new UserDao(mapper);
             UserInfoDao infodao = new UserInfoDao(mapper);
+            var exist = dao.Query(new UserQueryForm { Name = user.Name });
+            if (exist.Count > 0)
+            {
+                throw new Exception("已存在用户名：" + user.Name);
+            }
             string id = dao.Add(user);
             UserInfo userinfo = new UserInfo
             {

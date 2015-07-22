@@ -181,7 +181,7 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
-   <select id="Query`Menu`LastUpdateTime" resultClass="DateTime">
+   <select id="QueryMenuLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Menu`
    </select>
   </statements>

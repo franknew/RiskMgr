@@ -16,7 +16,7 @@ namespace RiskMgr.BLL
 {
     public class LogonBLL
     {
-        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache);
+        private ICache cache = CacheFactory.Create();
 
         public string Logon(string username, string password)
         {

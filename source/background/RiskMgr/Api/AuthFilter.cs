@@ -13,9 +13,6 @@ namespace RiskMgr.Api
     [ServiceLayer(IsHiddenDiscovery = true)]
     public class AuthFilter : BaseFilter
     {
-        LogonBLL logonbll = new LogonBLL();
-        UserBLL userbll = new UserBLL();
-
         /// <summary>
         /// 验证是否登录，Code返回1为没有登录或者token失效，要重新登录
         /// </summary>
@@ -23,6 +20,8 @@ namespace RiskMgr.Api
         /// <returns></returns>
         public override bool OnActionExecuting(ActionContext context)
         {
+            LogonBLL logonbll = new LogonBLL();
+            UserBLL userbll = new UserBLL();
             //验证没有token
             if (!context.Parameters.ContainsKey("token") || context.Parameters["token"] == null)
             {

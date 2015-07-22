@@ -22,5 +22,14 @@ namespace RiskMgr.Form
         public DateTime? LastUpdateTime_Start { get; set; }
 
         public DateTime? LastUpdateTime_End { get; set; }
+
+        public int? PageSize { get; set; }
+
+        public int? CurrentIndex { get; set; }
+
+        public int? StartIndex 
+        { 
+            get; 
+        }
     }
 }

@@ -307,7 +307,7 @@
         `Eanbled`=#Eanbled#
     </isNotNull>
   </delete>
-   <select id="Query`Asset`LastUpdateTime" resultClass="DateTime">
+   <select id="QueryAssetLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Asset`
    </select>
   </statements>

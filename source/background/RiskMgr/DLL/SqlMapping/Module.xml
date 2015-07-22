@@ -139,7 +139,7 @@
         `LastUpdator`=#LastUpdator#
     </isNotNull>
   </delete>
-   <select id="Query`Module`LastUpdateTime" resultClass="DateTime">
+   <select id="QueryModuleLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Module`
    </select>
   </statements>

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiskMgr.Form
+namespace RiskMgr.Model.PagingEntity
 {
-    public class CustomerInitResultForm
+    public class UserPaingForm
     {
-
     }
 }

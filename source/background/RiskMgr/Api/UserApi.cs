@@ -24,6 +24,8 @@ namespace RiskMgr.Api
         [EditAction]
         public string Add(User user)
         {
+            var currentUser = bll.GetCurrentUser();
+            user.Creator = currentUser.User.ID;
             return bll.Add(user);
         }
 
@@ -35,6 +37,8 @@ namespace RiskMgr.Api
         [EditAction]
         public bool Update(User user, UserInfo userinfo)
         {
+            var currentUser = bll.GetCurrentUser();
+            user.LastUpdator = currentUser.User.ID;
             UserEntireInfo form = new UserEntireInfo
             {
                 User = user,
@@ -93,6 +97,10 @@ namespace RiskMgr.Api
         public List<FullUser> QueryAllUser()
         {
             return bll.QueryAllUser();
+        }
+
+        public PagingServerResponse QueryUserPaging(int size, int currrentIndex)
+        {
         }
     }
 }

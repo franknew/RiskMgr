@@ -1,4 +1,5 @@
-﻿using SOAFramework.Service.SDK.Core;
+﻿using RiskMgr.Model;
+using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,6 +36,34 @@ namespace RiskMgr.WinformTest
             req.token = token;
             var res = SDKFactory.Client.Execute(req);
             
+            MessageBox.Show(res.ResponseBody);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ChangePasswordRequest request = new ChangePasswordRequest();
+            request.token = token;
+            request.form = new Form.ChangePasswordUpdateForm
+            {
+                UserID = "1",
+                NewPassword = "admin",
+            };
+            var res = SDKFactory.Client.Execute(request);
+            MessageBox.Show(res.ResponseBody);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            AddUserRequest req = new AddUserRequest();
+            req.token = token;
+            req.user = new User
+            {
+                ID = Guid.NewGuid().ToString().Replace("-",""),
+                Enabled = 1,
+                Name = "manualtest",
+                Password = "manualtest"
+            };
+            var res = SDKFactory.Client.Execute(req);
             MessageBox.Show(res.ResponseBody);
         }
     }
