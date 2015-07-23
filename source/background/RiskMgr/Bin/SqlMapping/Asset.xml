@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Asset" type="RiskMgr.Model.Asset" />
+    <typeAlias alias="AssetQueryForm" type="RiskMgr.Form.AssetQueryForm" />
+    <typeAlias alias="AssetUpdateForm" type="RiskMgr.Form.AssetUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryAsset" resultClass="Asset" parameterClass="AssetQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Asset` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Usage">
+        `Usage`=#Usage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Position">
+        `Position`=#Position#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Code">
+        `Code`=#Code#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Area">
+        `Area`=#Area#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RegPrice">
+        `RegPrice`=#RegPrice#
+    </isNotNull>
+    <isNotNull prepend="AND" property="OwnerID">
+        `OwnerID`=#OwnerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BuyerID">
+        `BuyerID`=#BuyerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IssueType">
+        `IssueType`=#IssueType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsTraded">
+        `IsTraded`=#IsTraded#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Eanbled">
+        `Eanbled`=#Eanbled#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddAsset" parameterClass="Asset">
+  INSERT INTO `Asset`
+  (
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `LastUpdator`,
+    `LastUpdateTime`,
+    `Remark`,
+    `Type`,
+    `Usage`,
+    `Position`,
+    `Address`,
+    `Code`,
+    `Area`,
+    `RegPrice`,
+    `OwnerID`,
+    `BuyerID`,
+    `IssueType`,
+    `IsTraded`,
+    `Eanbled`
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #LastUpdator#,
+        #LastUpdateTime#,
+        #Remark#,
+        #Type#,
+        #Usage#,
+        #Position#,
+        #Address#,
+        #Code#,
+        #Area#,
+        #RegPrice#,
+        #OwnerID#,
+        #BuyerID#,
+        #IssueType#,
+        #IsTraded#,
+        #Eanbled#
+  )
+  </insert>
+  <update id="UpdateAsset" parameterClass="AssetUpdateForm">
+  UPDATE `Asset`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Type">
+        `Type`=#Entity.Type#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Usage">
+        `Usage`=#Entity.Usage#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Position">
+        `Position`=#Entity.Position#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Address">
+        `Address`=#Entity.Address#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Code">
+        `Code`=#Entity.Code#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Area">
+        `Area`=#Entity.Area#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.RegPrice">
+        `RegPrice`=#Entity.RegPrice#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.OwnerID">
+        `OwnerID`=#Entity.OwnerID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.BuyerID">
+        `BuyerID`=#Entity.BuyerID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IssueType">
+        `IssueType`=#Entity.IssueType#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IsTraded">
+        `IsTraded`=#Entity.IsTraded#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Eanbled">
+        `Eanbled`=#Entity.Eanbled#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="AssetQueryForm.ID">
+        `ID`=#AssetQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Name">
+        `Name` LIKE '%$AssetQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Creator">
+        `Creator`=#AssetQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#AssetQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#AssetQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.LastUpdator">
+        `LastUpdator`=#AssetQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#AssetQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#AssetQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Remark">
+        `Remark` LIKE '%$AssetQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Type">
+        `Type`=#AssetQueryForm.Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Usage">
+        `Usage`=#AssetQueryForm.Usage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Position">
+        `Position`=#AssetQueryForm.Position#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Address">
+        `Address`=#AssetQueryForm.Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Code">
+        `Code`=#AssetQueryForm.Code#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Area">
+        `Area`=#AssetQueryForm.Area#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.RegPrice">
+        `RegPrice`=#AssetQueryForm.RegPrice#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.OwnerID">
+        `OwnerID`=#AssetQueryForm.OwnerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.BuyerID">
+        `BuyerID`=#AssetQueryForm.BuyerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.IssueType">
+        `IssueType`=#AssetQueryForm.IssueType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.IsTraded">
+        `IsTraded`=#AssetQueryForm.IsTraded#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.Eanbled">
+        `Eanbled`=#AssetQueryForm.Eanbled#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteAsset" parameterClass="AssetQueryForm">
+    DELETE FROM `Asset` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Usage">
+        `Usage`=#Usage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Position">
+        `Position`=#Position#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Code">
+        `Code`=#Code#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Area">
+        `Area`=#Area#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RegPrice">
+        `RegPrice`=#RegPrice#
+    </isNotNull>
+    <isNotNull prepend="AND" property="OwnerID">
+        `OwnerID`=#OwnerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BuyerID">
+        `BuyerID`=#BuyerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IssueType">
+        `IssueType`=#IssueType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsTraded">
+        `IsTraded`=#IsTraded#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Eanbled">
+        `Eanbled`=#Eanbled#
+    </isNotNull>
+  </delete>
+   <select id="QueryAssetLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Asset`
+   </select>
+   <select id="QueryAssetRecordCount" resultClass="int" parameterClass="AssetQueryForm">
+   SELECT COUNT(*) FROM `Asset` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Usage">
+        `Usage`=#Usage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Position">
+        `Position`=#Position#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Code">
+        `Code`=#Code#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Area">
+        `Area`=#Area#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RegPrice">
+        `RegPrice`=#RegPrice#
+    </isNotNull>
+    <isNotNull prepend="AND" property="OwnerID">
+        `OwnerID`=#OwnerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BuyerID">
+        `BuyerID`=#BuyerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IssueType">
+        `IssueType`=#IssueType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsTraded">
+        `IsTraded`=#IsTraded#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Eanbled">
+        `Eanbled`=#Eanbled#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Customer" type="RiskMgr.Model.Customer" />
+    <typeAlias alias="CustomerQueryForm" type="RiskMgr.Form.CustomerQueryForm" />
+    <typeAlias alias="CustomerUpdateForm" type="RiskMgr.Form.CustomerUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryCustomer" resultClass="Customer" parameterClass="CustomerQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Customer` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Gender">
+        `Gender`=#Gender#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Marrage">
+        `Marrage`=#Marrage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CardType">
+        `CardType`=#CardType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IdentityCode">
+        `IdentityCode`=#IdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Phone">
+        `Phone`=#Phone#
+    </isNotNull>
+    <isNotNull prepend="AND" property="OrignalName">
+        `OrignalName` LIKE '%$OrignalName$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="OrignalIdentityCode">
+        `OrignalIdentityCode`=#OrignalIdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankType">
+        `BankType`=#BankType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankCode">
+        `BankCode`=#BankCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkUnit">
+        `WorkUnit`=#WorkUnit#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddCustomer" parameterClass="Customer">
+  INSERT INTO `Customer`
+  (
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `LastUpdator`,
+    `LastUpdateTime`,
+    `Gender`,
+    `Marrage`,
+    `CardType`,
+    `IdentityCode`,
+    `Phone`,
+    `OrignalName`,
+    `OrignalIdentityCode`,
+    `BankType`,
+    `BankCode`,
+    `Address`,
+    `WorkUnit`,
+    `Remark`,
+    `Enabled`
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #LastUpdator#,
+        #LastUpdateTime#,
+        #Gender#,
+        #Marrage#,
+        #CardType#,
+        #IdentityCode#,
+        #Phone#,
+        #OrignalName#,
+        #OrignalIdentityCode#,
+        #BankType#,
+        #BankCode#,
+        #Address#,
+        #WorkUnit#,
+        #Remark#,
+        #Enabled#
+  )
+  </insert>
+  <update id="UpdateCustomer" parameterClass="CustomerUpdateForm">
+  UPDATE `Customer`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Gender">
+        `Gender`=#Entity.Gender#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Marrage">
+        `Marrage`=#Entity.Marrage#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CardType">
+        `CardType`=#Entity.CardType#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IdentityCode">
+        `IdentityCode`=#Entity.IdentityCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Phone">
+        `Phone`=#Entity.Phone#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.OrignalName">
+        `OrignalName`=#Entity.OrignalName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.OrignalIdentityCode">
+        `OrignalIdentityCode`=#Entity.OrignalIdentityCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.BankType">
+        `BankType`=#Entity.BankType#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.BankCode">
+        `BankCode`=#Entity.BankCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Address">
+        `Address`=#Entity.Address#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.WorkUnit">
+        `WorkUnit`=#Entity.WorkUnit#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Enabled">
+        `Enabled`=#Entity.Enabled#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="CustomerQueryForm.ID">
+        `ID`=#CustomerQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.Name">
+        `Name` LIKE '%$CustomerQueryForm.Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.Creator">
+        `Creator`=#CustomerQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#CustomerQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#CustomerQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.LastUpdator">
+        `LastUpdator`=#CustomerQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#CustomerQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#CustomerQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.Gender">
+        `Gender`=#CustomerQueryForm.Gender#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.Marrage">
+        `Marrage`=#CustomerQueryForm.Marrage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.CardType">
+        `CardType`=#CustomerQueryForm.CardType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.IdentityCode">
+        `IdentityCode`=#CustomerQueryForm.IdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.Phone">
+        `Phone`=#CustomerQueryForm.Phone#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.OrignalName">
+        `OrignalName` LIKE '%$CustomerQueryForm.OrignalName$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.OrignalIdentityCode">
+        `OrignalIdentityCode`=#CustomerQueryForm.OrignalIdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.BankType">
+        `BankType`=#CustomerQueryForm.BankType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.BankCode">
+        `BankCode`=#CustomerQueryForm.BankCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.Address">
+        `Address`=#CustomerQueryForm.Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.WorkUnit">
+        `WorkUnit`=#CustomerQueryForm.WorkUnit#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.Remark">
+        `Remark` LIKE '%$CustomerQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.Enabled">
+        `Enabled`=#CustomerQueryForm.Enabled#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteCustomer" parameterClass="CustomerQueryForm">
+    DELETE FROM `Customer` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Gender">
+        `Gender`=#Gender#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Marrage">
+        `Marrage`=#Marrage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CardType">
+        `CardType`=#CardType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IdentityCode">
+        `IdentityCode`=#IdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Phone">
+        `Phone`=#Phone#
+    </isNotNull>
+    <isNotNull prepend="AND" property="OrignalName">
+        `OrignalName`=#OrignalName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="OrignalIdentityCode">
+        `OrignalIdentityCode`=#OrignalIdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankType">
+        `BankType`=#BankType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankCode">
+        `BankCode`=#BankCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkUnit">
+        `WorkUnit`=#WorkUnit#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+  </delete>
+   <select id="QueryCustomerLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Customer`
+   </select>
+   <select id="QueryCustomerRecordCount" resultClass="int" parameterClass="CustomerQueryForm">
+   SELECT COUNT(*) FROM `Customer` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Gender">
+        `Gender`=#Gender#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Marrage">
+        `Marrage`=#Marrage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CardType">
+        `CardType`=#CardType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IdentityCode">
+        `IdentityCode`=#IdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Phone">
+        `Phone`=#Phone#
+    </isNotNull>
+    <isNotNull prepend="AND" property="OrignalName">
+        `OrignalName` LIKE '%$OrignalName$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="OrignalIdentityCode">
+        `OrignalIdentityCode`=#OrignalIdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankType">
+        `BankType`=#BankType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankCode">
+        `BankCode`=#BankCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkUnit">
+        `WorkUnit`=#WorkUnit#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>
