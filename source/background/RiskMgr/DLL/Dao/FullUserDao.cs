@@ -24,6 +24,10 @@ namespace RiskMgr.DAL
 
         public List<FullUser> Query(FullUserQueryForm form)
         {
+            if (form.PageSize.HasValue && form.PageSize.Value > 0)
+            {
+                form.RecordCount = mapper.QueryForObject<int>("QueryFullUserRecordCount", form);
+            }
             return mapper.QueryForList<FullUser>("QueryFullUser", form).ToList();
         }
     }

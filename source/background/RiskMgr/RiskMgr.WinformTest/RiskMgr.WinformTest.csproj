@@ -72,6 +72,8 @@
     <Compile Include="Request\ChangePasswordRequest.cs" />
     <Compile Include="Request\GetMenuRequest.cs" />
     <Compile Include="Request\LogonRequest.cs" />
+    <Compile Include="Request\QueryDataDictionaryRequest.cs" />
+    <Compile Include="Request\QueryUserRequest.cs" />
     <Compile Include="Response\CommonResponse.cs" />
     <Compile Include="Response\GetMenuResponse.cs" />
     <Compile Include="Response\LogonResponse.cs" />

@@ -7,7 +7,11 @@
   </alias>
   <statements>
   <select id="QueryRole_Module_Action" resultClass="Role_Module_Action" parameterClass="Role_Module_ActionQueryForm">
-    SELECT * FROM `Role_Module_Action` WHERE 1=1
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Role_Module_Action` 
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -19,6 +23,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ActionID">
         `ActionID`=#ActionID#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddRole_Module_Action" parameterClass="Role_Module_Action">
@@ -50,7 +60,7 @@
         `ActionID`=#Entity.ActionID#
         </isNotNull>
     </dynamic>
-    WHERE 1=1
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="Role_Module_ActionQueryForm.ID">
         `ID`=#Role_Module_ActionQueryForm.ID#
     </isNotNull>
@@ -63,6 +73,7 @@
     <isNotNull prepend="AND" property="Role_Module_ActionQueryForm.ActionID">
         `ActionID`=#Role_Module_ActionQueryForm.ActionID#
     </isNotNull>
+    </dynamic>
   </update>
   <delete id="DeleteRole_Module_Action" parameterClass="Role_Module_ActionQueryForm">
     DELETE FROM `Role_Module_Action` WHERE 1=1
@@ -79,5 +90,22 @@
         `ActionID`=#ActionID#
     </isNotNull>
   </delete>
+   <select id="QueryRole_Module_ActionRecordCount" resultClass="int" parameterClass="Role_Module_ActionQueryForm">
+   SELECT COUNT(*) FROM `Role_Module_Action` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleID">
+        `RoleID`=#RoleID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleID">
+        `ModuleID`=#ModuleID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionID">
+        `ActionID`=#ActionID#
+    </isNotNull>
+    </dynamic>
+   </select>
   </statements>
 </sqlMap>

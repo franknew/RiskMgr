@@ -7,7 +7,11 @@
   </alias>
   <statements>
   <select id="QueryMenu_Role" resultClass="Menu_Role" parameterClass="Menu_RoleQueryForm">
-    SELECT * FROM `Menu_Role` WHERE 1=1
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Menu_Role` 
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -16,6 +20,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="RoleID">
         `RoleID`=#RoleID#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddMenu_Role" parameterClass="Menu_Role">
@@ -42,7 +52,7 @@
         `RoleID`=#Entity.RoleID#
         </isNotNull>
     </dynamic>
-    WHERE 1=1
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="Menu_RoleQueryForm.ID">
         `ID`=#Menu_RoleQueryForm.ID#
     </isNotNull>
@@ -52,6 +62,7 @@
     <isNotNull prepend="AND" property="Menu_RoleQueryForm.RoleID">
         `RoleID`=#Menu_RoleQueryForm.RoleID#
     </isNotNull>
+    </dynamic>
   </update>
   <delete id="DeleteMenu_Role" parameterClass="Menu_RoleQueryForm">
     DELETE FROM `Menu_Role` WHERE 1=1
@@ -65,5 +76,19 @@
         `RoleID`=#RoleID#
     </isNotNull>
   </delete>
+   <select id="QueryMenu_RoleRecordCount" resultClass="int" parameterClass="Menu_RoleQueryForm">
+   SELECT COUNT(*) FROM `Menu_Role` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MenuID">
+        `MenuID`=#MenuID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleID">
+        `RoleID`=#RoleID#
+    </isNotNull>
+    </dynamic>
+   </select>
   </statements>
 </sqlMap>

@@ -2,16 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.Form
 {
-    public class CustomerQueryForm : BaseQueryForm
+    public class CustomerQueryForm : SimpleQueryForm
     {
-        public string LastUpdator { get; set; }
-        
-        public DateTime? LastUpdateTime_Start { get; set; }
-        
-        public DateTime? LastUpdateTime_End { get; set; }
-        
         public UInt64? Gender { get; set; }
         
         public Int32? Marrage { get; set; }

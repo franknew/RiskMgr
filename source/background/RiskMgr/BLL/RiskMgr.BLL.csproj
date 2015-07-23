@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetBLL.cs" />
     <Compile Include="CacheEnum.cs" />
     <Compile Include="CustomerBLL.cs" />
     <Compile Include="LogonBLL.cs" />

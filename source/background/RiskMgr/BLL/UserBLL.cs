@@ -18,8 +18,9 @@ namespace RiskMgr.BLL
         private ICache cache = CacheFactory.Create();
         private ISqlMapper mapper = Mapper.Instance();
 
-        public UserEntireInfo GetUserFormCache(string token)
+        public UserEntireInfo GetUserFormCache()
         {
+            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
             CacheItem item = cache.GetItem(token);
             if (item == null)
             {
@@ -68,7 +69,7 @@ namespace RiskMgr.BLL
 
         public string Add(User user)
         {
-            var userinfo = GetCurrentUser()
+            var userinfo = GetCurrentUser();
             mapper.BeginTransaction();
             UserDao dao = new UserDao(mapper);
             UserInfoDao infodao = new UserInfoDao(mapper);
@@ -78,11 +79,11 @@ namespace RiskMgr.BLL
                 throw new Exception("已存在用户名：" + user.Name);
             }
             string id = dao.Add(user);
-            UserInfo userinfo = new UserInfo
+            UserInfo ui = new UserInfo
             {
                 ID = id,
             };
-            infodao.Add(userinfo);
+            infodao.Add(ui);
             mapper.CommitTransaction();
             return id;
         }
@@ -147,10 +148,10 @@ namespace RiskMgr.BLL
         /// 查询所有用户
         /// </summary>
         /// <returns></returns>
-        public List<FullUser> QueryAllUser()
+        public List<FullUser> Query(FullUserQueryForm form)
         {
             FullUserDao dao = new FullUserDao();
-            var userlist = dao.Query(new FullUserQueryForm());
+            var userlist = dao.Query(form);
 
             return userlist;
         }

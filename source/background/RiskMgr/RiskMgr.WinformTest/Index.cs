@@ -66,5 +66,29 @@ namespace RiskMgr.WinformTest
             var res = SDKFactory.Client.Execute(req);
             MessageBox.Show(res.ResponseBody);
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            QueryDataDictionaryRequest request = new QueryDataDictionaryRequest();
+            request.nameList = new List<string>
+            {
+                "testgroup", "testgroup2"
+            };
+            var response = SDKFactory.Client.Execute(request);
+            MessageBox.Show(response.ResponseBody);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            QueryUserRequest request = new QueryUserRequest();
+            request.token = token;
+            request.form = new Form.FullUserQueryForm
+            {
+                PageSize = 1,
+                CurrentIndex = 1,
+            };
+            var response = SDKFactory.Client.Execute(request);
+            MessageBox.Show(response.ResponseBody);
+        }
     }
 }

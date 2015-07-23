@@ -53,8 +53,12 @@ namespace RiskMgr.Api
         /// <param name="user"></param>
         /// <returns></returns>
         [DeleteAction]
-        public bool Delete(UserQueryForm user)
+        public bool Delete(string userid)
         {
+            var user = new UserQueryForm
+            {
+                ID = userid,
+            };
             return bll.Delete(user);
         }
 
@@ -79,7 +83,7 @@ namespace RiskMgr.Api
         public bool ChangeSelfPassword(ChangePasswordUpdateForm form)
         {
             string token = ServiceSession.Current.Context.Parameters["token"].ToString();
-            var user = bll.GetUserFormCache(token);
+            var user = bll.GetUserFormCache();
             ChangePasswordUpdateForm newForm = new ChangePasswordUpdateForm
             {
                 UserID = user.User.ID,
@@ -94,13 +98,16 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [QueryAction]
-        public List<FullUser> QueryAllUser()
+        public PagingEntity<FullUser> QueryUser(FullUserQueryForm form)
         {
-            return bll.QueryAllUser();
-        }
-
-        public PagingServerResponse QueryUserPaging(int size, int currrentIndex)
-        {
+            var list = bll.Query(form);
+            PagingEntity<FullUser> users = new PagingEntity<FullUser>
+            {
+                Record = list,
+                PageCount = form.PageCount,
+                RecordCount = form.RecordCount,
+            };
+            return users;
         }
     }
 }

@@ -7,7 +7,11 @@
   </alias>
   <statements>
   <select id="QueryLogonHistory" resultClass="LogonHistory" parameterClass="LogonHistoryQueryForm">
-    SELECT * FROM `LogonHistory` WHERE 1=1
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `LogonHistory` 
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -31,6 +35,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ActiveTime_End">
         `ActiveTime`&lt;=#ActiveTime_End#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddLogonHistory" parameterClass="LogonHistory">
@@ -72,7 +82,7 @@
         `ActiveTime`=#Entity.ActiveTime#
         </isNotNull>
     </dynamic>
-    WHERE 1=1
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="LogonHistoryQueryForm.ID">
         `ID`=#LogonHistoryQueryForm.ID#
     </isNotNull>
@@ -97,6 +107,7 @@
     <isNotNull prepend="AND" property="LogonHistoryQueryForm.ActiveTime_End">
         `ActiveTime`&lt;=#LogonHistoryQueryForm.ActiveTime_End#
     </isNotNull>
+    </dynamic>
   </update>
   <delete id="DeleteLogonHistory" parameterClass="LogonHistoryQueryForm">
     DELETE FROM `LogonHistory` WHERE 1=1
@@ -125,5 +136,34 @@
         `ActiveTime`&lt;=#ActiveTime_End#
     </isNotNull>
   </delete>
+   <select id="QueryLogonHistoryRecordCount" resultClass="int" parameterClass="LogonHistoryQueryForm">
+   SELECT COUNT(*) FROM `LogonHistory` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        `UserID`=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Token">
+        `Token`=#Token#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonTime_Start">
+        `LogonTime`&gt;=#LogonTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogonTime_End">
+        `LogonTime`&lt;=#LogonTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IP">
+        `IP`=#IP#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActiveTime_Start">
+        `ActiveTime`&gt;=#ActiveTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActiveTime_End">
+        `ActiveTime`&lt;=#ActiveTime_End#
+    </isNotNull>
+    </dynamic>
+   </select>
   </statements>
 </sqlMap>

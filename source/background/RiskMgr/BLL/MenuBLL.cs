@@ -27,14 +27,15 @@ namespace RiskMgr.BLL
             return list;
         }
 
-        public List<Menu> GetCurrentUserMenu(string token)
+        public List<Menu> GetCurrentUserMenu()
         {
+            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
             UserBLL userbll = new UserBLL();
             Menu_RoleDao dao = new Menu_RoleDao();
-            UserEntireInfo u = userbll.GetUserFormCache(token);
+            UserEntireInfo u = userbll.GetUserFormCache();
             if (u == null)
             {
-                u = userbll.GetCurrentUser(token);
+                u = userbll.GetCurrentUser();
             }
             if (u == null)
             {

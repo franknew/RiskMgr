@@ -7,7 +7,11 @@
   </alias>
   <statements>
   <select id="QueryUser_Post" resultClass="User_Post" parameterClass="User_PostQueryForm">
-    SELECT * FROM `User_Post` WHERE 1=1
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `User_Post` 
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -16,6 +20,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="PostID">
         `PostID`=#PostID#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddUser_Post" parameterClass="User_Post">
@@ -42,7 +52,7 @@
         `PostID`=#Entity.PostID#
         </isNotNull>
     </dynamic>
-    WHERE 1=1
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="User_PostQueryForm.ID">
         `ID`=#User_PostQueryForm.ID#
     </isNotNull>
@@ -52,6 +62,7 @@
     <isNotNull prepend="AND" property="User_PostQueryForm.PostID">
         `PostID`=#User_PostQueryForm.PostID#
     </isNotNull>
+    </dynamic>
   </update>
   <delete id="DeleteUser_Post" parameterClass="User_PostQueryForm">
     DELETE FROM `User_Post` WHERE 1=1
@@ -65,5 +76,19 @@
         `PostID`=#PostID#
     </isNotNull>
   </delete>
+   <select id="QueryUser_PostRecordCount" resultClass="int" parameterClass="User_PostQueryForm">
+   SELECT COUNT(*) FROM `User_Post` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        `UserID`=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PostID">
+        `PostID`=#PostID#
+    </isNotNull>
+    </dynamic>
+   </select>
   </statements>
 </sqlMap>

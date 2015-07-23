@@ -7,7 +7,11 @@
   </alias>
   <statements>
   <select id="QueryCustomer" resultClass="Customer" parameterClass="CustomerQueryForm">
-    SELECT * FROM `Customer` WHERE 1=1
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Customer` 
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -70,6 +74,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="Enabled">
         `Enabled`=#Enabled#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddCustomer" parameterClass="Customer">
@@ -176,7 +186,7 @@
         `Enabled`=#Entity.Enabled#
         </isNotNull>
     </dynamic>
-    WHERE 1=1
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="CustomerQueryForm.ID">
         `ID`=#CustomerQueryForm.ID#
     </isNotNull>
@@ -240,6 +250,7 @@
     <isNotNull prepend="AND" property="CustomerQueryForm.Enabled">
         `Enabled`=#CustomerQueryForm.Enabled#
     </isNotNull>
+    </dynamic>
   </update>
   <delete id="DeleteCustomer" parameterClass="CustomerQueryForm">
     DELETE FROM `Customer` WHERE 1=1
@@ -309,6 +320,74 @@
   </delete>
    <select id="QueryCustomerLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Customer`
+   </select>
+   <select id="QueryCustomerRecordCount" resultClass="int" parameterClass="CustomerQueryForm">
+   SELECT COUNT(*) FROM `Customer` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Gender">
+        `Gender`=#Gender#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Marrage">
+        `Marrage`=#Marrage#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CardType">
+        `CardType`=#CardType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IdentityCode">
+        `IdentityCode`=#IdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Phone">
+        `Phone`=#Phone#
+    </isNotNull>
+    <isNotNull prepend="AND" property="OrignalName">
+        `OrignalName` LIKE '%$OrignalName$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="OrignalIdentityCode">
+        `OrignalIdentityCode`=#OrignalIdentityCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankType">
+        `BankType`=#BankType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankCode">
+        `BankCode`=#BankCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkUnit">
+        `WorkUnit`=#WorkUnit#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+    </dynamic>
    </select>
   </statements>
 </sqlMap>

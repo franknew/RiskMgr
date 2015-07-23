@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library.DAL;
+
 namespace RiskMgr.Form
 {
-    public class MenuQueryForm : BaseQueryForm
+    public class MenuQueryForm : SimpleQueryForm
     {
         public string Page { get; set; }
         
@@ -13,12 +15,6 @@ namespace RiskMgr.Form
         public UInt64? Enabled { get; set; }
         
         public string Remark { get; set; }
-        
-        public DateTime? LastUpdateTime_Start { get; set; }
-        
-        public DateTime? LastUpdateTime_End { get; set; }
-        
-        public string LastUpdator { get; set; }
         
     }
 }

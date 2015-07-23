@@ -7,7 +7,11 @@
   </alias>
   <statements>
   <select id="QueryUser_Role" resultClass="User_Role" parameterClass="User_RoleQueryForm">
-    SELECT * FROM `User_Role` WHERE 1=1
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `User_Role` 
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -16,6 +20,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="RoleID">
         `RoleID`=#RoleID#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddUser_Role" parameterClass="User_Role">
@@ -42,7 +52,7 @@
         `RoleID`=#Entity.RoleID#
         </isNotNull>
     </dynamic>
-    WHERE 1=1
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="User_RoleQueryForm.ID">
         `ID`=#User_RoleQueryForm.ID#
     </isNotNull>
@@ -52,6 +62,7 @@
     <isNotNull prepend="AND" property="User_RoleQueryForm.RoleID">
         `RoleID`=#User_RoleQueryForm.RoleID#
     </isNotNull>
+    </dynamic>
   </update>
   <delete id="DeleteUser_Role" parameterClass="User_RoleQueryForm">
     DELETE FROM `User_Role` WHERE 1=1
@@ -65,5 +76,19 @@
         `RoleID`=#RoleID#
     </isNotNull>
   </delete>
+   <select id="QueryUser_RoleRecordCount" resultClass="int" parameterClass="User_RoleQueryForm">
+   SELECT COUNT(*) FROM `User_Role` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        `UserID`=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleID">
+        `RoleID`=#RoleID#
+    </isNotNull>
+    </dynamic>
+   </select>
   </statements>
 </sqlMap>

@@ -7,7 +7,11 @@
   </alias>
   <statements>
   <select id="QueryUserInfo" resultClass="UserInfo" parameterClass="UserInfoQueryForm">
-    SELECT * FROM `UserInfo` WHERE 1=1
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `UserInfo` 
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -23,6 +27,21 @@
     <isNotNull prepend="AND" property="Address">
         `Address`=#Address#
     </isNotNull>
+    <isNotNull prepend="AND" property="Identity">
+        `Identity`=#Identity#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CnName">
+        `CnName` LIKE '%$CnName$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
+    </isNotNull>
   </select>
   <insert id="AddUserInfo" parameterClass="UserInfo">
   INSERT INTO `UserInfo`
@@ -31,7 +50,10 @@
     `QQ`,
     `Mobile`,
     `WX`,
-    `Address`
+    `Address`,
+    `Identity`,
+    `CnName`,
+    `Remark`
   )
   VALUES
   (
@@ -39,7 +61,10 @@
         #QQ#,
         #Mobile#,
         #WX#,
-        #Address#
+        #Address#,
+        #Identity#,
+        #CnName#,
+        #Remark#
   )
   </insert>
   <update id="UpdateUserInfo" parameterClass="UserInfoUpdateForm">
@@ -57,8 +82,17 @@
         <isNotNull prepend="," property="Entity.Address">
         `Address`=#Entity.Address#
         </isNotNull>
+        <isNotNull prepend="," property="Entity.Identity">
+        `Identity`=#Entity.Identity#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CnName">
+        `CnName`=#Entity.CnName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
     </dynamic>
-    WHERE 1=1
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="UserInfoQueryForm.ID">
         `ID`=#UserInfoQueryForm.ID#
     </isNotNull>
@@ -74,6 +108,16 @@
     <isNotNull prepend="AND" property="UserInfoQueryForm.Address">
         `Address`=#UserInfoQueryForm.Address#
     </isNotNull>
+    <isNotNull prepend="AND" property="UserInfoQueryForm.Identity">
+        `Identity`=#UserInfoQueryForm.Identity#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserInfoQueryForm.CnName">
+        `CnName` LIKE '%$UserInfoQueryForm.CnName$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserInfoQueryForm.Remark">
+        `Remark` LIKE '%$UserInfoQueryForm.Remark$%'
+    </isNotNull>
+    </dynamic>
   </update>
   <delete id="DeleteUserInfo" parameterClass="UserInfoQueryForm">
     DELETE FROM `UserInfo` WHERE 1=1
@@ -92,6 +136,44 @@
     <isNotNull prepend="AND" property="Address">
         `Address`=#Address#
     </isNotNull>
+    <isNotNull prepend="AND" property="Identity">
+        `Identity`=#Identity#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CnName">
+        `CnName`=#CnName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
   </delete>
+   <select id="QueryUserInfoRecordCount" resultClass="int" parameterClass="UserInfoQueryForm">
+   SELECT COUNT(*) FROM `UserInfo` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="QQ">
+        `QQ`=#QQ#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Mobile">
+        `Mobile`=#Mobile#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WX">
+        `WX`=#WX#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Identity">
+        `Identity`=#Identity#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CnName">
+        `CnName` LIKE '%$CnName$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    </dynamic>
+   </select>
   </statements>
 </sqlMap>

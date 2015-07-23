@@ -7,7 +7,11 @@
   </alias>
   <statements>
   <select id="QueryMenu" resultClass="Menu" parameterClass="MenuQueryForm">
-    SELECT * FROM `Menu` WHERE 1=1
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Menu` 
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -43,6 +47,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+    <isGreaterThan property="PageSize" compareValue="0">
+     LIMIT #StartIndex#, #PageSize# 
+    </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddMenu" parameterClass="Menu">
@@ -104,7 +114,7 @@
         `LastUpdator`=#Entity.LastUpdator#
         </isNotNull>
     </dynamic>
-    WHERE 1=1
+    <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="MenuQueryForm.ID">
         `ID`=#MenuQueryForm.ID#
     </isNotNull>
@@ -141,6 +151,7 @@
     <isNotNull prepend="AND" property="MenuQueryForm.LastUpdator">
         `LastUpdator`=#MenuQueryForm.LastUpdator#
     </isNotNull>
+    </dynamic>
   </update>
   <delete id="DeleteMenu" parameterClass="MenuQueryForm">
     DELETE FROM `Menu` WHERE 1=1
@@ -183,6 +194,47 @@
   </delete>
    <select id="QueryMenuLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Menu`
+   </select>
+   <select id="QueryMenuRecordCount" resultClass="int" parameterClass="MenuQueryForm">
+   SELECT COUNT(*) FROM `Menu` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name` LIKE '%$Name$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        `Page`=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ParentID">
+        `ParentID`=#ParentID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    </dynamic>
    </select>
   </statements>
 </sqlMap>

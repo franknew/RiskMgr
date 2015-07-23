@@ -23,13 +23,12 @@ namespace RiskMgr.Api
         [QueryAction]
         public IndexInitResultForm InitPage()
         {
-            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
             IndexInitResultForm form = new IndexInitResultForm();
             MenuBLL menubll = new MenuBLL();
             UserBLL userbll = new UserBLL();
             TaskDao taskdao = new TaskDao();
-            form.Menu = menubll.GetCurrentUserMenu(token);
-            form.User = userbll.GetCurrentUser(token);
+            form.Menu = menubll.GetCurrentUserMenu();
+            form.User = userbll.GetCurrentUser();
             return form;
         }
     }

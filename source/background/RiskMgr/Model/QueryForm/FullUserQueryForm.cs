@@ -1,11 +1,12 @@
-﻿using System;
+﻿using SOAFramework.Library.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace RiskMgr.Form
 {
-    public class FullUserQueryForm : BaseQueryForm
+    public class FullUserQueryForm : SimpleQueryForm
     {
         public int? Enabled { get; set; }
 
