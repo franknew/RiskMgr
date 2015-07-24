@@ -8,9 +8,15 @@ namespace RiskMgr.Model
 {
     public class User : SimpleEntity
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string Password { get; set; }
         
-        public UInt64? Enabled { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? Enabled { get; set; }
         
     }
 }

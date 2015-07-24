@@ -12,12 +12,29 @@ namespace RiskMgr.Model
 
         public string Password { get; set; }
 
+        /// <summary>
+        /// qq
+        /// </summary>
         public string QQ { get; set; }
 
+        /// <summary>
+        /// 手机
+        /// </summary>
         public string Mobile { get; set; }
 
+        /// <summary>
+        /// 微信
+        /// </summary>
         public string WX { get; set; }
 
+        /// <summary>
+        /// 地址
+        /// </summary>
         public string Address { get; set; }
+
+        /// <summary>
+        /// 中文名
+        /// </summary>
+        public string CnName { get; set; }
     }
 }

@@ -21,9 +21,9 @@ namespace RiskMgr.DAL
         {
         }
         
-        public DateTime QueryMaxLastUpdateTime()
+        public DateTime? QueryMaxLastUpdateTime()
         {
-            return Mapper.QueryForObject<DateTime>("QueryModuleLastUpdateTime", null);
+            return Mapper.QueryForObject<DateTime?>("QueryModuleLastUpdateTime", null);
         }
     }
 }

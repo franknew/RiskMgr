@@ -45,6 +45,7 @@ namespace RiskMgr.BLL
                     {
                         u.UserInfo = userinfo[0];
                     }
+                    u.Role = roleDao.QueryRoleByUserID(u.User.ID);
                     CacheItem item = new CacheItem(token, u);
                     LogonHistory history = new LogonHistory
                     {

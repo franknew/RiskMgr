@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
 using SOAFramework.Service.Core;
+using DreamWorkflow.Engine;
 
 namespace RiskMgr.BLL
 {
@@ -71,42 +72,58 @@ namespace RiskMgr.BLL
         {
             var userinfo = GetCurrentUser();
             mapper.BeginTransaction();
-            UserDao dao = new UserDao(mapper);
-            UserInfoDao infodao = new UserInfoDao(mapper);
-            var exist = dao.Query(new UserQueryForm { Name = user.Name });
-            if (exist.Count > 0)
+            try
             {
-                throw new Exception("已存在用户名：" + user.Name);
+                UserDao dao = new UserDao(mapper);
+                UserInfoDao infodao = new UserInfoDao(mapper);
+                var exist = dao.Query(new UserQueryForm { Name = user.Name });
+                if (exist.Count > 0)
+                {
+                    throw new Exception("已存在用户名：" + user.Name);
+                }
+                string id = dao.Add(user);
+                UserInfo ui = new UserInfo
+                {
+                    ID = id,
+                };
+                infodao.Add(ui);
+                mapper.CommitTransaction();
+                return id;
             }
-            string id = dao.Add(user);
-            UserInfo ui = new UserInfo
+            catch (Exception ex)
             {
-                ID = id,
-            };
-            infodao.Add(ui);
-            mapper.CommitTransaction();
-            return id;
+                mapper.RollBackTransaction();
+                throw ex;
+            }
         }
 
         public bool Update(UserEntireInfo user)
         {
             mapper.BeginTransaction();
-            if (user.User != null)
+            try
             {
-                UserDao dao = new UserDao(mapper);
-                User entity = new User
+                if (user.User != null)
                 {
-                    ID = user.User.ID,
-                    Enabled = user.User.Enabled,
-                };
-                dao.Update(new UserUpdateForm { Entity = entity });
+                    UserDao dao = new UserDao(mapper);
+                    User entity = new User
+                    {
+                        ID = user.User.ID,
+                        Enabled = user.User.Enabled,
+                    };
+                    dao.Update(new UserUpdateForm { Entity = entity, UserQueryForm = new UserQueryForm { ID = user.User.ID } });
+                }
+                if (user.UserInfo != null)
+                {
+                    UserInfoDao dao = new UserInfoDao();
+                    dao.Update(new UserInfoUpdateForm { Entity = user.UserInfo, UserInfoQueryForm = new UserInfoQueryForm { ID = user.UserInfo.ID } });
+                }
+                mapper.CommitTransaction();
             }
-            if (user.UserInfo != null)
+            catch (Exception ex)
             {
-                UserInfoDao dao = new UserInfoDao();
-                dao.Update(new UserInfoUpdateForm { Entity = user.UserInfo });
+                mapper.RollBackTransaction();
+                throw ex;
             }
-            mapper.CommitTransaction();
             return true;
         }
 
@@ -156,24 +173,30 @@ namespace RiskMgr.BLL
             return userlist;
         }
 
+        /// <summary>
+        /// 3:验证失效。4：没有权限
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public int CheckUserAuth(string token)
         {
             //验证有没有登录
             UserEntireInfo user = GetUserEntireInfoFromCache(token);
             if (user == null)
             {
-                LogonHistoryDao dao = new LogonHistoryDao();
-                var logonList = dao.Query(new LogonHistoryQueryForm { Token = token });
-                if (logonList.Count == 0 || DateTime.Now - logonList[0].ActiveTime > new TimeSpan(0, 30, 0))
-                {
-                    return 3;
-                }
-                dao.Update(new LogonHistoryUpdateForm
-                {
-                    Entity = new LogonHistory { ActiveTime = DateTime.Now },
-                    LogonHistoryQueryForm = new LogonHistoryQueryForm { Token = token },
-                });
+                return 3;
             }
+            LogonHistoryDao logonhistorydao = new LogonHistoryDao();
+            var logonList = logonhistorydao.Query(new LogonHistoryQueryForm { Token = token });
+            if (logonList.Count == 0 || DateTime.Now - logonList[0].ActiveTime > new TimeSpan(0, 30, 0))
+            {
+                return 3;
+            }
+            logonhistorydao.Update(new LogonHistoryUpdateForm
+            {
+                Entity = new LogonHistory { ActiveTime = DateTime.Now },
+                LogonHistoryQueryForm = new LogonHistoryQueryForm { Token = token },
+            });
             //验证有没有权限访问
             var attr = ServiceSession.Current.Method.GetCustomAttribute<BaseActionAttribute>(true);
             if (attr != null)
@@ -183,6 +206,40 @@ namespace RiskMgr.BLL
                 if (servicelayer != null)
                 {
                     string moduleName = servicelayer.Module;
+                    var modules = TableCacheHelper.GetDataFromCache<Module>(typeof(ModuleDao));
+                    var actions = TableCacheHelper.GetDataFromCache<RiskMgr.Model.Action>(typeof(ActionDao));
+                    Role_Module_ActionDao dao = new Role_Module_ActionDao();
+                    var module = modules.Find(t => t.Name == moduleName);
+                    var action = actions.Find(t => t.Name == actionName);
+                    if (module == null)
+                    {
+                        return -1;
+                    }
+                    if (action == null)
+                    {
+                        return -1;
+                    }
+                    string actionID = action.ID;
+                    string moduleID = module.ID;
+                    Role_Module_ActionQueryForm query = new Role_Module_ActionQueryForm
+                    {
+                        ActionID = actionID,
+                        ModuleID = moduleID
+                    };
+                    var role_module_action = dao.Query(query);
+                    bool hasRight = false;
+                    foreach (var item in role_module_action)
+                    {
+                        if (user.Role != null && user.Role.Exists(t=>t.ID == item.RoleID))
+                        {
+                            hasRight = true;
+                            break;
+                        }
+                    }
+                    if (!hasRight)
+                    {
+                        return 4;
+                    }
                 }
             }
             return -1;

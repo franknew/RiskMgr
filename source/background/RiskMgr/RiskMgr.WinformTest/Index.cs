@@ -19,6 +19,7 @@ namespace RiskMgr.WinformTest
         }
 
         private string token;
+        private User user = null;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -63,6 +64,7 @@ namespace RiskMgr.WinformTest
                 Name = "manualtest",
                 Password = "manualtest"
             };
+            user = req.user;
             var res = SDKFactory.Client.Execute(req);
             MessageBox.Show(res.ResponseBody);
         }
@@ -87,6 +89,30 @@ namespace RiskMgr.WinformTest
                 PageSize = 1,
                 CurrentIndex = 1,
             };
+            var response = SDKFactory.Client.Execute(request);
+            MessageBox.Show(response.ResponseBody);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            UpdateUserRequest request = new UpdateUserRequest();
+            request.token = token;
+            request.user = user;
+            request.userinfo = new UserInfo
+            {
+                ID = user.ID,
+                CnName = "测试",
+                Remark = "hello world",
+            };
+            var response = SDKFactory.Client.Execute(request);
+            MessageBox.Show(response.ResponseBody);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            DeleteUserRequest request = new DeleteUserRequest();
+            request.token = token;
+            request.userid = user.ID;
             var response = SDKFactory.Client.Execute(request);
             MessageBox.Show(response.ResponseBody);
         }

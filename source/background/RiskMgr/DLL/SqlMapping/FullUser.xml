@@ -40,6 +40,9 @@
       <isNotNull prepend="AND" property="WX">
         ur.`WX` LIKE '%WX%'
       </isNotNull>
+      <isNotNull prepend="AND" property="CnName">
+        ur.`CnName` LIKE '%CnName%'
+      </isNotNull>
       <isNotNull prepend="AND" property="Mobile">
         ur.`Mobile` LIKE '%Mobile%'
       </isNotNull>

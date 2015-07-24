@@ -8,8 +8,14 @@ namespace RiskMgr.Model
 {
     public class User_Post : BaseEntity
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string UserID { get; set; }
         
+        /// <summary>
+        /// 
+        /// </summary>
         public string PostID { get; set; }
         
     }

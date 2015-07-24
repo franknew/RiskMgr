@@ -89,7 +89,6 @@
     <Content Include="SqlMapping\UserInfo.xml" />
     <Content Include="SqlMapping\User_Post.xml" />
     <Content Include="SqlMapping\User_Role.xml" />
-    <Content Include="SqlMapping\Workflow.xml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

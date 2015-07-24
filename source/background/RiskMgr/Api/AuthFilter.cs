@@ -38,7 +38,11 @@ namespace RiskMgr.Api
                 case 3:
                     this.Message = "token失效，请重新登录！";
                     context.Code = result;
-                    break;
+                    return false;
+                case 4:
+                    this.Message = "您没有权限进行该操作！";
+                    context.Code = result;
+                    return false;
             }
 
 

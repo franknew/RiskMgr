@@ -8,6 +8,9 @@ namespace RiskMgr.Model
 {
     public class Post : SimpleEntity
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string Remark { get; set; }
         
     }
