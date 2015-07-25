@@ -22,11 +22,26 @@ namespace RiskMgr.Api
         /// <param name="user"></param>
         /// <returns></returns>
         [EditAction]
-        public string Add(User user)
+        public string Add(AddUserServiceForm form)
         {
             var currentUser = bll.GetCurrentUser();
-            user.Creator = currentUser.User.ID;
-            return bll.Add(user);
+            User u = new User
+            {
+                ID = form.ID,
+                Enabled = form.Enabled,
+                Name = form.Name,
+                Password = form.Password,
+            };
+            u.Creator = currentUser.User.ID;
+            UserInfo ui = new UserInfo
+            {
+                CnName = form.CnName,
+            };
+            User_Role ur = new User_Role
+            {
+                RoleID = form.Role,
+            };
+            return bll.Add(u, ui, ur);
         }
 
         /// <summary>
@@ -35,16 +50,26 @@ namespace RiskMgr.Api
         /// <param name="user"></param>
         /// <returns></returns>
         [EditAction]
-        public bool Update(User user, UserInfo userinfo)
+        public bool Update(UpdateUserServiceForm form)
         {
             var currentUser = bll.GetCurrentUser();
-            user.LastUpdator = currentUser.User.ID;
-            UserEntireInfo form = new UserEntireInfo
+            User u = new User
             {
-                User = user,
-                UserInfo = userinfo,
+                ID = form.ID,
+                LastUpdator = currentUser.User.ID,
+                Enabled = form.Enabled,
             };
-            return bll.Update(form);
+            UserInfo ui = new UserInfo
+            {
+                ID = form.ID,
+                Address = form.Address,
+                CnName = form.CnName,
+                Identity = form.Identity,
+                Mobile = form.Mobile,
+                QQ = form.QQ,
+                Remark = form.Remark
+            };
+            return bll.Update(u, ui);
         }
 
         /// <summary>
@@ -53,13 +78,9 @@ namespace RiskMgr.Api
         /// <param name="user"></param>
         /// <returns></returns>
         [DeleteAction]
-        public bool Delete(string userid)
+        public bool Delete(UserQueryForm form)
         {
-            var user = new UserQueryForm
-            {
-                ID = userid,
-            };
-            return bll.Delete(user);
+            return bll.Delete(form);
         }
 
         /// <summary>
@@ -108,6 +129,30 @@ namespace RiskMgr.Api
                 RecordCount = form.RecordCount,
             };
             return users;
+        }
+
+        /// <summary>
+        /// 用户管理首页需要用到的数据
+        /// </summary>
+        /// <returns></returns>
+        [QueryAction]
+        public UserInitResultForm Init(FullUserQueryForm form)
+        {
+            var list = bll.Query(form);
+            PagingEntity<FullUser> users = new PagingEntity<FullUser>
+            {
+                Record = list,
+                PageCount = form.PageCount,
+                RecordCount = form.RecordCount,
+            };
+            RoleBLL rolebll = new RoleBLL();
+            var role = rolebll.Query(new RoleQueryForm { });
+            UserInitResultForm resultform = new UserInitResultForm
+            {
+                User = users,
+                Role = role,
+            };
+            return resultform;
         }
     }
 }

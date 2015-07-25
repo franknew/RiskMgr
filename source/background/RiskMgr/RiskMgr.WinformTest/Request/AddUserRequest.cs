@@ -1,4 +1,5 @@
-﻿using RiskMgr.Model;
+﻿using RiskMgr.Form;
+using RiskMgr.Model;
 using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace RiskMgr.WinformTest
             return "RiskMgr.Api.UserApi.Add";
         }
 
-        public User user { get; set; }
+        public AddUserServiceForm form { get; set; }
 
         public string token { get; set; }
     }

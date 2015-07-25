@@ -77,7 +77,7 @@ namespace UnitTesting
                 Enabled = 1,
                 Name = defaultID,
                 Password = defaultID,
-            });
+            }, null, null);
         }
 
         [TestCleanup]
@@ -98,7 +98,7 @@ namespace UnitTesting
                 Name = id,
                 Password = id,
 
-            });
+            }, null, null);
             var list = dao.Query(new UserQueryForm { ID = id });
             Assert.IsNotNull(list);
             Assert.IsTrue(list.Count > 0);
@@ -110,17 +110,16 @@ namespace UnitTesting
         [TestMethod]
         public void TestUpdateUser()
         {
-            bll.Update(new UserEntireInfo
-            {
-                User = new User
+            bll.Update(
+                new User
                 {
                     Enabled = 0,
                 },
-                UserInfo = new UserInfo
+                new UserInfo
                 {
                     QQ = "11111111",
-                },
-            });
+                }
+            );
             var users = dao.Query(new UserQueryForm { ID = defaultID });
             var userinfo = infodao.Query(new UserInfoQueryForm { ID = defaultID });
             Assert.IsNotNull(users);

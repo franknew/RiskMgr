@@ -1,4 +1,6 @@
-﻿using RiskMgr.BLL;
+﻿
+using RiskMgr.BLL;
+using RiskMgr.Form;
 using RiskMgr.Model;
 using SOAFramework.Service.Core;
 using SOAFramework.Service.Core.Model;
@@ -20,9 +22,9 @@ namespace RiskMgr.Api
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        public string Logon(string username, string password)
+        public string Logon(LogonServiceForm form)
         {
-            return bll.Logon(username, password);
+            return bll.Logon(form.UserName, form.Password);
         }
 
         /// <summary>
@@ -31,8 +33,7 @@ namespace RiskMgr.Api
         /// <returns></returns>
         public bool Logout()
         {
-            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
-            return bll.Logout(token);
+            return bll.Logout();
         }
     }
 }

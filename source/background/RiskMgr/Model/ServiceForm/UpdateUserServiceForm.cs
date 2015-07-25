@@ -1,16 +1,15 @@
-﻿using SOAFramework.Library.DAL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiskMgr.Model
+namespace RiskMgr.Form
 {
-    public class FullUser : SimpleEntity
+    public class UpdateUserServiceForm
     {
-        public int? Enabled { get; set; }
+        public string ID { get; set; }
 
-        public string Password { get; set; }
+        public int? Enabled { get; set; }
 
         /// <summary>
         /// qq
@@ -42,6 +41,10 @@ namespace RiskMgr.Model
         /// </summary>
         public string Identity { get; set; }
 
+        /// <summary>
+        /// 备注
+        /// </summary>
         public string Remark { get; set; }
+
     }
 }

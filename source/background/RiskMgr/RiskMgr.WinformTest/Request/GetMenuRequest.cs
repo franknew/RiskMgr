@@ -6,11 +6,11 @@ using System.Text;
 
 namespace RiskMgr.WinformTest
 {
-    class GetMenuRequest : IRequest<GetMenuResponse>
+    class GetMenuRequest : IRequest<CommonResponse>
     {
         public string GetApi()
         {
-            return "RiskMgr.Api.MenuApi.GetMenu";
+            return "RiskMgr.Api.IndexApi.InitPage";
         }
 
         public string token { get; set; }

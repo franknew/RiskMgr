@@ -68,25 +68,36 @@ namespace RiskMgr.BLL
             return u;
         }
 
-        public string Add(User user)
+        public string Add(User user, UserInfo ui, User_Role role)
         {
             var userinfo = GetCurrentUser();
             mapper.BeginTransaction();
             try
             {
+                if (user == null)
+                {
+                    throw new Exception("user不能为null！");
+                }
                 UserDao dao = new UserDao(mapper);
-                UserInfoDao infodao = new UserInfoDao(mapper);
                 var exist = dao.Query(new UserQueryForm { Name = user.Name });
                 if (exist.Count > 0)
                 {
                     throw new Exception("已存在用户名：" + user.Name);
                 }
                 string id = dao.Add(user);
-                UserInfo ui = new UserInfo
+                if (ui == null)
                 {
-                    ID = id,
-                };
+                    ui = new UserInfo();
+                }
+                UserInfoDao infodao = new UserInfoDao(mapper);
+                ui.ID = id;
                 infodao.Add(ui);
+                if (role != null)
+                {
+                    User_RoleDao urdao = new User_RoleDao(mapper);
+                    role.UserID = id;
+                    urdao.Add(role);
+                }
                 mapper.CommitTransaction();
                 return id;
             }
@@ -97,25 +108,25 @@ namespace RiskMgr.BLL
             }
         }
 
-        public bool Update(UserEntireInfo user)
+        public bool Update(User user, UserInfo ui)
         {
             mapper.BeginTransaction();
             try
             {
-                if (user.User != null)
+                if (user != null)
                 {
                     UserDao dao = new UserDao(mapper);
                     User entity = new User
                     {
-                        ID = user.User.ID,
-                        Enabled = user.User.Enabled,
+                        ID = user.ID,
+                        Enabled = user.Enabled,
                     };
-                    dao.Update(new UserUpdateForm { Entity = entity, UserQueryForm = new UserQueryForm { ID = user.User.ID } });
+                    dao.Update(new UserUpdateForm { Entity = entity, UserQueryForm = new UserQueryForm { ID = user.ID } });
                 }
-                if (user.UserInfo != null)
+                if (ui != null)
                 {
                     UserInfoDao dao = new UserInfoDao();
-                    dao.Update(new UserInfoUpdateForm { Entity = user.UserInfo, UserInfoQueryForm = new UserInfoQueryForm { ID = user.UserInfo.ID } });
+                    dao.Update(new UserInfoUpdateForm { Entity = ui, UserInfoQueryForm = new UserInfoQueryForm { ID = ui.ID } });
                 }
                 mapper.CommitTransaction();
             }
@@ -230,7 +241,7 @@ namespace RiskMgr.BLL
                     bool hasRight = false;
                     foreach (var item in role_module_action)
                     {
-                        if (user.Role != null && user.Role.Exists(t=>t.ID == item.RoleID))
+                        if (user.Role != null && user.Role.Exists(t => t.ID == item.RoleID))
                         {
                             hasRight = true;
                             break;

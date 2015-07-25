@@ -1,4 +1,5 @@
-﻿using RiskMgr.Model;
+﻿using RiskMgr.Form;
+using RiskMgr.Model;
 using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,7 @@ namespace RiskMgr.WinformTest
 
         public string token { get; set; }
 
-        public User user { get; set; }
-
-        public UserInfo userinfo { get; set; }
+        public UpdateUserServiceForm form { get; set; }
 
     }
 }

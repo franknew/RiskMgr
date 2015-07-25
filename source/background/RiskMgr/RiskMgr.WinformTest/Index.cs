@@ -1,4 +1,5 @@
-﻿using RiskMgr.Model;
+﻿using RiskMgr.Form;
+using RiskMgr.Model;
 using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,11 @@ namespace RiskMgr.WinformTest
         private void button1_Click(object sender, EventArgs e)
         {
             LogonRequest request = new LogonRequest();
-            request.username = "admin";
-            request.password = "admin";
+            request.form = new Form.LogonServiceForm
+            {
+                UserName = "admin",
+                Password = "admin",
+            };
             var response = SDKFactory.Client.Execute(request);
             token = response.token;
             MessageBox.Show(response.ResponseBody);
@@ -36,7 +40,7 @@ namespace RiskMgr.WinformTest
             GetMenuRequest req = new GetMenuRequest();
             req.token = token;
             var res = SDKFactory.Client.Execute(req);
-            
+
             MessageBox.Show(res.ResponseBody);
         }
 
@@ -57,14 +61,18 @@ namespace RiskMgr.WinformTest
         {
             AddUserRequest req = new AddUserRequest();
             req.token = token;
-            req.user = new User
+            req.form = new Form.AddUserServiceForm
             {
-                ID = Guid.NewGuid().ToString().Replace("-",""),
+                ID = Guid.NewGuid().ToString().Replace("-", ""),
                 Enabled = 1,
                 Name = "manualtest",
-                Password = "manualtest"
+                Password = "manualtest",
+                CnName = "中文测试",
             };
-            user = req.user;
+            user = new User
+            {
+                ID = req.form.ID,
+            };
             var res = SDKFactory.Client.Execute(req);
             MessageBox.Show(res.ResponseBody);
         }
@@ -72,10 +80,13 @@ namespace RiskMgr.WinformTest
         private void button5_Click(object sender, EventArgs e)
         {
             QueryDataDictionaryRequest request = new QueryDataDictionaryRequest();
-            request.nameList = new List<string>
-            {
-                "testgroup", "testgroup2"
-            };
+            request.form = new QueryDataDictionaryByGroupNamesServiceForm
+             {
+                 NameList = new List<string>
+                {
+                "性别", "证件类型"
+                }
+             };
             var response = SDKFactory.Client.Execute(request);
             MessageBox.Show(response.ResponseBody);
         }
@@ -97,8 +108,7 @@ namespace RiskMgr.WinformTest
         {
             UpdateUserRequest request = new UpdateUserRequest();
             request.token = token;
-            request.user = user;
-            request.userinfo = new UserInfo
+            request.form = new Form.UpdateUserServiceForm
             {
                 ID = user.ID,
                 CnName = "测试",

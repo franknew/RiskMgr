@@ -1,4 +1,5 @@
-﻿using SOAFramework.Service.SDK.Core;
+﻿using RiskMgr.Form;
+using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,6 @@ namespace RiskMgr.WinformTest
             return "RiskMgr.Api.LogonApi.Logon";
         }
 
-        public string username { get; set; }
-
-        public string password { get; set; }
+        public LogonServiceForm form { get; set; }
     }
 }

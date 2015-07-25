@@ -73,8 +73,9 @@ namespace RiskMgr.BLL
             }
         }
 
-        public bool Logout(string token)
+        public bool Logout()
         {
+            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
             var item = cache.GetItem(token);
             if (item != null)
             {

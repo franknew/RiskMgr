@@ -65,7 +65,7 @@ namespace UnitTesting
         {
             LogonBLL bll = new LogonBLL();
             token = bll.Logon(initU.Name, initU.Password);
-            bll.Logout(token);
+            bll.Logout();
             Assert.IsNull(cache.GetItem(token));
         }
     }

@@ -21,9 +21,9 @@ namespace RiskMgr.Api
         /// <param name="customer"></param>
         /// <returns></returns>
         [EditAction]
-        public string Add(Customer customer)
+        public string Add(Customer form)
         {
-            return bll.Add(customer);
+            return bll.Add(form);
         }
 
         /// <summary>
@@ -32,14 +32,14 @@ namespace RiskMgr.Api
         /// <param name="customer"></param>
         /// <returns></returns>
         [EditAction]
-        public bool Update(Customer customer)
+        public bool Update(Customer form)
         {
-            CustomerUpdateForm form = new CustomerUpdateForm
+            CustomerUpdateForm updateform = new CustomerUpdateForm
             {
-                Entity = customer,
-                CustomerQueryForm = new CustomerQueryForm { ID = customer.ID },
+                Entity = form,
+                CustomerQueryForm = new CustomerQueryForm { ID = form.ID },
             };
-            return bll.Update(form);
+            return bll.Update(updateform);
         }
 
         /// <summary>
@@ -48,13 +48,9 @@ namespace RiskMgr.Api
         /// <param name="customerid"></param>
         /// <returns></returns>
         [DeleteAction]
-        public bool Delete(string customerid)
+        public bool Delete(CustomerQueryForm form)
         {
-            var customer = new CustomerQueryForm
-            {
-                ID = customerid
-            };
-            return bll.Delete(customer);
+            return bll.Delete(form);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using SOAFramework.Service.SDK.Core;
+﻿using RiskMgr.Form;
+using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,6 @@ namespace RiskMgr.WinformTest
             return "RiskMgr.Api.DataDictionaryApi.QueryByGroupNameList";
         }
 
-        public List<string> nameList { get; set; }
+        public QueryDataDictionaryByGroupNamesServiceForm form { get; set; }
     }
 }

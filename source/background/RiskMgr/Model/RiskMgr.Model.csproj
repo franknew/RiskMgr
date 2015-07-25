@@ -74,6 +74,11 @@
     <Compile Include="ResultForm\CustomerInitResultForm.cs" />
     <Compile Include="ResultForm\IndexInitResultForm.cs" />
     <Compile Include="QueryForm\LogonHistoryQueryForm.cs" />
+    <Compile Include="ResultForm\UserInitResultForm.cs" />
+    <Compile Include="ServiceForm\AddUserServiceForm.cs" />
+    <Compile Include="ServiceForm\LogonServiceForm.cs" />
+    <Compile Include="ServiceForm\QueryDataDictionaryByGroupNamesServiceForm.cs" />
+    <Compile Include="ServiceForm\UpdateUserServiceForm.cs" />
     <Compile Include="UpdateForm\AssetUpdateForm.cs" />
     <Compile Include="UpdateForm\ChangePasswordUpdateForm.cs" />
     <Compile Include="QueryForm\MenuQueryForm.cs" />
