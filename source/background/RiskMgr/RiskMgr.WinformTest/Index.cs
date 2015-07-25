@@ -97,7 +97,7 @@ namespace RiskMgr.WinformTest
             request.token = token;
             request.form = new Form.FullUserQueryForm
             {
-                PageSize = 1,
+                PageSize = 2,
                 CurrentIndex = 1,
             };
             var response = SDKFactory.Client.Execute(request);

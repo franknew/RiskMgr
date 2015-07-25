@@ -49,6 +49,9 @@
       <isNotNull prepend="AND" property="Address">
         ur.`Address` LIKE '%Address%'
       </isNotNull>
+      <isGreaterThan property="PageSize" compareValue="0">
+        LIMIT #StartIndex#, #PageSize#
+      </isGreaterThan>
     </select>
     <select id="QueryFullUserRecordCount" resultClass="int" parameterClass="FullUserQueryForm">
       SELECT COUNT(*)  FROM `User` u INNER JOIN `UserInfo` ui ON u.ID=ui.ID  WHERE 1=1
