@@ -6,7 +6,7 @@
   </alias>
   <statements>
     <select id="QueryFullUser" resultClass="FullUser" parameterClass="FullUserQueryForm">
-      SELECT u.Enabled,u.CreateTime,u.Creator,u.LastUpdateTime,u.LastUpdator,u.Name,ui.* FROM `User` u INNER JOIN `UserInfo` ui ON u.ID=ui.ID  WHERE 1=1
+      SELECT u.Enabled,u.CreateTime,u.Creator,u.LastUpdateTime,u.LastUpdator,u.Name,ui.* FROM `User` AS u INNER JOIN `UserInfo` AS ui ON u.ID=ui.ID  WHERE 1=1
       <isNotNull prepend="AND" property="ID">
         u.`ID`=#ID#
       </isNotNull>
@@ -35,26 +35,28 @@
         u.`LastUpdator`=#LastUpdator#
       </isNotNull>
       <isNotNull prepend="AND" property="QQ">
-        ur.`QQ` LIKE '%QQ%'
+        ui.`QQ` LIKE '%QQ%'
       </isNotNull>
       <isNotNull prepend="AND" property="WX">
-        ur.`WX` LIKE '%WX%'
+        ui.`WX` LIKE '%WX%'
       </isNotNull>
       <isNotNull prepend="AND" property="CnName">
-        ur.`CnName` LIKE '%CnName%'
+        ui.`CnName` LIKE '%CnName%'
       </isNotNull>
       <isNotNull prepend="AND" property="Mobile">
-        ur.`Mobile` LIKE '%Mobile%'
+        ui.`Mobile` LIKE '%Mobile%'
       </isNotNull>
       <isNotNull prepend="AND" property="Address">
-        ur.`Address` LIKE '%Address%'
+        ui.`Address` LIKE '%Address%'
       </isNotNull>
-      <isGreaterThan property="PageSize" compareValue="0">
-        LIMIT #StartIndex#, #PageSize#
-      </isGreaterThan>
+      <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+          LIMIT #StartIndex#, #PageSize#
+        </isGreaterThan>
+      </isNotNull>
     </select>
     <select id="QueryFullUserRecordCount" resultClass="int" parameterClass="FullUserQueryForm">
-      SELECT COUNT(*)  FROM `User` u INNER JOIN `UserInfo` ui ON u.ID=ui.ID  WHERE 1=1
+      SELECT COUNT(*)  FROM `User` AS u INNER JOIN `UserInfo` AS ui ON u.ID=ui.ID  WHERE 1=1
       <isNotNull prepend="AND" property="ID">
         u.`ID`=#ID#
       </isNotNull>
@@ -83,16 +85,16 @@
         u.`LastUpdator`=#LastUpdator#
       </isNotNull>
       <isNotNull prepend="AND" property="QQ">
-        ur.`QQ` LIKE '%QQ%'
+        ui.`QQ` LIKE '%QQ%'
       </isNotNull>
       <isNotNull prepend="AND" property="WX">
-        ur.`WX` LIKE '%WX%'
+        ui.`WX` LIKE '%WX%'
       </isNotNull>
       <isNotNull prepend="AND" property="Mobile">
-        ur.`Mobile` LIKE '%Mobile%'
+        ui.`Mobile` LIKE '%Mobile%'
       </isNotNull>
       <isNotNull prepend="AND" property="Address">
-        ur.`Address` LIKE '%Address%'
+        ui.`Address` LIKE '%Address%'
       </isNotNull>
     </select>
   </statements>
