@@ -140,7 +140,38 @@ namespace RiskMgr.BLL
 
         public bool Delete(UserQueryForm user)
         {
-            return true;
+            mapper.BeginTransaction();
+            try
+            {
+                UserDao userdao = new UserDao(mapper);
+                User_RoleDao urdao = new User_RoleDao(mapper);
+                UserInfoDao uidao = new UserInfoDao(mapper);
+
+                UserQueryForm uform = new UserQueryForm
+                {
+                    ID = user.ID
+                };
+                userdao.Delete(uform);
+
+                UserInfoQueryForm uiform = new UserInfoQueryForm
+                {
+                    ID = user.ID,
+                };
+                uidao.Delete(uiform);
+
+                User_RoleQueryForm urform = new User_RoleQueryForm
+                {
+                    UserID = user.ID,
+                };
+                urdao.Delete(urform);
+                mapper.CommitTransaction();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mapper.RollBackTransaction();
+                throw ex;
+            }
         }
 
         public bool ChangePassword(ChangePasswordUpdateForm form)

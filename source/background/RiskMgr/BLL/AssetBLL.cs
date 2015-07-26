@@ -10,10 +10,10 @@ namespace RiskMgr.BLL
 {
     public class AssetBLL
     {
-        public string Add(Asset asset)
+        public string Add(Asset form)
         {
             AssetDao dao = new AssetDao();
-            return dao.Add(asset);
+            return dao.Add(form);
         }
 
         public bool Update(AssetUpdateForm form)

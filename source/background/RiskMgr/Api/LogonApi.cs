@@ -22,9 +22,12 @@ namespace RiskMgr.Api
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        public string Logon(LogonServiceForm form)
+        public LogonResultForm Logon(LogonServiceForm form)
         {
-            return bll.Logon(form.UserName, form.Password);
+            var result = bll.Logon(form.UserName, form.Password);
+            MenuBLL menubll = new MenuBLL();
+            result.Menu = menubll.GetCurrentUserMenu();
+            return result;
         }
 
         /// <summary>

@@ -74,6 +74,7 @@
     <Compile Include="ResultForm\CustomerInitResultForm.cs" />
     <Compile Include="ResultForm\IndexInitResultForm.cs" />
     <Compile Include="QueryForm\LogonHistoryQueryForm.cs" />
+    <Compile Include="ResultForm\LogonResultForm.cs" />
     <Compile Include="ResultForm\UserInitResultForm.cs" />
     <Compile Include="ServiceForm\AddUserServiceForm.cs" />
     <Compile Include="ServiceForm\LogonServiceForm.cs" />

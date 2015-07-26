@@ -59,4 +59,15 @@ namespace RiskMgr.Model
             }
         } 
     }
+
+    public class ChangePasswordActionAttribute: BaseActionAttribute
+    {
+        public override string Action
+        {
+            get
+            {
+                return "changepassword";
+            }
+        }
+    }
 }

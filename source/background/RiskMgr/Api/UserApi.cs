@@ -88,7 +88,7 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="form"></param>
         /// <returns></returns>
-        [EditAction]
+        [ChangePasswordAction]
 
         public bool ChangePassword(ChangePasswordUpdateForm form)
         {

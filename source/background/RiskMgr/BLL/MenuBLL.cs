@@ -16,7 +16,7 @@ namespace RiskMgr.BLL
     public class MenuBLL
     {
 
-        private ICache cache = CacheFactory.Create(CacheType.DefaultMemoryCache);
+        private ICache cache = CacheFactory.Create();
 
         public List<Menu> GetAllMenu()
         {

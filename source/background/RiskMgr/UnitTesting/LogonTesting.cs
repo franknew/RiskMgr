@@ -46,10 +46,11 @@ namespace UnitTesting
         public void LogonTest()
         {
             LogonBLL bll = new LogonBLL();
-            token = bll.Logon(initU.Name, initU.Password);
+            var result = bll.Logon(initU.Name, initU.Password);
             var history = historydao.Query(new LogonHistoryQueryForm { UserID = initU.ID });
-            Assert.IsNotNull(token);
+            Assert.IsNotNull(result.token);
             Assert.IsTrue(history.Count > 0);
+            Assert.IsTrue(result.Menu.Count == 4);
             try
             {
                 bll.Logon(initU.Name, "wrongpassword");
@@ -64,7 +65,7 @@ namespace UnitTesting
         public void LogoutTest()
         {
             LogonBLL bll = new LogonBLL();
-            token = bll.Logon(initU.Name, initU.Password);
+            var result = bll.Logon(initU.Name, initU.Password);
             bll.Logout();
             Assert.IsNull(cache.GetItem(token));
         }

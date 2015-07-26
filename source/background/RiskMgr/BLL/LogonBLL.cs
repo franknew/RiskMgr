@@ -18,9 +18,10 @@ namespace RiskMgr.BLL
     {
         private ICache cache = CacheFactory.Create();
 
-        public string Logon(string username, string password)
+        public LogonResultForm Logon(string username, string password)
         {
             var mapper = Mapper.Instance();
+            LogonResultForm result = new LogonResultForm();
             mapper.BeginTransaction();
             UserDao userdao = new UserDao(mapper);
             UserInfoDao userInfoDao = new UserInfoDao(mapper);
@@ -57,9 +58,10 @@ namespace RiskMgr.BLL
                     //var endpoint = ServiceSession.Current.Context.Context.IncomingMessageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
                     //history.IP = endpoint.Address;
                     historyDao.Add(history);
+                    result.token = token;
                     mapper.CommitTransaction();
                     cache.AddItem(item, 30 * 60);
-                    return token;
+                    return result;
                 }
                 catch (Exception ex)
                 {
