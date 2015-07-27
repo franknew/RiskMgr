@@ -31,7 +31,7 @@ namespace RiskMgr.WinformTest
                 Password = "admin",
             };
             var response = SDKFactory.Client.Execute(request);
-            token = response.token;
+            token = response.form.token;
             MessageBox.Show(response.ResponseBody);
         }
 

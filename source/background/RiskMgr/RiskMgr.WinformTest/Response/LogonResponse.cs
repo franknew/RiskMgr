@@ -1,4 +1,5 @@
-﻿using SOAFramework.Service.SDK.Core;
+﻿using RiskMgr.Form;
+using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace RiskMgr.WinformTest
 {
     public class LogonResponse : BaseResponse
     {
-        public string token { get; set; }
+        public LogonResultForm form { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace RiskMgr.Api
         {
             var result = bll.Logon(form.UserName, form.Password);
             MenuBLL menubll = new MenuBLL();
-            result.Menu = menubll.GetCurrentUserMenu();
+            result.Menu = menubll.GetCurrentUserMenu(result.token);
             return result;
         }
 

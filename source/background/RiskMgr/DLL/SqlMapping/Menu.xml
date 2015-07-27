@@ -48,11 +48,14 @@
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
+    <isNotNull prepend="AND" property="ImagePath">
+        `ImagePath`=#ImagePath#
+    </isNotNull>
     </dynamic>
     <isNotNull property="PageSize">
-    <isGreaterThan property="PageSize" compareValue="0">
-     LIMIT #StartIndex#, #PageSize# 
-    </isGreaterThan>
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddMenu" parameterClass="Menu">
@@ -67,7 +70,8 @@
     `Enabled`,
     `Remark`,
     `LastUpdateTime`,
-    `LastUpdator`
+    `LastUpdator`,
+    `ImagePath`
   )
   VALUES
   (
@@ -80,7 +84,8 @@
         #Enabled#,
         #Remark#,
         #LastUpdateTime#,
-        #LastUpdator#
+        #LastUpdator#,
+        #ImagePath#
   )
   </insert>
   <update id="UpdateMenu" parameterClass="MenuUpdateForm">
@@ -112,6 +117,9 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.LastUpdator">
         `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ImagePath">
+        `ImagePath`=#Entity.ImagePath#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -150,6 +158,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.LastUpdator">
         `LastUpdator`=#MenuQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MenuQueryForm.ImagePath">
+        `ImagePath`=#MenuQueryForm.ImagePath#
     </isNotNull>
     </dynamic>
   </update>
@@ -190,6 +201,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ImagePath">
+        `ImagePath`=#ImagePath#
     </isNotNull>
   </delete>
    <select id="QueryMenuLastUpdateTime" resultClass="DateTime">
@@ -233,6 +247,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ImagePath">
+        `ImagePath`=#ImagePath#
     </isNotNull>
     </dynamic>
    </select>

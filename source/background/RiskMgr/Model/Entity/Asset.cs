@@ -14,17 +14,17 @@ namespace RiskMgr.Model
         public string Remark { get; set; }
         
         /// <summary>
-        /// 
+        /// 资产类型.1:房产 
         /// </summary>
         public int? Type { get; set; }
         
         /// <summary>
-        /// 
+        /// 用途。1:自主 2:租赁 
         /// </summary>
         public int? Usage { get; set; }
         
         /// <summary>
-        /// 
+        /// 所在区域
         /// </summary>
         public string Position { get; set; }
         
@@ -44,7 +44,7 @@ namespace RiskMgr.Model
         public decimal? Area { get; set; }
         
         /// <summary>
-        /// 注册价格
+        /// 登记价格
         /// </summary>
         public decimal? RegPrice { get; set; }
         
@@ -72,6 +72,11 @@ namespace RiskMgr.Model
         /// 
         /// </summary>
         public int? Eanbled { get; set; }
+        
+        /// <summary>
+        /// 评估过户总价
+        /// </summary>
+        public decimal? ChangeOwnerPrice { get; set; }
         
     }
 }

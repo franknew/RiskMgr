@@ -9,6 +9,5 @@ namespace RiskMgr.WinformTest
 {
     public class GetMenuResponse : BaseResponse
     {
-        public List<Menu> Menus { get; set; }
     }
 }

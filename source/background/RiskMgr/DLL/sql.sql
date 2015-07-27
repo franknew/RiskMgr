@@ -33,7 +33,8 @@ ParentID VARCHAR(32) NULL,
 `Enabled` BIT NULL,
 Remark NVARCHAR(500) NULL,
 LastUpdateTime DATETIME NULL,
-LastUpdator VARCHAR(32) NULL
+LastUpdator VARCHAR(32) NULL,
+ImagePath VARCHAR(50) NULL
 );
 
 CREATE TABLE `Role`
@@ -164,6 +165,7 @@ OwnerID VARCHAR(32) NULL,
 BuyerID VARCHAR(32) NULL,
 IssueType INT NULL,
 IsTraded BIT NULL,
-Enabled BIT NULL
+Enabled BIT NULL,
+ChangeOwnerPrice DECIMAL(10,2) NULL
 );
 

@@ -16,5 +16,7 @@ namespace RiskMgr.Form
         
         public string Remark { get; set; }
         
+        public string ImagePath { get; set; }
+        
     }
 }

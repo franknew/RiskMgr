@@ -19,9 +19,12 @@ namespace RiskMgr.BLL
         private ICache cache = CacheFactory.Create();
         private ISqlMapper mapper = Mapper.Instance();
 
-        public UserEntireInfo GetUserFormCache()
+        public UserEntireInfo GetUserFormCache(string token = null)
         {
-            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
+            if (string.IsNullOrEmpty(token))
+            {
+                token = ServiceSession.Current.Context.Parameters["token"].ToString();
+            }
             CacheItem item = cache.GetItem(token);
             if (item == null)
             {
@@ -42,9 +45,12 @@ namespace RiskMgr.BLL
             return u;
         }
 
-        public UserEntireInfo GetCurrentUser()
+        public UserEntireInfo GetCurrentUser(string token = null)
         {
-            string token = ServiceSession.Current.Context.Parameters["token"].ToString();
+            if (string.IsNullOrEmpty(token))
+            {
+                token = ServiceSession.Current.Context.Parameters["token"].ToString();
+            }
             var u = GetUserEntireInfoFromCache(token);
             if (u == null)
             {

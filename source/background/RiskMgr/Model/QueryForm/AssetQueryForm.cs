@@ -20,9 +20,13 @@ namespace RiskMgr.Form
         
         public string Code { get; set; }
         
-        public Decimal? Area { get; set; }
+        public DateTime? Area_Start { get; set; }
         
-        public Decimal? RegPrice { get; set; }
+        public DateTime? Area_End { get; set; }
+        
+        public DateTime? RegPrice_Start { get; set; }
+        
+        public DateTime? RegPrice_End { get; set; }
         
         public string OwnerID { get; set; }
         
@@ -33,6 +37,10 @@ namespace RiskMgr.Form
         public UInt64? IsTraded { get; set; }
         
         public UInt64? Eanbled { get; set; }
+        
+        public DateTime? ChangeOwnerPrice_Start { get; set; }
+        
+        public DateTime? ChangeOwnerPrice_End { get; set; }
         
     }
 }
