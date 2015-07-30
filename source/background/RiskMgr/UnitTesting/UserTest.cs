@@ -118,7 +118,8 @@ namespace UnitTesting
                 new UserInfo
                 {
                     QQ = "11111111",
-                }
+                },
+                null
             );
             var users = dao.Query(new UserQueryForm { ID = defaultID });
             var userinfo = infodao.Query(new UserInfoQueryForm { ID = defaultID });

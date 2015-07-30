@@ -10,7 +10,7 @@ using System.Text;
 
 namespace RiskMgr.Api
 {
-    [ServiceLayer(Module="RiskMgr.UserApi")]
+    [ServiceLayer(Module = "RiskMgr.UserApi")]
     [AuthFilter]
     public class UserApi
     {
@@ -37,9 +37,13 @@ namespace RiskMgr.Api
             {
                 CnName = form.CnName,
             };
-            User_Role ur = new User_Role
+            User_Role ur = null;
+            if (!string.IsNullOrEmpty(form.Role))
             {
-                RoleID = form.Role,
+                ur = new User_Role
+                {
+                    RoleID = form.Role,
+                };
             };
             return bll.Add(u, ui, ur);
         }
@@ -69,7 +73,7 @@ namespace RiskMgr.Api
                 QQ = form.QQ,
                 Remark = form.Remark
             };
-            return bll.Update(u, ui);
+            return bll.Update(u, ui, form.Role);
         }
 
         /// <summary>

@@ -114,7 +114,7 @@ namespace RiskMgr.BLL
             }
         }
 
-        public bool Update(User user, UserInfo ui)
+        public bool Update(User user, UserInfo ui, string role)
         {
             mapper.BeginTransaction();
             try
@@ -131,8 +131,18 @@ namespace RiskMgr.BLL
                 }
                 if (ui != null)
                 {
-                    UserInfoDao dao = new UserInfoDao();
+                    UserInfoDao dao = new UserInfoDao(mapper);
                     dao.Update(new UserInfoUpdateForm { Entity = ui, UserInfoQueryForm = new UserInfoQueryForm { ID = ui.ID } });
+                }
+                if (!string.IsNullOrEmpty(role))
+                {
+                    User_RoleDao urdao = new User_RoleDao(mapper);
+                    var ur = urdao.Query(new User_RoleQueryForm { UserID = user.ID }).FirstOrDefault();
+                    if (ur != null)
+                    {
+                        ur.RoleID = role;
+                        urdao.Update(new User_RoleUpdateForm { Entity = ur, User_RoleQueryForm = new User_RoleQueryForm { ID = ur.ID } });
+                    }
                 }
                 mapper.CommitTransaction();
             }

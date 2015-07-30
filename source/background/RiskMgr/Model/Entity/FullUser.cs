@@ -43,5 +43,7 @@ namespace RiskMgr.Model
         public string Identity { get; set; }
 
         public string Remark { get; set; }
+
+        public string Role { get; set; }
     }
 }
