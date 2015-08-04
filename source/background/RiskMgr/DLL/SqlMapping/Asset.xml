@@ -66,12 +66,6 @@
     <isNotNull prepend="AND" property="RegPrice_End">
         `RegPrice`&lt;=#RegPrice_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="OwnerID">
-        `OwnerID`=#OwnerID#
-    </isNotNull>
-    <isNotNull prepend="AND" property="BuyerID">
-        `BuyerID`=#BuyerID#
-    </isNotNull>
     <isNotNull prepend="AND" property="IssueType">
         `IssueType`=#IssueType#
     </isNotNull>
@@ -111,8 +105,6 @@
     `Code`,
     `Area`,
     `RegPrice`,
-    `OwnerID`,
-    `BuyerID`,
     `IssueType`,
     `IsTraded`,
     `Eanbled`,
@@ -134,8 +126,6 @@
         #Code#,
         #Area#,
         #RegPrice#,
-        #OwnerID#,
-        #BuyerID#,
         #IssueType#,
         #IsTraded#,
         #Eanbled#,
@@ -183,12 +173,6 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.RegPrice">
         `RegPrice`=#Entity.RegPrice#
-        </isNotNull>
-        <isNotNull prepend="," property="Entity.OwnerID">
-        `OwnerID`=#Entity.OwnerID#
-        </isNotNull>
-        <isNotNull prepend="," property="Entity.BuyerID">
-        `BuyerID`=#Entity.BuyerID#
         </isNotNull>
         <isNotNull prepend="," property="Entity.IssueType">
         `IssueType`=#Entity.IssueType#
@@ -257,12 +241,6 @@
     </isNotNull>
     <isNotNull prepend="AND" property="AssetQueryForm.RegPrice_End">
         `RegPrice`&lt;=#AssetQueryForm.RegPrice_End#
-    </isNotNull>
-    <isNotNull prepend="AND" property="AssetQueryForm.OwnerID">
-        `OwnerID`=#AssetQueryForm.OwnerID#
-    </isNotNull>
-    <isNotNull prepend="AND" property="AssetQueryForm.BuyerID">
-        `BuyerID`=#AssetQueryForm.BuyerID#
     </isNotNull>
     <isNotNull prepend="AND" property="AssetQueryForm.IssueType">
         `IssueType`=#AssetQueryForm.IssueType#
@@ -336,12 +314,6 @@
     </isNotNull>
     <isNotNull prepend="AND" property="RegPrice_End">
         `RegPrice`&lt;=#RegPrice_End#
-    </isNotNull>
-    <isNotNull prepend="AND" property="OwnerID">
-        `OwnerID`=#OwnerID#
-    </isNotNull>
-    <isNotNull prepend="AND" property="BuyerID">
-        `BuyerID`=#BuyerID#
     </isNotNull>
     <isNotNull prepend="AND" property="IssueType">
         `IssueType`=#IssueType#
@@ -418,12 +390,6 @@
     </isNotNull>
     <isNotNull prepend="AND" property="RegPrice_End">
         `RegPrice`&lt;=#RegPrice_End#
-    </isNotNull>
-    <isNotNull prepend="AND" property="OwnerID">
-        `OwnerID`=#OwnerID#
-    </isNotNull>
-    <isNotNull prepend="AND" property="BuyerID">
-        `BuyerID`=#BuyerID#
     </isNotNull>
     <isNotNull prepend="AND" property="IssueType">
         `IssueType`=#IssueType#

@@ -79,6 +79,7 @@
     <Compile Include="DataDictionaryApi.cs" />
     <Compile Include="IndexApi.cs" />
     <Compile Include="LogonApi.cs" />
+    <Compile Include="ProjectApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserApi.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

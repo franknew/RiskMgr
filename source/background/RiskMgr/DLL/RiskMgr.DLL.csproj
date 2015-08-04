@@ -51,7 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dao\AssetDao.cs" />
+    <Compile Include="Dao\Asset_ProjectDao.cs" />
     <Compile Include="Dao\CustomerDao.cs" />
+    <Compile Include="Dao\Customer_ProjectDao.cs" />
     <Compile Include="Dao\FullUserDao.cs" />
     <Compile Include="Dao\LogonHistoryDao.cs" />
     <Content Include="sql.sql" />
@@ -63,6 +65,7 @@
     <Compile Include="Dao\Menu_RoleDao.cs" />
     <Compile Include="Dao\ModuleDao.cs" />
     <Compile Include="Dao\PostDao.cs" />
+    <Compile Include="Dao\ProjectDao.cs" />
     <Compile Include="Dao\RoleDao.cs" />
     <Compile Include="Dao\Role_Module_ActionDao.cs" />
     <Compile Include="Dao\UserDao.cs" />
@@ -72,7 +75,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="SqlMapping\Action.xml" />
     <Content Include="SqlMapping\Asset.xml" />
+    <Content Include="SqlMapping\Asset_Project.xml" />
     <Content Include="SqlMapping\Customer.xml" />
+    <Content Include="SqlMapping\Customer_Project.xml" />
     <Content Include="SqlMapping\FullUser.xml" />
     <Content Include="SqlMapping\LogonHistory.xml" />
     <Content Include="SqlMapping\Menu.xml" />
@@ -82,6 +87,7 @@
     <Content Include="SqlMapping\Module.xml" />
     <Content Include="SqlMapping\Module_ex.xml" />
     <Content Include="SqlMapping\Post.xml" />
+    <Content Include="SqlMapping\Project.xml" />
     <Content Include="SqlMapping\Role.xml" />
     <Content Include="SqlMapping\Role_ex.xml" />
     <Content Include="SqlMapping\Role_Module_Action.xml" />

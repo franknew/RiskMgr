@@ -28,10 +28,6 @@ namespace RiskMgr.Form
         
         public DateTime? RegPrice_End { get; set; }
         
-        public string OwnerID { get; set; }
-        
-        public string BuyerID { get; set; }
-        
         public Int32? IssueType { get; set; }
         
         public UInt64? IsTraded { get; set; }

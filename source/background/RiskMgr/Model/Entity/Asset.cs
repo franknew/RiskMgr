@@ -49,16 +49,6 @@ namespace RiskMgr.Model
         public decimal? RegPrice { get; set; }
         
         /// <summary>
-        /// 业主
-        /// </summary>
-        public string OwnerID { get; set; }
-        
-        /// <summary>
-        /// 购房人
-        /// </summary>
-        public string BuyerID { get; set; }
-        
-        /// <summary>
         /// 办理事项
         /// </summary>
         public int? IssueType { get; set; }

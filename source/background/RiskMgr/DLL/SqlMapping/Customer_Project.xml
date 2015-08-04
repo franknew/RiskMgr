@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Customer_Project" type="RiskMgr.Model.Customer_Project" />
+    <typeAlias alias="Customer_ProjectQueryForm" type="RiskMgr.Form.Customer_ProjectQueryForm" />
+    <typeAlias alias="Customer_ProjectUpdateForm" type="RiskMgr.Form.Customer_ProjectUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryCustomer_Project" resultClass="Customer_Project" parameterClass="Customer_ProjectQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Customer_Project` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerID">
+        `CustomerID`=#CustomerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddCustomer_Project" parameterClass="Customer_Project">
+  INSERT INTO `Customer_Project`
+  (
+    `ID`,
+    `CustomerID`,
+    `ProjectID`,
+    `Type`
+  )
+  VALUES
+  (
+        #ID#,
+        #CustomerID#,
+        #ProjectID#,
+        #Type#
+  )
+  </insert>
+  <update id="UpdateCustomer_Project" parameterClass="Customer_ProjectUpdateForm">
+  UPDATE `Customer_Project`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.CustomerID">
+        `CustomerID`=#Entity.CustomerID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ProjectID">
+        `ProjectID`=#Entity.ProjectID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Type">
+        `Type`=#Entity.Type#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="Customer_ProjectQueryForm.ID">
+        `ID`=#Customer_ProjectQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Customer_ProjectQueryForm.CustomerID">
+        `CustomerID`=#Customer_ProjectQueryForm.CustomerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Customer_ProjectQueryForm.ProjectID">
+        `ProjectID`=#Customer_ProjectQueryForm.ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Customer_ProjectQueryForm.Type">
+        `Type`=#Customer_ProjectQueryForm.Type#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteCustomer_Project" parameterClass="Customer_ProjectQueryForm">
+    DELETE FROM `Customer_Project` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerID">
+        `CustomerID`=#CustomerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+  </delete>
+   <select id="QueryCustomer_ProjectRecordCount" resultClass="int" parameterClass="Customer_ProjectQueryForm">
+   SELECT COUNT(*) FROM `Customer_Project` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerID">
+        `CustomerID`=#CustomerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

@@ -156,16 +156,90 @@ LastUpdateTime DATETIME NULL,
 Remark NVARCHAR(200) NULL,
 `Type` INT NULL,
 `Usage` INT NULL,
-Position NVARCHAR(50) NULL,
-Address NVARCHAR(50) NULL,
-`Code` VARCHAR(20) NULL,
-Area DECIMAL(8, 2) NULL,
-RegPrice DECIMAL(10, 2) NULL,
-OwnerID VARCHAR(32) NULL,
-BuyerID VARCHAR(32) NULL,
-IssueType INT NULL,
-IsTraded BIT NULL,
+Position NVARCHAR(50) NULL COMMENT '区域',
+Address NVARCHAR(50) NULL COMMENT '地址',
+`Code` VARCHAR(20) NULL COMMENT '房产编号',
+Area DECIMAL(8, 2) NULL COMMENT '面积',
+RegPrice DECIMAL(10, 2) NULL COMMENT '评估价格',
+IssueType INT NULL COMMENT '交易类型',
+IsTraded BIT NULL COMMENT '是否交易',
 Enabled BIT NULL,
-ChangeOwnerPrice DECIMAL(10,2) NULL
+ChangeOwnerPrice DECIMAL(10,2) NULL COMMENT ''
 );
 
+CREATE TABLE `Asset_Customer`
+(
+ID VARCHAR(32) NOT NULL PRIMARY KEY,
+`Type` INT NULL,
+AssetID VARCHAR(32) NULL,
+CustomerID VARCHAR(32) NULL
+);
+
+CREATE TABLE `Project`
+(
+ID VARCHAR(32) NOT NULL PRIMARY KEY,
+Name NVARCHAR(30) NULL,
+Creator VARCHAR(32) NULL,
+CreateTime DATETIME NULL,
+LastUpdator VARCHAR(32) NULL,
+LastUpdateTime DATETIME NULL,
+`Type` INT NULL COMMENT '额度申请类型1.二手楼买卖 2.首期垫付 3.现金赎楼 4.红本抵押',
+`Source` INT NULL COMMENT '来源',
+AgentName NVARCHAR(50) NULL COMMENT '中介名称',
+CertificateData DATETIME NULL COMMENT '公证书日期',
+AgentContact NVARCHAR(10) NULL COMMENT '中介联系人',
+Rebater NVARCHAR(10) NULL COMMENT '返佣人',
+RebateAccount VARCHAR(20) NULL COMMENT '返佣账号',
+OtherRebateInfo NVARCHAR(200) NULL COMMENT '其他返佣信息',
+OrignalMortgageBank NVARCHAR(50) NULL COMMENT '原按揭银行',
+OrignalMortgageBranch VARCHAR(50) NULL COMMENT '原按揭银行支行',
+OrignalFundCenter NVARCHAR(50) NULL COMMENT '原贷款公积金中心',
+OrignalFundBranch NVARCHAR(50) NULL COMMENT '公积金银行支行',
+SupplyCardCopy BIT NULL COMMENT '是否提供供楼卡复印件',
+OrignalCreditPI DECIMAL(10,2) NULL COMMENT '原贷款本息',
+OrignalCreditCommerceMoney DECIMAL(10,2) NULL COMMENT '原贷款商业金额',
+OrignalCreditFundMoney DECIMAL(10,2) NULL COMMENT '原贷款公积金金额',
+AssetRansomCustomerManager NVARCHAR(10) NULL COMMENT '赎楼客户经理',
+AssetRansomContactPhone NVARCHAR(20) NULL COMMENT '赎楼联系电话',
+NewCreditBank NVARCHAR(50) NULL COMMENT '新贷款银行',
+NewCreditBranch NVARCHAR(50) NULL COMMENT '新贷款银行支行',
+ShortTermAssetRansomBank NVARCHAR(50) NULL COMMENT '短期赎楼贷款银行',
+ShortTermAssetRansomBranch NVARCHAR(50) NULL COMMENT '短期赎楼贷款银行支行',
+GuaranteeMoney DECIMAL(10,2) NULL COMMENT '担保金额',
+GuaranteeMonth INT NULL COMMENT '担保期限',
+BuyerCreditCommerceMoney DECIMAL(10,2) NULL COMMENT '买方贷款商业金额',
+BuyerCreditFundMoney DECIMAL(10,2) NULL COMMENT '买方贷款公积金金额',
+LoanMoney DECIMAL(10,2) NULL COMMENT '贷款放款金额',
+DealMoney DECIMAL(10,2) NULL COMMENT '成交金额',
+EarnestMoney DECIMAL(10,2) NULL COMMENT '交易定金',
+SupervisionMoney DECIMAL(10,2) NULL COMMENT '监管资金',
+SupervisionBank NVARCHAR(50) NULL COMMENT '资金监管银行',
+AssetRansomMoney DECIMAL(10,2) NULL COMMENT '赎楼金额',
+CustomerPredepositMoney DECIMAL(10,2) NULL COMMENT '客户预存款',
+CreditReceiverName NVARCHAR(10) NULL COMMENT '贷款接收姓名',
+CreditReceiverBank NVARCHAR(50) NULL COMMENT '贷款接收银行-支行',
+CreditReceiverAccount VARCHAR(30) NULL COMMENT '贷款接收账号',
+TrusteeshipAccount VARCHAR(30) NULL COMMENT '工行托管账号',
+AssetRansomPredictMoney DECIMAL(10,2) NULL COMMENT '预计赎楼金额',
+AssetRansomer NVARCHAR(10) NULL COMMENT '赎楼员',
+AssetRansomType INT NULL COMMENT '赎楼方式',
+PredictDays INT NULL COMMENT '预存时间',
+ChargeType INT NULL COMMENT '收费方式',
+CheckNumbersAndLimit VARCHAR(50) NULL COMMENT '申请支票数量及限额',
+Stagnationer NVARCHAR(50) NULL COMMENT '驻点人员'
+);
+
+CREATE TABLE Asset_Project
+(
+ID VARCHAR(32) NOT NULL PRIMARY KEY,
+AssetID VARCHAR(32) NULL,
+ProjectID VARCHAR(32) NULL
+);
+
+CREATE TABLE Customer_Project
+(
+ID VARCHAR(32) NOT NULL PRIMARY KEY,
+CustomerID VARCHAR(32) NULL,
+ProjectID VARCHAR(32) NULL,
+`Type` INT NULL COMMENT '客户类型 1.买家 2.卖家 3.买家第三方 4.卖家第三方'
+);

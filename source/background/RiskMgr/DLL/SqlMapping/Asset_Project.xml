@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Asset_Project" type="RiskMgr.Model.Asset_Project" />
+    <typeAlias alias="Asset_ProjectQueryForm" type="RiskMgr.Form.Asset_ProjectQueryForm" />
+    <typeAlias alias="Asset_ProjectUpdateForm" type="RiskMgr.Form.Asset_ProjectUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryAsset_Project" resultClass="Asset_Project" parameterClass="Asset_ProjectQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Asset_Project` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetID">
+        `AssetID`=#AssetID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddAsset_Project" parameterClass="Asset_Project">
+  INSERT INTO `Asset_Project`
+  (
+    `ID`,
+    `AssetID`,
+    `ProjectID`
+  )
+  VALUES
+  (
+        #ID#,
+        #AssetID#,
+        #ProjectID#
+  )
+  </insert>
+  <update id="UpdateAsset_Project" parameterClass="Asset_ProjectUpdateForm">
+  UPDATE `Asset_Project`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.AssetID">
+        `AssetID`=#Entity.AssetID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ProjectID">
+        `ProjectID`=#Entity.ProjectID#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="Asset_ProjectQueryForm.ID">
+        `ID`=#Asset_ProjectQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Asset_ProjectQueryForm.AssetID">
+        `AssetID`=#Asset_ProjectQueryForm.AssetID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Asset_ProjectQueryForm.ProjectID">
+        `ProjectID`=#Asset_ProjectQueryForm.ProjectID#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteAsset_Project" parameterClass="Asset_ProjectQueryForm">
+    DELETE FROM `Asset_Project` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetID">
+        `AssetID`=#AssetID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+  </delete>
+   <select id="QueryAsset_ProjectRecordCount" resultClass="int" parameterClass="Asset_ProjectQueryForm">
+   SELECT COUNT(*) FROM `Asset_Project` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetID">
+        `AssetID`=#AssetID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

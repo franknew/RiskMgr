@@ -20,9 +20,9 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="asset"></param>
         /// <returns></returns>
-        public string Add(Asset asset)
+        public string Add(Asset form)
         {
-            return bll.Add(asset);
+            return bll.Add(form);
         }
 
         /// <summary>
@@ -30,14 +30,14 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="asset"></param>
         /// <returns></returns>
-        public bool Update(Asset asset)
+        public bool Update(Asset form)
         {
-            AssetUpdateForm form = new AssetUpdateForm
+            AssetUpdateForm updateform = new AssetUpdateForm
             {
-                Entity = asset,
-                AssetQueryForm = new AssetQueryForm { ID = asset.ID },
+                Entity = form,
+                AssetQueryForm = new AssetQueryForm { ID = form.ID },
             };
-            return bll.Update(form);
+            return bll.Update(updateform);
         }
 
         /// <summary>
