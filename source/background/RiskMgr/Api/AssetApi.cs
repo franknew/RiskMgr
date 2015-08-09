@@ -45,13 +45,13 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="assetid"></param>
         /// <returns></returns>
-        public bool Delete(string assetid)
+        public bool Delete(Asset form)
         {
-            AssetQueryForm form = new AssetQueryForm
+            AssetQueryForm deleteform = new AssetQueryForm
             {
-                ID = assetid,
+                ID = form.ID,
             };
-            return bll.Delete(form);
+            return bll.Delete(deleteform);
         }
 
         public PagingEntity<Asset> Query(AssetQueryForm form)
