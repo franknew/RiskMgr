@@ -8,8 +8,8 @@ define(function(require, exports, module){
 
 	var MOD = {
 		get:function(key) {
-			var r = new RegExp('\b' + name + '=([^;]*)'),
-			m = document.cookie.match(r);
+			var r = new RegExp('\\bskey=([^\\;]*)\\b'),
+				m = document.cookie.match(r);
 			return m && m[1] || '';
 		},
 		set:function(key,val,opts) {
@@ -20,15 +20,23 @@ define(function(require, exports, module){
 				path = opts.path,	//生效的路径,/path
 				domain = opts.domain;	//设置的域名，qq.com
 
-			if(expire) {
+			if (expire*1<=0) {
+				expire = 'Mon, 26 Jul 1997 05:00:00 GMT';
+			} else{
 				expire = new Date(expire).toGMTString();
 			}
+			
 			document.cookie = (key + '=' + val + '; ') + 
 							(expire ? ('expires=' + expire + '; ') : '') + 
 							('path=' + (path || '/') + '; ') + 
 							(domain?'domain=' + domain + ';' : '');
 
-		}
+		},
+		del: function(key, opts) {
+			this.set(key,'',{
+				expire:-1
+			});
+		},
 	};
 
 	return MOD;

@@ -48,7 +48,7 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 
 
 	var Clone = myclass.clone;
-	
+
 	var DIALOG_OBJ = [],
 		 DIALOG_COUNT = 0;	//浮层计数，用来填默认的id
 	var MOD ={
@@ -57,7 +57,7 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 			setting:{	//默认配置
 				title:'温馨提示'
 				,content:''	//内容，支持html
-				,width:'630px'	//宽度，必须设定单位
+				//,width:'630px'	//宽度，必须设定单位
 				,padding:'20px'	//内容区域的padding
 				,skin:''	//主容器的className
 				,ok:function () {}	//确定按钮的回调
@@ -67,10 +67,13 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 				,onclose:function () {}	 //关闭浮层时的回调
 				,onshow:function(){}	//打开浮层时的回调
 				,id:''	//浮层主容器的ID
+				,validate:true	//是否校验表单
+				,form:true	//是否自动生成外包form
+				//,button:[]	//增加按钮
 			}
 		},
 		/** 显示浮层
-		 * @param  setting {Object} 
+		 * @param  setting {Object}
 		 * @return 返回当前浮层对象
 		 */
 		show:function (setting) {
@@ -83,13 +86,14 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 			}
 
 			var conf = this._initConfig(setting);
-			
+
 			this._showMask();
 			var html = TMPL.modal(conf),
 				 elem = $(html);
 			$('body').append(elem);
 
 			this.dialog = elem;
+			this.content = elem.find('div.modal-body');
 			this.form = elem.find('>form').eq(0);
 			this.parsley = this.form.parsley();
 
@@ -149,7 +153,10 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 		 * @param
 		 */
 		_initEvent:function (box) {
-			var that = this;
+			var that = this,
+				conf = this._config(),
+				validate = conf.validate;
+
 			box.find('button.j-op-close').bind('click',function (ev) {//关闭按钮
 				ev.preventDefault();
 				that.close();
@@ -157,22 +164,35 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 			box.find('button.j-op-cancel').bind('click',function (ev) {	 //取消按钮
 				ev.preventDefault();
 				if (!that._exeCallback('cancel')) {
-					that.close();	
+					that.close();
 				}
 			});
 			box.find('button.j-op-ok').bind('click',function (ev) {	 //确定按钮
 				ev.preventDefault();
-				if (that.parsley.validate()) {	//校验表单  在没有表单的时候默认成功，所以可以全部都校验
+				if (!validate || that.parsley.validate()) {	//校验表单  在没有表单的时候默认成功，所以可以全部都校验
 					if (!that._exeCallback('ok')) {	//执行『ok』回调，如果不返回true，则执行关闭浮层
 						that.close();
 					}
 				}
 			});
+
+			//自定义按钮事件绑定
+			var buttons = conf.button;
+			if (buttons&&buttons.length>0) {
+				box.on('click','button.j-op-btns',function(ev) {
+					ev.preventDefault();
+					var btn = $(ev.currentTarget),
+						sn = btn.data('sn'),
+						fn = buttons[sn].callback;
+
+					fn.call(that);
+				});
+			}
 		},
 		/** 执行回调 */
 		_exeCallback:function (name) {
 			var conf = this._config(),
-				 fn = conf[name];
+				fn = conf[name];
 			if($.isFunction(fn)) {
 				return fn.call(this);
 			}
@@ -180,10 +200,10 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 		/** 初始化配置 */
 		_initConfig:function (setting) {
 			var def = this._DEFAULT_CONFIG.setting,
-				 key = this._DEFAULT_CONFIG.configKey,
+				key = this._DEFAULT_CONFIG.configKey,
 				conf;
 			conf = this[key] = $.extend({},def,setting);
-			
+
 			//填上popup的id
 			DIALOG_COUNT = DIALOG_COUNT+1;
 			if(!conf.id) {
@@ -223,9 +243,9 @@ var tmpl = {
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('<div class="md-modal colored-header custom-width md-effect-9" ');
 _p(data.id?'id="'+data.id+'"':'');
-__p.push(' style="');
-_p((data.width?"width:"+data.width : ''));
-__p.push('">\n	<form data-parsley-validate>\n	<div class="md-content">\n		<div class="modal-header">\n			<h3>');
+__p.push('>');
+if (data.form) {__p.push('	<form data-parsley-validate>');
+}__p.push('\n	<div class="md-content">\n		<div class="modal-header">\n			<h3>');
 _p(data.title);
 __p.push('</h3>\n			<button type="button" class="close md-close j-op-close">&times;</button>\n		</div>\n		<div class="modal-body form" style="');
 _p((data.padding?'padding:'+data.padding+';' : ''));
@@ -235,6 +255,20 @@ __p.push('		</div>');
 
 			if (!('footer' in data && !data.footer)) {
 		__p.push('		<div class="modal-footer">');
+
+				var Buttons = data.button || [];
+				var i=0, l = Buttons.length;
+				for(; i < l; ++i) {
+			__p.push('				<button type="button" class="btn btn-');
+_p((Buttons[i].style || 'default'));
+__p.push(' btn-flat j-op-btns" data-sn="');
+_p(i);
+__p.push('">');
+_p(Buttons[i].value);
+__p.push('</button>');
+
+				}
+			__p.push('			');
 if (data.cancel!=false) {__p.push('			<button type="button" class="btn btn-default btn-flat j-op-cancel">');
 _p(data.cancelValue);
 __p.push('</button>');
@@ -243,7 +277,9 @@ if (data.ok!=false) {__p.push('			<button type="submit" class="btn btn-primary b
 _p(data.okValue);
 __p.push('</button>');
 }__p.push('		</div>');
- } __p.push('	</div>\n	</form>\n</div>');
+ } __p.push('	</div>');
+if (data.form) {__p.push('	</form>');
+}__p.push('\n</div>');
 
 return __p.join("");
 }

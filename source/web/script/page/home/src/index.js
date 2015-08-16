@@ -15,12 +15,6 @@ define(function(require, exports, module){
 			var html = tmpl.home();
 			route.show(html);
 
-			$('#LOGIN').click(function(e) {
-				e.preventDefault();
-				seajs.use('risk/components/login/index',function(m) {
-					m.show();
-				});
-			});
 		}
 	}; 
 	return MOD;

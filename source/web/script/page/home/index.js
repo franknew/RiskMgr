@@ -53,12 +53,6 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl"],function(require, ex
 			var html = tmpl.home();
 			route.show(html);
 
-			$('#LOGIN').click(function(e) {
-				e.preventDefault();
-				seajs.use('risk/components/login/index',function(m) {
-					m.show();
-				});
-			});
 		}
 	}; 
 	return MOD;
@@ -70,7 +64,7 @@ var tmpl = {
 'home': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div>adsfadsf</div>\n<p><a href="###" id="LOGIN">登录</a>\n<p><a href="http://203.195.163.209/ServiceDiscovery/ServiceDiscovery/Index/Default" target="_blank">后台文档</a>');
+__p.push('<div class="row dash-cols">\n	<div class="col-sm-6 col-md-6">\n\n		<div class="block-flat">\n			<div class="header">\n				<h3>待办事项</h3>\n			</div>\n			<div class="content">\n				<div class="list-group">\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n				</div>						\n			</div>\n		</div>\n	</div>	\n	<div class="col-sm-6 col-md-6">\n		<ul class="nav nav-tabs">\n			<li class="active"><a href="#home" data-toggle="tab">待办事</a></li>\n			<li><a href="#profile" data-toggle="tab">进行中</a></li>\n			<li><a href="#messages" data-toggle="tab">最近完成</a></li>\n		</ul>\n		<div class="tab-content">\n			<div class="tab-pane active cont" id="home">\n			homeeeee\n			</div>\n			<div class="tab-pane cont" id="profile">\n			hahahahahah\n			</div>\n			<div class="tab-pane" id="messages">\n			第三个slk艾山街道非\n			</div>\n		</div>\n	</div>		\n</div>');
 
 return __p.join("");
 }

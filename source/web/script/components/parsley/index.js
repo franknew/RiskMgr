@@ -159,7 +159,14 @@
     classHandler: function (ParsleyField) {},
     // Return the `$element` where errors will be appended
     // Could also be (and given directly from DOM) a valid selector like `'#div'`
-    errorsContainer: function (ParsleyField) {},
+    errorsContainer: function (ParsleyField) {
+      var elem = ParsleyField.$element,
+          groupInput = elem.parent('.input-group');
+
+      if (groupInput.size()) {
+        return groupInput.parent();
+      }
+     },
     // ul elem that would receive errors' list
     errorsWrapper: '<ul class="parsley-errors-list"></ul>',
     // li elem that would receive error message
@@ -305,6 +312,10 @@ var Validator = ( function ( ) {
         return this._validateBindedObject( objectOrString, AssertsOrConstraintOrGroup );
       // regular object validation
       return this._validateObject( objectOrString, AssertsOrConstraintOrGroup, group );
+    },
+    validateElements:function(nodes) {
+      var obj = new Constraint(nodes);
+      console.log('obj check::::',obj.check());
     },
     bind: function ( object, constraint ) {
       if ( 'object' !== typeof object )
@@ -1519,6 +1530,22 @@ var Validator = ( function ( ) {
         event.preventDefault();
       }
       return this;
+    },
+
+    validateElements:function(nodes) {
+      //this._refreshFields();
+
+      var i=0,cur,
+        rs = true,
+        curRS;
+      for(;cur=nodes[i++];) {
+        curRS = new Parsley.Factory(cur,{},this).validate();
+        if (curRS!==true) {
+          rs = false;
+        }
+      }
+      curRS = null;
+      return rs;
     },
     // @returns boolean
     validate: function (group, force, event) {

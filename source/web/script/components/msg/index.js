@@ -67,8 +67,9 @@ define.pack("./index",["jquery","./tmpl"],function(require, exports, module){
 				fontSize:'14px',
 				lineHeight:'1.7',
 				position:'fixed',
-				zIndex:'2000',
+				zIndex:'3000',
 				minWidth:'330px',
+				maxWidth:'400px',
 				top:'50%',
 				left:'50%',
 				transform:'translateX(-50%) translateY(-50%)'

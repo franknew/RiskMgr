@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/route"],function(require,exports,module){
+define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/former/index","risk/components/msg/index","risk/unit/serialize","risk/page/customer/index","risk/components/modal/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -31,39 +31,1491 @@ define.pack = function(){
 };
 })();
 //all file list:
+//apply-amount/src/autoComplete.js
+//apply-amount/src/customer.js
 //apply-amount/src/index.js
+//apply-amount/src/project.js
+//apply-amount/src/property.js
+//apply-amount/src/test-data.js
+//apply-amount/src/tpl.project.base.js
+//apply-amount/src/tpl.project.newloan.js
+//apply-amount/src/tpl.project.ransombank.js
+//apply-amount/src/tpl.project.ransomway.js
+//apply-amount/src/wizzard.js
+//apply-amount/src/choose.tmpl.html
 //apply-amount/src/setup.tmpl.html
+//apply-amount/src/setup1.tmpl.html
+//apply-amount/src/setup2.tmpl.html
+//apply-amount/src/setup3.tmpl.html
 
 //js file list:
+//apply-amount/src/autoComplete.js
+//apply-amount/src/customer.js
 //apply-amount/src/index.js
+//apply-amount/src/project.js
+//apply-amount/src/property.js
+//apply-amount/src/test-data.js
+//apply-amount/src/tpl.project.base.js
+//apply-amount/src/tpl.project.newloan.js
+//apply-amount/src/tpl.project.ransombank.js
+//apply-amount/src/tpl.project.ransomway.js
+//apply-amount/src/wizzard.js
 /**
+ * 用户输入关键字段时，查找已知数据，自动补齐
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-08-09 21:13:29
+ */
+
+define.pack("./autoComplete",["jquery","risk/unit/ajax"],function(require, exports, module){
+
+	var $ = require('jquery'),
+		Ajax = require('risk/unit/ajax');
+	/**
+	 * @param opts {Object} 配置项
+	 *     container 绑定blur事件的容器
+	 *     checkList 需要check的Name列表
+	 *     cgi:拉取数据的接口
+	 *     dataFilter: 拉取到数据后，通过该函数取最终结果，需要返回取到的结果
+	 *     formSelector 查找表单的选择器
+	 */
+	function autoComplete(opts) {
+		opts = $.extend({
+			formSelector:'div.form-horizontal:first'
+		},opts);
+
+		var container = opts.container,
+			checkList = opts.checkList;
+
+
+		var selector = [];
+		var i=0,cur;
+		for(;cur=checkList[i++];) {
+			selector.push('[name="'+cur+'"]');
+		}
+		selector = selector.join(',');
+
+		container.on('blur',selector,opts,auto);
+	}
+
+
+	function auto(ev) {
+		var opts = ev.data;
+
+		var elem = $(ev.currentTarget),
+			checkList = opts.checkList;
+		var thisForm = elem.parents(opts.formSelector),
+			valList = [],
+			data = {};
+
+		var i=0,cur,curVal;
+		for(;cur=checkList[i++];) {
+			curVal = thisForm.find('[name="'+cur+'"]').val();
+			valList.push(curVal);
+
+			data[cur] = curVal;
+		}
+
+		if ($.inArray('', valList)==-1) {
+			Ajax.post({
+				url:opts.cgi,
+				data:data,
+				success:function(da) {
+					var info = opts.dataFilter(da);
+
+					if (info) {
+						var ele;
+						for(var key in info) {
+							if(info.hasOwnProperty(key)) {
+								ele = thisForm.find('[name="'+key+'"]');
+								if ($.inArray(key, checkList)!==-1) {
+									ele.attr('disabled','disabled');
+								}
+								ele.val(info[key]);
+							}
+						}
+					}
+				}
+			});
+		}
+	}
+
+	return autoComplete;
+});/**
+ * 客户信息
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-08-09 14:53:02
+ */
+
+define.pack("./customer",["jquery","risk/unit/route","risk/components/former/index","risk/components/msg/index","risk/unit/serialize","risk/page/customer/index","./tmpl","./autoComplete"],function(require, exports, module){
+	require.get = require;
+
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
+		former = require('risk/components/former/index'),
+		msg = require('risk/components/msg/index'),
+		Serialize = require('risk/unit/serialize'),
+		Customer = require('risk/page/customer/index'),
+		CustomerFormTpl = require.get('risk/page/customer/tpl.view');
+
+	var Tmpl = require('./tmpl'),
+		AutoComplete = require('./autoComplete');
+
+	var CORE_NAME = ['Name','IdentityCode','CardType'];
+
+	var MOD = {
+		getTpl:function(data) {
+			var tpl = former.make(CustomerFormTpl,{data:data});
+
+			return tpl;
+		},
+		getData:function() {
+			var buyerList = $('#BuyerList div.list-group-item'),
+				sellerList = $('#SellerList div.list-group-item'),
+				data = {
+					buyer:[],
+					seller:[]
+				};
+
+			buyerList.each(function(i,ele) {
+				data.buyer.push(Serialize(ele));
+			});
+			sellerList.each(function(i,ele) {
+				data.seller.push(Serialize(ele));
+			});
+
+			return data;
+		},
+		init:function() {
+			route.on('click','customer-import',function(ev) {	//导入现有客户数据，包含买家、卖家
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.parents('div.block-transparent:first').find('div.list-group:first');
+
+				Customer.selector({
+					success:function(data) {
+						MOD.add(box,data);
+					}
+				});
+
+			}).on('click','customer-remove',function(ev) {//移除客户
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					itemClass = 'div.list-group-item',
+					box = btn.parents(itemClass),
+					boxSize = box.siblings(itemClass).size();
+
+				if (boxSize<=0) {
+					msg.error('至少保留有一个客户.');
+					return ;
+				}else {
+					box.slideUp('fase',function() {
+						box.remove();
+					});
+				}
+			}).on('click','customer-add',function(ev) {//新增空白客户
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.siblings('div.list-group');
+
+				MOD.add(box);
+			});
+
+			//通过输入的关键字段，自动补齐
+			AutoComplete({
+				container:$('#Customer'),
+				checkList:CORE_NAME,
+				cgi:'RiskMgr.Api.CustomerApi/Query',
+				dataFilter:function(da) {
+					var rs = da&&da.Record;
+					rs = rs&&rs[0];
+
+					return rs;
+				}
+			});
+
+		},
+		add:function(box,data) {
+			box = $(box);
+			var tpl = this.getTpl(data),
+				html = Tmpl.CustomerItem({
+					customerTpl:tpl
+				});
+
+			html = $(html);
+			if (data) {//导入的关键数据不可编辑
+				html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
+			}
+			html.hide();
+			html.appendTo(box).slideDown('fast', function() {});
+
+		}
+	};
+
+	return MOD;
+});/**
  * 申请额度
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./index",["jquery","risk/unit/route","./tmpl"],function(require, exports, module){
+define.pack("./index",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./customer","./property","./project","./test-data"],function(require, exports, module){
+
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
-		tmpl = require('./tmpl');
+		msg = require('risk/components/msg/index'),
+		Modal = require('risk/components/modal/index'),
+		Ajax = require('risk/unit/ajax'),
+		Tmpl = require('./tmpl'),
+		Wizzard = require('./wizzard');
+
+	var Customer = require('./customer'),
+		Property = require('./property'),
+		Project = require('./project');
 
 	var MOD = {
 		initPage:function() {
-			var html = tmpl.setup();
-			route.show(html);
+			var html = Tmpl.choose();
+			route.show({
+				head:'申请额度',
+				content:html
+			});
+
+			route.on('click','choose-type',function(ev) {
+				var elem = $(ev.currentTarget),
+					type = elem.data('type');
+				MOD._setup(type);
+			});
+			this._setup(1);
+
+
+			$('#TEST').click(function(ev) {
+				ev.preventDefault();
+				var data = require('./test-data');
+				MOD.submit(data);
+			});
+		},
+		/** 开始进入填单流程
+		 * @param
+		 */
+		_setup:function(type) {
+			var typeName = {
+				'1':'二手楼买卖交易',
+				'2':'首期款垫付',
+				'3':'现金赎楼',
+				'4':'红本抵押'
+			}[type];
+
+			var that = this;
+			var html = Tmpl.Setup({
+				customerTpl:Customer.getTpl(),
+				propertyTpl:Property.getTpl(),
+				projectTpl:Project.getTpl()
+			});
+			route.show({
+				head:'申请额度 <small>'+typeName+'</small>',
+				content:html
+			});
+
+			Wizzard.init({
+				container:'#J_Wizzard',
+				success:function() {
+					that.submit();
+				}
+			});
+
+			this._initEvent();
+		},
+		_initEvent:function() {
+			Customer.init();
+			Property.init();
+			Project.init();
+
+			route.on('click','cancel',function(ev) {//取消按钮
+				ev.preventDefault();
+				Modal.show({
+					content:'您填写的表单将不会被保存，是否要取消？',
+					okValue:'确认取消',
+					ok:function() {
+						route.load('page=apply-amount');
+					},
+					cancelValue:'不取消'
+				});
+			});
+		},
+		submit:function(data_test) {
+			var dataCustomer = Customer.getData();
+			var data = {
+				Buyers:dataCustomer.buyer,
+				Sellers:dataCustomer.seller,
+				Assets:Property.getData(),
+				Project:Project.getData()
+			};
+
+			if (data_test) {//使用测试数据
+				data = data_test;
+			}
+
+			Ajax.post({
+				url:'RiskMgr.Api.ProjectApi/Add',
+				data:data,
+				success:function(data, textStatus, jqXHR) {
+					msg.success('申请成功');
+				}
+			});
+		}
+	};
+
+	return MOD;
+});/**
+ * 项目信息
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-08-09 14:54:00
+ */
+
+define.pack("./project",["risk/unit/serialize","risk/components/former/index","./tpl.project.base","./tpl.project.ransombank","./tpl.project.newloan","./tpl.project.ransomway"],function(require, exports, module){
+	require.get = require;
+
+	var Serialize = require('risk/unit/serialize'),
+		former = require('risk/components/former/index');
+
+	var FormList = [{	//项目信息的list
+			name:'基本情况',
+			tpl:require('./tpl.project.base')
+		},{
+			name:'赎楼行',
+			tpl:require('./tpl.project.ransombank')
+		},{
+			name:'新贷款资料',
+			tpl:require('./tpl.project.newloan')
+		},{
+			name:'赎楼方式',
+			tpl:require('./tpl.project.ransomway')
+		}];
+
+	var MOD = {
+		getTpl:function(data) {
+			var list = FormList,
+				html = [];
+			var i=0,cur,curHtml;
+			for(;cur=list[i++];) {
+				curHtml = '<div class="well"><div class="header"><h4>'+cur.name+'</h4></div>'+former.make(cur.tpl,{data:data})+'</div>';
+				html.push(curHtml);
+			}
+
+			html = html.join('');
+			return html;
+		},
+		getData:function() {
+			var data = Serialize($('#Project'))
+
+			return data;
+		},
+		init:function() {}
+	};
+
+	return MOD;
+});/**
+ * 房产
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-08-09 14:53:41
+ */
+
+define.pack("./property",["jquery","risk/unit/route","risk/components/former/index","risk/components/msg/index","risk/unit/serialize","risk/page/Property/index","./tmpl","./autoComplete"],function(require, exports, module){
+	require.get = require;
+
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
+		former = require('risk/components/former/index'),
+		msg = require('risk/components/msg/index'),
+		Serialize = require('risk/unit/serialize'),
+		Property = require('risk/page/Property/index'),
+		PropertyTpl = require.get('risk/page/Property/tpl.view');
+
+	var Tmpl = require('./tmpl'),
+		AutoComplete = require('./autoComplete');
+
+	var CORE_NAME = ['Code'];
+
+	var MOD = {
+		getTpl:function(data) {
+			var tpl = former.make(PropertyTpl,{data:data});
+			return tpl;
+		},
+		getData:function() {
+			var list = $('#PropertyBase div.list-group-item'),
+				data = [];
+
+			list.each(function(i,ele) {
+				data.push(Serialize(ele));
+			});
+
+			return data;
+		},
+		init:function() {
+			route.on('click','property-add',function(ev) {//新增空白房产
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.siblings('div.list-group');
+
+				MOD.add(box);
+			}).on('click','property-import',function(ev) {//导入房产
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.parents('div.block-transparent:first').find('div.list-group:first');
+
+				Property.selector({
+					success:function(data) {
+						console.log('succ',data);
+						delete data.ID;	//移除id，后台要根据姓名、身份证号来更新已存在客户信息
+						MOD.add(box,data);
+					}
+				});
+			}).on('click','property-remove',function(ev) {//移除房产
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					itemClass = 'div.list-group-item',
+					box = btn.parents(itemClass),
+					boxSize = box.siblings(itemClass).size();
+
+				if (boxSize<=0) {
+					msg.error('至少保留有一个房产.');
+					return ;
+				}else {
+					box.slideUp('fase',function() {
+						box.remove();
+					});
+				}
+			});
+
+
+			//通过输入的关键字段，自动补齐
+			AutoComplete({
+				container:$('#PropertyBase'),
+				checkList:CORE_NAME,
+				cgi:'RiskMgr.Api.AssetApi/Query',
+				dataFilter:function(da) {
+					var rs = da&&da.Record;
+					rs = rs&&rs[0];
+
+					return rs;
+				}
+			});
+		},
+		add:function(box,data) {
+			box = $(box);
+
+			var html = Tmpl.PropertyItem({
+					propertyTpl:this.getTpl(data)
+				});
+
+			html = $(html);
+			if (data) {//导入的关键数据不可编辑
+				html.find('[name="Code"]').attr('disabled','disabled');
+			}
+			html.hide();
+			html.appendTo(box).slideDown('fast', function() {
+
+			});
+		}
+	};
+
+	return MOD;
+});/**
+ * test-data
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-08-09 17:43:41
+ */
+
+define.pack("./test-data",[],function(require, exports, module){
+var rs = {
+  "Buyers": [
+   {
+    "ID": "395f7ce8de8340eda2dfd22098c81290",
+    "Name": "爱的色放",
+    "CardType": "1",
+    "IdentityCode": "4444444444",
+    "Phone": "123123123123",
+    "Gender": "1",
+    "Marrage": "1",
+    "Address": "啊都是法师打发而且额外人",
+    "OrignalName": "",
+    "OrignalIdentityCode": "",
+    "BankCode": "",
+    "BankType": "1",
+    "WorkUnit": "",
+    "Quotient": "222"
+   },
+   {
+    "ID": "",
+    "Name": "阿萨法 ",
+    "CardType": "1",
+    "IdentityCode": "986799283948723984",
+    "Phone": "123123",
+    "Gender": "2",
+    "Marrage": "1",
+    "Address": "三个地方集团研究研究",
+    "OrignalName": "",
+    "OrignalIdentityCode": "",
+    "BankCode": "",
+    "BankType": "",
+    "WorkUnit": "",
+    "Quotient": "333"
+   },
+   {
+    "ID": "712feaff6c034244ab3f066268b9fe5a",
+    "Name": "阿斯顿飞",
+    "CardType": "1",
+    "IdentityCode": "12312312312323",
+    "Phone": "123123123",
+    "Gender": "1",
+    "Marrage": "1",
+    "Address": "嘎达嗦嘎多个地方十多个地方各个",
+    "OrignalName": "",
+    "OrignalIdentityCode": "",
+    "BankCode": "",
+    "BankType": "1",
+    "WorkUnit": "",
+    "Quotient": "222"
+   }
+  ],
+  "Sellers": [
+   {
+    "ID": "55b71c225dc841a7b99ead4cecc601c5",
+    "Name": "aeeboo",
+    "CardType": "1",
+    "IdentityCode": "234234235235",
+    "Phone": "324234234234",
+    "Gender": "1",
+    "Marrage": "2",
+    "Address": "的方式购房合同和投入和",
+    "OrignalName": "",
+    "OrignalIdentityCode": "",
+    "BankCode": "",
+    "BankType": "2",
+    "WorkUnit": "",
+    "Quotient": "111"
+   },
+   {
+    "ID": "",
+    "Name": "阿萨德飞44",
+    "CardType": "1",
+    "IdentityCode": "237856234",
+    "Phone": "34234234",
+    "Gender": "1",
+    "Marrage": "1",
+    "Address": "然后统一集团研究与",
+    "OrignalName": "",
+    "OrignalIdentityCode": "",
+    "BankCode": "",
+    "BankType": "",
+    "WorkUnit": "",
+    "Quotient": "123"
+   }
+  ],
+  "Assets": [
+   {
+    "ID": "",
+    "Code": "44444444",
+    "Usage": "1",
+    "Position": "2",
+    "Address": "景田西路八个道路",
+    "Area": "123",
+    "RegPrice": "44232"
+   },
+   {
+    "ID": "",
+    "Code": "1412412132",
+    "Usage": "1",
+    "Position": "1",
+    "Address": "水电费个人个人高",
+    "Area": "234324",
+    "RegPrice": "123123"
+   }
+  ],
+  "Project": {
+   "Source": "1",
+   "AgentName": "213213",
+   "CertificateData": "2015-08-05",
+   "AgentContact": "",
+   "Rebater": "",
+   "RebateAccount": "",
+   "OtherRebateInfo": "",
+   "OrignalMortgageBank": "1",
+   "OrignalMortgageBranch": "阿斯顿发顺丰",
+   "OrignalFundCenter": "1",
+   "OrignalFundBranch": "",
+   "SupplyCardCopy": "",
+   "OrignalCreditPI": "123123",
+   "OrignalCreditCommerceMoney": "123",
+   "OrignalCreditFundMoney": "123",
+   "AssetRansomCustomerManager": "124142",
+   "AssetRansomContactPhone": "24124",
+   "NewCreditBank": "1",
+   "NewCreditBranch": "2r323",
+   "ShortTermAssetRansomBank": "1",
+   "ShortTermAssetRansomBranch": "",
+   "GuaranteeMoney": "123",
+   "GuaranteeMonth": "1231",
+   "BuyerCreditCommerceMoney": "213",
+   "BuyerCreditFundMoney": "2",
+   "LoanMoney": "123123",
+   "DealMoney": "123123",
+   "EarnestMoney": "123123",
+   "SupervisionMoney": "123123",
+   "SupervisionBank": "12123",
+   "AssetRansomMoney": "122323",
+   "CustomerPredepositMoney": "323232",
+   "CreditReceiverName": "23123",
+   "CreditReceiverBank": "2323",
+   "CreditReceiverAccount": "2323",
+   "TrusteeshipAccount": "",
+   "AssetRansomPredictMoney": "2323",
+   "AssetRansomer": "232323",
+   "AssetRansomType": "1",
+   "PredictDays": "2323",
+   "ChargeType": "1",
+   "CheckNumbersAndLimit": "123123",
+   "Stagnationer": ""
+  }
+}
+
+return rs;
+});/**
+ * 项目信息form表单：基本信息
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-21 21:00:52
+ */
+
+define.pack("./tpl.project.base",[],function(require, exports, module){
+	var MOD = [
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'项目来源'
+		},{
+			col:"3",
+			type:'select',
+			name:'Source',
+			required:true,
+			options:[{
+				name:'请选择',
+				value:''
+			},{
+				name:'预存',
+				value:1
+			},{
+				name:'神马村',
+				value:2
+			}]
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'中介名称'
+		},{
+			col:"3",
+			type:'text',
+			name:'AgentName',
+			required:true
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'公证书日期'
+		},{
+			col:"3",
+			type:'date',
+			name:'CertificateData',
+			required:true
+		},{
+			type:'label',
+			col:3,
+			html:'中介联系人'
+		},{
+			col:"3",
+			type:'text',
+			name:'AgentContact'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'返佣人'
+		},{
+			col:"3",
+			type:'text',
+			name:'Rebater'
+		},{
+			type:'label',
+			col:3,
+			html:'返佣账号'
+		},{
+			col:"3",
+			type:'text',
+			name:'RebateAccount'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'其他返佣信息'
+		},{
+			col:9,
+			type:'text',
+			name:'OtherRebateInfo'
+		}]
+	];
+
+	return MOD;
+});/**
+ * 项目信息form表单：新贷款资料
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-21 21:00:52
+ */
+
+define.pack("./tpl.project.newloan",[],function(require, exports, module){
+	var MOD = [
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'新贷款银行'
+		},{
+			col:"3",
+			type:'select',
+			name:'NewCreditBank',
+			required:true,
+			options:[{
+				name:'请选择',
+				value:''
+			},{
+				name:'招商银行',
+				value:1
+			},{
+				name:'中国银行',
+				value:2
+			}]
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'新贷款银行支行'
+		},{
+			col:"3",
+			type:'text',
+			name:'NewCreditBranch',
+			required:true
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'短期赎楼贷款银行'
+		},{
+			col:"3",
+			type:'select',
+			name:'ShortTermAssetRansomBank',
+			required:true,
+			options:[{
+				name:'无',
+				value:''
+			},{
+				name:'AAA',
+				value:1
+			},{
+				name:'BBB',
+				value:2
+			}]
+		},{
+			type:'label',
+			col:3,
+			html:'支行'
+		},{
+			col:"3",
+			type:'text',
+			name:'ShortTermAssetRansomBranch',
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'担保金额'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'GuaranteeMoney',
+			placeholder:'',
+			suffix:'万元'
+		},{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'担保期限'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'GuaranteeMonth',
+			placeholder:'',
+			suffix:'月'
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'买方贷款金额'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'BuyerCreditCommerceMoney',
+			placeholder:'',
+			prefix:'商业',
+			suffix:'万元'
+		},{
+			col:'3',
+			type:'number',
+			name:'BuyerCreditFundMoney',
+			placeholder:'',
+			prefix:'公积金',
+			suffix:'万元'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'贷款放款金额'
+		},{
+			col:"3",
+			type:'number',
+			name:'LoanMoney',
+			required:true,
+			suffix:'万元'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'成交金额'
+		},{
+			col:"3",
+			type:'number',
+			name:'DealMoney',
+			required:true,
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'交易定金'
+		},{
+			col:"3",
+			type:'number',
+			name:'EarnestMoney',
+			required:true,
+			suffix:'万元'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'资金监管'
+		},{
+			col:"3",
+			type:'number',
+			name:'SupervisionMoney',
+			required:true,
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'资金监管银行'
+		},{
+			col:"3",
+			type:'text',
+			name:'SupervisionBank',
+			required:true
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'用于赎楼的金额'
+		},{
+			col:"3",
+			type:'number',
+			name:'AssetRansomMoney',
+			required:true,
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'客户预存款'
+		},{
+			col:"3",
+			type:'number',
+			name:'CustomerPredepositMoney',
+			required:true,
+			suffix:'万元'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'贷款接收账户'
+		},{
+			col:"3",
+			type:'text',
+			name:'CreditReceiverName',
+			placeholder:'姓名',
+			required:true
+		},{
+			col:"3",
+			type:'text',
+			name:'CreditReceiverBank',
+			placeholder:'银行 - 支行',
+			required:true
+		},{
+			col:"3",
+			type:'text',
+			name:'CreditReceiverAccount',
+			placeholder:'账号',
+			required:true
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'工行安心托管账户'
+		},{
+			col:9,
+			type:'text',
+			name:'TrusteeshipAccount',
+			placeholder:''
+		}]
+	];
+
+	return MOD;
+});/**
+ * 项目信息form表单：赎楼行
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-21 21:00:52
+ */
+
+define.pack("./tpl.project.ransombank",[],function(require, exports, module){
+	var MOD = [//赎楼行
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'原按揭银行'
+		},{
+			col:"3",
+			type:'select',
+			name:'OrignalMortgageBank',
+			required:true,
+			options:[{
+				name:'请选择',
+				value:''
+			},{
+				name:'招商银行',
+				value:1
+			},{
+				name:'中国银行',
+				value:2
+			}]
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'原按揭银行支行'
+		},{
+			col:"3",
+			type:'text',
+			name:'OrignalMortgageBranch',
+			required:true
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'原贷款公积金中心'
+		},{
+			col:"3",
+			type:'select',
+			name:'OrignalFundCenter',
+			required:true,
+			options:[{
+				name:'无',
+				value:''
+			},{
+				name:'AAA',
+				value:1
+			},{
+				name:'BBB',
+				value:2
+			}]
+		},{
+			type:'label',
+			col:3,
+			html:'公积金银行支行'
+		},{
+			col:"3",
+			type:'text',
+			name:'OrignalFundBranch',
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'是否提供供楼卡复印件'
+		},{
+			col:"3",
+			type:'select',
+			name:'SupplyCardCopy',
+			options:[{
+				name:'请选择',
+				value:''
+			},{
+				name:'否',
+				value:1
+			},{
+				name:'是',
+				value:2
+			}]
+		},{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'原贷款本息'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'OrignalCreditPI',
+			placeholder:'',
+			suffix:'万元'
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'原贷款金额'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'OrignalCreditCommerceMoney',
+			placeholder:'',
+			prefix:'商业',
+			suffix:'万元'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'OrignalCreditFundMoney',
+			placeholder:'',
+			prefix:'公积金',
+			suffix:'万元'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'赎楼银行客户经理'
+		},{
+			col:"3",
+			type:'text',
+			name:'AssetRansomCustomerManager',
+			required:true
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'联系电话'
+		},{
+			col:"3",
+			type:'tel',
+			name:'AssetRansomContactPhone',
+			required:true
+		}]
+	];
+
+	return MOD;
+});/**
+ * 项目信息form表单：赎楼方式
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-21 21:00:52
+ */
+
+define.pack("./tpl.project.ransomway",[],function(require, exports, module){
+	var MOD = [
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'预计总赎楼金额'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'AssetRansomPredictMoney',
+			placeholder:'',
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'赎楼员'
+		},{
+			col:"3",
+			type:'text',
+			name:'AssetRansomer',
+			required:true
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'赎楼方式'
+		},{
+			col:"3",
+			type:'select',
+			name:'AssetRansomType',
+			required:true,
+			options:[{
+				name:'请选择',
+				value:''
+			},{
+				name:'预存',
+				value:1
+			},{
+				name:'神马村',
+				value:2
+			}]
+		},{
+			type:'label',
+			col:3,
+			required:true,
+			html:'预存时间'
+		},{
+			col:"3",
+			type:'number',
+			name:'PredictDays',
+			required:true,
+			suffix:'天'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'收费方式'
+		},{
+			col:"3",
+			type:'select',
+			required:true,
+			name:'ChargeType',
+			options:[{
+				name:'请选择',
+				value:''
+			},{
+				name:'赎楼前收取',
+				value:1
+			},{
+				name:'赎楼后收取',
+				value:2
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'申请支票数量及限额'
+		},{
+			col:'3',
+			type:'text',
+			required:true,
+			name:'CheckNumbersAndLimit',
+			placeholder:''
+		},{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'驻点人员'
+		},{
+			col:'3',
+			type:'text',
+			name:'Stagnationer',
+			placeholder:''
+		}]
+	];
+
+	return MOD;
+});/**
+ * 向导类表单
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-29 15:47:29
+ */
+
+define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/index"],function(require, exports, module){
+	var $ = require('jquery'),
+		Clone = require('risk/unit/class').clone,
+		parsley = require('risk/components/parsley/index');
+
+	var MOD = {
+		_DEFAULT_CONFIG:{
+			configKey:'___CONFIG___',	//存储配置用的公共key
+			setting:{	//默认配置
+				highlight:'active'	//导航栏高亮className
+				//,container:''	//主容器，如果需要校验表单，则需保证该容器为form
+				,nav:'.wizard-steps'	//导航
+				,setup:'.step-pane'	//每一个setup的选择器
+				,btnNext:'.wizard-next'	//下一步按钮的选择器
+				,btnPrev:'.wizard-previous'	//上一步按钮的选择器
+				,validate:true	//进入下一步时，是否要校验表单
+				//,success:function() {}	//最后一步完成时执行
+			}
+		},
+		init:function (setting) {
+			var initKey = this._DEFAULT_CONFIG.configKey,
+				obj=this;
+			if(!this[initKey]) {
+				obj = Clone(MOD);
+				obj[initKey] = true;
+				return obj.init.apply(obj,arguments);
+			}
+
+			var conf = this._initConfig(setting);
+
+			this.container = $(conf.container);
+			this.nav = this.container.find(conf.nav);
+
+			this._initBox();
+			this._initButton();
+
+			return this;
+		},
+		_success:function() {
+			var conf = this._config();
+			conf.success && conf.success();
+		},
+		_initBox:function() {
+			var conf = this._config(),
+				highlight = conf.highlight,
+				that = this;
+
+			//初始时显示
+			this.nav.find('li').each(function(i,ele) {
+				ele = $(ele);
+				var id = ele.data('target'),
+					box = $('#'+id);
+
+				//默认值显示激活的步骤
+				if (ele.hasClass(highlight)) {
+					box.show();
+				}else {
+					box.hide();
+				}
+			});
+
+			//初始化校验
+			this.parsley = this.container.parsley();
+		},
+		//初始化按钮事件
+		_initButton:function() {
+			var that = this;
+			var conf = this._config(),
+				btnNext = conf.btnNext,
+				btnPrev = conf.btnPrev;
+
+			this.container.on('click',btnNext,function(ev) {
+				ev.preventDefault();
+				var btn = $(ev.currentTarget);
+				that._showByButton(btn,'next');
+			});
+			this.container.on('click',btnPrev,function(ev) {
+				ev.preventDefault();
+				var btn = $(ev.currentTarget);
+				that._showByButton(btn,'prev');
+			});
+		},
+		/** 根据setup的ID来显示
+		 * @param setupID {Selector} 需要显示的setup id
+		 */
+		_show:function(setupID) {
+			var conf = this._config(),
+				highlight = conf.highlight,
+				nav = this.nav,
+				boxs = this.container.find(conf.setup);
+
+			nav.find('[data-target]').removeClass(highlight);
+			nav.find('[data-target="'+setupID+'"]').addClass(highlight);
+			boxs.hide().filter('[id="'+setupID+'"]').show();
+		},
+		/** 根据按钮来和类型来显示指定setup
+		 * @param btn
+		 * @param type {String} 可选值有：next、prev
+		 */
+		_showByButton:function(btn,type) {
+			btn = $(btn);
+			var conf = this._config(),
+				highlight = conf.highlight,
+				box = btn.parents(conf.setup+':first'),
+				oldName = box.attr('id'),
+				oldNav = this.nav.find('[data-target="'+oldName+'"]'),
+				oldBox = this.container.find('#'+oldName),
+				newNav = oldNav[type](),
+				newName = newNav.data('target');
+
+			//进入下一步之前校验当前表单
+			if (type==='next' && !( !conf.validate || this.parsley.validateElements(box.find(':input')) ) ) {
+				return false;
+			}
+
+			if (conf[oldName]) {//执行单步骤回调
+				conf[oldName]();
+			}
+
+			if (newName) {
+				this._show(newName);
+			}else if (type==='next') {	//下一步按钮，没有newName了，标示为success
+				this._success();
+			}else {
+				throw "找不到正确的步骤";
+			}
+		},
+		/** 初始化配置 */
+		_initConfig:function (setting) {
+			var def = this._DEFAULT_CONFIG.setting,
+				key = this._DEFAULT_CONFIG.configKey,
+				conf;
+			conf = this[key] = $.extend({},def,setting);
+
+			return this[key];
+		},
+		/** 读、写配置
+		 * @param
+		 */
+		_config:function (key,value) {
+			var ckey = this._DEFAULT_CONFIG.configKey;
+			var rs;
+			var store = this[ckey],
+				argLen = arguments.length;
+			if(argLen>=2) {	//set
+				store[key] = value;
+				rs = store;
+			}else if(argLen==1) {	//get
+				rs = store[key];
+			}else {	//默认返回全部配置
+				rs = store;
+			}
+			return rs;
 		}
 	};
 
 	return MOD;
 });
 //tmpl file list:
+//apply-amount/src/choose.tmpl.html
 //apply-amount/src/setup.tmpl.html
+//apply-amount/src/setup1.tmpl.html
+//apply-amount/src/setup2.tmpl.html
+//apply-amount/src/setup3.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
-'setup': function(data){
+'choose': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="row wizard-row">\n<div class="col-md-12 fuelux">\n<div class="block-wizard">\n	<div id="wizard1" class="wizard wizard-ux">\n		<ul class="steps">\n			<li data-target="#step1" class="active">Step 1<span class="chevron"></span></li>\n			<li data-target="#step2">Step 2<span class="chevron"></span></li>\n			<li data-target="#step3">Step 3<span class="chevron"></span></li>\n		</ul>\n	</div>\n	<div class="step-content">\n		<form class="form-horizontal group-border-dashed" action="#" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate=""> \n			<div class="step-pane active" id="step1">\n				<div class="form-group no-padding">\n					<div class="col-sm-7">\n						<h3 class="hthin">User Info</h3>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">User Name</label>\n					<div class="col-sm-6">\n						<input type="text" class="form-control" placeholder="User name">\n					</div>\n				</div>	\n				<div class="form-group">\n					<label class="col-sm-3 control-label">E-Mail</label>\n					<div class="col-sm-6">\n						<input type="text" class="form-control" placeholder="User E-Mail">\n					</div>\n				</div>	\n				<div class="form-group">\n					<label class="col-sm-3 control-label">Password</label>\n					<div class="col-sm-6">\n						<input type="password" class="form-control" placeholder="Enter your password">\n					</div>\n				</div>		\n				<div class="form-group">\n					<label class="col-sm-3 control-label">Verify Password</label>\n					<div class="col-sm-6">\n						<input type="password" class="form-control" placeholder="Enter your password again">\n					</div>\n				</div>	\n				<div class="form-group">\n					<div class="col-sm-offset-2 col-sm-10">\n						<button class="btn btn-default">Cancel</button>\n						<button data-wizard="#wizard1" class="btn btn-primary wizard-next">Next Step <i class="fa fa-caret-right"></i></button>\n					</div>\n				</div>									\n			</div>\n			<div class="step-pane" id="step2">\n				<div class="form-group no-padding">\n					<div class="col-sm-7">\n						<h3 class="hthin">Notifications</h3>\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="col-sm-7">\n						<label class="control-label">E-Mail Notifications</label>\n						<p>This option allow you to recieve email notifications by us.</p>\n					</div>\n					<div class="col-sm-3">\n						<input class="switch" checked="" data-size="small" name="op1" type="checkbox">\n					</div>\n				</div>	\n				<div class="form-group">\n					<div class="col-sm-7">\n						<label class="control-label">Phone Notifications</label>\n						<p>Allow us to send phone notifications to your cell phone.</p>\n					</div>\n					<div class="col-sm-3">\n						<input class="switch" checked="" data-size="small" name="op1" type="checkbox">\n					</div>\n				</div>	\n				<div class="form-group">\n					<div class="col-sm-7">\n						<label class="control-label">Global Notifications</label>\n						<p>Allow us to send notifications to your dashboard.</p>\n					</div>\n					<div class="col-sm-3">\n						<input class="switch" checked="" data-size="small" name="op1" type="checkbox">\n					</div>\n				</div>	\n				<div class="form-group">\n					<div class="col-sm-12">\n						<button data-wizard="#wizard1" class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> Previous</button>\n						<button data-wizard="#wizard1" class="btn btn-primary wizard-next">Next Step <i class="fa fa-caret-right"></i></button>\n					</div>\n				</div>	\n			</div>\n			<div class="step-pane" id="step3">\n				<div class="form-group no-padding">\n					<div class="col-sm-7">\n						<h3 class="hthin">Configuration</h3>\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="col-sm-6">\n						<label class="control-label">Buy Credits: <span id="credits">$0</span></label>\n						<p>This option allow you to buy an amount of credits.</p>\n						\n						<input id="credit_slider" type="text" class="bslider form-control" value="0">\n					</div>\n					<div class="col-sm-6">\n						<label class="control-label">Change Plan</label>\n						<p>Change your plan many times as you want.</p>\n						<select class="select2">\n							<optgroup label="Personal">\n								<option value="p1">Basic</option>\n								<option value="p2">Medium</option>\n							</optgroup>\n							<optgroup label="Company">\n								<option value="p3">Standard</option>\n								<option value="p4">Silver</option>\n								<option value="p5">Gold</option>\n							</optgroup>\n						</select>\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="col-sm-6">\n						<label class="control-label">Payment Rate: <span id="rate">0%</span></label>\n						<p>Choose your payment rate to calculate how much money you will recieve.</p>\n						\n						<input id="rate_slider" data-slider-min="0" data-slider-max="100" type="text" class="bslider form-control" value="0">\n					</div>\n					<div class="col-sm-6">\n						<label class="control-label">Keywords</label>\n						<p>Write your keywords to do a successful CEO with web search engines.</p>\n						<input class="tags" type="hidden" value="brown,blue,green">\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="col-sm-12">\n						<button data-wizard="#wizard1" class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> Previous</button>\n						<button data-wizard="#wizard1" class="btn btn-success wizard-next"><i class="fa fa-check"></i> Complete</button>\n					</div>\n				</div>	\n			</div>\n		</form>\n	</div>\n</div>\n</div>\n</div>');
+__p.push('<div class="block-flat">\n	<h3 class="hthin">请选择业务类型</h3>\n	<div class="spacer spacer-bottom">\n		<button type="button" data-hook="choose-type" data-type="1" class="btn btn-success btn-lg">二手楼买卖交易</button>\n		<button type="button" data-hook="choose-type" data-type="2" class="btn btn-primary btn-lg">首期款垫付</button>\n		<button type="button" data-hook="choose-type" data-type="3" class="btn btn-info btn-lg">现金赎楼</button>\n		<button type="button" data-hook="choose-type" data-type="4" class="btn btn-danger btn-lg">红本抵押</button>\n		</div>\n</div>');
+
+return __p.join("");
+},
+
+'Setup': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	data = data || {};
+__p.push('<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">\n			<li data-target="setup0">选择类型<span class="chevron"></span></li>\n			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n		</ul>\n		<div class="step-content">');
+_p(this.Setup1(data));
+__p.push('			');
+_p(this.Setup2(data));
+__p.push('			');
+_p(this.Setup3(data));
+__p.push('		</div>\n	</form>\n\n</div>');
+
+return __p.join("");
+},
+
+'Setup1': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('	<div class="step-pane" id="Customer">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>买家 <button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button></h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="BuyerList">');
+_p(this.CustomerItem(data));
+__p.push('				</div>\n				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加买家&nbsp;&nbsp;</button>\n			</div>\n		</div>\n\n		<div class="block-transparent">\n			<div class="header">\n				<h3>卖家 <button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button></h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="SellerList">');
+_p(this.CustomerItem(data));
+__p.push('				</div>\n				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加卖家&nbsp;&nbsp;</button>\n			</div>\n		</div>\n		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>&nbsp;&nbsp;<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n			</div>\n		</div>\n	</div>');
+
+return __p.join("");
+},
+
+'CustomerItem': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var customerHTML = data.customerTpl;
+__p.push('	<div class="list-group-item">');
+_p((customerHTML||''));
+__p.push('		<div class="form-group">\n			<div class="col-sm-2"><label class="control-label media-object"><span class="text-danger">*</span> 份额</label></div>\n			<div class="col-sm-4">\n				<div class="input-group"><input required name="Quotient" class="form-control" type="number"><div class="input-group-addon">%</div></div>\n			</div>\n		</div>\n		<div class="form-group">\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><label class="control-label">房产共权人、保证人、配偶、辅助联系人、第三方借款人</label>&nbsp;&nbsp;<button type="button" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加</button></div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><span class="label label-warning pinter-item" title="点击移除">李克强 <i class="fa fa-remove"></i></span> <span class="label label-warning pinter-item" title="点击移除">王宝强 <i class="fa fa-remove"></i></span></div>\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="customer-remove">移除</button>\n		</div>\n	</div>');
+
+return __p.join("");
+},
+
+'Setup2': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('<div class="step-pane" id="Assets">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>房产 <button type="button" class="btn btn-default" data-hook="property-import"><i class="fa fa-sign-in"></i> 导入现有房产</button></h3>\n		</div>\n		<div class="content">\n			<div class="list-group tickets" id="PropertyBase">');
+_p(this.PropertyItem(data));
+__p.push('			</div>\n			<button type="button" class="btn btn-success" data-hook="property-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加房产&nbsp;&nbsp;</button>\n		</div>\n	</div>\n\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>\n</div>');
+
+return __p.join("");
+},
+
+'PropertyItem': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('	<div class="list-group-item">');
+_p(data.propertyTpl);
+__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>\n		</div>\n	</div>');
+
+return __p.join("");
+},
+
+'Setup3': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>项目信息</h3>\n		</div>\n		<div class="content">');
+_p(data.projectTpl);
+__p.push('		</div>\n	</div>\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>&nbsp;&nbsp;\n			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>\n</div>');
 
 return __p.join("");
 }

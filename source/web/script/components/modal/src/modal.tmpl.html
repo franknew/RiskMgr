@@ -1,6 +1,10 @@
 <script type="text/html" id="modal">
-<div class="md-modal colored-header custom-width md-effect-9" <%=data.id?'id="'+data.id+'"':''%> style="<%=(data.width?"width:"+data.width : '')%>">
+<div class="md-modal colored-header custom-width md-effect-9" <%=data.id?'id="'+data.id+'"':''%>>
+
+	<%if (data.form) {%>
 	<form data-parsley-validate>
+	<%}%>
+
 	<div class="md-content">
 		<div class="modal-header">
 			<h3><%=data.title%></h3>
@@ -13,6 +17,15 @@
 			if (!('footer' in data && !data.footer)) {
 		%>
 		<div class="modal-footer">
+			<%
+				var Buttons = data.button || [];
+				var i=0, l = Buttons.length;
+				for(; i < l; ++i) {
+			%>
+				<button type="button" class="btn btn-<%=(Buttons[i].style || 'default')%> btn-flat j-op-btns" data-sn="<%=i%>"><%=Buttons[i].value%></button>
+			<%
+				}
+			%>
 			<%if (data.cancel!=false) {%>
 			<button type="button" class="btn btn-default btn-flat j-op-cancel"><%=data.cancelValue%></button>
 			<%}%>
@@ -22,6 +35,10 @@
 		</div>
 		<% } %>
 	</div>
+
+	<%if (data.form) {%>
 	</form>
+	<%}%>
+
 </div>
 </script>

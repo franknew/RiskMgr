@@ -5,7 +5,84 @@
  */
 
 define(function(require, exports, module){
-	//初始化
-	
-	
+	require('bootstrap');
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
+		Modal = require('risk/components/modal/index'),
+		User = require('risk/components/user/index'),
+		Tmpl = require('./tmpl'),
+		Userinfo = require('./userinfo');
+
+	//登录态处理
+	if (!User.isLogin()) {
+		console.log('not login');
+		$('body>div').remove(); //隐藏所有界面
+		User.login({
+			success:function() {
+				location.reload();
+			}
+		});
+		return ;
+	}else {
+		User.info().done(function(info) {
+			var html = Tmpl.Frame({
+				name:info.CnName,
+				avatar:User.avatar(info.Identity)
+			});
+			$('body').prepend(html);
+
+			MOD.initEvent();
+		}).fail(function(msg) {
+			Modal.show({
+				title:'错误',
+				content:'<p>拉取用户信息出错</p><p>'+msg+'</p>',
+				okValue:'刷新页面',
+				ok:function() {
+					location.reload();
+				},
+				cancel:false
+			});
+		});
+	}
+
+	var MOD = {
+		initEvent:function() {
+			//登出按钮
+			$('#J_Logout').bind('click',function(ev) {
+				ev.preventDefault();
+				User.logout();
+			});
+
+			//手机下菜单事件
+			var menuButton = $("#J_MenuToggle");
+			if (menuButton.is(':visible')) {
+				//打开菜单
+				menuButton.click(function(e){
+					e.preventDefault();
+					var elem = $(e.currentTarget),
+					ul = $(elem.attr('data-target'));
+					ul.slideToggle(300, 'swing', function () {});
+				});
+				//点击菜单时关闭
+				$('#J_Vnavigation').on('click','a[href^="#page="]',function(e) {
+					var ul = $(e.delegateTarget);
+					ul.slideToggle(300, 'swing', function () {});
+				});
+			}
+
+			//初始化路由
+			route.init({
+				header:'#J_Header',
+				container:'#J_Body',
+				index:'page=home',
+				loading:'<div class="loading">Loading...</div>',
+				filter:function(mod){ //规则  page=xxxx
+					mod='risk/page/'+mod+'/index';
+
+					return mod || '';
+				}
+			});
+		}
+	};
+
 });

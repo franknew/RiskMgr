@@ -2,139 +2,22 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>首页</title>
-  <link href="style/bootstrap/css/bootstrap.css" rel="stylesheet" />
-  <link href="style/font-awesome/css/font-awesome.css" rel="stylesheet">
-  <link href="style/fuelux.css" rel="stylesheet" />
-  <link href="style/cleanzone.css" rel="stylesheet" />
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>首页</title>
+	<link href="style/bootstrap/css/bootstrap.css" rel="stylesheet" />
+	<link href="style/font-awesome/css/font-awesome.css" rel="stylesheet">
+	<!--<link href="style/fuelux.css" rel="stylesheet" />-->
+	<link href="style/cleanzone.css" rel="stylesheet" />
 </head>
 <body>
-
-  <!-- Fixed navbar -->
-  <div id="head-nav" class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="fa fa-gear"></span>
-        </button>
-        <a class="navbar-brand" href="#"><span>manager</span></a>
-      </div>
-      <div class="navbar-collapse collapse">
-        <!--
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">首页</a></li>
-          <li><a href="#about">About</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contact <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="dropdown-submenu"><a href="#">Sub menu</a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                </ul>
-              </li>              
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Large menu <b class="caret"></b></a>
-            <ul class="dropdown-menu col-menu-2">
-              <li class="col-sm-6 no-padding">
-                <ul>
-                  <li class="dropdown-header"><i class="fa fa-group"></i>Users</li>
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="dropdown-header"><i class="fa fa-gear"></i>Config</li>
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li> 
-                </ul>
-              </li>
-              <li  class="col-sm-6 no-padding">
-                <ul>
-                  <li class="dropdown-header"><i class="fa fa-legal"></i>Sales</li>
-                  <li><a href="#">New sale</a></li>
-                  <li><a href="#">Register a product</a></li>
-                  <li><a href="#">Register a client</a></li> 
-                  <li><a href="#">Month sales</a></li>
-                  <li><a href="#">Delivered orders</a></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        -->
-        <ul class="nav navbar-nav navbar-right user-nav">
-          <li class="dropdown profile_menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="images/avatar/10.png" width="30" height="30" /><span>username</span> <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="#page=user-info">个人资料</a></li>
-              <li class="divider"></li>
-              <li><a href="#" id="J_Logout">退出登录</a></li>
-            </ul>
-          </li>
-        </ul>
-
-      </div><!--/.nav-collapse animate-collapse -->
-    </div>
-  </div>
-
-  <div id="cl-wrapper" class="fixed-menu">
-    <div class="cl-sidebar" data-position="right" data-step="1" data-intro="<strong>Fixed Sidebar</strong> <br/> It adjust to your needs." >
-      <div class="cl-toggle"><i class="fa fa-bars"></i></div>
-      <div class="cl-navblock">
-        <div class="menu-space">
-          <div class="content">
-            <div class="side-user">
-              <div class="avatar"><img src="images/avatar/10.png" width="50" height="50" alt="Avatar" /></div>
-              <div class="info">
-                <a href="#">username</a>
-              </div>
-            </div>
-            <ul class="cl-vnavigation">
-              <li><a href="#page=home"><i class="fa fa-home"></i><span>首页</span></a></li>
-              <li><a href="#page=customer-list"><i class="fa fa-users"></i><span>客户信息管理</span></a></li>
-              <li><a href="#page=apply-amount"><i class="fa fa-money"></i><span>申请额度</span></a></li>
-              <li><a href="#page=admin-user"><i class="fa fa-user-md"></i><span>员工管理</span></a></li>
-              <li><a href="#"><i class="fa fa-file"></i><span>Pages</span></a>
-                <ul class="sub-menu">
-                  <li><a href="pages-blank.html">Blank Page</a></li>
-                  <li><a href="pages-blank-header.html">Blank Page Header</a></li>
-                  <li><a href="pages-blank-aside.html">Blank Page Aside</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!--
-        <div class="text-right collapse-button" style="padding:7px 9px;">
-          <input type="text" class="form-control search" placeholder="Search..." />
-          <button id="sidebar-collapse" class="btn btn-default" style=""><i style="color:#fff;" class="fa fa-angle-left"></i></button>
-        </div>
-        -->
-      </div>
-    </div>
-
-    <div class="container-fluid" id="pcont">
-      <div class="cl-mcont">
-        <div id="J_Body">
-          <h3 class="text-center">Loading...</h3>
-        </div>
-      </div>
-    </div> 
-    
-  </div>
-
-  <script src="script/lib/seajs-2.1.2/sea.js"></script>
-  <script src="script/site.js"></script>
+	<noscript style="padding:20px;text-align: center;">
+		<p>您的浏览器有可能已经禁用了活动脚本（通常指Javascript）功能，需要开启这些功能才可以正常浏览。</p>
+		<p><a href="http://qzs.qq.com/qzone/v6/troubleshooter/noscript.html" target="_blank">查看开启方法</a></p>
+	</noscript>
+	<script src="script/lib/seajs-2.1.2/sea.js"></script>
+	<script src="script/site.js"></script>
 </body>
-
 </html>

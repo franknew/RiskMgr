@@ -10,7 +10,7 @@ define(function (require, exports, module) {
 
 
 	var Clone = myclass.clone;
-	
+
 	var DIALOG_OBJ = [],
 		 DIALOG_COUNT = 0;	//浮层计数，用来填默认的id
 	var MOD ={
@@ -19,7 +19,7 @@ define(function (require, exports, module) {
 			setting:{	//默认配置
 				title:'温馨提示'
 				,content:''	//内容，支持html
-				,width:'630px'	//宽度，必须设定单位
+				//,width:'630px'	//宽度，必须设定单位
 				,padding:'20px'	//内容区域的padding
 				,skin:''	//主容器的className
 				,ok:function () {}	//确定按钮的回调
@@ -29,10 +29,13 @@ define(function (require, exports, module) {
 				,onclose:function () {}	 //关闭浮层时的回调
 				,onshow:function(){}	//打开浮层时的回调
 				,id:''	//浮层主容器的ID
+				,validate:true	//是否校验表单
+				,form:true	//是否自动生成外包form
+				//,button:[]	//增加按钮
 			}
 		},
 		/** 显示浮层
-		 * @param  setting {Object} 
+		 * @param  setting {Object}
 		 * @return 返回当前浮层对象
 		 */
 		show:function (setting) {
@@ -45,13 +48,14 @@ define(function (require, exports, module) {
 			}
 
 			var conf = this._initConfig(setting);
-			
+
 			this._showMask();
 			var html = TMPL.modal(conf),
 				 elem = $(html);
 			$('body').append(elem);
 
 			this.dialog = elem;
+			this.content = elem.find('div.modal-body');
 			this.form = elem.find('>form').eq(0);
 			this.parsley = this.form.parsley();
 
@@ -111,7 +115,10 @@ define(function (require, exports, module) {
 		 * @param
 		 */
 		_initEvent:function (box) {
-			var that = this;
+			var that = this,
+				conf = this._config(),
+				validate = conf.validate;
+
 			box.find('button.j-op-close').bind('click',function (ev) {//关闭按钮
 				ev.preventDefault();
 				that.close();
@@ -119,22 +126,35 @@ define(function (require, exports, module) {
 			box.find('button.j-op-cancel').bind('click',function (ev) {	 //取消按钮
 				ev.preventDefault();
 				if (!that._exeCallback('cancel')) {
-					that.close();	
+					that.close();
 				}
 			});
 			box.find('button.j-op-ok').bind('click',function (ev) {	 //确定按钮
 				ev.preventDefault();
-				if (that.parsley.validate()) {	//校验表单  在没有表单的时候默认成功，所以可以全部都校验
+				if (!validate || that.parsley.validate()) {	//校验表单  在没有表单的时候默认成功，所以可以全部都校验
 					if (!that._exeCallback('ok')) {	//执行『ok』回调，如果不返回true，则执行关闭浮层
 						that.close();
 					}
 				}
 			});
+
+			//自定义按钮事件绑定
+			var buttons = conf.button;
+			if (buttons&&buttons.length>0) {
+				box.on('click','button.j-op-btns',function(ev) {
+					ev.preventDefault();
+					var btn = $(ev.currentTarget),
+						sn = btn.data('sn'),
+						fn = buttons[sn].callback;
+
+					fn.call(that);
+				});
+			}
 		},
 		/** 执行回调 */
 		_exeCallback:function (name) {
 			var conf = this._config(),
-				 fn = conf[name];
+				fn = conf[name];
 			if($.isFunction(fn)) {
 				return fn.call(this);
 			}
@@ -142,10 +162,10 @@ define(function (require, exports, module) {
 		/** 初始化配置 */
 		_initConfig:function (setting) {
 			var def = this._DEFAULT_CONFIG.setting,
-				 key = this._DEFAULT_CONFIG.configKey,
+				key = this._DEFAULT_CONFIG.configKey,
 				conf;
 			conf = this[key] = $.extend({},def,setting);
-			
+
 			//填上popup的id
 			DIALOG_COUNT = DIALOG_COUNT+1;
 			if(!conf.id) {

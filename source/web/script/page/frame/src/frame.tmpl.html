@@ -1,0 +1,77 @@
+<script type="text/html" id="Frame">
+<%
+	data.avatar = data.avatar || 'about:blank'; //防止空src
+%>
+<div id="head-nav" class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="fa fa-gear"></span>
+			</button>
+			<a class="navbar-brand" href="/"><span>manager</span></a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<!--
+			<ul class="nav navbar-nav">
+			<li><a href="#page=apply-amount">申请额度</a></li>
+			<li><a href="#about">快捷连接22</a></li>
+			</ul>
+			-->
+			<ul class="nav navbar-nav navbar-right user-nav" id="J_UserNav">
+				<li class="dropdown profile_menu">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="<%=data.avatar%>" width="30" height="30" /><%=data.name%> <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#page=user/info">个人资料</a></li>
+						<li><a href="#page=user/info">修改密码</a></li>
+						<li class="divider"></li>
+						<li><a href="#" id="J_Logout">退出登录</a></li>
+					</ul>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+<div id="cl-wrapper" class="fixed-menu">
+	<div class="cl-sidebar" data-position="right" data-step="1" data-intro="<strong>Fixed Sidebar</strong> <br/> It adjust to your needs." >
+		<div class="cl-toggle" id="J_MenuToggle" data-target="#J_Vnavigation"><i class="fa fa-bars"></i></div>
+		<div class="cl-navblock">
+			<div class="menu-space">
+				<div class="content">
+					<div class="side-user" id="J_SideUser">
+						<div class="avatar"><img src="<%=data.avatar%>" width="50" height="50" alt="Avatar" /></div>
+						<div class="info">
+							<a href="#page=user/info"><%=data.name%></a>
+						</div>
+					</div>
+					<ul class="cl-vnavigation" id="J_Vnavigation">
+						<li><a href="#page=home"><i class="fa fa-home"></i><span>首页</span></a></li>
+						<li><a href="#page=customer"><i class="fa fa-users"></i><span>客户信息管理</span></a></li>
+						<li><a href="#page=property"><i class="fa fa-building-o"></i><span>房产信息管理</span></a></li>
+						<li><a href="#page=apply-amount"><i class="fa fa-yen"></i><span>申请额度</span></a></li>
+						<li><a href="#page=employee"><i class="fa fa-user-md"></i><span>员工管理</span></a></li>
+						<li><a href="#page=debugger"><i class="fa fa-bug"></i><span>测试后台接口</span></a></li>
+						<!--
+						<li><a href="#"><i class="fa fa-file"></i><span>Pages</span></a>
+							<ul class="sub-menu">
+								<li><a href="pages-blank.html">Blank Page</a></li>
+								<li><a href="pages-blank-header.html">Blank Page Header</a></li>
+								<li><a href="pages-blank-aside.html">Blank Page Aside</a></li>
+							</ul>
+						</li>
+						-->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid" id="pcont">
+		<div class="page-head hide" id="J_Header"></div>
+		<div class="cl-mcont" id="J_Body">
+			<div class="loading">Loading...</div>
+		</div>
+	</div>
+</div>
+</script>
