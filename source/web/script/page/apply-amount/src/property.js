@@ -69,6 +69,17 @@ define(function(require, exports, module){
 						box.remove();
 					});
 				}
+			}).on('click','joint-add',function(ev) {//增加共权人
+				ev.preventDefault();
+				MOD.addJoint();
+			}).on('click','joint-remove',function(ev) {//移除共权人
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					item = btn.parents('tr:first');
+				if (item.siblings().size()<=0) {
+					item.parents('table:first').hide();
+				}
+				item.remove();
 			});
 
 
@@ -100,6 +111,14 @@ define(function(require, exports, module){
 			html.appendTo(box).slideDown('fast', function() {
 
 			});
+		},
+		addJoint:function() {
+			var list = $('#J_PropertyJointBox'),
+				html = Tmpl.PropertyJointItem();
+			var item = $(html).appendTo(list.find('tbody:first'));
+
+			list.show();
+			item.find('input').eq(0).focus();
 		}
 	};
 

@@ -27,13 +27,35 @@
 		<%=data.propertyTpl%>
 		<div class="form-group">
 			<div class="col-sm-2">&nbsp;</div>
-			<div class="col-sm-10"><label class="control-label">房产共权人、保证人、配偶、辅助联系人、第三方借款人</label>&nbsp;&nbsp;<button type="button" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加</button></div>
+			<div class="col-sm-10"><button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>&nbsp;&nbsp;(房产共权人、保证人、配偶、辅助联系人、第三方借款人)</div>
 			<div class="col-sm-2">&nbsp;</div>
-			<div class="col-sm-10"><span class="label label-warning pinter-item" title="点击移除">李克强 <i class="fa fa-remove"></i></span> <span class="label label-warning pinter-item" title="点击移除">王宝强 <i class="fa fa-remove"></i></span></div>
+			<div class="col-sm-10">
+				<table class="no-border" id="J_PropertyJointBox" style="background-color:#fff;margin-top:10px; display:none;">
+					<thead class="no-border">
+						<tr>
+							<th>姓名</th>
+							<th>电话</th>
+							<th>证件号</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody class="no-border-x no-border-y" id="J_PropertyJointList">
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<hr style="border-bottom:1px dashed #dadada"/>
 		<div class="col-sm-offset-2">
 			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>
 		</div>
 	</div>
+</script>
+
+<script type="text/html" id="PropertyJointItem">
+	<tr>
+		<td><input type="text" placeholder="输入姓名" /></td>
+		<td><input type="text" placeholder="输入电话" /></td>
+		<td><input type="text" placeholder="输入证件号" /></td>
+		<td><i class="pointer-item fa fa-times" data-hook="joint-remove"></i></td>
+	</tr>
 </script>

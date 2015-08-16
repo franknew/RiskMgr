@@ -485,6 +485,17 @@ define.pack("./property",["jquery","risk/unit/route","risk/components/former/ind
 						box.remove();
 					});
 				}
+			}).on('click','joint-add',function(ev) {//增加共权人
+				ev.preventDefault();
+				MOD.addJoint();
+			}).on('click','joint-remove',function(ev) {//移除共权人
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					item = btn.parents('tr:first');
+				if (item.siblings().size()<=0) {
+					item.parents('table:first').hide();
+				}
+				item.remove();
 			});
 
 
@@ -516,6 +527,14 @@ define.pack("./property",["jquery","risk/unit/route","risk/components/former/ind
 			html.appendTo(box).slideDown('fast', function() {
 
 			});
+		},
+		addJoint:function() {
+			var list = $('#J_PropertyJointBox'),
+				html = Tmpl.PropertyJointItem();
+			var item = $(html).appendTo(list.find('tbody:first'));
+
+			list.show();
+			item.find('input').eq(0).focus();
 		}
 	};
 
@@ -1505,7 +1524,15 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('	<div class="list-group-item">');
 _p(data.propertyTpl);
-__p.push('		<div class="form-group">\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><label class="control-label">房产共权人、保证人、配偶、辅助联系人、第三方借款人</label>&nbsp;&nbsp;<button type="button" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加</button></div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><span class="label label-warning pinter-item" title="点击移除">李克强 <i class="fa fa-remove"></i></span> <span class="label label-warning pinter-item" title="点击移除">王宝强 <i class="fa fa-remove"></i></span></div>\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>\n		</div>\n	</div>');
+__p.push('		<div class="form-group">\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>&nbsp;&nbsp;(房产共权人、保证人、配偶、辅助联系人、第三方借款人)</div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">\n				<table class="no-border" id="J_PropertyJointBox" style="background-color:#fff;margin-top:10px; display:none;">\n					<thead class="no-border">\n						<tr>\n							<th>姓名</th>\n							<th>电话</th>\n							<th>证件号</th>\n							<th>&nbsp;</th>\n						</tr>\n					</thead>\n					<tbody class="no-border-x no-border-y" id="J_PropertyJointList">\n					</tbody>\n				</table>\n			</div>\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>\n		</div>\n	</div>');
+
+return __p.join("");
+},
+
+'PropertyJointItem': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('	<tr>\n		<td><input type="text" placeholder="输入姓名" /></td>\n		<td><input type="text" placeholder="输入电话" /></td>\n		<td><input type="text" placeholder="输入证件号" /></td>\n		<td><i class="pointer-item fa fa-times" data-hook="joint-remove"></i></td>\n	</tr>');
 
 return __p.join("");
 },
