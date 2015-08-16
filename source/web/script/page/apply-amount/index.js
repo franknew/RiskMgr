@@ -1485,7 +1485,7 @@ var __p=[],_p=function(s){__p.push(s)};
 	var customerHTML = data.customerTpl;
 __p.push('	<div class="list-group-item">');
 _p((customerHTML||''));
-__p.push('		<div class="form-group">\n			<div class="col-sm-2"><label class="control-label media-object"><span class="text-danger">*</span> 份额</label></div>\n			<div class="col-sm-4">\n				<div class="input-group"><input required name="Quotient" class="form-control" type="number"><div class="input-group-addon">%</div></div>\n			</div>\n		</div>\n		<div class="form-group">\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><label class="control-label">房产共权人、保证人、配偶、辅助联系人、第三方借款人</label>&nbsp;&nbsp;<button type="button" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加</button></div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><span class="label label-warning pinter-item" title="点击移除">李克强 <i class="fa fa-remove"></i></span> <span class="label label-warning pinter-item" title="点击移除">王宝强 <i class="fa fa-remove"></i></span></div>\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="customer-remove">移除</button>\n		</div>\n	</div>');
+__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="customer-remove">移除</button>\n		</div>\n	</div>');
 
 return __p.join("");
 },
@@ -1505,7 +1505,7 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('	<div class="list-group-item">');
 _p(data.propertyTpl);
-__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>\n		</div>\n	</div>');
+__p.push('		<div class="form-group">\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><label class="control-label">房产共权人、保证人、配偶、辅助联系人、第三方借款人</label>&nbsp;&nbsp;<button type="button" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加</button></div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><span class="label label-warning pinter-item" title="点击移除">李克强 <i class="fa fa-remove"></i></span> <span class="label label-warning pinter-item" title="点击移除">王宝强 <i class="fa fa-remove"></i></span></div>\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>\n		</div>\n	</div>');
 
 return __p.join("");
 },
