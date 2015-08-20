@@ -42,6 +42,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CommonDll\DreamWorkflow.Engine.dll</HintPath>
     </Reference>
+    <Reference Include="IBatisNet.Common, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\IBatisNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="IBatisNet.DataMapper, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\IBatisNet.DataMapper.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Library.Cache">
       <HintPath>..\CommonDll\SOAFramework.Library.Cache.dll</HintPath>
     </Reference>
@@ -78,6 +86,7 @@
     <Compile Include="CustomerApi.cs" />
     <Compile Include="DataDictionaryApi.cs" />
     <Compile Include="IndexApi.cs" />
+    <Compile Include="InitDBFilter.cs" />
     <Compile Include="LogonApi.cs" />
     <Compile Include="ProjectApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -15,52 +15,67 @@ namespace RiskMgr.Api
     {
         private ProjectBLL bll = new ProjectBLL();
 
+        /// <summary>
+        /// 新增额度申请
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [EditAction]
         public string Add(AddProjectServiceForm form)
         {
             List<Asset_Project> assets = new List<Asset_Project>();
             List<Customer_Project> customers = new List<Customer_Project>();
+            List<Customer> updateCustomers = new List<Customer>();
 
             if (form.Assets != null)
             {
-                foreach (var id in form.Assets)
+                foreach (var a in form.Assets)
                 {
-                    assets.Add(new Asset_Project { AssetID = id });
+                    assets.Add(new Asset_Project { AssetID = a.ID });
                 }
             }
 
+            customers.AddRange(GetRelationship(form.Buyers, 1));
+            customers.AddRange(GetRelationship(form.Sellers, 2));
+            customers.AddRange(GetRelationship(form.ThirdPart, 3));
             if (form.Buyers != null)
             {
-                foreach (var id in form.Buyers)
-                {
-                    customers.Add(new Customer_Project { CustomerID = id, Type = 1 });
-                }
+                updateCustomers.AddRange(form.Buyers);
             }
-
+            if (form.ThirdPart != null)
+            {
+                updateCustomers.AddRange(form.ThirdPart);
+            }
             if (form.Sellers != null)
             {
-                foreach (var id in form.Sellers)
-                {
-                    customers.Add(new Customer_Project { CustomerID = id, Type = 2 });
-                }
+                updateCustomers.AddRange(form.Sellers);
             }
 
-            if (form.Buyers_ThirdPart != null)
+            return bll.Add(form.Project, assets, customers, updateCustomers, form.Customer_Assset);
+        }
+
+        /// <summary>
+        /// 查询项目
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [QueryAction]
+        public List<Project> Query(QueryProjectServiceForm form)
+        {
+            return bll.Query(form);
+        }
+
+        private List<Customer_Project> GetRelationship(List<Customer> customers, int type)
+        {
+            List<Customer_Project> result = new List<Customer_Project>();
+            if (customers != null)
             {
-                foreach (var id in form.Buyers_ThirdPart)
+                foreach (var customer in customers)
                 {
-                    customers.Add(new Customer_Project { CustomerID = id, Type = 3 });
+                    result.Add(new Customer_Project { CustomerID = customer.ID, Type = type });
                 }
             }
-
-            if (form.Sellers_ThirdPart != null)
-            {
-                foreach (var id in form.Sellers_ThirdPart)
-                {
-                    customers.Add(new Customer_Project { CustomerID = id, Type = 4 });
-                }
-            }
-
-            return bll.Add(form.Project, assets, customers);
+            return result;
         }
     }
 }

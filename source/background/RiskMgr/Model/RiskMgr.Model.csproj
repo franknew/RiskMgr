@@ -52,6 +52,7 @@
     <Compile Include="Entity\Asset.cs" />
     <Compile Include="Entity\Asset_Project.cs" />
     <Compile Include="Entity\Customer.cs" />
+    <Compile Include="Entity\Customer_Asset.cs" />
     <Compile Include="Entity\Customer_Project.cs" />
     <Compile Include="Entity\FullUser.cs" />
     <Compile Include="Entity\LogonHistory.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="QueryForm\AssetQueryForm.cs" />
     <Compile Include="QueryForm\Asset_ProjectQueryForm.cs" />
     <Compile Include="QueryForm\CustomerQueryForm.cs" />
+    <Compile Include="QueryForm\Customer_AssetQueryForm.cs" />
     <Compile Include="QueryForm\Customer_ProjectQueryForm.cs" />
     <Compile Include="QueryForm\FullUserQueryForm.cs" />
     <Compile Include="QueryForm\ProjectQueryForm.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="ResultForm\IndexInitResultForm.cs" />
     <Compile Include="QueryForm\LogonHistoryQueryForm.cs" />
     <Compile Include="ResultForm\LogonResultForm.cs" />
+    <Compile Include="ResultForm\QueryProjectResultForm.cs" />
     <Compile Include="ResultForm\UserInitResultForm.cs" />
     <Compile Include="ServiceForm\AddProjectServiceForm.cs" />
     <Compile Include="ServiceForm\AddUserServiceForm.cs" />
@@ -102,6 +105,7 @@
     <Compile Include="QueryForm\User_RoleQueryForm.cs" />
     <Compile Include="UpdateForm\ActionUpdateForm.cs" />
     <Compile Include="UpdateForm\CustomerUpdateForm.cs" />
+    <Compile Include="UpdateForm\Customer_AssetUpdateForm.cs" />
     <Compile Include="UpdateForm\Customer_ProjectUpdateForm.cs" />
     <Compile Include="UpdateForm\LogonHistoryUpdateForm.cs" />
     <Compile Include="UpdateForm\MenuUpdateForm.cs" />

@@ -68,5 +68,16 @@ namespace RiskMgr.Api
             paggingList.RecordCount = form.RecordCount;
             return paggingList;
         }
+
+        /// <summary>
+        /// 检查证件号码是否有存在,如果不存在用户id,则只检查证件号码，如果存在用户id，则检查不是该用户的证件号码
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [QueryAction]
+        public bool CheckIdentityCodeExists(CustomerQueryForm form)
+        {
+            return bll.CheckIdentityCodeExists(form);
+        }
     }
 }

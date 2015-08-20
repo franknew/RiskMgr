@@ -26,9 +26,21 @@ namespace RiskMgr.Api
             IndexInitResultForm form = new IndexInitResultForm();
             MenuBLL menubll = new MenuBLL();
             UserBLL userbll = new UserBLL();
-            TaskDao taskdao = new TaskDao();
+            TaskBLL taskbll = new TaskBLL();
             form.Menu = menubll.GetCurrentUserMenu();
             form.User = userbll.GetCurrentUser();
+            var task = taskbll.Query(new TaskQueryForm { UserID = form.User.UserInfo.ID });
+            task.Sort((l, r) =>
+            {
+                if (l.CreateTime > r.CreateTime)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 1;
+                }
+            });
             return form;
         }
     }

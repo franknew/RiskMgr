@@ -20,9 +20,16 @@ namespace RiskMgr.BLL
 
         public LogonResultForm Logon(string username, string password)
         {
-            var mapper = Mapper.Instance();
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
+            {
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
+            }
+            else
+            {
+                mapper = Mapper.Instance();
+            }
             LogonResultForm result = new LogonResultForm();
-            mapper.BeginTransaction();
             UserDao userdao = new UserDao(mapper);
             UserInfoDao userInfoDao = new UserInfoDao(mapper);
             RoleDao roleDao = new RoleDao(mapper);
@@ -30,44 +37,35 @@ namespace RiskMgr.BLL
             var users = userdao.Query(new UserQueryForm { Name = username, Password = password });
             if (users.Count > 0)
             {
-                try
+                if (users[0].Enabled == 0)
                 {
-                    if (users[0].Enabled == 0)
-                    {
-                        throw new Exception("该用户已被禁用，请联系管理员！");
-                    }
-                    string token = Guid.NewGuid().ToString().Replace("-", "");
-                    var userinfo = userInfoDao.Query(new UserInfoQueryForm { ID = users[0].ID });
-                    UserEntireInfo u = new UserEntireInfo
-                    {
-                        User = users[0],
-                    };
-                    if (userinfo.Count > 0)
-                    {
-                        u.UserInfo = userinfo[0];
-                    }
-                    u.Role = roleDao.QueryRoleByUserID(u.User.ID);
-                    CacheItem item = new CacheItem(token, u);
-                    LogonHistory history = new LogonHistory
-                    {
-                        LogonTime = DateTime.Now,
-                        Token = token,
-                        UserID = users[0].ID,
-                        ActiveTime = DateTime.Now,
-                    };
-                    //var endpoint = ServiceSession.Current.Context.Context.IncomingMessageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-                    //history.IP = endpoint.Address;
-                    historyDao.Add(history);
-                    result.token = token;
-                    mapper.CommitTransaction();
-                    cache.AddItem(item, 30 * 60);
-                    return result;
+                    throw new Exception("该用户已被禁用，请联系管理员！");
                 }
-                catch (Exception ex)
+                string token = Guid.NewGuid().ToString().Replace("-", "");
+                var userinfo = userInfoDao.Query(new UserInfoQueryForm { ID = users[0].ID });
+                UserEntireInfo u = new UserEntireInfo
                 {
-                    mapper.RollBackTransaction();
-                    throw ex;
+                    User = users[0],
+                };
+                if (userinfo.Count > 0)
+                {
+                    u.UserInfo = userinfo[0];
                 }
+                u.Role = roleDao.QueryRoleByUserID(u.User.ID);
+                CacheItem item = new CacheItem(token, u);
+                LogonHistory history = new LogonHistory
+                {
+                    LogonTime = DateTime.Now,
+                    Token = token,
+                    UserID = users[0].ID,
+                    ActiveTime = DateTime.Now,
+                };
+                //var endpoint = ServiceSession.Current.Context.Context.IncomingMessageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+                //history.IP = endpoint.Address;
+                historyDao.Add(history);
+                result.token = token;
+                cache.AddItem(item, 30 * 60);
+                return result;
             }
             else
             {

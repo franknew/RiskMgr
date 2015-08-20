@@ -22,6 +22,8 @@ namespace RiskMgr.Api
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
+        [AuthFilter]
+        [NoneAuthFilter]
         public LogonResultForm Logon(LogonServiceForm form)
         {
             var result = bll.Logon(form.UserName, form.Password);

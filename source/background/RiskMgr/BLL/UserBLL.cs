@@ -77,122 +77,128 @@ namespace RiskMgr.BLL
         public string Add(User user, UserInfo ui, User_Role role)
         {
             var userinfo = GetCurrentUser();
-            mapper.BeginTransaction();
-            try
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
             {
-                if (user == null)
-                {
-                    throw new Exception("user不能为null！");
-                }
-                UserDao dao = new UserDao(mapper);
-                var exist = dao.Query(new UserQueryForm { Name = user.Name });
-                if (exist.Count > 0)
-                {
-                    throw new Exception("已存在用户名：" + user.Name);
-                }
-                string id = dao.Add(user);
-                if (ui == null)
-                {
-                    ui = new UserInfo();
-                }
-                UserInfoDao infodao = new UserInfoDao(mapper);
-                ui.ID = id;
-                infodao.Add(ui);
-                if (role != null)
-                {
-                    User_RoleDao urdao = new User_RoleDao(mapper);
-                    role.UserID = id;
-                    urdao.Add(role);
-                }
-                mapper.CommitTransaction();
-                return id;
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
             }
-            catch (Exception ex)
+            else
             {
-                mapper.RollBackTransaction();
-                throw ex;
+                mapper = Mapper.Instance();
             }
+            if (user == null)
+            {
+                throw new Exception("user不能为null！");
+            }
+            UserDao dao = new UserDao(mapper);
+            var exist = dao.Query(new UserQueryForm { Name = user.Name });
+            if (exist.Count > 0)
+            {
+                throw new Exception("已存在用户名：" + user.Name);
+            }
+            string id = dao.Add(user);
+            if (ui == null)
+            {
+                ui = new UserInfo();
+            }
+            UserInfoDao infodao = new UserInfoDao(mapper);
+            ui.ID = id;
+            infodao.Add(ui);
+            if (role != null)
+            {
+                User_RoleDao urdao = new User_RoleDao(mapper);
+                role.UserID = id;
+                urdao.Add(role);
+            }
+            return id;
         }
 
         public bool Update(User user, UserInfo ui, string role)
         {
-            mapper.BeginTransaction();
-            try
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
             {
-                if (user != null)
-                {
-                    UserDao dao = new UserDao(mapper);
-                    User entity = new User
-                    {
-                        ID = user.ID,
-                        Enabled = user.Enabled,
-                    };
-                    dao.Update(new UserUpdateForm { Entity = entity, UserQueryForm = new UserQueryForm { ID = user.ID } });
-                }
-                if (ui != null)
-                {
-                    UserInfoDao dao = new UserInfoDao(mapper);
-                    dao.Update(new UserInfoUpdateForm { Entity = ui, UserInfoQueryForm = new UserInfoQueryForm { ID = ui.ID } });
-                }
-                if (!string.IsNullOrEmpty(role))
-                {
-                    User_RoleDao urdao = new User_RoleDao(mapper);
-                    var ur = urdao.Query(new User_RoleQueryForm { UserID = user.ID }).FirstOrDefault();
-                    if (ur != null)
-                    {
-                        ur.RoleID = role;
-                        urdao.Update(new User_RoleUpdateForm { Entity = ur, User_RoleQueryForm = new User_RoleQueryForm { ID = ur.ID } });
-                    }
-                }
-                mapper.CommitTransaction();
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
             }
-            catch (Exception ex)
+            else
             {
-                mapper.RollBackTransaction();
-                throw ex;
+                mapper = Mapper.Instance();
+            }
+            if (user != null)
+            {
+                UserDao dao = new UserDao(mapper);
+                User entity = new User
+                {
+                    ID = user.ID,
+                    Enabled = user.Enabled,
+                };
+                dao.Update(new UserUpdateForm { Entity = entity, UserQueryForm = new UserQueryForm { ID = user.ID } });
+            }
+            if (ui != null)
+            {
+                UserInfoDao dao = new UserInfoDao(mapper);
+                dao.Update(new UserInfoUpdateForm { Entity = ui, UserInfoQueryForm = new UserInfoQueryForm { ID = ui.ID } });
+            }
+            if (!string.IsNullOrEmpty(role))
+            {
+                User_RoleDao urdao = new User_RoleDao(mapper);
+                var ur = urdao.Query(new User_RoleQueryForm { UserID = user.ID }).FirstOrDefault();
+                if (ur != null)
+                {
+                    ur.RoleID = role;
+                    urdao.Update(new User_RoleUpdateForm { Entity = ur, User_RoleQueryForm = new User_RoleQueryForm { ID = ur.ID } });
+                }
             }
             return true;
         }
 
         public bool Delete(UserQueryForm user)
         {
-            mapper.BeginTransaction();
-            try
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
             {
-                UserDao userdao = new UserDao(mapper);
-                User_RoleDao urdao = new User_RoleDao(mapper);
-                UserInfoDao uidao = new UserInfoDao(mapper);
-
-                UserQueryForm uform = new UserQueryForm
-                {
-                    ID = user.ID
-                };
-                userdao.Delete(uform);
-
-                UserInfoQueryForm uiform = new UserInfoQueryForm
-                {
-                    ID = user.ID,
-                };
-                uidao.Delete(uiform);
-
-                User_RoleQueryForm urform = new User_RoleQueryForm
-                {
-                    UserID = user.ID,
-                };
-                urdao.Delete(urform);
-                mapper.CommitTransaction();
-                return true;
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
             }
-            catch (Exception ex)
+            else
             {
-                mapper.RollBackTransaction();
-                throw ex;
+                mapper = Mapper.Instance();
             }
+            UserDao userdao = new UserDao(mapper);
+            User_RoleDao urdao = new User_RoleDao(mapper);
+            UserInfoDao uidao = new UserInfoDao(mapper);
+
+            UserQueryForm uform = new UserQueryForm
+            {
+                ID = user.ID
+            };
+            userdao.Delete(uform);
+
+            UserInfoQueryForm uiform = new UserInfoQueryForm
+            {
+                ID = user.ID,
+            };
+            uidao.Delete(uiform);
+
+            User_RoleQueryForm urform = new User_RoleQueryForm
+            {
+                UserID = user.ID,
+            };
+            urdao.Delete(urform);
+            return true;
         }
 
         public bool ChangePassword(ChangePasswordUpdateForm form)
         {
-            UserDao dao = new UserDao();
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
+            {
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
+            }
+            else
+            {
+                mapper = Mapper.Instance();
+            }
+            UserDao dao = new UserDao(mapper);
             User user = new User
             {
                 ID = form.UserID,
@@ -204,7 +210,16 @@ namespace RiskMgr.BLL
 
         public bool ChangeSelfPassword(ChangePasswordUpdateForm form)
         {
-            UserDao dao = new UserDao();
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
+            {
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
+            }
+            else
+            {
+                mapper = Mapper.Instance();
+            }
+            UserDao dao = new UserDao(mapper);
             var userList = dao.Query(new UserQueryForm { ID = form.UserID, Password = form.OldPassword });
             if (userList == null || userList.Count == 0)
             {
@@ -225,7 +240,16 @@ namespace RiskMgr.BLL
         /// <returns></returns>
         public List<FullUser> Query(FullUserQueryForm form)
         {
-            FullUserDao dao = new FullUserDao();
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
+            {
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
+            }
+            else
+            {
+                mapper = Mapper.Instance();
+            }
+            FullUserDao dao = new FullUserDao(mapper);
             var userlist = dao.Query(form);
 
             return userlist;
@@ -238,13 +262,22 @@ namespace RiskMgr.BLL
         /// <returns></returns>
         public int CheckUserAuth(string token)
         {
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
+            {
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
+            }
+            else
+            {
+                mapper = Mapper.Instance();
+            }
             //验证有没有登录
             UserEntireInfo user = GetUserEntireInfoFromCache(token);
             if (user == null)
             {
                 return 3;
             }
-            LogonHistoryDao logonhistorydao = new LogonHistoryDao();
+            LogonHistoryDao logonhistorydao = new LogonHistoryDao(mapper);
             var logonList = logonhistorydao.Query(new LogonHistoryQueryForm { Token = token });
             if (logonList.Count == 0 || DateTime.Now - logonList[0].ActiveTime > new TimeSpan(0, 30, 0))
             {

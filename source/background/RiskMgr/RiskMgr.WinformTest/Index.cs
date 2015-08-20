@@ -1,5 +1,6 @@
 ﻿using RiskMgr.Form;
 using RiskMgr.Model;
+using SOAFramework.Library;
 using SOAFramework.Service.SDK.Core;
 using System;
 using System.Collections.Generic;
@@ -124,6 +125,64 @@ namespace RiskMgr.WinformTest
             request.userid = user.ID;
             var response = SDKFactory.Client.Execute(request);
             MessageBox.Show(response.ResponseBody);
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            AddProjectRequest request = new AddProjectRequest();
+            request.form = new AddProjectServiceForm
+            {
+                Project = new Project
+                {
+                    AgentName = "agent",
+                    AgentContact = "agentcontact",
+                    AssetRansomer = "frank",
+                    Creator = "frank",
+                    DealMoney = 10,
+                    EarnestMoney = 20,
+                    GuaranteeMoney = 30,
+                    GuaranteeMonth = 1,
+                    Name = "test",
+                    Source = 1,
+                    Stagnationer = "frank",
+                    SupervisionMoney = 40,
+                    SupervisionBank = "bank",
+                    TrusteeshipAccount = "aaaa",
+                    SupplyCardCopy = 1,
+                    LoanMoney = 50,
+
+                },
+                Buyers = new List<Customer>
+                {
+                    new Customer
+                    {
+                        Gender = 1,
+                        Name = "addprojecttest",
+                        OrignalIdentityCode = "111",
+                        OrignalName = "old name",
+                        BankCode = "22222",
+                        BankType = 1,
+                        CardType = 1,
+                        Enabled = 1,
+                        IdentityCode = "123123",
+                    },
+                    new Customer
+                    {
+                        ID = "420ef3acca3243af846137e30961e5ce",
+                        BankCode = "hello world",
+                    },
+                },
+            };
+            request.token = token;
+            var response = SDKFactory.Client.Execute(request);
+            MessageBox.Show(response.ResponseBody);
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            string jsonstring = "hello world";
+            string result = HttpHelper.Post("http://localhost/Service.Host/JsonHost.svc/Execute/RiskMgr.Api.ProjectApi/Add", Encoding.UTF8.GetBytes(jsonstring));
+            MessageBox.Show(result);
         }
     }
 }

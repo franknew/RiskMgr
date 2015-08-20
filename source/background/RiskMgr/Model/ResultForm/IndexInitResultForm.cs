@@ -13,6 +13,10 @@ namespace RiskMgr.Form
 
         public List<Menu> Menu { get; set; }
 
-        public List<Task> Task { get; set; }
+        public List<Task> ProcessingTask { get; set; }
+
+        public List<Task> CompletedTask { get; set; }
+
+        public List<Task> MyTask { get; set; }
     }
 }

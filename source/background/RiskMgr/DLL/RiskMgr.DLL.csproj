@@ -50,12 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DaoExtension\CustomerDao_ex.cs" />
+    <Compile Include="DaoExtension\ProjectDao_ex.cs" />
     <Compile Include="Dao\AssetDao.cs" />
     <Compile Include="Dao\Asset_ProjectDao.cs" />
     <Compile Include="Dao\CustomerDao.cs" />
+    <Compile Include="Dao\Customer_AssetDao.cs" />
     <Compile Include="Dao\Customer_ProjectDao.cs" />
     <Compile Include="Dao\FullUserDao.cs" />
     <Compile Include="Dao\LogonHistoryDao.cs" />
+    <Content Include="SqlMapping\Customer_Asset.xml" />
+    <Content Include="SqlMapping\Customer_ex.xml" />
     <Content Include="sql.sql" />
     <Compile Include="DaoExtension\MenuDao_ex.cs" />
     <Compile Include="DaoExtension\Menu_RoleDao_ex.cs" />
@@ -88,6 +93,7 @@
     <Content Include="SqlMapping\Module_ex.xml" />
     <Content Include="SqlMapping\Post.xml" />
     <Content Include="SqlMapping\Project.xml" />
+    <Content Include="SqlMapping\Project_ex.xml" />
     <Content Include="SqlMapping\Role.xml" />
     <Content Include="SqlMapping\Role_ex.xml" />
     <Content Include="SqlMapping\Role_Module_Action.xml" />

@@ -35,5 +35,11 @@ namespace RiskMgr.BLL
             CustomerDao dao = new CustomerDao();
             return dao.Query(form);
         }
+
+        public bool CheckIdentityCodeExists(CustomerQueryForm form)
+        {
+            CustomerDao dao = new CustomerDao();
+            return dao.CheckIdentityCode(form);
+        }
     }
 }

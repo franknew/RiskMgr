@@ -1,6 +1,8 @@
-﻿using RiskMgr.DAL;
+﻿using IBatisNet.DataMapper;
+using RiskMgr.DAL;
 using RiskMgr.Form;
 using RiskMgr.Model;
+using SOAFramework.Service.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,16 @@ namespace RiskMgr.BLL
     {
         public List<Role> Query(RoleQueryForm form)
         {
-            RoleDao dao = new RoleDao();
+            ISqlMapper mapper = null;
+            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
+            {
+                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
+            }
+            else
+            {
+                mapper = Mapper.Instance();
+            }
+            RoleDao dao = new RoleDao(mapper);
             return dao.Query(form);
         }
     }
