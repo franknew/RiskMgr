@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>管理</title>
+  <title>首页</title>
   <link href="style/bootstrap/css/bootstrap.css" rel="stylesheet" />
   <link href="style/font-awesome/css/font-awesome.css" rel="stylesheet">
+  <link href="style/fuelux.css" rel="stylesheet" />
   <link href="style/cleanzone.css" rel="stylesheet" />
 </head>
 <body>
@@ -20,66 +21,20 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="fa fa-gear"></span>
         </button>
-        <a class="navbar-brand" href="#"><span>manager</span></a>
+        <a class="navbar-brand" href="/"><span>manager</span></a>
       </div>
       <div class="navbar-collapse collapse">
-        <!--
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">首页</a></li>
-          <li><a href="#about">About</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contact <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="dropdown-submenu"><a href="#">Sub menu</a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                </ul>
-              </li>              
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Large menu <b class="caret"></b></a>
-            <ul class="dropdown-menu col-menu-2">
-              <li class="col-sm-6 no-padding">
-                <ul>
-                  <li class="dropdown-header"><i class="fa fa-group"></i>Users</li>
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="dropdown-header"><i class="fa fa-gear"></i>Config</li>
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li> 
-                </ul>
-              </li>
-              <li  class="col-sm-6 no-padding">
-                <ul>
-                  <li class="dropdown-header"><i class="fa fa-legal"></i>Sales</li>
-                  <li><a href="#">New sale</a></li>
-                  <li><a href="#">Register a product</a></li>
-                  <li><a href="#">Register a client</a></li> 
-                  <li><a href="#">Month sales</a></li>
-                  <li><a href="#">Delivered orders</a></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
+          <li><a href="#page=apply-amount">申请额度</a></li>
+          <li><a href="#about">快捷连接22</a></li>
         </ul>
-        -->
         <ul class="nav navbar-nav navbar-right user-nav">
           <li class="dropdown profile_menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="images/avatar/10.png" width="30" height="30" /><span>username</span> <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="#">My Account</a></li>
-              <li><a href="#">Profile</a></li>
-              <li><a href="#">Messages</a></li>
+              <li><a href="#page=user/info">个人资料</a></li>
               <li class="divider"></li>
-              <li><a href="#">Sign Out</a></li>
+              <li><a href="#" id="J_Logout">退出登录</a></li>
             </ul>
           </li>
         </ul>
@@ -90,67 +45,27 @@
 
   <div id="cl-wrapper" class="fixed-menu">
     <div class="cl-sidebar" data-position="right" data-step="1" data-intro="<strong>Fixed Sidebar</strong> <br/> It adjust to your needs." >
-      <div class="cl-toggle"><i class="fa fa-bars"></i></div>
+      <div class="cl-toggle" id="J_MenuToggle" data-target="#J_Vnavigation"><i class="fa fa-bars"></i></div>
       <div class="cl-navblock">
         <div class="menu-space">
           <div class="content">
             <div class="side-user">
               <div class="avatar"><img src="images/avatar/10.png" width="50" height="50" alt="Avatar" /></div>
               <div class="info">
-                <a href="#">username</a>
+                <a href="#page=user/info">username</a>
               </div>
             </div>
-            <ul class="cl-vnavigation">
+            <ul class="cl-vnavigation" id="J_Vnavigation">
               <li><a href="#page=home"><i class="fa fa-home"></i><span>首页</span></a></li>
-              <li><a href="#page=page2"><i class="fa fa-smile-o"></i><span>UI Elements</span></a></li>
-              <li><a href="#page=xxx"><i class="fa fa-list-alt"></i><span>Forms</span></a>
-                <ul class="sub-menu">
-                  <li><a href="form-elements.html">Components</a></li>
-                  <li><a href="form-validation.html">Validation</a></li>
-                  <li><a href="form-wizard.html">Wizard</a></li>
-                  <li><a href="form-masks.html">Input Masks</a></li>
-                  <li><a href="form-multiselect.html"><span class="label label-primary pull-right">New</span>Multi Select</a></li>
-                  <li><a href="form-wysiwyg.html"><span class="label label-primary pull-right">New</span>WYSIWYG Editor</a></li>
-                  <li><a href="form-upload.html"><span class="label label-primary pull-right">New</span>Multi Upload</a></li>
-                </ul>
-              </li>
-              <li><a href="#"><i class="fa fa-table"></i><span>Tables</span></a>
-                <ul class="sub-menu">
-                  <li><a href="tables-general.html">General</a></li>
-                  <li><a href="tables-datatables.html"><span class="label label-primary pull-right">New</span>Data Tables</a></li>
-                </ul>
-              </li>              
-              <li><a href="#"><i class="fa fa-map-marker nav-icon"></i><span>Maps</span></a>
-                <ul class="sub-menu">
-                  <li><a href="maps.html">Google Maps</a></li>
-                  <li><a href="vector-maps.html"><span class="label label-primary pull-right">New</span>Vector Maps</a></li>
-                </ul>
-              </li>             
-              <li><a href="#"><i class="fa fa-envelope nav-icon"></i><span>Email</span></a>
-                <ul class="sub-menu">
-                  <li><a href="email-inbox.html">Inbox</a></li>
-                  <li><a href="email-read.html">Email Detail</a></li>
-                  <li><a href="email-compose.html"><span class="label label-primary pull-right">New</span>Email Compose</a></li>
-                </ul>
-              </li>
-              <li><a href="typography.html"><i class="fa fa-text-height"></i><span>Typography</span></a></li>
-              <li><a href="charts.html"><i class="fa fa-bar-chart-o"></i><span>Charts</span></a></li>
+              <li><a href="#page=customer/list"><i class="fa fa-users"></i><span>客户信息管理</span></a></li>
+              <li><a href="#page=apply-amount"><i class="fa fa-money"></i><span>申请额度</span></a></li>
+              <li><a href="#page=employee/list"><i class="fa fa-user-md"></i><span>员工管理</span></a></li>
+              <li><a href="#page=debugger"><i class="fa fa-user-md"></i><span>测试后台接口</span></a></li>
               <li><a href="#"><i class="fa fa-file"></i><span>Pages</span></a>
                 <ul class="sub-menu">
                   <li><a href="pages-blank.html">Blank Page</a></li>
                   <li><a href="pages-blank-header.html">Blank Page Header</a></li>
                   <li><a href="pages-blank-aside.html">Blank Page Aside</a></li>
-                  <li><a href="pages-login.html">Login</a></li>
-                  <li><a href="pages-404.html">404 Page</a></li>
-                  <li><a href="pages-500.html">500 Page</a></li>
-                  <li><a href="pages-sign-up.html"><span class="label label-primary pull-right">New</span>Sign Up</a></li>
-                  <li><a href="pages-forgot-password.html"><span class="label label-primary pull-right">New</span>Forgot Password</a></li>
-                  <li><a href="pages-profile.html"><span class="label label-primary pull-right">New</span>Profile</a></li>
-                  <li><a href="pages-search.html"><span class="label label-primary pull-right">New</span>Search</a></li>
-                  <li><a href="pages-calendar.html"><span class="label label-primary pull-right">New</span>Calendar</a></li>
-                  <li><a href="pages-code-editor.html"><span class="label label-primary pull-right">New</span>Code Editor</a></li>
-                  <li><a href="pages-gallery.html">Gallery</a></li>
-                  <li><a href="pages-timeline.html">Timeline</a></li>
                 </ul>
               </li>
             </ul>
@@ -166,6 +81,7 @@
     </div>
 
     <div class="container-fluid" id="pcont">
+      <div class="page-head hide" id="J_Header"></div>
       <div class="cl-mcont">
         <div id="J_Body">
           <h3 class="text-center">Loading...</h3>
@@ -175,7 +91,7 @@
     
   </div>
 
-  <script src="script/lib/seajs-3.0.0/sea-debug.js"></script>
+  <script src="script/lib/seajs-2.1.2/sea.js"></script>
   <script src="script/site.js"></script>
 </body>
 

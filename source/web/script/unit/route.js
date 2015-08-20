@@ -34,16 +34,47 @@ define(function(require, exports, module) {
 			conf = this._config();
 
 			this.container = $(conf.container||'body');
+			this.head = $(conf.header);
 			
 			this._initIndex();
 			this._initEvent();
 		},
 		/** 显示内容
-		 * @param content {String|DOM} 需要显示的内容
+		 * @param cont {String|Object} 如果string，则当做内容直接插入页面。如果是object，则当做配置项：
+		 	content: 需要插入页面的内容
+		 	head: 该页面的标题，插入配置项的header里
 		 */
-		show:function(content){
-			this.container.html(content);
+		show:function(con){
+			var content,
+				head,
+				headHtml;
+
+			if (typeof con == 'string') {	//纯字符串，则单做content
+				content = con;
+			}else if($.isPlainObject(con)){	//object配置项解析
+				content = con.content;
+				head = con.head;
+			}
+
+			if (head) {
+				if (head.indexOf('<')===0) {//如果是标签则直接输出
+					headHtml = head;
+				}else {//非标签单做单纯文本，包一层h2
+					headHtml = '<h2>'+head+'</h2>';
+				}
+				this.head.html(headHtml).show().removeClass('hide');
+			}else {
+				this.head.hide();
+			}
+
+			this.container.html(content).show();
+
 			$(window).scrollTop(0);
+		},
+		//加载指定的模块
+		load:function(mod) {
+			var url = this._getMod(mod);
+			this._load(url);
 		},
 		/** 获取当前展示的模块url id
 		 * @param 
@@ -51,20 +82,33 @@ define(function(require, exports, module) {
 		getCurrent:function() {
 			return _CURRENT;
 		},
+		_getMod:function(url) {
+			var conf = this._config(),
+				filter = conf.filter,
+				rs;
+			
+			if (filter) {
+				rs = filter(url);
+			}else{
+				throw "route: 没有配置filter";
+			}
+
+			return rs;
+		},
 		/** 加载页面js
 		 * @param 
 		 */
-		_load:function(mod){
+		_load:function(url){
 			var that = this;
 
 			this._showLoading();
 			
-			mod && require.async(mod,function(m){
-				_CURRENT = mod;
+			url && require.async(url,function(m){
+				_CURRENT = url;
 				var fn = m && m.initPage;
 				
 				if (fn) {
-					fn();
+					fn.call(that);
 				}else{
 					that._show404();
 				}
@@ -87,33 +131,36 @@ define(function(require, exports, module) {
 		 */
 		_initIndex:function() {
 			var conf = this._config(),
-				filter = conf.filter,
-				idx;
+				idx = this._getMod(location.href);
 			
-
-			if (filter) {
-				idx = filter(location.href);
-			}else{
-				throw "route: 没有配置filter";
-			}
-
-			idx = idx || conf.index;
+			idx = idx || this._getMod(conf.index);
 
 			idx && this._load(idx);
 		},
-		/** 初始化默认的事件绑定
+		/** 初始化事件绑定
 		 * @param 
 		 */
 		_initEvent:function (){
-			var conf = this._config(),
-				bind = conf.bind;
-			if (bind) {
-				$(document.documentElement).on('click',bind,function(ev) {
-					var elem = $(ev.currentTarget),
-						url = elem.attr('href'),
-						mod = conf.filter(url,elem);
-					MOD._load(mod);
-				});
+			var hasHashChangeEvent = 'onhashchange' in window,
+				hasStateChange = 'pushState' in history,
+				hasAddEventListener = 'addEventListener' in window,
+				documentMode = document.documentMode,
+				supportHashChange = hasHashChangeEvent && ( documentMode === void 0 || documentMode > 7 );
+
+			var that = this,
+				changeHandler = function(ev) {
+					var url = ev.newURL,
+						mod = that._getMod(url);
+					that._load(mod);
+					console.log('hashchange',ev);
+				};
+
+			if(!supportHashChange) {
+				return false;
+			} else if (hasAddEventListener) {
+				window.addEventListener('hashchange', changeHandler, false);
+			} else if (hasHashChangeEvent) {
+				window.onhashchange = changeHandler;
 			}
 		},
 		/** 配置项的读、写

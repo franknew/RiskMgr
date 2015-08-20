@@ -1,21 +1,20 @@
 /**
- * 首页
+ * 申请额度
  * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-08 22:28:39
- * @version $Id$
+ * @date    2015-07-15 21:41:52
  */
 
 define(function(require, exports, module){
-	var $ = require('jquery');
-	var route = require('risk/unit/route'),
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
 		tmpl = require('./tmpl');
- 
+
 	var MOD = {
 		initPage:function() {
-			var html = tmpl.home();
+			var html = tmpl.setup();
 			route.show(html);
-
 		}
-	}; 
+	};
+
 	return MOD;
 });

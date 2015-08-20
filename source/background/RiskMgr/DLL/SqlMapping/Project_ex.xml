@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="QueryProjectServiceForm" type="RiskMgr.Form.QueryProjectServiceForm" />
+  </alias>
+
+  <statements>
+    <select id="QueryProjectByRelationship" resultClass="Project" parameterClass="QueryProjectServiceForm">
+      SELECT p.* FROM PROJECT AS p LEFT JOIN
+      LEFT JOIN Customer_Project bp ON bp.ProjectID=p.ID AND bp.Type=1
+      LEFT JOIN Customer AS b ON bp.CustomerID=b.ID AND b.Enabled=1
+      LEFT JOIN Customer_Project bs ON bs.ProjectID=p.ID AND bp.Type=2
+      LEFT JOIN Customer AS s ON bs.CustomerID=s.ID AND s.Enabled=1
+      LEFT JOIN Asset_Project AS ap ON ap.ProjectID=p.ID
+      LEFT JOIN Asset AS a ON a.ID=ap.AssetID AND a.Enabled=1
+      <dynamic prepend="WHERE">
+        <isNotNull prepend="AND" property="ID">
+          `p.ID`=#ID#
+        </isNotNull>
+        <isNotNull prepend="AND" property="Name">
+          `p.Name` LIKE '%$Name$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="Creator">
+          `p.Creator`=#Creator#
+        </isNotNull>
+        <isNotNull prepend="AND" property="CreateTime_Start">
+          `p.CreateTime`&gt;=#CreateTime_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="CreateTime_End">
+          `p.CreateTime`&lt;=#CreateTime_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="LastUpdator">
+          `p.LastUpdator`=#LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="AND" property="LastUpdateTime_Start">
+          `p.LastUpdateTime`&gt;=#LastUpdateTime_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="LastUpdateTime_End">
+          `p.LastUpdateTime`&lt;=#LastUpdateTime_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="Type">
+          `p.Type`=#Type#
+        </isNotNull>
+        <isNotNull prepend="AND" property="Source">
+          `p.Source`=#Source#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AgentName">
+          `p.AgentName` LIKE '%$AgentName$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="CertificateData_Start">
+          `p.CertificateData`&gt;=#CertificateData_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="CertificateData_End">
+          `p.CertificateData`&lt;=#CertificateData_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AgentContact">
+          `p.AgentContact`=#AgentContact#
+        </isNotNull>
+        <isNotNull prepend="AND" property="Rebater">
+          `p.Rebater`=#Rebater#
+        </isNotNull>
+        <isNotNull prepend="AND" property="RebateAccount">
+          `p.RebateAccount`=#RebateAccount#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OtherRebateInfo">
+          `p.OtherRebateInfo`=#OtherRebateInfo#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalMortgageBank">
+          `p.OrignalMortgageBank`=#OrignalMortgageBank#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalMortgageBranch">
+          `p.OrignalMortgageBranch`=#OrignalMortgageBranch#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalFundCenter">
+          `p.OrignalFundCenter`=#OrignalFundCenter#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalFundBranch">
+          `p.OrignalFundBranch`=#OrignalFundBranch#
+        </isNotNull>
+        <isNotNull prepend="AND" property="SupplyCardCopy">
+          `p.SupplyCardCopy`=#SupplyCardCopy#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalCreditPI_Start">
+          `p.OrignalCreditPI`&gt;=#OrignalCreditPI_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalCreditPI_End">
+          `p.OrignalCreditPI`&lt;=#OrignalCreditPI_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalCreditCommerceMoney_Start">
+          `p.OrignalCreditCommerceMoney`&gt;=#OrignalCreditCommerceMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalCreditCommerceMoney_End">
+          `p.OrignalCreditCommerceMoney`&lt;=#OrignalCreditCommerceMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalCreditFundMoney_Start">
+          `p.OrignalCreditFundMoney`&gt;=#OrignalCreditFundMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="OrignalCreditFundMoney_End">
+          `p.OrignalCreditFundMoney`&lt;=#OrignalCreditFundMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetRansomCustomerManager">
+          `p.AssetRansomCustomerManager`=#AssetRansomCustomerManager#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetRansomContactPhone">
+          `p.AssetRansomContactPhone`=#AssetRansomContactPhone#
+        </isNotNull>
+        <isNotNull prepend="AND" property="NewCreditBank">
+          `p.NewCreditBank`=#NewCreditBank#
+        </isNotNull>
+        <isNotNull prepend="AND" property="NewCreditBranch">
+          `p.NewCreditBranch`=#NewCreditBranch#
+        </isNotNull>
+        <isNotNull prepend="AND" property="ShortTermAssetRansomBank">
+          `p.ShortTermAssetRansomBank`=#ShortTermAssetRansomBank#
+        </isNotNull>
+        <isNotNull prepend="AND" property="ShortTermAssetRansomBranch">
+          `p.ShortTermAssetRansomBranch`=#ShortTermAssetRansomBranch#
+        </isNotNull>
+        <isNotNull prepend="AND" property="GuaranteeMoney_Start">
+          `p.GuaranteeMoney`&gt;=#GuaranteeMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="GuaranteeMoney_End">
+          `p.GuaranteeMoney`&lt;=#GuaranteeMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="GuaranteeMonth">
+          `p.GuaranteeMonth`=#GuaranteeMonth#
+        </isNotNull>
+        <isNotNull prepend="AND" property="BuyerCreditCommerceMoney_Start">
+          `p.BuyerCreditCommerceMoney`&gt;=#BuyerCreditCommerceMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="BuyerCreditCommerceMoney_End">
+          `p.BuyerCreditCommerceMoney`&lt;=#BuyerCreditCommerceMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="BuyerCreditFundMoney_Start">
+          `p.BuyerCreditFundMoney`&gt;=#BuyerCreditFundMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="BuyerCreditFundMoney_End">
+          `p.BuyerCreditFundMoney`&lt;=#BuyerCreditFundMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="LoanMoney_Start">
+          `p.LoanMoney`&gt;=#LoanMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="LoanMoney_End">
+          `p.LoanMoney`&lt;=#LoanMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="DealMoney_Start">
+          `p.DealMoney`&gt;=#DealMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="DealMoney_End">
+          `p.DealMoney`&lt;=#DealMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="EarnestMoney_Start">
+          `p.EarnestMoney`&gt;=#EarnestMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="EarnestMoney_End">
+          `p.EarnestMoney`&lt;=#EarnestMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="SupervisionMoney_Start">
+          `p.SupervisionMoney`&gt;=#SupervisionMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="SupervisionMoney_End">
+          `p.SupervisionMoney`&lt;=#SupervisionMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="SupervisionBank">
+          `p.SupervisionBank`=#SupervisionBank#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetRansomMoney_Start">
+          `p.AssetRansomMoney`&gt;=#AssetRansomMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetRansomMoney_End">
+          `p.AssetRansomMoney`&lt;=#AssetRansomMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="CustomerPredepositMoney_Start">
+          `p.CustomerPredepositMoney`&gt;=#CustomerPredepositMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="CustomerPredepositMoney_End">
+          `p.CustomerPredepositMoney`&lt;=#CustomerPredepositMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="CreditReceiverName">
+          `p.CreditReceiverName` LIKE '%$CreditReceiverName$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="CreditReceiverBank">
+          `p.CreditReceiverBank`=#CreditReceiverBank#
+        </isNotNull>
+        <isNotNull prepend="AND" property="CreditReceiverAccount">
+          `p.CreditReceiverAccount`=#CreditReceiverAccount#
+        </isNotNull>
+        <isNotNull prepend="AND" property="TrusteeshipAccount">
+          `p.TrusteeshipAccount`=#TrusteeshipAccount#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetRansomPredictMoney_Start">
+          `p.AssetRansomPredictMoney`&gt;=#AssetRansomPredictMoney_Start#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetRansomPredictMoney_End">
+          `p.AssetRansomPredictMoney`&lt;=#AssetRansomPredictMoney_End#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetRansomer">
+          `AssetRansomer`=#AssetRansomer#
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetRansomType">
+          `p.AssetRansomType`=#AssetRansomType#
+        </isNotNull>
+        <isNotNull prepend="AND" property="PredictDays">
+          `p.PredictDays`=#PredictDays#
+        </isNotNull>
+        <isNotNull prepend="AND" property="ChargeType">
+          `p.ChargeType`=#ChargeType#
+        </isNotNull>
+        <isNotNull prepend="AND" property="CheckNumbersAndLimit">
+          `p.CheckNumbersAndLimit`=#CheckNumbersAndLimit#
+        </isNotNull>
+        <isNotNull prepend="AND" property="Stagnationer">
+          `p.Stagnationer`=#Stagnationer#
+        </isNotNull>
+        <isNotNull prepend="AND" property="BuyerName">
+          b.Name LIKE '%BuyerName%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="SellerName">
+          s.Name LIKE '%SellerName%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="BuyerIdentityCode">
+          b.IdentityCode LIKE '%BuyerIdentityCode%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="SellerIdentityCode">
+          s.IdentityCode LIKE '%SellerIdentityCode%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="AssetCode">
+          a.AssetCode LIKE '%AssetCode%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="Address">
+          a.Address LIKE '%Address%'
+        </isNotNull>
+      </dynamic>
+    </select>
+  </statements>
+</sqlMap>

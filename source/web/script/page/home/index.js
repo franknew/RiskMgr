@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["risk/unit/route"],function(require,exports,module){
+define(["jquery","risk/unit/route"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -32,6 +32,7 @@ define.pack = function(){
 })();
 //all file list:
 //home/src/index.js
+//home/src/home.tmpl.html
 
 //js file list:
 //home/src/index.js
@@ -42,13 +43,31 @@ define.pack = function(){
  * @version $Id$
  */
 
-define.pack("./index",["risk/unit/route"],function(require, exports, module){
-	var route = require('risk/unit/route');
+define.pack("./index",["jquery","risk/unit/route","./tmpl"],function(require, exports, module){
+	var $ = require('jquery');
+	var route = require('risk/unit/route'),
+		tmpl = require('./tmpl');
  
 	var MOD = {
 		initPage:function() {
-			route.show('<p>这是首页</p>');
+			var html = tmpl.home();
+			route.show(html);
+
 		}
 	}; 
 	return MOD;
+});
+//tmpl file list:
+//home/src/home.tmpl.html
+define.pack("./tmpl",[],function(require, exports, module){
+var tmpl = { 
+'home': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('<div class="row dash-cols">\n	<div class="col-sm-6 col-md-6">\n\n		<div class="block-flat">\n			<div class="header">\n				<h3>待办事项</h3>\n			</div>\n			<div class="content">\n				<div class="list-group">\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n				</div>						\n			</div>\n		</div>\n	</div>	\n	<div class="col-sm-6 col-md-6">\n		<ul class="nav nav-tabs">\n			<li class="active"><a href="#home" data-toggle="tab">待办事</a></li>\n			<li><a href="#profile" data-toggle="tab">进行中</a></li>\n			<li><a href="#messages" data-toggle="tab">最近完成</a></li>\n		</ul>\n		<div class="tab-content">\n			<div class="tab-pane active cont" id="home">\n			homeeeee\n			</div>\n			<div class="tab-pane cont" id="profile">\n			hahahahahah\n			</div>\n			<div class="tab-pane" id="messages">\n			第三个slk艾山街道非\n			</div>\n		</div>\n	</div>		\n</div>');
+
+return __p.join("");
+}
+};
+return tmpl;
 });
