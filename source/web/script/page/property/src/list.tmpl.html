@@ -1,0 +1,109 @@
+<!--
+包含list页所需所有tmpl
+-->
+<script type="text/html" id="list">
+<div class="spacer spacer-bottom">
+	<button type="button" class="btn btn-primary" data-hook="add">新增房产</button>
+</div>
+
+<div class="block-flat">
+	<%=this.ListContainer()%>
+</div>
+</script>
+
+<script type="text/html" id="ListContainer">
+	<form class="form-inline" id="J_SearchForm">
+		<div class="form-group">
+			<label>房产证号</label>
+			<input type="text" name="Code" class="form-control" placeholder="">
+		</div>
+		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>
+	</form>
+	<hr/>
+	<div id="ListContainer">
+		<div class="loading">Loading...</div>
+	</div>
+</script>
+
+<script type="text/html" id="ListBox">
+
+	<table class="no-border">
+		<thead class="no-border">
+			<tr>
+				<th>房产证号</th>
+				<th colspan="2">房产地址</th>
+				<th>用途</th>
+				<th>面积(㎡)</th>
+				<th>登记价(元)</th>
+			</tr>
+		</thead>
+		<tbody class="no-border-x no-border-y" id="J_ListBox">
+			<%=this.ListItem(data)%>
+		</tbody>
+	</table>
+
+	<div class="j-pager"></div>
+
+</script>
+
+<script type="text/html" id="ListItem">
+<%
+	var List = data||[];
+	var ShowInfos = ['Code','Position','Address','Usage','Area','RegPrice'];
+
+	var i=0,Cur;
+	if (List.length>0) {
+
+		for(;Cur=List[i++];) {
+%>
+	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+		<%
+			var ii=0,CurII;
+			for(;CurII=ShowInfos[ii++];) {
+		%>
+			<td><%=Cur[CurII]%></td>
+		<%
+			}
+		%>
+	</tr>
+<%
+		}
+	}else{
+%>
+	<tr>
+	<td colspan="<%=ShowInfos.length%>">
+		<div class="alert alert-info" role="alert">没有房产信息</div>
+	</td>
+	</tr>
+<%
+	}
+%>
+
+
+</script>
+<script type="text/html" id="dd">
+
+<%
+
+	var List = data;
+	var i=0,Cur;
+	if (List.length>0) {
+
+		for(;Cur=List[i++];) {
+%>
+
+	<div data-hook="view" class="list-group-item pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+		<h4 class="name">[<%=Cur.Position%>] <strong><%=Cur.Address%></strong></h4>
+		<p><%=[Cur.Usage,Cur.Area+'㎡',Cur.Code].join(' , ')%></p>
+	</div>
+<%
+		}
+	}else{
+%>
+	<div class="alert alert-info" role="alert">
+		没有房产信息
+	</div>
+<%
+	}
+%>
+</script>
