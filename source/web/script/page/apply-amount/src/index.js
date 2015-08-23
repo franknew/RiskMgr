@@ -33,12 +33,6 @@ define(function(require, exports, module){
 			});
 			//this._setup(1);//测试，直进
 
-
-			$('#TEST').click(function(ev) {
-				ev.preventDefault();
-				var data = require('./test-data');
-				MOD.submit(data);
-			});
 		},
 		/** 开始进入填单流程
 		 * @param
@@ -66,13 +60,20 @@ define(function(require, exports, module){
 				container:'#J_Wizzard',
 				success:function() {
 					that.submit();
-				},
-				Assets:function() {
-					console.log('Property data::',Property.getData());
 				}
 			});
 
 			this._initEvent();
+
+
+			$('#TEST').click(function(ev) {
+				ev.preventDefault();
+				var data = require('./test-data');
+				console.log('ttt',data);
+				MOD.submit(data);
+			});
+
+
 		},
 		_initEvent:function() {
 			Customer.init();
