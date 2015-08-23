@@ -98,6 +98,8 @@ define(function(require, exports, module){
 			nav.find('[data-target]').removeClass(highlight);
 			nav.find('[data-target="'+setupID+'"]').addClass(highlight);
 			boxs.hide().filter('[id="'+setupID+'"]').show();
+
+			$(window).scrollTop(0);	//滚动到顶部
 		},
 		/** 根据按钮来和类型来显示指定setup
 		 * @param btn
