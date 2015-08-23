@@ -1,0 +1,63 @@
+<script type="text/html" id="SetupProperty">
+<div class="step-pane" id="Assets">
+	<div class="block-transparent">
+		<div class="header">
+			<h3>房产 <button type="button" class="btn btn-default" data-hook="property-import"><i class="fa fa-sign-in"></i> 导入现有房产</button></h3>
+		</div>
+		<div class="content">
+			<div class="list-group tickets" id="PropertyBase">
+				<%=this.PropertyItem(data)%>
+			</div>
+			<button type="button" class="btn btn-success" data-hook="property-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加房产&nbsp;&nbsp;</button>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="text-center col-sm-12">
+			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>&nbsp;&nbsp;
+			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>
+		</div>
+	</div>
+</div>
+</script>
+
+
+<script type="text/html" id="PropertyItem">
+	<div class="list-group-item">
+		<div class="j-property-form">
+			<%=data.propertyTpl%>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-2">&nbsp;</div>
+			<div class="col-sm-10"><button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>&nbsp;&nbsp;(房产共权人、保证人、配偶、辅助联系人、第三方借款人)</div>
+			<div class="col-sm-2">&nbsp;</div>
+			<div class="col-sm-10">
+				<table class="no-border j-property-joint" style="background-color:#fff;margin-top:10px; display:none;">
+					<thead class="no-border">
+						<tr>
+							<th>姓名</th>
+							<th>电话</th>
+							<th>证件号</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody class="no-border-x no-border-y">
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr style="border-bottom:1px dashed #dadada"/>
+		<div class="col-sm-offset-2">
+			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="PropertyJointItem">
+	<tr>
+		<td><input type="text" name="Name" placeholder="输入姓名" /></td>
+		<td><input type="text" name="Phone" placeholder="输入电话" /></td>
+		<td><input type="text" name="IdentityCode" placeholder="输入证件号" /></td>
+		<td><i class="pointer-item fa fa-times" data-hook="joint-remove"></i></td>
+	</tr>
+</script>

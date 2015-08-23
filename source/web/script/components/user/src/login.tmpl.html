@@ -1,0 +1,17 @@
+<script type="text/html" id="login">
+	<div class="content">
+		<%
+			if (data.message) {
+		%>
+		<div class="alert alert-info"><%=data.message%></div>
+		<%
+			}
+		%>
+		<div class="form-group">
+			<label>用户名</label> <input type="text" name="username" parsley-trigger="change" required="" placeholder="请输入用户名" class="form-control">
+		</div>
+		<div class="form-group">
+			<label>密码</label> <input type="password" name="password" parsley-trigger="change" required="" placeholder="请输入密码" class="form-control">
+		</div>
+	</div>
+</script>
