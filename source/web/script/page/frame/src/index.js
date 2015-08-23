@@ -70,6 +70,30 @@ define(function(require, exports, module){
 				});
 			}
 
+			//左侧导航
+			$(".cl-vnavigation li ul").each(function(){
+				$(this).parent().addClass("parent");
+			});
+			$(".cl-vnavigation li ul li.active").each(function(){
+				$(this).parent().show().parent().addClass("open");
+			});
+			$(".cl-vnavigation").delegate(".parent > a","click",function(e){
+				$(".cl-vnavigation .parent.open > ul").not($(this).parent().find("ul")).slideUp(300, 'swing',function(){
+					$(this).parent().removeClass("open");
+				});
+
+				var ul = $(this).parent().find("ul");
+				ul.slideToggle(300, 'swing', function () {
+					var p = $(this).parent();
+					if(p.hasClass("open")){
+						p.removeClass("open");
+					}else{
+						p.addClass("open");
+					}
+				});
+				e.preventDefault();
+			});
+
 			//初始化路由
 			route.init({
 				header:'#J_Header',

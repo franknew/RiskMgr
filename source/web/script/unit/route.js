@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-08 22:12:16
  * @version $Id$
@@ -36,7 +36,7 @@ define(function(require, exports, module) {
 
 			this.container = $(conf.container||'body');
 			this.head = $(conf.header);
-			
+
 			this._initIndex();
 			this._initEvent();
 		},
@@ -76,17 +76,21 @@ define(function(require, exports, module) {
 		},
 		//加载指定的模块
 		load:function(modname) {
+			var reg = new RegExp('\b'+modname+'\b','');
+			if (!reg.test(location.hash)) {	//填上当前页的mod
+				location.hash = modname;
+			}
 			var modinfo = this._getMod(modname);
 			this._load(modinfo);
 		},
 		/** 获取当前展示的模块url id
-		 * @param 
+		 * @param
 		 */
 		getCurrent:function() {
 			return _CURRENT;
 		},
 		/** 绑定事件
-		 * @param 
+		 * @param
 		 */
 		on:function(events,hook,func) {
 			var selector = '[data-hook='+hook+']';
@@ -94,7 +98,7 @@ define(function(require, exports, module) {
 
 			return this;
 		},
-		/** 
+		/**
 		 * @param url 需要解析的完整url
 		 */
 		_getMod:function(url) {
@@ -135,16 +139,19 @@ define(function(require, exports, module) {
 			action = action || conf.defaultAction;
 
 			this._showLoading();
-			url && require.async(url,function(m){
-				_CURRENT = url;
-				var fn = m && m[action];
-				
-				if (fn) {
-					fn.call(m,that);
-				}else{
-					that._show404();
-				}
-			});
+
+			if (url) {
+				require.async(url,function(m){
+					_CURRENT = url;
+					var fn = m && m[action];
+
+					if (fn) {
+						fn.call(m,that);
+					}else{
+						that._show404();
+					}
+				});
+			}
 		},
 		_showLoading:function() {
 			var conf = this._config(),
@@ -159,16 +166,16 @@ define(function(require, exports, module) {
 			this.show(conf['404']);
 		},
 		/** 初始页显示
-		 * @param 
+		 * @param
 		 */
 		_initIndex:function() {
 			var conf = this._config(),
 				modinfo = this._getMod(location.href) || this._getMod(conf.index);
-			
+
 			this._load(modinfo);
 		},
 		/** 初始化事件绑定
-		 * @param 
+		 * @param
 		 */
 		_initEvent:function (){
 			var hasHashChangeEvent = 'onhashchange' in window,
@@ -193,12 +200,12 @@ define(function(require, exports, module) {
 			}
 		},
 		/** 配置项的读、写
-		 * @param 
+		 * @param
 		 */
 		_config:function(key,val){
 			var rs = _CONFIG,
 				argLen = arguments.length;
-			
+
 			if(argLen>1) {	//set
 				rs[key] = val;
 			}else if(argLen==1) {	//get
@@ -208,6 +215,6 @@ define(function(require, exports, module) {
 			return rs;
 		}
 	};
-	
+
 	return MOD;
 });

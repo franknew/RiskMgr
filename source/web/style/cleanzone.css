@@ -943,6 +943,9 @@ body.modal-open,
   padding: 0;
   padding-top: 4px;
 }
+.cl-vnavigation li.open ul {
+  display: inherit;
+}
 .cl-vnavigation .parent ul li:last-child {
   padding-bottom: 13px;
 }
@@ -2155,7 +2158,6 @@ table thead th span {
   color: #333;
 }
 table thead th {
-  vertical-align: bottom;
   border-bottom: 1px solid #DADADA;
   border-left: 1px solid #DADADA;
   border-top: 1px solid #DADADA;

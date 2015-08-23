@@ -1,0 +1,119 @@
+<!--
+包含list页所需所有tmpl
+-->
+<script type="text/html" id="list">
+<div class="spacer spacer-bottom">
+	<a href="#page=trade/apply" class="btn btn-primary">申请额度</a>
+</div>
+
+<div class="block-flat">
+	<%=this.ListContainer()%>
+</div>
+</script>
+
+<script type="text/html" id="ListContainer">
+	<form class="form-inline" id="J_SearchForm">
+		<div class="form-group">
+			<label>客户姓名</label>
+			<input type="text" name="Name" class="form-control" placeholder="">
+		</div>
+		<div class="form-group">
+			<label>房产证号</label>
+			<input type="text" name="IdentityCode" class="form-control" placeholder="">
+		</div>
+		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>
+	</form>
+	<hr/>
+	<div id="ListContainer">
+		<div class="loading">Loading...</div>
+	</div>
+</script>
+
+<script type="text/html" id="ListBox">
+	<table class="no-border">
+		<thead class="no-border">
+			<tr>
+				<th rowspan="2">编号</th>
+				<th rowspan="2">业务员</th>
+				<th colspan="2" class="text-center">客户信息</th>
+				<th rowspan="2">收费状态</th>
+				<th rowspan="2">返佣状态</th>
+				<th rowspan="2">尾款状态</th>
+				<th rowspan="2">当前进度</th>
+				<th colspan="2" class="text-center">房产信息</th>
+			</tr>
+			<tr>
+				<th>姓名</th>
+				<th>证件号</th>
+				<th>房产证号</th>
+				<th>地址</th>
+			</tr>
+		</thead>
+		<tbody class="no-border-x no-border-y" id="J_ListBox">
+			<%=this.ListItem(data)%>
+		</tbody>
+	</table>
+
+	<div class="j-pager"></div>
+
+</script>
+
+<script type="text/html" id="ListItem">
+<%
+	var List = data||[];
+	var ShowInfos = ['Name','Phone','IdentityCode','Address'];
+
+	var i=0,Cur;
+	if (List.length>0) {
+
+		for(;Cur=List[i++];) {
+%>
+	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+		<td>SN00001</td>
+		<td>ye wu yuan</td>
+		<td colspan="2">
+			<table class="no-strip"><tr>
+				<td>李振文</td>
+				<td>430611198765432123</td>
+			</tr><tr>
+				<td>赵兰琴</td>
+				<td>515151515141414141</td>
+			</tr></table>
+		</td>
+		<td>已收费</td>
+		<td>已返佣</td>
+		<td>已退尾款</td>
+		<td>总经理审核中</td>
+		<td>20001234</td>
+		<td>福田区深圳市景田西路赛格景苑A802</td>
+	</tr>
+<%
+		}
+	}else{
+%>
+	<tr>
+	<td colspan="<%=ShowInfos.length%>">
+		<div class="alert alert-info" role="alert">没有客户信息</div>
+	</td>
+	</tr>
+<%
+	}
+%>
+</script>
+
+<script type="text/html" id="bak">
+
+	<!--
+	<div class="list-group tickets" id="J_ListBox">
+		<%=this.ListItem(data)%>
+	</div>
+	-->
+	<!--
+	<div data-hook="view" class="list-group-item pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+		<span class="label label-default pull-right"><%=Cur.Role%></span>
+		<h4 class="name"><strong><%=Cur.Name%></strong></h4>
+		<p><%=Cur.Phone||'&nbsp;'%></p>
+		<p><%=Cur.Address||'&nbsp;'%></p>
+	</div>
+	-->
+</script>
