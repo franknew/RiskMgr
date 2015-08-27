@@ -6,7 +6,7 @@ using SOAFramework.Library.DAL;
 
 namespace RiskMgr.Model
 {
-    public class Asset : SimpleEntity
+    public partial class Asset : SimpleEntity
     {
         /// <summary>
         /// 

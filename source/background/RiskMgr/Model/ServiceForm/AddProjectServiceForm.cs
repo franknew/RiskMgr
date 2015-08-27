@@ -26,7 +26,7 @@ namespace RiskMgr.Form
         /// <summary>
         /// 房产ID
         /// </summary>
-        public List<Customer> Assets { get; set; }
+        public List<Asset> Assets { get; set; }
 
         public List<Customer_Asset> Customer_Assset { get; set; }
 
