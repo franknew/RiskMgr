@@ -1,4 +1,5 @@
 ﻿using IBatisNet.DataMapper;
+using SOAFramework.Library;
 using SOAFramework.Service.Core.Model;
 using System;
 using System.Collections.Generic;
@@ -13,22 +14,31 @@ namespace RiskMgr.Api
         public override bool OnActionExecuting(ActionContext context)
         {
             ISqlMapper mapper = Mapper.Instance();
-            context.Parameters["Mapper"] = mapper;
-            mapper.BeginTransaction();
+            if (!mapper.IsSessionStarted)
+            {
+                mapper.BeginTransaction();
+            }
+            context.Parameters["_Mapper"] = mapper;
             return base.OnActionExecuting(context);
         }
 
         public override bool OnActionExecuted(ActionContext context)
         {
-            ISqlMapper mapper = context.Parameters["Mapper"] as ISqlMapper;
-            mapper.CommitTransaction();
+            ISqlMapper mapper = context.Parameters["_Mapper"] as ISqlMapper;
+            if (mapper.IsSessionStarted)
+            {
+                mapper.CommitTransaction();
+            }
             return base.OnActionExecuted(context);
         }
 
         public override void OnExceptionOccurs(ActionContext context)
         {
-            ISqlMapper mapper = context.Parameters["Mapper"] as ISqlMapper;
-            mapper.RollBackTransaction();
+            ISqlMapper mapper = context.Parameters["_Mapper"] as ISqlMapper;
+            if (mapper.IsSessionStarted)
+            {
+                mapper.RollBackTransaction();
+            }
             base.OnExceptionOccurs(context);
         }
     }

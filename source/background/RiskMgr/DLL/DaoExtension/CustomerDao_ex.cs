@@ -12,7 +12,7 @@ namespace RiskMgr.DAL
     {
         public bool CheckIdentityCode(CustomerQueryForm form)
         {
-            return Mapper.QueryForObject<bool>("CheckIdentityCodeExists", form);
+            return Mapper.QueryForList<Customer>("CheckIdentityCodeExists", form).Count > 0;
         }
     }
 }

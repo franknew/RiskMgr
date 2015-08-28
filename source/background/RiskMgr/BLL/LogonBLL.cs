@@ -11,6 +11,7 @@ using System.Runtime.Caching;
 using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using SOAFramework.Library;
 
 namespace RiskMgr.BLL
 {
@@ -20,15 +21,7 @@ namespace RiskMgr.BLL
 
         public LogonResultForm Logon(string username, string password)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            var mapper = Common.GetMapperFromSession();
             LogonResultForm result = new LogonResultForm();
             UserDao userdao = new UserDao(mapper);
             UserInfoDao userInfoDao = new UserInfoDao(mapper);
@@ -60,8 +53,6 @@ namespace RiskMgr.BLL
                     UserID = users[0].ID,
                     ActiveTime = DateTime.Now,
                 };
-                //var endpoint = ServiceSession.Current.Context.Context.IncomingMessageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-                //history.IP = endpoint.Address;
                 historyDao.Add(history);
                 result.token = token;
                 cache.AddItem(item, 30 * 60);

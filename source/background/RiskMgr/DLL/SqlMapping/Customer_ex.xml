@@ -2,12 +2,11 @@
 <sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
   <statements>
     <select id="CheckIdentityCodeExists" resultClass="bool" parameterClass="CustomerQueryForm">
-      SELECT EXISTS(SELECT 1 FROM Customr WHERE IdentityCode=#IdentityCode# AND Enabled=1
+      SELECT * FROM Customer WHERE IdentityCode=#IdentityCode# AND Enabled=1
 
       <isNotNull prepend="AND" property="ID">
       ID!=#ID#
     </isNotNull>
-      )
     </select>
   </statements>
 </sqlMap>

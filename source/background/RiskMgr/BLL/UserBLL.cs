@@ -11,6 +11,7 @@ using System.Runtime.Caching;
 using System.Text;
 using SOAFramework.Service.Core;
 using DreamWorkflow.Engine;
+using SOAFramework.Library;
 
 namespace RiskMgr.BLL
 {
@@ -76,16 +77,7 @@ namespace RiskMgr.BLL
 
         public string Add(User user, UserInfo ui, User_Role role)
         {
-            var userinfo = GetCurrentUser();
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             if (user == null)
             {
                 throw new Exception("user不能为null！");
@@ -115,15 +107,7 @@ namespace RiskMgr.BLL
 
         public bool Update(User user, UserInfo ui, string role)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             if (user != null)
             {
                 UserDao dao = new UserDao(mapper);
@@ -154,15 +138,7 @@ namespace RiskMgr.BLL
 
         public bool Delete(UserQueryForm user)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             UserDao userdao = new UserDao(mapper);
             User_RoleDao urdao = new User_RoleDao(mapper);
             UserInfoDao uidao = new UserInfoDao(mapper);
@@ -189,15 +165,7 @@ namespace RiskMgr.BLL
 
         public bool ChangePassword(ChangePasswordUpdateForm form)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             UserDao dao = new UserDao(mapper);
             User user = new User
             {
@@ -210,15 +178,7 @@ namespace RiskMgr.BLL
 
         public bool ChangeSelfPassword(ChangePasswordUpdateForm form)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             UserDao dao = new UserDao(mapper);
             var userList = dao.Query(new UserQueryForm { ID = form.UserID, Password = form.OldPassword });
             if (userList == null || userList.Count == 0)
@@ -240,15 +200,7 @@ namespace RiskMgr.BLL
         /// <returns></returns>
         public List<FullUser> Query(FullUserQueryForm form)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             FullUserDao dao = new FullUserDao(mapper);
             var userlist = dao.Query(form);
 
@@ -262,15 +214,7 @@ namespace RiskMgr.BLL
         /// <returns></returns>
         public int CheckUserAuth(string token)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             //验证有没有登录
             UserEntireInfo user = GetUserEntireInfoFromCache(token);
             if (user == null)
@@ -288,48 +232,51 @@ namespace RiskMgr.BLL
                 Entity = new LogonHistory { ActiveTime = DateTime.Now },
                 LogonHistoryQueryForm = new LogonHistoryQueryForm { Token = token },
             });
-            //验证有没有权限访问
-            var attr = ServiceSession.Current.Method.GetCustomAttribute<BaseActionAttribute>(true);
-            if (attr != null)
+            if (ServiceSession.Current != null)
             {
-                string actionName = attr.Action;
-                var servicelayer = ServiceSession.Current.Method.DeclaringType.GetCustomAttribute<ServiceLayer>(true);
-                if (servicelayer != null)
+                //验证有没有权限访问
+                var attr = ServiceSession.Current.Method.GetCustomAttribute<BaseActionAttribute>(true);
+                if (attr != null)
                 {
-                    string moduleName = servicelayer.Module;
-                    var modules = TableCacheHelper.GetDataFromCache<Module>(typeof(ModuleDao));
-                    var actions = TableCacheHelper.GetDataFromCache<RiskMgr.Model.Action>(typeof(ActionDao));
-                    Role_Module_ActionDao dao = new Role_Module_ActionDao();
-                    var module = modules.Find(t => t.Name == moduleName);
-                    var action = actions.Find(t => t.Name == actionName);
-                    if (module == null)
+                    string actionName = attr.Action;
+                    var servicelayer = ServiceSession.Current.Method.DeclaringType.GetCustomAttribute<ServiceLayer>(true);
+                    if (servicelayer != null)
                     {
-                        return -1;
-                    }
-                    if (action == null)
-                    {
-                        return -1;
-                    }
-                    string actionID = action.ID;
-                    string moduleID = module.ID;
-                    Role_Module_ActionQueryForm query = new Role_Module_ActionQueryForm
-                    {
-                        ActionID = actionID,
-                        ModuleID = moduleID
-                    };
-                    var role_module_action = dao.Query(query);
-                    bool hasRight = false;
-                    foreach (var item in role_module_action)
-                    {
-                        if (user.Role != null && user.Role.Exists(t => t.ID == item.RoleID))
+                        string moduleName = servicelayer.Module;
+                        var modules = TableCacheHelper.GetDataFromCache<Module>(typeof(ModuleDao));
+                        var actions = TableCacheHelper.GetDataFromCache<RiskMgr.Model.Action>(typeof(ActionDao));
+                        Role_Module_ActionDao dao = new Role_Module_ActionDao(mapper);
+                        var module = modules.Find(t => t.Name == moduleName);
+                        var action = actions.Find(t => t.Name == actionName);
+                        if (module == null)
                         {
-                            hasRight = true;
-                            break;
+                            return -1;
                         }
-                    }
-                    if (!hasRight)
-                    {
-                        return 4;
+                        if (action == null)
+                        {
+                            return -1;
+                        }
+                        string actionID = action.ID;
+                        string moduleID = module.ID;
+                        Role_Module_ActionQueryForm query = new Role_Module_ActionQueryForm
+                        {
+                            ActionID = actionID,
+                            ModuleID = moduleID
+                        };
+                        var role_module_action = dao.Query(query);
+                        bool hasRight = false;
+                        foreach (var item in role_module_action)
+                        {
+                            if (user.Role != null && user.Role.Exists(t => t.ID == item.RoleID))
+                            {
+                                hasRight = true;
+                                break;
+                            }
+                        }
+                        if (!hasRight)
+                        {
+                            return 4;
+                        }
                     }
                 }
             }

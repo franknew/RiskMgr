@@ -32,6 +32,17 @@ namespace RiskMgr.Api
                 foreach (var a in form.Assets)
                 {
                     assets.Add(new Asset_Project { AssetID = a.ID });
+                    //处理公权人
+                    if (a.Joint != null)
+                    {
+                        foreach (var third in a.Joint)
+                        {
+                            if (!updateCustomers.Exists(t => t.IdentityCode.Equals(third.IdentityCode)))
+                            {
+                                updateCustomers.Add(third);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -41,10 +52,6 @@ namespace RiskMgr.Api
             if (form.Buyers != null)
             {
                 updateCustomers.AddRange(form.Buyers);
-            }
-            if (form.ThirdPart != null)
-            {
-                updateCustomers.AddRange(form.ThirdPart);
             }
             if (form.Sellers != null)
             {

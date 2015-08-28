@@ -1,5 +1,6 @@
 ﻿
 using DreamWorkflow.Engine;
+using IBatisNet.DataMapper;
 using RiskMgr.DAL;
 using RiskMgr.Form;
 using RiskMgr.Model;
@@ -20,7 +21,8 @@ namespace RiskMgr.BLL
 
         public List<Menu> GetAllMenu()
         {
-            MenuDao dao = new MenuDao();
+            ISqlMapper mapper = Common.GetMapperFromSession();
+            MenuDao dao = new MenuDao(mapper);
 
             List<Menu> list = TableCacheHelper.GetDataFromCache<Menu>(typeof(MenuDao));
 
@@ -33,8 +35,9 @@ namespace RiskMgr.BLL
             {
                 token = ServiceSession.Current.Context.Parameters["token"].ToString();
             }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             UserBLL userbll = new UserBLL();
-            Menu_RoleDao dao = new Menu_RoleDao();
+            Menu_RoleDao dao = new Menu_RoleDao(mapper);
             UserEntireInfo u = userbll.GetUserFormCache(token);
             if (u == null)
             {
