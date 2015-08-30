@@ -1,13 +1,11 @@
 <script type="text/html" id="Setup">
-<%
-	data = data || {};
-%>
 <div class="col-md-12">
 <button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>
-
 	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">
 		<ul class="wizard-steps">
-			<li data-target="setup0">选择类型<span class="chevron"></span></li>
+			<%if (data.mode=='add') {%>
+			<li>选择类型<span class="chevron"></span></li>
+			<%}%>
 			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>
 			<li data-target="Assets">房产信息<span class="chevron"></span></li>
 			<li data-target="Project">项目信息<span class="chevron"></span></li>
@@ -18,6 +16,5 @@
 			<%=this.SetupProject(data)%>
 		</div>
 	</form>
-
 </div>
 </script>

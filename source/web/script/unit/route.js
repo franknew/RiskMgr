@@ -5,7 +5,8 @@
  * @version $Id$
  */
 define(function(require, exports, module) {
-	var $ = require('jquery');
+	var $ = require('jquery'),
+		URI = require('./uri');
 
 	var _CONFIG = {	//初始配置
 			//loading:'<h3 class="text-center">Loading...</h3>',
@@ -80,6 +81,7 @@ define(function(require, exports, module) {
 			if (!reg.test(location.hash)) {	//填上当前页的mod
 				location.hash = modname;
 			}
+
 			var modinfo = this._getMod(modname);
 			this._load(modinfo);
 		},
@@ -107,21 +109,19 @@ define(function(require, exports, module) {
 				rs;
 
 			var hashIdx = url.indexOf('#');
-				hashIdx = hashIdx===-1?0:hashIdx; //没有hash时默认找全字符串
+				hashIdx = hashIdx===-1?0:hashIdx+1; //没有hash时默认找全字符串
 
-			var modinfo= url.substr(hashIdx).match(/\bpage=([^=&]+)(?:\&action=([^=&]+)\b|\b)/),
-				page = modinfo && modinfo[1],
-				act = modinfo && modinfo[2];
+			var hash = url.substr(hashIdx),
+				uri = URI('http://www.com/?'+hash),
+				params = uri.params || {},
+				page = params.page;
 
 			if (filter && page) {
-				page=filter(page);
+				params.page = page = filter(page);
 			}
 
 			if (page) {
-				rs = {
-					page:page,
-					action:act
-				};
+				rs = uri.params || {};
 			}
 
 			return rs;
@@ -146,7 +146,7 @@ define(function(require, exports, module) {
 					var fn = m && m[action];
 
 					if (fn) {
-						fn.call(m,that);
+						fn.call(m,modinfo,that);
 					}else{
 						that._show404();
 					}

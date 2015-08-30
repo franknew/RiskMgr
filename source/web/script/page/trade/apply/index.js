@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/unit/serialize","risk/page/customer/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
+define(["jquery","risk/unit/ajax","risk/components/msg/index","risk/components/modal/index","risk/unit/route","risk/components/former/index","risk/unit/serialize","risk/page/customer/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -31,35 +31,39 @@ define.pack = function(){
 };
 })();
 //all file list:
-//apply-amount/src/autoComplete.js
-//apply-amount/src/index.js
-//apply-amount/src/setup.customer.js
-//apply-amount/src/setup.project.js
-//apply-amount/src/setup.property.js
-//apply-amount/src/test-data.js
-//apply-amount/src/tpl.project.base.js
-//apply-amount/src/tpl.project.newloan.js
-//apply-amount/src/tpl.project.ransombank.js
-//apply-amount/src/tpl.project.ransomway.js
-//apply-amount/src/wizzard.js
-//apply-amount/src/choose.tmpl.html
-//apply-amount/src/setup.customer.tmpl.html
-//apply-amount/src/setup.project.tmpl.html
-//apply-amount/src/setup.property.tmpl.html
-//apply-amount/src/setup.tmpl.html
+//apply/src/autoComplete.js
+//apply/src/data.js
+//apply/src/index.js
+//apply/src/setup.customer.js
+//apply/src/setup.project.js
+//apply/src/setup.property.js
+//apply/src/test-data.js
+//apply/src/tpl.project.base.js
+//apply/src/tpl.project.newloan.js
+//apply/src/tpl.project.ransombank.js
+//apply/src/tpl.project.ransomway.js
+//apply/src/view.js
+//apply/src/wizzard.js
+//apply/src/choose.tmpl.html
+//apply/src/setup.customer.tmpl.html
+//apply/src/setup.project.tmpl.html
+//apply/src/setup.property.tmpl.html
+//apply/src/setup.tmpl.html
 
 //js file list:
-//apply-amount/src/autoComplete.js
-//apply-amount/src/index.js
-//apply-amount/src/setup.customer.js
-//apply-amount/src/setup.project.js
-//apply-amount/src/setup.property.js
-//apply-amount/src/test-data.js
-//apply-amount/src/tpl.project.base.js
-//apply-amount/src/tpl.project.newloan.js
-//apply-amount/src/tpl.project.ransombank.js
-//apply-amount/src/tpl.project.ransomway.js
-//apply-amount/src/wizzard.js
+//apply/src/autoComplete.js
+//apply/src/data.js
+//apply/src/index.js
+//apply/src/setup.customer.js
+//apply/src/setup.project.js
+//apply/src/setup.property.js
+//apply/src/test-data.js
+//apply/src/tpl.project.base.js
+//apply/src/tpl.project.newloan.js
+//apply/src/tpl.project.ransombank.js
+//apply/src/tpl.project.ransomway.js
+//apply/src/view.js
+//apply/src/wizzard.js
 /**
  * 用户输入关键字段时，查找已知数据，自动补齐
  * @authors viktorli (i@lizhenwen.com)
@@ -141,118 +145,91 @@ define.pack("./autoComplete",["jquery","risk/unit/ajax"],function(require, expor
 
 	return autoComplete;
 });/**
- * 申请额度
+ * 获取数据
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-08-29 16:07:24
+ */
+
+define.pack("./data",["jquery","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax"],function(require, exports, module){
+	var $ = require('jquery'),
+		msg = require('risk/components/msg/index'),
+		Modal = require('risk/components/modal/index'),
+		Ajax = require('risk/unit/ajax');
+
+	var MOD = {
+		get:function(id,callback) {
+			require.async('./test-data',function(d) {
+				callback(d);
+			});
+		}
+	};
+
+	return MOD;
+});/**
+ * 申请额度主入口
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./index",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.project","./test-data"],function(require, exports, module){
+define.pack("./index",["jquery","risk/unit/route","./tmpl","./view","./data"],function(require, exports, module){
 
 	var $ = require('jquery'),
-		route = require('risk/unit/route'),
-		msg = require('risk/components/msg/index'),
-		Modal = require('risk/components/modal/index'),
-		Ajax = require('risk/unit/ajax'),
+		Route = require('risk/unit/route'),
 		Tmpl = require('./tmpl'),
-		Wizzard = require('./wizzard');
-
-	var Customer = require('./setup.customer'),
-		Property = require('./setup.property'),
-		Project = require('./setup.project');
+		Views = require('./view');
 
 	var MOD = {
-		initPage:function() {
+		initPage:function(params) {
+			this.add(params);
+		},
+		add:function(params) {
 			var html = Tmpl.choose();
-			route.show({
+			Route.show({
 				head:'申请额度',
 				content:html
 			});
 
-			route.on('click','choose-type',function(ev) {
+			Route.on('click','choose-type',function(ev) {
 				var elem = $(ev.currentTarget),
-					type = elem.data('type');
-				MOD._setup(type);
-			});
-			//this._setup(1);//测试，直进
+					type = elem.data('type'),
+					subHead = {
+						'1':'二手楼买卖交易',
+						'2':'首期款垫付',
+						'3':'现金赎楼',
+						'4':'红本抵押'
+					}[type],
+					head = '申请额度 <small>'+subHead+'</small>';
 
-		},
-		/** 开始进入填单流程
-		 * @param
-		 */
-		_setup:function(type) {
-			var typeName = {
-				'1':'二手楼买卖交易',
-				'2':'首期款垫付',
-				'3':'现金赎楼',
-				'4':'红本抵押'
-			}[type];
-
-			var that = this;
-			var html = Tmpl.Setup({
-				customerTpl:Customer.getTpl(),
-				propertyTpl:Property.getTpl(),
-				projectTpl:Project.getTpl()
-			});
-			route.show({
-				head:'申请额度 <small>'+typeName+'</small>',
-				content:html
-			});
-
-			Wizzard.init({
-				container:'#J_Wizzard',
-				success:function() {
-					that.submit();
-				}
-			});
-
-			this._initEvent();
-
-
-			$('#TEST').click(function(ev) {
-				ev.preventDefault();
-				var data = require('./test-data');
-				console.log('ttt',data);
-				MOD.submit(data);
-			});
-
-
-		},
-		_initEvent:function() {
-			Customer.init();
-			Property.init();
-			Project.init();
-
-			route.on('click','cancel',function(ev) {//取消按钮
-				ev.preventDefault();
-				Modal.show({
-					content:'您填写的表单将不会被保存，是否要取消？',
-					okValue:'确认取消',
-					ok:function() {
-						route.load('page=apply-amount');
-					},
-					cancelValue:'不取消'
+				Views.init({
+					mode:'add',
+					head:head
 				});
 			});
 		},
-		submit:function(data_test) {
-			var dataCustomer = Customer.getData();
-			var data = {
-				Buyers:dataCustomer.buyer,
-				Sellers:dataCustomer.seller,
-				Assets:Property.getData(),
-				Project:Project.getData()
-			};
+		edit:function(params) {
+			this._shown(params);
+		},
+		view:function(params) {
+			this._shown(params);
+		},
+		_shown:function(params) {
+			var mode = params.action;
+			var html = '<div class="loading">Loading...</div>',
+				head = {
+					'edit':'额度编辑',
+					'view':'额度查看'
+				}[mode];
+			Route.show({
+				head:head,
+				content:html
+			});
 
-			if (data_test) {//使用测试数据
-				data = data_test;
-			}
-
-			Ajax.post({
-				url:'RiskMgr.Api.ProjectApi/Add',
-				data:data,
-				success:function(data, textStatus, jqXHR) {
-					msg.success('申请成功');
-				}
+			require('./data').get(params.id,function(data) {
+				Views.init({
+					mode:params.action,
+					head:head+'<small>('+data.id+')</small>',
+					data:data
+				})
 			});
 		}
 	};
@@ -281,8 +258,11 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 	var CORE_NAME = ['Name','IdentityCode','CardType'];
 
 	var MOD = {
-		getTpl:function(data) {
-			var tpl = former.make(CustomerFormTpl,{data:data});
+		getTpl:function(data,canEdit) {
+			var tpl = former.make(CustomerFormTpl,{
+				data:data,
+				disabled:!canEdit
+			});
 
 			return tpl;
 		},
@@ -354,9 +334,10 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 		},
 		add:function(box,data) {
 			box = $(box);
-			var tpl = this.getTpl(data),
-				html = Tmpl.CustomerItem({
-					customerTpl:tpl
+			var html = Tmpl.CustomerItem({
+					tpl:this.getTpl,
+					data:data,
+					canEdit:true
 				});
 
 			html = $(html);
@@ -397,12 +378,12 @@ define.pack("./setup.project",["risk/unit/serialize","risk/components/former/ind
 		}];
 
 	var MOD = {
-		getTpl:function(data) {
+		getTpl:function(data,canEdit) {
 			var list = FormList,
 				html = [];
 			var i=0,cur,curHtml;
 			for(;cur=list[i++];) {
-				curHtml = '<div class="well"><div class="header"><h4>'+cur.name+'</h4></div>'+former.make(cur.tpl,{data:data})+'</div>';
+				curHtml = '<div class="well"><div class="header"><h4>'+cur.name+'</h4></div>'+former.make(cur.tpl,{data:data,disabled:!canEdit})+'</div>';
 				html.push(curHtml);
 			}
 
@@ -441,8 +422,11 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 	var CORE_NAME = ['Code'];
 
 	var MOD = {
-		getTpl:function(data) {
-			var tpl = former.make(PropertyTpl,{data:data});
+		getTpl:function(data,canEdit) {
+			var tpl = former.make(PropertyTpl,{
+				data:data,
+				disabled:!canEdit
+			});
 			return tpl;
 		},
 		getData:function() {
@@ -499,7 +483,7 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 				ev.preventDefault();
 				var btn = $(ev.currentTarget),
 					container = btn.parents('.form-group:first').find('.j-property-joint');
-				console.log(container);
+
 				MOD.addJoint(container);
 			}).on('click','joint-remove',function(ev) {//移除共权人
 				ev.preventDefault();
@@ -529,7 +513,9 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 			box = $(box);
 
 			var html = Tmpl.PropertyItem({
-					propertyTpl:this.getTpl(data)
+					tpl:this.getTpl,
+					data:data,
+					canEdit:true
 				});
 
 			html = $(html);
@@ -543,7 +529,9 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 		},
 		addJoint:function(table) {
 			table = $(table);
-			var html = Tmpl.PropertyJointItem(),
+			var html = Tmpl.PropertyJointItem({
+					canEdit:true
+				}),
 				item = $(html).appendTo(table.find('tbody:first'));
 
 			table.show();
@@ -1282,6 +1270,110 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 
 	return MOD;
 });/**
+ * 申请额度表单视图
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-15 21:41:52
+ */
+
+define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.project","./test-data"],function(require, exports, module){
+
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
+		msg = require('risk/components/msg/index'),
+		Modal = require('risk/components/modal/index'),
+		Ajax = require('risk/unit/ajax'),
+		Tmpl = require('./tmpl'),
+		Wizzard = require('./wizzard');
+
+	var Customer = require('./setup.customer'),
+		Property = require('./setup.property'),
+		Project = require('./setup.project');
+
+	var MOD = {
+		/**
+		 * @param opts {Object} 配置项：
+			mode:模式，可选有add、edit、view
+			head:标题文本
+			data:表单数据
+		 */
+		init:function(opts) {
+			var mode = opts.mode,
+				data = opts.data,
+				head = opts.head;
+
+			var that = this;
+			var html = Tmpl.Setup({
+				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
+				propertyTpl:Property.getTpl,
+				projectTpl:Project.getTpl,
+				data:data,
+				mode:mode,
+				canEdit:!!~$.inArray(mode, ['add','edit'])
+			});
+			route.show({
+				head:head,
+				content:html
+			});
+
+			Wizzard.init({
+				container:'#J_Wizzard',
+				success:function() {
+					that.submit(mode);
+				}
+			});
+
+			this._initEvent();
+
+
+			$('#TEST').click(function(ev) {
+				ev.preventDefault();
+				var data = require('./test-data');
+				console.log('ttt',data);
+				MOD.submit(mode,data);
+			});
+		},
+		_initEvent:function() {
+			Customer.init();
+			Property.init();
+			Project.init();
+
+			route.on('click','cancel',function(ev) {//取消按钮
+				ev.preventDefault();
+				Modal.show({
+					content:'您填写的表单将不会被保存，是否要取消？',
+					okValue:'确认取消',
+					ok:function() {
+						route.load('page=apply-amount');
+					},
+					cancelValue:'不取消'
+				});
+			});
+		},
+		submit:function(mode,data) {
+			var dataCustomer = Customer.getData();
+			var data = {
+				Buyers:dataCustomer.buyer,
+				Sellers:dataCustomer.seller,
+				Assets:Property.getData(),
+				Project:Project.getData()
+			};
+
+			if (data) {//使用测试数据
+				data = data;
+			}
+
+			Ajax.post({
+				url:'RiskMgr.Api.ProjectApi/Add',
+				data:data,
+				success:function(data, textStatus, jqXHR) {
+					msg.success('申请成功');
+				}
+			});
+		}
+	};
+
+	return MOD;
+});/**
  * 向导类表单
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-29 15:47:29
@@ -1299,6 +1391,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 				highlight:'active'	//导航栏高亮className
 				//,container:''	//主容器，如果需要校验表单，则需保证该容器为form
 				,nav:'.wizard-steps'	//导航
+				,navHook:'data-target'	//导航的data属性
 				,setup:'.step-pane'	//每一个setup的选择器
 				,btnNext:'.wizard-next'	//下一步按钮的选择器
 				,btnPrev:'.wizard-previous'	//上一步按钮的选择器
@@ -1326,7 +1419,31 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 			return this;
 		},
 		_success:function() {
-			var conf = this._config();
+			var conf = this._config(),
+				setups = (function(nav,hook) {
+					var rs = [];
+					nav.find('['+hook+']').each(function(i,elem) {
+						rs.push($(elem).attr(hook));
+					});
+					return rs;
+				})(this.nav,conf.navHook);
+			var i=0, l = setups.length,
+				notValidate,
+				setupNotValid = null;
+			for(; i < l; ++i) {
+				if (!this.parsley.validateElements($('#'+setups[i]).find(':input'))) {
+					notValidate = true;
+					if (!setupNotValid) {
+						setupNotValid = setups[i];
+					}
+				}
+			}
+
+			if (notValidate) {
+				this._show(setupNotValid);
+				return ;
+			}
+
 			conf.success && conf.success();
 		},
 		_initBox:function() {
@@ -1368,6 +1485,13 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 				var btn = $(ev.currentTarget);
 				that._showByButton(btn,'prev');
 			});
+
+			this.nav.on('click','['+conf.navHook+']',function(ev) {
+				ev.preventDefault();
+				var elem = $(ev.currentTarget),
+					setup = elem.attr(conf.navHook);
+				that._show(setup);
+			});
 		},
 		/** 根据setup的ID来显示
 		 * @param setupID {Selector} 需要显示的setup id
@@ -1378,8 +1502,8 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 				nav = this.nav,
 				boxs = this.container.find(conf.setup);
 
-			nav.find('[data-target]').removeClass(highlight);
-			nav.find('[data-target="'+setupID+'"]').addClass(highlight);
+			nav.find('['+conf.navHook+']').removeClass(highlight);
+			nav.find('['+conf.navHook+'="'+setupID+'"]').addClass(highlight);
 			boxs.hide().filter('[id="'+setupID+'"]').show();
 
 			$(window).scrollTop(0);	//滚动到顶部
@@ -1448,11 +1572,11 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 	return MOD;
 });
 //tmpl file list:
-//apply-amount/src/choose.tmpl.html
-//apply-amount/src/setup.customer.tmpl.html
-//apply-amount/src/setup.project.tmpl.html
-//apply-amount/src/setup.property.tmpl.html
-//apply-amount/src/setup.tmpl.html
+//apply/src/choose.tmpl.html
+//apply/src/setup.customer.tmpl.html
+//apply/src/setup.project.tmpl.html
+//apply/src/setup.property.tmpl.html
+//apply/src/setup.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'choose': function(data){
@@ -1466,11 +1590,48 @@ return __p.join("");
 'SetupCustomer': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<div class="step-pane" id="Customer">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>买家 <button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button></h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="BuyerList">');
-_p(this.CustomerItem(data));
-__p.push('				</div>\n				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加买家&nbsp;&nbsp;</button>\n			</div>\n		</div>\n\n		<div class="block-transparent">\n			<div class="header">\n				<h3>卖家 <button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button></h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="SellerList">');
-_p(this.CustomerItem(data));
-__p.push('				</div>\n				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加卖家&nbsp;&nbsp;</button>\n			</div>\n		</div>\n		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>&nbsp;&nbsp;<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n			</div>\n		</div>\n	</div>');
+__p.push('	');
+
+		var FormData = data.data || {};
+	__p.push('	<div class="step-pane" id="Customer">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>买家 ');
+if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
+}__p.push('</h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="BuyerList">');
+
+						var Buyer = FormData.Buyers||[];
+						var i=0, l = Buyer.length||1;
+						for(; i < l; ++i) {
+					__p.push('						');
+_p(this.CustomerItem({
+							data:Buyer[i],
+							tpl:data.customerTpl,
+							canEdit:data.canEdit
+						}));
+__p.push('					');
+
+						}
+					__p.push('				</div>');
+if (data.canEdit) {__p.push('					<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加买家&nbsp;&nbsp;</button>');
+}__p.push('			</div>\n		</div>\n\n		<div class="block-transparent">\n			<div class="header">\n				<h3>卖家 ');
+if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
+}__p.push('</h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="SellerList">');
+
+						var Sellers = FormData.Sellers||[];
+						var i=0, l = Sellers.length||1;
+						for(; i < l; ++i) {
+					__p.push('						');
+_p(this.CustomerItem({
+							data:Sellers[i],
+							tpl:data.customerTpl,
+							canEdit:data.canEdit
+						}));
+__p.push('					');
+
+						}
+					__p.push('				</div>');
+if (data.canEdit) {__p.push('				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加卖家&nbsp;&nbsp;</button>');
+}__p.push('			</div>\n		</div>\n		<div class="form-group">\n			<div class="text-center col-sm-12">');
+if (data.canEdit) {__p.push('				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>\n				&nbsp;&nbsp;');
+}__p.push('				<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n			</div>\n		</div>\n	</div>');
 
 return __p.join("");
 },
@@ -1478,11 +1639,15 @@ return __p.join("");
 'CustomerItem': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-
-	var customerHTML = data.customerTpl;
 __p.push('	<div class="list-group-item">');
-_p((customerHTML||''));
-__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="customer-remove">移除</button>\n		</div>\n	</div>');
+_p(data.tpl(data.data,data.canEdit));
+__p.push('		');
+
+			if (data.canEdit) {
+		__p.push('			<hr style="border-bottom:1px dashed #dadada"/>\n			<div class="col-sm-offset-2">\n				<button type="button" class="btn btn-danger" data-hook="customer-remove">移除</button>\n			</div>');
+
+			}
+		__p.push('	</div>');
 
 return __p.join("");
 },
@@ -1490,9 +1655,13 @@ return __p.join("");
 'SetupProject': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
+
+	var FormData = data.data||{};
 __p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>项目信息</h3>\n		</div>\n		<div class="content">');
-_p(data.projectTpl);
-__p.push('		</div>\n	</div>\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>&nbsp;&nbsp;\n			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>\n</div>');
+_p(data.projectTpl(FormData.Project,data.canEdit));
+__p.push('		</div>\n	</div>\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>');
+if (data.canEdit) {__p.push('			&nbsp;&nbsp;\n			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>');
+}__p.push('		</div>\n	</div>\n</div>');
 
 return __p.join("");
 },
@@ -1500,9 +1669,27 @@ return __p.join("");
 'SetupProperty': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="step-pane" id="Assets">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>房产 <button type="button" class="btn btn-default" data-hook="property-import"><i class="fa fa-sign-in"></i> 导入现有房产</button></h3>\n		</div>\n		<div class="content">\n			<div class="list-group tickets" id="PropertyBase">');
-_p(this.PropertyItem(data));
-__p.push('			</div>\n			<button type="button" class="btn btn-success" data-hook="property-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加房产&nbsp;&nbsp;</button>\n		</div>\n	</div>\n\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>\n</div>');
+
+	var FormData = data.data || {};
+__p.push('<div class="step-pane" id="Assets">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>房产 ');
+if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="property-import"><i class="fa fa-sign-in"></i> 导入现有房产</button>');
+}__p.push('</h3>\n		</div>\n		<div class="content">\n			<div class="list-group tickets" id="PropertyBase">');
+
+					var Property = FormData.Assets||[];
+					var i=0, l = Property.length||1;
+					for(; i < l; ++i) {
+				__p.push('					');
+_p(this.PropertyItem({
+						data:Property[i],
+						tpl:data.propertyTpl,
+						canEdit:data.canEdit
+					}));
+__p.push('				');
+
+					}
+				__p.push('			</div>');
+if (data.canEdit) {__p.push('			<button type="button" class="btn btn-success" data-hook="property-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加房产&nbsp;&nbsp;</button>');
+}__p.push('		</div>\n	</div>\n\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>\n</div>');
 
 return __p.join("");
 },
@@ -1511,8 +1698,32 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('	<div class="list-group-item">\n		<div class="j-property-form">');
-_p(data.propertyTpl);
-__p.push('		</div>\n		<div class="form-group">\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10"><button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>&nbsp;&nbsp;(房产共权人、保证人、配偶、辅助联系人、第三方借款人)</div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">\n				<table class="no-border j-property-joint" style="background-color:#fff;margin-top:10px; display:none;">\n					<thead class="no-border">\n						<tr>\n							<th>姓名</th>\n							<th>电话</th>\n							<th>证件号</th>\n							<th>&nbsp;</th>\n						</tr>\n					</thead>\n					<tbody class="no-border-x no-border-y">\n					</tbody>\n				</table>\n			</div>\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>\n		</div>\n	</div>');
+_p(data.tpl(data.data,data.canEdit));
+__p.push('		</div>\n		<div class="form-group">');
+
+				var Joint = data.data&&data.data.Joint || [],
+					JointLen = Joint.length;
+			__p.push('			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">');
+if (data.canEdit) {__p.push('<button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>');
+}__p.push('				&nbsp;&nbsp;');
+_p((JointLen||data.canEdit)?'(房产共权人、保证人、配偶、辅助联系人、第三方借款人)':'');
+__p.push('			</div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">\n				<table class="no-border no-strip j-property-joint" style="background-color:#fff;margin-top:10px; ');
+_p(JointLen?'':'display:none;');
+__p.push('">\n					<thead class="no-border">\n						<tr>\n							<th>姓名</th>\n							<th>电话</th>\n							<th>证件号</th>\n							<th>&nbsp;</th>\n						</tr>\n					</thead>\n					<tbody class="no-border-x no-border-y">');
+
+							var i=0, l = JointLen;
+							for(; i < l; ++i) {
+						__p.push('							');
+_p(this.PropertyJointItem({
+								data:Joint[i],
+								canEdit:data.canEdit
+							}));
+__p.push('						');
+
+							}
+						__p.push('					</tbody>\n				</table>\n			</div>\n		</div>');
+if (data.canEdit) {__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2">\n			<button type="button" class="btn btn-danger" data-hook="property-remove">移除</button>\n		</div>');
+}__p.push('	</div>');
 
 return __p.join("");
 },
@@ -1520,7 +1731,24 @@ return __p.join("");
 'PropertyJointItem': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<tr>\n		<td><input type="text" name="Name" placeholder="输入姓名" /></td>\n		<td><input type="text" name="Phone" placeholder="输入电话" /></td>\n		<td><input type="text" name="IdentityCode" placeholder="输入证件号" /></td>\n		<td><i class="pointer-item fa fa-times" data-hook="joint-remove"></i></td>\n	</tr>');
+__p.push('	');
+
+		var FormData = data.data || {};
+	__p.push('	<tr>\n		<td><input type="text" name="Name" value="');
+_p(FormData.Name||'');
+__p.push('" placeholder="输入姓名" ');
+_p(data.canEdit?'':'disabled');
+__p.push(' /></td>\n		<td><input type="text" name="Phone" value="');
+_p(FormData.Phone||'');
+__p.push('" placeholder="输入电话" ');
+_p(data.canEdit?'':'disabled');
+__p.push(' /></td>\n		<td><input type="text" name="IdentityCode" value="');
+_p(FormData.IdentityCode||'');
+__p.push('" placeholder="输入证件号" ');
+_p(data.canEdit?'':'disabled');
+__p.push(' /></td>\n		<td>');
+if (data.canEdit) {__p.push('<i class="pointer-item fa fa-times" data-hook="joint-remove"></i>');
+}__p.push('</td>\n	</tr>');
 
 return __p.join("");
 },
@@ -1528,15 +1756,15 @@ return __p.join("");
 'Setup': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-
-	data = data || {};
-__p.push('<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">\n			<li data-target="setup0">选择类型<span class="chevron"></span></li>\n			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n		</ul>\n		<div class="step-content">');
+__p.push('<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
+if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
+}__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n		</ul>\n		<div class="step-content">');
 _p(this.SetupCustomer(data));
 __p.push('			');
 _p(this.SetupProperty(data));
 __p.push('			');
 _p(this.SetupProject(data));
-__p.push('		</div>\n	</form>\n\n</div>');
+__p.push('		</div>\n	</form>\n</div>');
 
 return __p.join("");
 }

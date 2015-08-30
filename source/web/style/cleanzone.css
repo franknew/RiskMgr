@@ -5775,8 +5775,20 @@ ul.timeline li > .date {
   color:#999999;
   background-color: #ededed;
 }
+.wizard-steps li[data-target] {
+  cursor: pointer;
+}
+.wizard-steps li[data-target]:hover {
+  background-color: #FFFEDF;
+}
+.wizard-steps li[data-target]:hover .chevron:before {
+  border-left-color: #FFFEDF;
+}
+.wizard-steps li.active[data-target]:hover {
+
+}
 .wizard-steps .active {
-  color: #3078EF;
+  color: #0020F9;
   background: #fff;
 }
 .wizard-steps .active:hover {

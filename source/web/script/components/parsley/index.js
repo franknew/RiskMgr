@@ -313,10 +313,6 @@ var Validator = ( function ( ) {
       // regular object validation
       return this._validateObject( objectOrString, AssertsOrConstraintOrGroup, group );
     },
-    validateElements:function(nodes) {
-      var obj = new Constraint(nodes);
-      console.log('obj check::::',obj.check());
-    },
     bind: function ( object, constraint ) {
       if ( 'object' !== typeof object )
         throw new Error( 'Must bind a Constraint to an object' );
@@ -1537,13 +1533,21 @@ var Validator = ( function ( ) {
 
       var i=0,cur,
         rs = true,
+        hasFocus = false,
+        factory,
         curRS;
       for(;cur=nodes[i++];) {
-        curRS = new Parsley.Factory(cur,{},this).validate();
+        factory = new Parsley.Factory(cur,{},this);
+        curRS = factory.validate();
         if (curRS!==true) {
           rs = false;
+          if (!hasFocus) {
+            hasFocus = true;
+            cur.focus();
+          }
         }
       }
+      factory = null;
       curRS = null;
       return rs;
     },

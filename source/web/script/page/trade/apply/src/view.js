@@ -1,5 +1,5 @@
 /**
- * 申请额度
+ * 申请额度表单视图
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
@@ -19,47 +19,35 @@ define(function(require, exports, module){
 		Project = require('./setup.project');
 
 	var MOD = {
-		initPage:function() {
-			var html = Tmpl.choose();
-			route.show({
-				head:'申请额度',
-				content:html
-			});
-
-			route.on('click','choose-type',function(ev) {
-				var elem = $(ev.currentTarget),
-					type = elem.data('type');
-				MOD._setup(type);
-			});
-			//this._setup(1);//测试，直进
-
-		},
-		/** 开始进入填单流程
-		 * @param
+		/**
+		 * @param opts {Object} 配置项：
+			mode:模式，可选有add、edit、view
+			head:标题文本
+			data:表单数据
 		 */
-		_setup:function(type) {
-			var typeName = {
-				'1':'二手楼买卖交易',
-				'2':'首期款垫付',
-				'3':'现金赎楼',
-				'4':'红本抵押'
-			}[type];
+		init:function(opts) {
+			var mode = opts.mode,
+				data = opts.data,
+				head = opts.head;
 
 			var that = this;
 			var html = Tmpl.Setup({
-				customerTpl:Customer.getTpl(),
-				propertyTpl:Property.getTpl(),
-				projectTpl:Project.getTpl()
+				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
+				propertyTpl:Property.getTpl,
+				projectTpl:Project.getTpl,
+				data:data,
+				mode:mode,
+				canEdit:!!~$.inArray(mode, ['add','edit'])
 			});
 			route.show({
-				head:'申请额度 <small>'+typeName+'</small>',
+				head:head,
 				content:html
 			});
 
 			Wizzard.init({
 				container:'#J_Wizzard',
 				success:function() {
-					that.submit();
+					that.submit(mode);
 				}
 			});
 
@@ -70,10 +58,8 @@ define(function(require, exports, module){
 				ev.preventDefault();
 				var data = require('./test-data');
 				console.log('ttt',data);
-				MOD.submit(data);
+				MOD.submit(mode,data);
 			});
-
-
 		},
 		_initEvent:function() {
 			Customer.init();
@@ -92,7 +78,7 @@ define(function(require, exports, module){
 				});
 			});
 		},
-		submit:function(data_test) {
+		submit:function(mode,data) {
 			var dataCustomer = Customer.getData();
 			var data = {
 				Buyers:dataCustomer.buyer,
@@ -101,8 +87,8 @@ define(function(require, exports, module){
 				Project:Project.getData()
 			};
 
-			if (data_test) {//使用测试数据
-				data = data_test;
+			if (data) {//使用测试数据
+				data = data;
 			}
 
 			Ajax.post({

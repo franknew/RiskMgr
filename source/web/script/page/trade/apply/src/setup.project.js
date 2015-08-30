@@ -25,12 +25,12 @@ define(function(require, exports, module){
 		}];
 
 	var MOD = {
-		getTpl:function(data) {
+		getTpl:function(data,canEdit) {
 			var list = FormList,
 				html = [];
 			var i=0,cur,curHtml;
 			for(;cur=list[i++];) {
-				curHtml = '<div class="well"><div class="header"><h4>'+cur.name+'</h4></div>'+former.make(cur.tpl,{data:data})+'</div>';
+				curHtml = '<div class="well"><div class="header"><h4>'+cur.name+'</h4></div>'+former.make(cur.tpl,{data:data,disabled:!canEdit})+'</div>';
 				html.push(curHtml);
 			}
 

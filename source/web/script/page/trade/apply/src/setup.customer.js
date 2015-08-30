@@ -21,8 +21,11 @@ define(function(require, exports, module){
 	var CORE_NAME = ['Name','IdentityCode','CardType'];
 
 	var MOD = {
-		getTpl:function(data) {
-			var tpl = former.make(CustomerFormTpl,{data:data});
+		getTpl:function(data,canEdit) {
+			var tpl = former.make(CustomerFormTpl,{
+				data:data,
+				disabled:!canEdit
+			});
 
 			return tpl;
 		},
@@ -94,9 +97,10 @@ define(function(require, exports, module){
 		},
 		add:function(box,data) {
 			box = $(box);
-			var tpl = this.getTpl(data),
-				html = Tmpl.CustomerItem({
-					customerTpl:tpl
+			var html = Tmpl.CustomerItem({
+					tpl:this.getTpl,
+					data:data,
+					canEdit:true
 				});
 
 			html = $(html);

@@ -21,8 +21,11 @@ define(function(require, exports, module){
 	var CORE_NAME = ['Code'];
 
 	var MOD = {
-		getTpl:function(data) {
-			var tpl = former.make(PropertyTpl,{data:data});
+		getTpl:function(data,canEdit) {
+			var tpl = former.make(PropertyTpl,{
+				data:data,
+				disabled:!canEdit
+			});
 			return tpl;
 		},
 		getData:function() {
@@ -79,7 +82,7 @@ define(function(require, exports, module){
 				ev.preventDefault();
 				var btn = $(ev.currentTarget),
 					container = btn.parents('.form-group:first').find('.j-property-joint');
-				console.log(container);
+
 				MOD.addJoint(container);
 			}).on('click','joint-remove',function(ev) {//移除共权人
 				ev.preventDefault();
@@ -109,7 +112,9 @@ define(function(require, exports, module){
 			box = $(box);
 
 			var html = Tmpl.PropertyItem({
-					propertyTpl:this.getTpl(data)
+					tpl:this.getTpl,
+					data:data,
+					canEdit:true
 				});
 
 			html = $(html);
@@ -123,7 +128,9 @@ define(function(require, exports, module){
 		},
 		addJoint:function(table) {
 			table = $(table);
-			var html = Tmpl.PropertyJointItem(),
+			var html = Tmpl.PropertyJointItem({
+					canEdit:true
+				}),
 				item = $(html).appendTo(table.find('tbody:first'));
 
 			table.show();

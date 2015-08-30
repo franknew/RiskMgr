@@ -16,6 +16,7 @@ define(function(require, exports, module){
 				highlight:'active'	//导航栏高亮className
 				//,container:''	//主容器，如果需要校验表单，则需保证该容器为form
 				,nav:'.wizard-steps'	//导航
+				,navHook:'data-target'	//导航的data属性
 				,setup:'.step-pane'	//每一个setup的选择器
 				,btnNext:'.wizard-next'	//下一步按钮的选择器
 				,btnPrev:'.wizard-previous'	//上一步按钮的选择器
@@ -43,7 +44,31 @@ define(function(require, exports, module){
 			return this;
 		},
 		_success:function() {
-			var conf = this._config();
+			var conf = this._config(),
+				setups = (function(nav,hook) {
+					var rs = [];
+					nav.find('['+hook+']').each(function(i,elem) {
+						rs.push($(elem).attr(hook));
+					});
+					return rs;
+				})(this.nav,conf.navHook);
+			var i=0, l = setups.length,
+				notValidate,
+				setupNotValid = null;
+			for(; i < l; ++i) {
+				if (!this.parsley.validateElements($('#'+setups[i]).find(':input'))) {
+					notValidate = true;
+					if (!setupNotValid) {
+						setupNotValid = setups[i];
+					}
+				}
+			}
+
+			if (notValidate) {
+				this._show(setupNotValid);
+				return ;
+			}
+
 			conf.success && conf.success();
 		},
 		_initBox:function() {
@@ -85,6 +110,13 @@ define(function(require, exports, module){
 				var btn = $(ev.currentTarget);
 				that._showByButton(btn,'prev');
 			});
+
+			this.nav.on('click','['+conf.navHook+']',function(ev) {
+				ev.preventDefault();
+				var elem = $(ev.currentTarget),
+					setup = elem.attr(conf.navHook);
+				that._show(setup);
+			});
 		},
 		/** 根据setup的ID来显示
 		 * @param setupID {Selector} 需要显示的setup id
@@ -95,8 +127,8 @@ define(function(require, exports, module){
 				nav = this.nav,
 				boxs = this.container.find(conf.setup);
 
-			nav.find('[data-target]').removeClass(highlight);
-			nav.find('[data-target="'+setupID+'"]').addClass(highlight);
+			nav.find('['+conf.navHook+']').removeClass(highlight);
+			nav.find('['+conf.navHook+'="'+setupID+'"]').addClass(highlight);
 			boxs.hide().filter('[id="'+setupID+'"]').show();
 
 			$(window).scrollTop(0);	//滚动到顶部

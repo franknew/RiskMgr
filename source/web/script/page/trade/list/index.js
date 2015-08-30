@@ -132,7 +132,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 				ev.preventDefault();
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
-				alert('view');
+				route.load('page=trade/apply&action=view&id='+id);
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();
