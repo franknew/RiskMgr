@@ -590,7 +590,7 @@ define.pack("./tpl.view",[],function(require, exports, module){
 			checked:true,
 			value:1,
 			placeholder:'启用该帐号'
-		}],
+		}]
 	];
 
 	return MOD;

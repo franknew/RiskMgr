@@ -1,7 +1,7 @@
 /**
- * 员工信息的基本form表单
+ * 用户表单
  * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-21 21:00:52
+ * @date    2015-08-30 16:20:40
  */
 
 define(function(require, exports, module){
@@ -12,12 +12,12 @@ define(function(require, exports, module){
 		},{
 			type:'label',
 			col:'3',
-			required:true,
 			html:'帐号'
 		},{
 			col:'7',
 			type:'text',
 			required:true,
+			disabled:true,
 			name:'Name',
 			placeholder:''
 		}],
@@ -25,26 +25,13 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
-			required:true,
-			html:'密码'
-		},{
-			col:'7',
-			type:'text',
-			required:true,
-			name:'Password',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			required:true,
 			html:'职位'
 		},{
 			col:7,
 			type:'select',
 			name:'Role',
 			required:true,
+			disabled:true,
 			options:[{
 				name:'请选择',
 				value:''
@@ -106,19 +93,6 @@ define(function(require, exports, module){
 			type:'text',
 			name:'Address',
 			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:' '
-		},{
-			col:'7',
-			type:'checkbox',
-			name:'Enabled',
-			checked:true,
-			value:1,
-			placeholder:'启用该帐号'
 		}]
 	];
 

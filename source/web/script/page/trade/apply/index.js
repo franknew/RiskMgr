@@ -212,12 +212,16 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./view","./data"],fu
 		view:function(params) {
 			this._shown(params);
 		},
+		approval:function(params) {
+			this._shown(params);
+		},
 		_shown:function(params) {
 			var mode = params.action;
 			var html = '<div class="loading">Loading...</div>',
 				head = {
 					'edit':'额度编辑',
-					'view':'额度查看'
+					'view':'额度查看',
+					'approval':'审批单据'
 				}[mode];
 			Route.show({
 				head:head,
@@ -1318,7 +1322,11 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 			Wizzard.init({
 				container:'#J_Wizzard',
 				success:function() {
-					that.submit(mode);
+					if (mode=='approval') {
+						that.approval(mode);
+					}else {
+						that.submit(mode);
+					}
 				}
 			});
 
@@ -1349,6 +1357,7 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 				});
 			});
 		},
+		//提交表单
 		submit:function(mode,data) {
 			var dataCustomer = Customer.getData();
 			var data = {
@@ -1369,6 +1378,10 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 					msg.success('申请成功');
 				}
 			});
+		},
+		//提交审批
+		approval:function() {
+			alert('审批拉')
 		}
 	};
 
@@ -1659,8 +1672,10 @@ var __p=[],_p=function(s){__p.push(s)};
 	var FormData = data.data||{};
 __p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>项目信息</h3>\n		</div>\n		<div class="content">');
 _p(data.projectTpl(FormData.Project,data.canEdit));
-__p.push('		</div>\n	</div>\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>');
-if (data.canEdit) {__p.push('			&nbsp;&nbsp;\n			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>');
+__p.push('		</div>\n	</div>\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;');
+if (data.canEdit) {__p.push('			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>');
+}__p.push('			');
+if (data.mode == 'approval') {__p.push('			<button class="btn btn btn-success wizard-next">提交审批 <i class="fa fa-caret-right"></i></button>');
 }__p.push('		</div>\n	</div>\n</div>');
 
 return __p.join("");

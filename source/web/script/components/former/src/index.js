@@ -71,6 +71,7 @@ define(function(require, exports, module){
 					prefix:item.prefix
 				},
 				html = false;
+			console.log('disabled',item.name,disabled,item);
 
 			switch (type){
 				case 'label':

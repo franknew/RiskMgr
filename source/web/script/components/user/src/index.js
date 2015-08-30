@@ -71,6 +71,7 @@ define(function(require, exports, module){
 		*/
 		info: (function() {
 			var CACHE,
+				CACHE_MENU,
 				DEFER;
 			return function (opt) {
 				var nocache, setting;
@@ -80,18 +81,20 @@ define(function(require, exports, module){
 					nocache = opt;
 				}
 				if (CACHE && DEFER && !nocache) {//已经拉取到时，取缓存
-					DEFER.resolve(CACHE);
+					DEFER.resolve(CACHE,CACHE_MENU);
 				} else if (!DEFER) {	//没有defer时 才初始化
 					DEFER = $.Deferred();
 
 					Ajax.post({
 						url:'RiskMgr.Api.IndexApi/InitPage',
 						success:function(da) {
-							var userinfo = da&&da.User;
-							userinfo = userinfo && userinfo.UserInfo;
+							var userinfo = da&&da.User || {},
+								menuinfo = da&&da.Menu || {};
+							userinfo = $.extend({},userinfo.UserInfo,userinfo.User);
 							if (userinfo) {
 								CACHE = userinfo;
-								DEFER.resolve(CACHE);
+								CACHE_MENU = menuinfo;
+								DEFER.resolve(CACHE,CACHE_MENU);
 							}
 						},
 						error:function(jqXHR,message) {

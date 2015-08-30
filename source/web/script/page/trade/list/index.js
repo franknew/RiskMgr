@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/pager/index"],function(require,exports,module){
+define(["risk/unit/route","jquery","risk/unit/ajax","risk/components/pager/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -32,17 +32,59 @@ define.pack = function(){
 })();
 //all file list:
 //list/src/index.js
+//list/src/list.js
 //list/src/list.tmpl.html
 
 //js file list:
 //list/src/index.js
+//list/src/list.js
 /**
+ * 额度列表主入口
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-08-30 14:17:40
+ */
+
+define.pack("./index",["risk/unit/route","./list","./tmpl"],function(require, exports, module){
+	var Route = require('risk/unit/route');
+	var List = require('./list'),
+		Tmpl = require('./tmpl');
+
+	var MOD = {
+		//默认查询入口
+		initPage:function(params) {
+			params = params || {};
+
+			var mode = params.action || 'mine',
+				head = {
+					'mine':'我的申请单据',
+					'approval':'审批单据'
+				}[mode],
+				html = Tmpl.ListContainer({
+					mode:mode
+				});
+			Route.show({
+				head:head,
+				content:html
+			});
+
+			List.init({
+				mode:mode
+			});
+		},
+		//审批入口
+		approval:function(params,obj) {
+			this.initPage(params,obj);
+		}
+	};
+
+	return MOD;
+});/**
  * 额度列表
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/components/pager/index","./tmpl"],function(require, exports, module){
+define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/components/pager/index","./tmpl"],function(require, exports, module){
 	var $ = require('jquery'),
 		ajax = require('risk/unit/ajax'),
 		route = require('risk/unit/route'),
@@ -50,17 +92,13 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 		tmpl = require('./tmpl');
 
 	var MOD = {
-		initPage:function(params) {
-			params = params || {};
-
-			var html = tmpl.list();
-			route.show({
-				head:'额度列表',
-				content:html
-			});
-
+		/** 初始化填充列表
+		 * @param
+		 */
+		init:function(params) {
 			this.fill({
-				container:route.container.find('#ListContainer')
+				container:route.container.find('#ListContainer'),
+				mode:params.mode
 			});
 		},
 		/** 填充列表主体html到指定容器
@@ -71,6 +109,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 		 */
 		fill:function(setting) {
 			setting = setting||{};
+			var mode = setting.mode;
 
 			var container = $(setting.container),
 				current = setting.current || 1,
@@ -83,7 +122,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.ListBox(da.Record);
+					var html = tmpl.List(da.Record);
 
 					container.html(html);
 
@@ -103,36 +142,36 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 						}
 					});
 
-					that._initFillEvent(container);
+					that._initFillEvent(container,setting);
 
 					success && success();
 				},
-				error:setting.error || function(xhr,msg) {
-					route.show({
-						head:'客户管理',
-						content:msg
-					});
-				}
+				error:setting.error
 			});
 		},
 		_fill:function(container,data) {
 			var html = tmpl.ListItem(data);
-			container.find('#J_ListBox').html(html);
+			container.find('#J_Lister').html(html);
 		},
-		_initFillEvent:function(container) {
+		_initFillEvent:function(container,setting) {
 			var that = this,
-				key = '__initFillCustomerEvent__';
+				key = '__initFillCustomerEvent__',
+				mode = setting.mode;
 			if (container.data(key)) {
 				return false;
 			}
 
 			container.data(key,'1');//标记已经进行事件绑定，防止重复绑定
 
-			container.on('click','[data-hook="view"]',function(ev) {//查看客户详情
+			container.on('click','[data-hook="view"]',function(ev) {//查看详情
 				ev.preventDefault();
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
-				route.load('page=trade/apply&action=view&id='+id);
+				var act = {
+					'mine':'view',
+					'approval':'approval'
+				}[mode] || mode;
+				route.load('page=trade/apply&action='+act+'&id='+id);
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();
@@ -141,7 +180,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 				});
 			});
 		},
-		/** 查询客户列表接口
+		/** 查询接口
 		 * @param conf {Obejct} 配置项：
 		 *      size: 每页个数
 		 *      current: 拉取第几页
@@ -168,28 +207,24 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 //list/src/list.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
-'list': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="spacer spacer-bottom">\n	<a href="#page=trade/apply" class="btn btn-primary">申请额度</a>\n</div>\n\n<div class="block-flat">');
-_p(this.ListContainer());
-__p.push('</div>');
-
-return __p.join("");
-},
-
 'ListContainer': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<form class="form-inline" id="J_SearchForm">\n		<div class="form-group">\n			<label>客户姓名</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>房产证号</label>\n			<input type="text" name="IdentityCode" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>');
+
+	var Mode = data.mode;
+__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">');
+if (Mode=='mine') {__p.push('		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control">\n				<option>全部</option>\n				<option selected="selected">流程中</option>\n				<option>已完结</option>\n			</select>\n		</div>');
+}__p.push('		');
+if (Mode=='approval') {__p.push('		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control">\n				<option>全部</option>\n				<option selected="selected">待审批</option>\n				<option>已审批</option>\n			</select>\n		</div>');
+}__p.push('		<div class="form-group">\n			<label>客户姓名</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>房产证号</label>\n			<input type="text" name="IdentityCode" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
 
 return __p.join("");
 },
 
-'ListBox': function(data){
+'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th rowspan="2">编号</th>\n				<th rowspan="2">业务员</th>\n				<th colspan="2" class="text-center">客户信息</th>\n				<th rowspan="2">收费状态</th>\n				<th rowspan="2">返佣状态</th>\n				<th rowspan="2">尾款状态</th>\n				<th rowspan="2">当前进度</th>\n				<th colspan="2" class="text-center">房产信息</th>\n			</tr>\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>房产证号</th>\n				<th>地址</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th rowspan="2">编号</th>\n				<th rowspan="2">业务员</th>\n				<th colspan="2" class="text-center">客户信息</th>\n				<th rowspan="2">收费状态</th>\n				<th rowspan="2">返佣状态</th>\n				<th rowspan="2">尾款状态</th>\n				<th rowspan="2">当前进度</th>\n				<th colspan="2" class="text-center">房产信息</th>\n			</tr>\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>房产证号</th>\n				<th>地址</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -201,7 +236,6 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	var List = data||[];
-	var ShowInfos = ['Name','Phone','IdentityCode','Address'];
 
 	var i=0,Cur;
 	if (List.length>0) {
@@ -215,34 +249,10 @@ __p.push('\'>\n		<td>SN00001</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n		
 
 		}
 	}else{
-__p.push('	<tr>\n	<td colspan="');
-_p(ShowInfos.length);
-__p.push('">\n		<div class="alert alert-info" role="alert">没有客户信息</div>\n	</td>\n	</tr>');
+__p.push('	<tr>\n	<td colspan="5">\n		<div class="alert alert-info" role="alert">没有客户信息</div>\n	</td>\n	</tr>');
 
 	}
 __p.push('');
-
-return __p.join("");
-},
-
-'bak': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-__p.push('\n	<!--\n	<div class="list-group tickets" id="J_ListBox">');
-_p(this.ListItem(data));
-__p.push('	</div>\n	-->\n	<!--\n	<div data-hook="view" class="list-group-item pointer-item" data-id="');
-_p(Cur.ID);
-__p.push('" data-data=\'');
-_p(JSON.stringify(Cur));
-__p.push('\'>\n		<span class="label label-default pull-right">');
-_p(Cur.Role);
-__p.push('</span>\n		<h4 class="name"><strong>');
-_p(Cur.Name);
-__p.push('</strong></h4>\n		<p>');
-_p(Cur.Phone||'&nbsp;');
-__p.push('</p>\n		<p>');
-_p(Cur.Address||'&nbsp;');
-__p.push('</p>\n	</div>\n	-->');
 
 return __p.join("");
 }

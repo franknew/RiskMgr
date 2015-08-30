@@ -1,18 +1,32 @@
 <!--
 包含list页所需所有tmpl
 -->
-<script type="text/html" id="list">
-<div class="spacer spacer-bottom">
-	<a href="#page=trade/apply" class="btn btn-primary">申请额度</a>
-</div>
-
-<div class="block-flat">
-	<%=this.ListContainer()%>
-</div>
-</script>
-
 <script type="text/html" id="ListContainer">
+<%
+	var Mode = data.mode;
+%>
+<div class="block-flat">
 	<form class="form-inline" id="J_SearchForm">
+		<%if (Mode=='mine') {%>
+		<div class="form-group">
+			<label>单据状态</label>
+			<select class="form-control">
+				<option>全部</option>
+				<option selected="selected">流程中</option>
+				<option>已完结</option>
+			</select>
+		</div>
+		<%}%>
+		<%if (Mode=='approval') {%>
+		<div class="form-group">
+			<label>单据状态</label>
+			<select class="form-control">
+				<option>全部</option>
+				<option selected="selected">待审批</option>
+				<option>已审批</option>
+			</select>
+		</div>
+		<%}%>
 		<div class="form-group">
 			<label>客户姓名</label>
 			<input type="text" name="Name" class="form-control" placeholder="">
@@ -27,9 +41,10 @@
 	<div id="ListContainer">
 		<div class="loading">Loading...</div>
 	</div>
+</div>
 </script>
 
-<script type="text/html" id="ListBox">
+<script type="text/html" id="List">
 	<table class="no-border">
 		<thead class="no-border">
 			<tr>
@@ -49,7 +64,7 @@
 				<th>地址</th>
 			</tr>
 		</thead>
-		<tbody class="no-border-x no-border-y" id="J_ListBox">
+		<tbody class="no-border-x no-border-y" id="J_Lister">
 			<%=this.ListItem(data)%>
 		</tbody>
 	</table>
@@ -61,7 +76,6 @@
 <script type="text/html" id="ListItem">
 <%
 	var List = data||[];
-	var ShowInfos = ['Name','Phone','IdentityCode','Address'];
 
 	var i=0,Cur;
 	if (List.length>0) {
@@ -92,28 +106,11 @@
 	}else{
 %>
 	<tr>
-	<td colspan="<%=ShowInfos.length%>">
+	<td colspan="5">
 		<div class="alert alert-info" role="alert">没有客户信息</div>
 	</td>
 	</tr>
 <%
 	}
 %>
-</script>
-
-<script type="text/html" id="bak">
-
-	<!--
-	<div class="list-group tickets" id="J_ListBox">
-		<%=this.ListItem(data)%>
-	</div>
-	-->
-	<!--
-	<div data-hook="view" class="list-group-item pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
-		<span class="label label-default pull-right"><%=Cur.Role%></span>
-		<h4 class="name"><strong><%=Cur.Name%></strong></h4>
-		<p><%=Cur.Phone||'&nbsp;'%></p>
-		<p><%=Cur.Address||'&nbsp;'%></p>
-	</div>
-	-->
 </script>

@@ -47,7 +47,11 @@ define(function(require, exports, module){
 			Wizzard.init({
 				container:'#J_Wizzard',
 				success:function() {
-					that.submit(mode);
+					if (mode=='approval') {
+						that.approval(mode);
+					}else {
+						that.submit(mode);
+					}
 				}
 			});
 
@@ -78,6 +82,7 @@ define(function(require, exports, module){
 				});
 			});
 		},
+		//提交表单
 		submit:function(mode,data) {
 			var dataCustomer = Customer.getData();
 			var data = {
@@ -98,6 +103,10 @@ define(function(require, exports, module){
 					msg.success('申请成功');
 				}
 			});
+		},
+		//提交审批
+		approval:function() {
+			alert('审批拉')
 		}
 	};
 
