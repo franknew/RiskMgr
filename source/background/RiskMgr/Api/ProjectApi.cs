@@ -1,4 +1,6 @@
-﻿using RiskMgr.BLL;
+﻿using DreamWorkflow.Engine;
+using DreamWorkflow.Engine.Model;
+using RiskMgr.BLL;
 using RiskMgr.Form;
 using RiskMgr.Model;
 using SOAFramework.Service.Core;
@@ -27,6 +29,7 @@ namespace RiskMgr.Api
             List<Customer_Project> customers = new List<Customer_Project>();
             List<Customer> updateCustomers = new List<Customer>();
 
+
             if (form.Assets != null)
             {
                 foreach (var a in form.Assets)
@@ -46,9 +49,8 @@ namespace RiskMgr.Api
                 }
             }
 
-            customers.AddRange(GetRelationship(form.Buyers, 1));
-            customers.AddRange(GetRelationship(form.Sellers, 2));
-            customers.AddRange(GetRelationship(form.ThirdPart, 3));
+            customers.AddRange(GetRelationship(form.Buyers, (int)CustomerType.Buyer));
+            customers.AddRange(GetRelationship(form.Sellers, (int)CustomerType.Seller));
             if (form.Buyers != null)
             {
                 updateCustomers.AddRange(form.Buyers);
@@ -58,7 +60,15 @@ namespace RiskMgr.Api
                 updateCustomers.AddRange(form.Sellers);
             }
 
-            return bll.Add(form.Project, assets, customers, updateCustomers, form.Customer_Assset);
+            var result = bll.Add(form.Project, assets, customers, updateCustomers);
+            
+            //处理流程
+            WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            wfdm.StartNew(user.User.ID, result, new WorkflowAuthority());
+
+            return result;
         }
 
         /// <summary>
@@ -83,6 +93,25 @@ namespace RiskMgr.Api
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// 查询流程的数据和状态
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public InitApprovalResultForm InitApproval(InitApprovalServiceForm form)
+        {
+            return bll.QueryDetail(form.WorkflowID);
+        }
+
+        /// <summary>
+        /// 查询我处理过的项目
+        /// </summary>
+        /// <returns></returns>
+        public List<Task> QueryMyProcessedTask()
+        {
+            return null;
         }
     }
 }

@@ -28,6 +28,23 @@
         </isGreaterThan>
     </isNotNull>
   </select>
+  <select id="QueryMenu_RoleByIds" resultClass="Menu_Role" parameterClass="Menu_RoleQueryForm" >
+    SELECT * FROM `Menu_Role` 
+    <dynamic prepend="WHERE">
+     <iterate property="Ids" open="(" close=")" conjunction="OR">
+     Ids=#Ids[]#
+     </iterate>
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MenuID">
+        `MenuID`=#MenuID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleID">
+        `RoleID`=#RoleID#
+    </isNotNull>
+    </dynamic>
+  </select>
   <insert id="AddMenu_Role" parameterClass="Menu_Role">
   INSERT INTO `Menu_Role`
   (

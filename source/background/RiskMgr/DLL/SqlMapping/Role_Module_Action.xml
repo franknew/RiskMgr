@@ -31,6 +31,26 @@
         </isGreaterThan>
     </isNotNull>
   </select>
+  <select id="QueryRole_Module_ActionByIds" resultClass="Role_Module_Action" parameterClass="Role_Module_ActionQueryForm" >
+    SELECT * FROM `Role_Module_Action` 
+    <dynamic prepend="WHERE">
+     <iterate property="Ids" open="(" close=")" conjunction="OR">
+     Ids=#Ids[]#
+     </iterate>
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleID">
+        `RoleID`=#RoleID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ModuleID">
+        `ModuleID`=#ModuleID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActionID">
+        `ActionID`=#ActionID#
+    </isNotNull>
+    </dynamic>
+  </select>
   <insert id="AddRole_Module_Action" parameterClass="Role_Module_Action">
   INSERT INTO `Role_Module_Action`
   (

@@ -28,6 +28,23 @@
         </isGreaterThan>
     </isNotNull>
   </select>
+  <select id="QueryUser_RoleByIds" resultClass="User_Role" parameterClass="User_RoleQueryForm" >
+    SELECT * FROM `User_Role` 
+    <dynamic prepend="WHERE">
+     <iterate property="Ids" open="(" close=")" conjunction="OR">
+     Ids=#Ids[]#
+     </iterate>
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="UserID">
+        `UserID`=#UserID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleID">
+        `RoleID`=#RoleID#
+    </isNotNull>
+    </dynamic>
+  </select>
   <insert id="AddUser_Role" parameterClass="User_Role">
   INSERT INTO `User_Role`
   (

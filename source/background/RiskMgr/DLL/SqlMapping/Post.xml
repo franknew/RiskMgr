@@ -16,7 +16,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
@@ -45,6 +45,41 @@
          LIMIT #StartIndex#, #PageSize# 
         </isGreaterThan>
     </isNotNull>
+  </select>
+  <select id="QueryPostByIds" resultClass="Post" parameterClass="PostQueryForm" >
+    SELECT * FROM `Post` 
+    <dynamic prepend="WHERE">
+     <iterate property="Ids" open="(" close=")" conjunction="OR">
+     Ids=#Ids[]#
+     </iterate>
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    </dynamic>
   </select>
   <insert id="AddPost" parameterClass="Post">
   INSERT INTO `Post`
@@ -95,7 +130,7 @@
         `ID`=#PostQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="PostQueryForm.Name">
-        `Name` LIKE '%$PostQueryForm.Name$%'
+        `Name`=#PostQueryForm.Name#
     </isNotNull>
     <isNotNull prepend="AND" property="PostQueryForm.Creator">
         `Creator`=#PostQueryForm.Creator#
@@ -160,7 +195,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#

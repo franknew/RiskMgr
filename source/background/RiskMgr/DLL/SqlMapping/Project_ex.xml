@@ -2,6 +2,7 @@
 <sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
   <alias>
     <typeAlias alias="QueryProjectServiceForm" type="RiskMgr.Form.QueryProjectServiceForm" />
+    <typeAlias alias="ProjectTask" type="RiskMgr.Model.ProjectTask" />
   </alias>
 
   <statements>
@@ -229,6 +230,22 @@
         </isNotNull>
         <isNotNull prepend="AND" property="Address">
           a.Address LIKE '%Address%'
+        </isNotNull>
+      </dynamic>
+    </select>
+
+    <select id="QueryProjectTaskByWorkflow" resultClass="ProjectTask" parameterClass="Workflow">
+      SELECT p.* FROM PROJECT AS p LEFT JOIN Workflow AS wf ON p.ID=wf.ProcessID
+      LEFT JOIN Task AS t ON t.WorkflowID=wf.ID 
+      <dynamic prepend="WHERE">
+        <isNotNull prepend="AND" property="ID">
+          wf.ID=#ID#
+        </isNotNull>
+        <isNotNull prepend="AND" property="Status">
+          wf.Status=#Status#
+        </isNotNull>
+        <isNotNull prepend="AND" property="WorkflowDefinitionID">
+          wf.WorkflowDefinitionID=#WorkflowDefinitionID#
         </isNotNull>
       </dynamic>
     </select>

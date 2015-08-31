@@ -16,7 +16,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
@@ -57,6 +57,53 @@
          LIMIT #StartIndex#, #PageSize# 
         </isGreaterThan>
     </isNotNull>
+  </select>
+  <select id="QueryMenuByIds" resultClass="Menu" parameterClass="MenuQueryForm" >
+    SELECT * FROM `Menu` 
+    <dynamic prepend="WHERE">
+     <iterate property="Ids" open="(" close=")" conjunction="OR">
+     Ids=#Ids[]#
+     </iterate>
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        `Page`=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ParentID">
+        `ParentID`=#ParentID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ImagePath">
+        `ImagePath`=#ImagePath#
+    </isNotNull>
+    </dynamic>
   </select>
   <insert id="AddMenu" parameterClass="Menu">
   INSERT INTO `Menu`
@@ -127,7 +174,7 @@
         `ID`=#MenuQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Name">
-        `Name` LIKE '%$MenuQueryForm.Name$%'
+        `Name`=#MenuQueryForm.Name#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Creator">
         `Creator`=#MenuQueryForm.Creator#
@@ -216,7 +263,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#

@@ -80,6 +80,7 @@
     <Compile Include="RoleBLL.cs" />
     <Compile Include="TaskBLL.cs" />
     <Compile Include="UserBLL.cs" />
+    <Compile Include="WorkflowAuthority.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DLL\RiskMgr.DLL.csproj">

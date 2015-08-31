@@ -18,7 +18,6 @@ namespace RiskMgr.BLL
     public class UserBLL
     {
         private ICache cache = CacheFactory.Create();
-        private ISqlMapper mapper = Mapper.Instance();
 
         public UserEntireInfo GetUserFormCache(string token = null)
         {
@@ -48,6 +47,7 @@ namespace RiskMgr.BLL
 
         public UserEntireInfo GetCurrentUser(string token = null)
         {
+            ISqlMapper mapper = Common.GetMapperFromSession();
             if (string.IsNullOrEmpty(token))
             {
                 token = ServiceSession.Current.Context.Parameters["token"].ToString();
@@ -55,7 +55,6 @@ namespace RiskMgr.BLL
             var u = GetUserEntireInfoFromCache(token);
             if (u == null)
             {
-                mapper.BeginTransaction();
                 UserDao userdao = new UserDao(mapper);
                 RoleDao roledao = new RoleDao(mapper);
                 UserInfoDao uidao = new UserInfoDao(mapper);

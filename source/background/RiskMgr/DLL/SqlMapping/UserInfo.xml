@@ -31,7 +31,7 @@
         `Identity`=#Identity#
     </isNotNull>
     <isNotNull prepend="AND" property="CnName">
-        `CnName` LIKE '%$CnName$%'
+        `CnName`=#CnName#
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
         `Remark` LIKE '%$Remark$%'
@@ -42,6 +42,38 @@
          LIMIT #StartIndex#, #PageSize# 
         </isGreaterThan>
     </isNotNull>
+  </select>
+  <select id="QueryUserInfoByIds" resultClass="UserInfo" parameterClass="UserInfoQueryForm" >
+    SELECT * FROM `UserInfo` 
+    <dynamic prepend="WHERE">
+     <iterate property="Ids" open="(" close=")" conjunction="OR">
+     Ids=#Ids[]#
+     </iterate>
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="QQ">
+        `QQ`=#QQ#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Mobile">
+        `Mobile`=#Mobile#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WX">
+        `WX`=#WX#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Address">
+        `Address`=#Address#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Identity">
+        `Identity`=#Identity#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CnName">
+        `CnName`=#CnName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    </dynamic>
   </select>
   <insert id="AddUserInfo" parameterClass="UserInfo">
   INSERT INTO `UserInfo`
@@ -112,7 +144,7 @@
         `Identity`=#UserInfoQueryForm.Identity#
     </isNotNull>
     <isNotNull prepend="AND" property="UserInfoQueryForm.CnName">
-        `CnName` LIKE '%$UserInfoQueryForm.CnName$%'
+        `CnName`=#UserInfoQueryForm.CnName#
     </isNotNull>
     <isNotNull prepend="AND" property="UserInfoQueryForm.Remark">
         `Remark` LIKE '%$UserInfoQueryForm.Remark$%'
@@ -168,7 +200,7 @@
         `Identity`=#Identity#
     </isNotNull>
     <isNotNull prepend="AND" property="CnName">
-        `CnName` LIKE '%$CnName$%'
+        `CnName`=#CnName#
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
         `Remark` LIKE '%$Remark$%'
