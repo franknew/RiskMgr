@@ -30,30 +30,33 @@ define(function(require, exports, module){
 				data = opts.data,
 				head = opts.head;
 
-			var that = this;
+			var that = this,
+				canEdit = !!~$.inArray(mode, ['add','edit']);
 			var html = Tmpl.Setup({
 				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
 				propertyTpl:Property.getTpl,
 				projectTpl:Project.getTpl,
 				data:data,
 				mode:mode,
-				canEdit:!!~$.inArray(mode, ['add','edit'])
+				canEdit:canEdit
 			});
 			route.show({
 				head:head,
 				content:html
 			});
 
-			Wizzard.init({
-				container:'#J_Wizzard',
-				success:function() {
-					if (mode=='approval') {
-						that.approval(mode);
-					}else {
-						that.submit(mode);
+			if (canEdit) {
+				Wizzard.init({
+					container:'#J_Wizzard',
+					success:function() {
+						if (mode=='approval') {
+							that.approval(mode);
+						}else {
+							that.submit(mode);
+						}
 					}
-				}
-			});
+				});
+			}
 
 			this._initEvent();
 

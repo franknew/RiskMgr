@@ -56,15 +56,15 @@
 				<%}%>
 			</div>
 		</div>
+		<%if (data.canEdit) {%>
 		<div class="form-group">
 			<div class="text-center col-sm-12">
-				<%if (data.canEdit) {%>
 				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>
 				&nbsp;&nbsp;
-				<%}%>
 				<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>
 			</div>
 		</div>
+		<%}%>
 	</div>
 </script>
 

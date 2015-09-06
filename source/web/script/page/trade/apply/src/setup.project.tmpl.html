@@ -11,17 +11,14 @@
 			<%=data.projectTpl(FormData.Project,data.canEdit)%>
 		</div>
 	</div>
+	<%if (data.canEdit) {%>
 	<div class="form-group">
 		<div class="text-center col-sm-12">
 			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>
 			&nbsp;&nbsp;
-			<%if (data.canEdit) {%>
 			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>
-			<%}%>
-			<%if (data.mode == 'approval') {%>
-			<button class="btn btn btn-success wizard-next">提交审批 <i class="fa fa-caret-right"></i></button>
-			<%}%>
 		</div>
 	</div>
+	<%}%>
 </div>
 </script>

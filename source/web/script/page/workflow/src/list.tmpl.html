@@ -1,0 +1,78 @@
+<!--
+包含list页所需所有tmpl
+-->
+<script type="text/html" id="ListContainer">
+<div class="block-flat">
+	<form class="form-inline" id="J_SearchForm">
+		<div class="form-group">
+			<label>项目</label>
+			<select class="form-control">
+				<option>额度申请</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label>单据状态</label>
+			<select class="form-control">
+				<option>全部</option>
+				<option selected="selected">待审批</option>
+				<option>已审批</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label>申请人</label>
+			<input type="text" name="Name" class="form-control" placeholder="">
+		</div>
+		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>
+	</form>
+	<hr/>
+	<div id="ListContainer">
+		<div class="loading">Loading...</div>
+	</div>
+</div>
+</script>
+
+<script type="text/html" id="List">
+	<table class="no-border">
+		<thead class="no-border">
+			<th>项目名</th>
+			<th>说明</th>
+			<th>申请人</th>
+			<th>申请时间</th>
+		</thead>
+		<tbody class="no-border-x no-border-y" id="J_Lister">
+			<%=this.ListItem(data)%>
+		</tbody>
+	</table>
+
+	<div class="j-pager"></div>
+
+</script>
+
+<script type="text/html" id="ListItem">
+<%
+	var List = data||[];
+
+	var i=0,Cur;
+	if (List.length>0) {
+
+		for(;Cur=List[i++];) {
+%>
+	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+		<td><%=Cur.Name%></td>
+		<td><%=Cur.Remark%></td>
+		<td><%=Cur.Creator%></td>
+		<td><%=Cur.LastUpdateTime%></td>
+	</tr>
+<%
+		}
+	}else{
+%>
+	<tr>
+	<td colspan="2">
+		<div class="alert alert-info" role="alert">没有审批信息</div>
+	</td>
+	</tr>
+<%
+	}
+%>
+</script>

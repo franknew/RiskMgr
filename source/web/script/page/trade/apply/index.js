@@ -45,6 +45,7 @@ define.pack = function(){
 //apply/src/view.js
 //apply/src/wizzard.js
 //apply/src/choose.tmpl.html
+//apply/src/setup.approval.tmpl.html
 //apply/src/setup.customer.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
@@ -1305,30 +1306,33 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 				data = opts.data,
 				head = opts.head;
 
-			var that = this;
+			var that = this,
+				canEdit = !!~$.inArray(mode, ['add','edit']);
 			var html = Tmpl.Setup({
 				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
 				propertyTpl:Property.getTpl,
 				projectTpl:Project.getTpl,
 				data:data,
 				mode:mode,
-				canEdit:!!~$.inArray(mode, ['add','edit'])
+				canEdit:canEdit
 			});
 			route.show({
 				head:head,
 				content:html
 			});
 
-			Wizzard.init({
-				container:'#J_Wizzard',
-				success:function() {
-					if (mode=='approval') {
-						that.approval(mode);
-					}else {
-						that.submit(mode);
+			if (canEdit) {
+				Wizzard.init({
+					container:'#J_Wizzard',
+					success:function() {
+						if (mode=='approval') {
+							that.approval(mode);
+						}else {
+							that.submit(mode);
+						}
 					}
-				}
-			});
+				});
+			}
 
 			this._initEvent();
 
@@ -1586,6 +1590,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 });
 //tmpl file list:
 //apply/src/choose.tmpl.html
+//apply/src/setup.approval.tmpl.html
 //apply/src/setup.customer.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
@@ -1596,6 +1601,16 @@ var tmpl = {
 
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('<div class="block-flat">\n	<h3 class="hthin">请选择业务类型</h3>\n	<div class="spacer spacer-bottom">\n		<button type="button" data-hook="choose-type" data-type="1" class="btn btn-success btn-lg">二手楼买卖交易</button>\n		<!--\n		<button type="button" data-hook="choose-type" data-type="2" class="btn btn-primary btn-lg">首期款垫付</button>\n		<button type="button" data-hook="choose-type" data-type="3" class="btn btn-info btn-lg">现金赎楼</button>\n		<button type="button" data-hook="choose-type" data-type="4" class="btn btn-danger btn-lg">红本抵押</button>\n		</div>\n		-->\n</div>');
+
+return __p.join("");
+},
+
+'SetupApproval': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>审批信息</h3>\n		</div>\n		<div class="content">\n			<div class="well">\n				<div class="header"><h4>调查报告</h4></div>\n				<div>由业务员填写</div>\n			</div>\n			<div class="well">\n				<div class="header"><h4>风控意见</h4></div>\n				<div>风控填写各种表单</div>\n			</div>\n			<div class="well">\n				<div class="header"><h4>经理意见</h4></div>\n				<div>审批意见填写</div>\n			</div>\n			<div class="well">\n				<div class="header"><h4>财务操作</h4></div>\n				<div>各种状态表单</div>\n			</div>\n		</div>\n	</div>');
+if (data.mode == 'approval') {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n			&nbsp;&nbsp;\n			<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n		</div>\n	</div>');
+}__p.push('</div>');
 
 return __p.join("");
 },
@@ -1642,9 +1657,9 @@ __p.push('					');
 						}
 					__p.push('				</div>');
 if (data.canEdit) {__p.push('				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加卖家&nbsp;&nbsp;</button>');
-}__p.push('			</div>\n		</div>\n		<div class="form-group">\n			<div class="text-center col-sm-12">');
-if (data.canEdit) {__p.push('				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>\n				&nbsp;&nbsp;');
-}__p.push('				<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n			</div>\n		</div>\n	</div>');
+}__p.push('			</div>\n		</div>');
+if (data.canEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>\n				&nbsp;&nbsp;\n				<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n			</div>\n		</div>');
+}__p.push('	</div>');
 
 return __p.join("");
 },
@@ -1672,11 +1687,9 @@ var __p=[],_p=function(s){__p.push(s)};
 	var FormData = data.data||{};
 __p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>项目信息</h3>\n		</div>\n		<div class="content">');
 _p(data.projectTpl(FormData.Project,data.canEdit));
-__p.push('		</div>\n	</div>\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;');
-if (data.canEdit) {__p.push('			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>');
-}__p.push('			');
-if (data.mode == 'approval') {__p.push('			<button class="btn btn btn-success wizard-next">提交审批 <i class="fa fa-caret-right"></i></button>');
-}__p.push('		</div>\n	</div>\n</div>');
+__p.push('		</div>\n	</div>');
+if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
+}__p.push('</div>');
 
 return __p.join("");
 },
@@ -1704,7 +1717,9 @@ __p.push('				');
 					}
 				__p.push('			</div>');
 if (data.canEdit) {__p.push('			<button type="button" class="btn btn-success" data-hook="property-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加房产&nbsp;&nbsp;</button>');
-}__p.push('		</div>\n	</div>\n\n	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>\n</div>');
+}__p.push('		</div>\n	</div>');
+if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
+}__p.push('</div>');
 
 return __p.join("");
 },
@@ -1773,13 +1788,19 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
-}__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n		</ul>\n		<div class="step-content">');
+}__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');
+if (!data.canEdit) {__p.push('			<li data-target="Approval">审批信息<span class="chevron"></span></li>');
+}__p.push('		</ul>\n		<div class="step-content">');
 _p(this.SetupCustomer(data));
 __p.push('			');
 _p(this.SetupProperty(data));
 __p.push('			');
 _p(this.SetupProject(data));
-__p.push('		</div>\n	</form>\n</div>');
+__p.push('			');
+if (!data.canEdit) {__p.push('			');
+_p(this.SetupApproval(data));
+__p.push('			');
+}__p.push('		</div>\n	</form>\n</div>');
 
 return __p.join("");
 }

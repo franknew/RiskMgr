@@ -1,0 +1,36 @@
+<script type="text/html" id="SetupApproval">
+<div class="step-pane" id="Project">
+	<div class="block-transparent">
+		<div class="header">
+			<h3>审批信息</h3>
+		</div>
+		<div class="content">
+			<div class="well">
+				<div class="header"><h4>调查报告</h4></div>
+				<div>由业务员填写</div>
+			</div>
+			<div class="well">
+				<div class="header"><h4>风控意见</h4></div>
+				<div>风控填写各种表单</div>
+			</div>
+			<div class="well">
+				<div class="header"><h4>经理意见</h4></div>
+				<div>审批意见填写</div>
+			</div>
+			<div class="well">
+				<div class="header"><h4>财务操作</h4></div>
+				<div>各种状态表单</div>
+			</div>
+		</div>
+	</div>
+	<%if (data.mode == 'approval') {%>
+	<div class="form-group">
+		<div class="text-center col-sm-12">
+			<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>
+			&nbsp;&nbsp;
+			<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>
+		</div>
+	</div>
+	<%}%>
+</div>
+</script>

@@ -31,15 +31,15 @@ define.pack = function(){
 };
 })();
 //all file list:
-//list/src/index.js
-//list/src/list.js
-//list/src/list.tmpl.html
+//workflow/src/index.js
+//workflow/src/list.js
+//workflow/src/list.tmpl.html
 
 //js file list:
-//list/src/index.js
-//list/src/list.js
+//workflow/src/index.js
+//workflow/src/list.js
 /**
- * 额度列表主入口
+ * 审批流程主入口
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-08-30 14:17:40
  */
@@ -55,13 +55,8 @@ define.pack("./index",["risk/unit/route","./list","./tmpl"],function(require, ex
 			params = params || {};
 
 			var mode = params.action || 'mine',
-				head = {
-					'mine':'查询 <small>额度申请</small>',
-					//'approval':'审批单据'
-				}[mode],
-				html = Tmpl.ListContainer({
-					mode:mode
-				});
+				head = '审批单据',
+				html = Tmpl.ListContainer();
 			Route.show({
 				head:head,
 				content:html
@@ -118,7 +113,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.List(da.Record);
+					var html = tmpl.List(da);
 
 					container.html(html);
 
@@ -132,7 +127,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 								current:num,
 								size:size,
 								success:function(da) {
-									that._fill(container,da.Record);
+									that._fill(container,da);
 								}
 							});
 						}
@@ -163,11 +158,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 				ev.preventDefault();
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
-				var act = {
-					'mine':'view',
-					'approval':'approval'
-				}[mode] || mode;
-				route.load('page=trade/apply&action='+act+'&id='+id);
+				route.load('page=trade/apply&action=approval&id='+id);
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();
@@ -184,7 +175,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 		 */
 		query:function(conf) {
 			return ajax.post({
-				url:'RiskMgr.Api.CustomerApi/Query',
+				url:'RiskMgr.Api.WorkflowApi/QueryMyProcessing',
 				data:{
 					PageSize:conf.size||10,
 					CurrentIndex:conf.current || 1
@@ -200,19 +191,13 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 	return MOD;
 });
 //tmpl file list:
-//list/src/list.tmpl.html
+//workflow/src/list.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'ListContainer': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-
-	var Mode = data.mode;
-__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">');
-if (Mode=='mine') {__p.push('		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control">\n				<option>全部</option>\n				<option selected="selected">流程中</option>\n				<option>已完结</option>\n			</select>\n		</div>');
-}__p.push('		');
-if (Mode=='approval') {__p.push('		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control">\n				<option>全部</option>\n				<option selected="selected">待审批</option>\n				<option>已审批</option>\n			</select>\n		</div>');
-}__p.push('		<div class="form-group">\n			<label>客户姓名</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>房产证号</label>\n			<input type="text" name="IdentityCode" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
+__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">\n		<div class="form-group">\n			<label>项目</label>\n			<select class="form-control">\n				<option>额度申请</option>\n			</select>\n		</div>\n		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control">\n				<option>全部</option>\n				<option selected="selected">待审批</option>\n				<option>已审批</option>\n			</select>\n		</div>\n		<div class="form-group">\n			<label>申请人</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
 
 return __p.join("");
 },
@@ -220,7 +205,7 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th rowspan="2">编号</th>\n				<th rowspan="2">业务员</th>\n				<th colspan="2" class="text-center">客户信息</th>\n				<th rowspan="2">收费状态</th>\n				<th rowspan="2">返佣状态</th>\n				<th rowspan="2">尾款状态</th>\n				<th rowspan="2">当前进度</th>\n				<th colspan="2" class="text-center">房产信息</th>\n			</tr>\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>房产证号</th>\n				<th>地址</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<th>项目名</th>\n			<th>说明</th>\n			<th>申请人</th>\n			<th>申请时间</th>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -241,11 +226,19 @@ __p.push('	<tr data-hook="view" class="pointer-item" data-id="');
 _p(Cur.ID);
 __p.push('" data-data=\'');
 _p(JSON.stringify(Cur));
-__p.push('\'>\n		<td>SN00001</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip"><tr>\n				<td>李振文</td>\n				<td>430611198765432123</td>\n			</tr><tr>\n				<td>赵兰琴</td>\n				<td>515151515141414141</td>\n			</tr></table>\n		</td>\n		<td>已收费</td>\n		<td>已返佣</td>\n		<td>已退尾款</td>\n		<td>总经理审核中</td>\n		<td>20001234</td>\n		<td>福田区深圳市景田西路赛格景苑A802</td>\n	</tr>');
+__p.push('\'>\n		<td>');
+_p(Cur.Name);
+__p.push('</td>\n		<td>');
+_p(Cur.Remark);
+__p.push('</td>\n		<td>');
+_p(Cur.Creator);
+__p.push('</td>\n		<td>');
+_p(Cur.LastUpdateTime);
+__p.push('</td>\n	</tr>');
 
 		}
 	}else{
-__p.push('	<tr>\n	<td colspan="5">\n		<div class="alert alert-info" role="alert">没有客户信息</div>\n	</td>\n	</tr>');
+__p.push('	<tr>\n	<td colspan="2">\n		<div class="alert alert-info" role="alert">没有审批信息</div>\n	</td>\n	</tr>');
 
 	}
 __p.push('');

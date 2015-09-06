@@ -1,5 +1,5 @@
 /**
- * 额度列表主入口
+ * 审批流程主入口
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-08-30 14:17:40
  */
@@ -15,13 +15,8 @@ define(function(require, exports, module){
 			params = params || {};
 
 			var mode = params.action || 'mine',
-				head = {
-					'mine':'查询 <small>额度申请</small>',
-					//'approval':'审批单据'
-				}[mode],
-				html = Tmpl.ListContainer({
-					mode:mode
-				});
+				head = '审批单据',
+				html = Tmpl.ListContainer();
 			Route.show({
 				head:head,
 				content:html

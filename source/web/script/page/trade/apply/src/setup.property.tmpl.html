@@ -29,6 +29,7 @@
 		</div>
 	</div>
 
+	<%if (data.canEdit) {%>
 	<div class="form-group">
 		<div class="text-center col-sm-12">
 			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>
@@ -36,6 +37,7 @@
 			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>
 		</div>
 	</div>
+	<%}%>
 </div>
 </script>
 

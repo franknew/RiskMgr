@@ -9,11 +9,17 @@
 			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>
 			<li data-target="Assets">房产信息<span class="chevron"></span></li>
 			<li data-target="Project">项目信息<span class="chevron"></span></li>
+			<%if (!data.canEdit) {%>
+			<li data-target="Approval">审批信息<span class="chevron"></span></li>
+			<%}%>
 		</ul>
 		<div class="step-content">
 			<%=this.SetupCustomer(data)%>
 			<%=this.SetupProperty(data)%>
 			<%=this.SetupProject(data)%>
+			<%if (!data.canEdit) {%>
+			<%=this.SetupApproval(data)%>
+			<%}%>
 		</div>
 	</form>
 </div>
