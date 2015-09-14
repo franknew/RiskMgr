@@ -50,6 +50,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CommonDll\SOAFramework.Library.DAL.dll</HintPath>
     </Reference>
+    <Reference Include="SOAFramework.Library.Extension, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9a50c39ae211549b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\SOAFramework.Library.Extension.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Service.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9a50c39ae211549b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CommonDll\SOAFramework.Service.Core.dll</HintPath>
@@ -81,6 +85,7 @@
     <Compile Include="TaskBLL.cs" />
     <Compile Include="UserBLL.cs" />
     <Compile Include="WorkflowAuthority.cs" />
+    <Compile Include="WorkflowBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DLL\RiskMgr.DLL.csproj">

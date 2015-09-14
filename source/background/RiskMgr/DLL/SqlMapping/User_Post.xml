@@ -21,29 +21,17 @@
     <isNotNull prepend="AND" property="PostID">
         `PostID`=#PostID#
     </isNotNull>
+    <isNotNull property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         Ids=#Ids[]#
+        </iterate>
+    </isNotNull>
     </dynamic>
     <isNotNull property="PageSize">
         <isGreaterThan property="PageSize" compareValue="0">
          LIMIT #StartIndex#, #PageSize# 
         </isGreaterThan>
     </isNotNull>
-  </select>
-  <select id="QueryUser_PostByIds" resultClass="User_Post" parameterClass="User_PostQueryForm" >
-    SELECT * FROM `User_Post` 
-    <dynamic prepend="WHERE">
-     <iterate property="Ids" open="(" close=")" conjunction="OR">
-     Ids=#Ids[]#
-     </iterate>
-    <isNotNull prepend="AND" property="ID">
-        `ID`=#ID#
-    </isNotNull>
-    <isNotNull prepend="AND" property="UserID">
-        `UserID`=#UserID#
-    </isNotNull>
-    <isNotNull prepend="AND" property="PostID">
-        `PostID`=#PostID#
-    </isNotNull>
-    </dynamic>
   </select>
   <insert id="AddUser_Post" parameterClass="User_Post">
   INSERT INTO `User_Post`

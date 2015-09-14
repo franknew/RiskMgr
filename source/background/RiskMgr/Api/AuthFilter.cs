@@ -11,7 +11,7 @@ using System.Text;
 namespace RiskMgr.Api
 {
     [ServiceLayer(IsHiddenDiscovery = true)]
-    [Filter(GlobalUse = true, Index = 1)]
+    [Filter(GlobalUse = false, Index = 1)]
     public class AuthFilter : BaseFilter
     {
         /// <summary>

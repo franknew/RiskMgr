@@ -90,6 +90,7 @@
     <Compile Include="LogonApi.cs" />
     <Compile Include="ProjectApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkflowApi.cs" />
     <Compile Include="UserApi.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

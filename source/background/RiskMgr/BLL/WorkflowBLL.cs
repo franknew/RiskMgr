@@ -1,0 +1,27 @@
+﻿using DreamWorkflow.Engine;
+using DreamWorkflow.Engine.Model;
+using IBatisNet.DataMapper;
+using SOAFramework.Library.Cache;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace RiskMgr.BLL
+{
+    public class WorkflowBLL
+    {
+        private ICache cache = CacheFactory.Create();
+
+        
+        public bool Approval(string workflowid, string activityid, Approval approval)
+        {
+            ISqlMapper mapper = Common.GetMapperFromSession();
+            WorkflowModel workflow = WorkflowModel.Load(workflowid);
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            workflow.ProcessActivity(activityid, approval, user.User.ID, new WorkflowAuthority());
+            return true;
+        }
+    }
+}

@@ -1,4 +1,5 @@
-﻿using DreamWorkflow.Engine.DAL;
+﻿using DreamWorkflow.Engine;
+using DreamWorkflow.Engine.DAL;
 using DreamWorkflow.Engine.Form;
 using DreamWorkflow.Engine.Model;
 using IBatisNet.DataMapper;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library;
 
 namespace RiskMgr.BLL
 {
@@ -97,19 +99,18 @@ namespace RiskMgr.BLL
             return projectid;
         }
 
-        public List<Project> Query(QueryProjectServiceForm form)
+        public List<InitApprovalResultForm> Query(QueryProjectServiceForm form)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
+            ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao dao = new ProjectDao(mapper);
-            return dao.QueryProjectByRelationship(form);
+            var list = dao.QueryProjectByRelationship(form);
+            List<InitApprovalResultForm> result = new List<InitApprovalResultForm>();
+            foreach (var project in list)
+            {
+                var p = QueryDetail(project.ID);
+                result.Add(p);
+            }
+            return result;
         }
 
         public InitApprovalResultForm QueryDetail(string projectid)
@@ -140,40 +141,62 @@ namespace RiskMgr.BLL
                             select a.CustomerID).ToList();
             var sellerids = (from a in cps.FindAll(t => t.Type == (int)CustomerType.Seller)
                              select a.CustomerID).ToList();
-            form.Buyers = customerdao.QueryByIdList(buyerids);
-            form.Sellers = customerdao.QueryByIdList(sellerids);
+            form.Buyers = customerdao.Query(new CustomerQueryForm { Ids = buyerids });
+            form.Sellers = customerdao.Query(new CustomerQueryForm { Ids = sellerids });
             //处理房产和公权人
-            form.Assets = assetdao.QueryByIdList(assetids);
+            form.Assets = assetdao.Query(new AssetQueryForm { Ids = assetids });
             if (form.Assets != null)
             {
                 foreach (var a in form.Assets)
                 {
                     var jointids = (from t in cadao.Query(new Customer_AssetQueryForm { AssetID = a.ID })
                                     select t.CustomerID).ToList();
-                    a.Joint = customerdao.QueryByIdList(jointids);
+                    a.Joint = customerdao.Query(new CustomerQueryForm { Ids = jointids });
                 }
             }
             return form;
         }
 
-        public List<ProjectTask> QueryMyProcessProject()
+        public List<Project> QueryMyProject(WorkflowProcessStatus processStatus)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             TaskDao taskdao = new TaskDao(mapper);
             WorkflowDao wfdao = new WorkflowDao(mapper);
+            ProjectDao projectdao = new ProjectDao(mapper);
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
             var tasks = taskdao.Query(new TaskQueryForm { UserID = user.User.ID });
-            List<string> workflowids = new List<string>();
-            foreach (var task in tasks)
+            List<string> workflowids = (from t in tasks
+                                        select t.WorkflowID).ToList();
+            var workflows = wfdao.Query(new WorkflowQueryForm { Ids = workflowids, Status = (int)processStatus });
+            List<string> projectids = (from wf in workflows
+                                       select wf.ProcessID).ToList();
+            return projectdao.Query(new ProjectQueryForm { Ids = projectids });
+        }
+
+        public List<ProjectTask> QueryMyApply()
+        {
+            ISqlMapper mapper = Common.GetMapperFromSession();
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            WorkflowDao wfdao = new WorkflowDao(mapper);
+            ProjectDao projectdao = new ProjectDao(mapper);
+            var workflows = wfdao.Query(new WorkflowQueryForm { Creator = user.User.ID });
+            var projectids = (from wf in workflows
+                              select wf.ProcessID).ToList();
+            var projcts = projectdao.Query(new ProjectQueryForm { Ids = projectids });
+            List<ProjectTask> projecttasks = projcts.ToDataTable().ToList<ProjectTask>().ToList();
+            projecttasks.ForEach(t =>
             {
-                if (!workflowids.Contains(task.WorkflowID))
+                var workflow = workflows.Find(p => p.ProcessID == t.ID);
+                if (workflow != null)
                 {
-                    workflowids.Add(task.WorkflowID);
+                    WorkflowProcessStatus status = WorkflowProcessStatus.Started;
+                    Enum.TryParse<WorkflowProcessStatus>(workflow.Status.Value.ToString(), out status);
+                    t.ProcessStatus = status;
                 }
-            }
-            var workflows = wfdao.QueryByIdList(workflowids);
-            return null;
+            });
+            return projecttasks;
         }
     }
 }

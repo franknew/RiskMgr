@@ -77,11 +77,11 @@ namespace RiskMgr.Api
         /// <param name="form"></param>
         /// <returns></returns>
         [QueryAction]
-        public List<Project> Query(QueryProjectServiceForm form)
+        public List<InitApprovalResultForm> Query(QueryProjectServiceForm form)
         {
             return bll.Query(form);
         }
-
+        
         private List<Customer_Project> GetRelationship(List<Customer> customers, int type)
         {
             List<Customer_Project> result = new List<Customer_Project>();
@@ -100,6 +100,7 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="form"></param>
         /// <returns></returns>
+        [QueryAction]
         public InitApprovalResultForm InitApproval(InitApprovalServiceForm form)
         {
             return bll.QueryDetail(form.WorkflowID);
@@ -109,9 +110,20 @@ namespace RiskMgr.Api
         /// 查询我处理过的项目
         /// </summary>
         /// <returns></returns>
-        public List<Task> QueryMyProcessedTask()
+        [QueryAction]
+        public List<Project> QueryMyProcessedProject()
         {
-            return null;
+            return bll.QueryMyProject(WorkflowProcessStatus.Processed);
+        }
+
+        /// <summary>
+        /// 查询我发起的流程
+        /// </summary>
+        /// <returns></returns>
+        [QueryAction]
+        public List<ProjectTask> QueryMyApply()
+        {
+            return bll.QueryMyApply();
         }
     }
 }

@@ -231,6 +231,11 @@
         <isNotNull prepend="AND" property="Address">
           a.Address LIKE '%Address%'
         </isNotNull>
+        <isNotNull property="PageSize">
+          <isGreaterThan property="PageSize" compareValue="0">
+            LIMIT #StartIndex#, #PageSize#
+          </isGreaterThan>
+        </isNotNull>
       </dynamic>
     </select>
 

@@ -75,6 +75,8 @@
     <Compile Include="Request\GetMenuRequest.cs" />
     <Compile Include="Request\LogonRequest.cs" />
     <Compile Include="Request\QueryDataDictionaryRequest.cs" />
+    <Compile Include="Request\QueryMyApplyRequest.cs" />
+    <Compile Include="Request\QueryMyProcessingRequest.cs" />
     <Compile Include="Request\QueryUserRequest.cs" />
     <Compile Include="Request\UpdateUserRequest.cs" />
     <Compile Include="Response\CommonResponse.cs" />

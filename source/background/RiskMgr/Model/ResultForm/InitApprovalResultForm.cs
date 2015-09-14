@@ -8,6 +8,8 @@ namespace RiskMgr.Form
 { 
     public class InitApprovalResultForm : AddProjectServiceForm
     {
-        public ActionStatus ActionStatus { get; set; }
+        public ActionStatus BusinessStatus { get; set; }
+
+        public ActionStatus FinaceStatus { get; set; }
     }
 }

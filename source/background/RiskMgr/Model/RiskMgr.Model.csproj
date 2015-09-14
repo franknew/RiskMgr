@@ -91,6 +91,7 @@
     <Compile Include="ResultForm\UserInitResultForm.cs" />
     <Compile Include="ServiceForm\AddProjectServiceForm.cs" />
     <Compile Include="ServiceForm\AddUserServiceForm.cs" />
+    <Compile Include="ServiceForm\ApprovalServiceForm.cs" />
     <Compile Include="ServiceForm\InitApprovalServiceForm.cs" />
     <Compile Include="ServiceForm\LogonServiceForm.cs" />
     <Compile Include="ServiceForm\QueryDataDictionaryByGroupNamesServiceForm.cs" />

@@ -26,7 +26,7 @@ namespace RiskMgr.WinformTest
         private void button1_Click(object sender, EventArgs e)
         {
             LogonRequest request = new LogonRequest();
-            request.form = new Form.LogonServiceForm
+            request.form = new LogonServiceForm
             {
                 UserName = "admin",
                 Password = "admin",
@@ -183,6 +183,22 @@ namespace RiskMgr.WinformTest
             string jsonstring = "hello world";
             string result = HttpHelper.Post("http://localhost/Service.Host/JsonHost.svc/Execute/RiskMgr.Api.ProjectApi/Add", Encoding.UTF8.GetBytes(jsonstring));
             MessageBox.Show(result);
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            QueryMyApplyRequest request = new QueryMyApplyRequest();
+            request.token = token;
+            var response = SDKFactory.Client.Execute(request);
+            MessageBox.Show(response.ResponseBody);
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            QueryMyProcessingRequest request = new QueryMyProcessingRequest();
+            request.token = token;
+            var response = SDKFactory.Client.Execute(request);
+            MessageBox.Show(response.ResponseBody);
         }
     }
 }
