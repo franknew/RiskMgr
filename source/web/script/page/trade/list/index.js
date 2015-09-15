@@ -118,7 +118,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.List(da.Record);
+					var html = tmpl.List(da);
 
 					container.html(html);
 
@@ -132,7 +132,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 								current:num,
 								size:size,
 								success:function(da) {
-									that._fill(container,da.Record);
+									that._fill(container,da);
 								}
 							});
 						}
@@ -184,7 +184,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 		 */
 		query:function(conf) {
 			return ajax.post({
-				url:'RiskMgr.Api.CustomerApi/Query',
+				url:'RiskMgr.Api.ProjectApi/QueryMyApply',
 				data:{
 					PageSize:conf.size||10,
 					CurrentIndex:conf.current || 1
@@ -239,9 +239,7 @@ var __p=[],_p=function(s){__p.push(s)};
 		for(;Cur=List[i++];) {
 __p.push('	<tr data-hook="view" class="pointer-item" data-id="');
 _p(Cur.ID);
-__p.push('" data-data=\'');
-_p(JSON.stringify(Cur));
-__p.push('\'>\n		<td>SN00001</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip"><tr>\n				<td>李振文</td>\n				<td>430611198765432123</td>\n			</tr><tr>\n				<td>赵兰琴</td>\n				<td>515151515141414141</td>\n			</tr></table>\n		</td>\n		<td>已收费</td>\n		<td>已返佣</td>\n		<td>已退尾款</td>\n		<td>总经理审核中</td>\n		<td>20001234</td>\n		<td>福田区深圳市景田西路赛格景苑A802</td>\n	</tr>');
+__p.push('">\n		<td>SN00001</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip"><tr>\n				<td>李振文</td>\n				<td>430611198765432123</td>\n			</tr><tr>\n				<td>赵兰琴</td>\n				<td>515151515141414141</td>\n			</tr></table>\n		</td>\n		<td>已收费</td>\n		<td>已返佣</td>\n		<td>已退尾款</td>\n		<td>总经理审核中</td>\n		<td>20001234</td>\n		<td>福田区深圳市景田西路赛格景苑A802</td>\n	</tr>');
 
 		}
 	}else{

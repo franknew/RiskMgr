@@ -42,7 +42,7 @@ define(function(require, exports, module){
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.List(da.Record);
+					var html = tmpl.List(da);
 
 					container.html(html);
 
@@ -56,7 +56,7 @@ define(function(require, exports, module){
 								current:num,
 								size:size,
 								success:function(da) {
-									that._fill(container,da.Record);
+									that._fill(container,da);
 								}
 							});
 						}
@@ -108,7 +108,7 @@ define(function(require, exports, module){
 		 */
 		query:function(conf) {
 			return ajax.post({
-				url:'RiskMgr.Api.CustomerApi/Query',
+				url:'RiskMgr.Api.ProjectApi/QueryMyApply',
 				data:{
 					PageSize:conf.size||10,
 					CurrentIndex:conf.current || 1

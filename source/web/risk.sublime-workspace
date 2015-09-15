@@ -4,16 +4,32 @@
 		"selected_items":
 		[
 			[
+				"sett",
+				"setting〔variable〕"
+			],
+			[
+				"bac",
+				"background"
+			],
+			[
+				"can",
+				"canEdit"
+			],
+			[
+				"param",
+				"params"
+			],
+			[
+				"Cur",
+				"CurItem"
+			],
+			[
 				"scr",
 				"scrollTop	.scrollTop()"
 			],
 			[
 				"Prop",
 				"PropertyItem"
-			],
-			[
-				"sett",
-				"setting"
 			],
 			[
 				"C",
@@ -74,10 +90,6 @@
 			[
 				"ap",
 				"appendTo	.appendTo()"
-			],
-			[
-				"bac",
-				"background"
 			],
 			[
 				"contain",
@@ -335,6 +347,14 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "script/page/trade/apply/src/view.js",
+			"settings":
+			{
+				"buffer_size": 2316,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -342,6 +362,10 @@
 		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"brows",
+				"Preferences: Browse Packages"
+			],
 			[
 				"package",
 				"Package Control: List Packages"
@@ -456,15 +480,59 @@
 	},
 	"file_history":
 	[
+		"/Library/WebServer/Documents/RiskMgr/.gitignore",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/setup.approval.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/workflow/src/list.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/workflow/src/list.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/workflow/src/index.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/frame/src/frame.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/index.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/view.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/frame/src/index.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/setup.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/setup.customer.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/setup.property.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/setup.project.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/index.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/former/src/index.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/index.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/src/tpl.password.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/src/tpl.info.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/user/src/index.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/src/index.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/src/info.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/src/password.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/employee/src/dialog.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/src/data.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/src/user.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/employee/src/tpl.view.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/list.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/setup.project.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/list.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/mine.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/approval.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/approval.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/mine.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/wizzard.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/setup.customer.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/autoComplete.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/parsley/index.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/style/cleanzone.css",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/data.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/setup.property.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/add.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/test-data.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/choose.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/unit/string.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/unit/uri.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/unit/route.js",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/view/src/view.tmpl.html",
+		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/view/src/index.js",
+		"/Library/WebServer/Documents/qzact/lib/src/util.js",
+		"/Library/WebServer/Documents/hybrid/lib/index.js",
+		"/Library/WebServer/Documents/hybrid/lib/src/qcloud.speed.js",
 		"/Users/lizhenwen/Desktop/评审.txt",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/readability.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/apply/src/test-data.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/list.tmpl.html",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/trade/list/src/index.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/unit/route.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/style/cleanzone.css",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/frame/src/index.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/frame/src/frame.tmpl.html",
 		"/Library/WebServer/Documents/RiskMgr/source/web/style/bootstrap/css/bootstrap.css",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/apply-amount/src/index.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/apply-amount/src/wizzard.js",
@@ -488,16 +556,13 @@
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/customer/src/dialog.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/employee/src/list.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/employee/src/index.js",
-		"/Library/WebServer/Documents/hybrid/lib/src/qcloud.speed.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/customer/src/list.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/customer/src/selector.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/property/src/list.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/employee/src_bak/list.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/employee/src/list.tmpl.html",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/employee/src/dialog.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/property/src/form.tmpl.html",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/employee/src_bak/dialog.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/index.html",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/property/src/list.tmpl.html",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/customer/src/index.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/customer/src/tpl.view.js",
@@ -505,7 +570,6 @@
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/info/src/user.tmpl.html",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/user/info/src/index.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/all.sh",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/user/src/index.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/frame/src/userinfo.js",
 		"/Library/WebServer/Documents/qzact/lib/src/user.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/unit/ajax.js",
@@ -516,11 +580,9 @@
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/property/src/dialog.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/apply-amount/src/autoComplete.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/unit/loading.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/former/src/index.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/msg/src/index.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/unit/serialize.js",
 		"/Users/lizhenwen/Downloads/jquery-1.11.3.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/parsley/index.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/apply-amount/src/tpl.project.base.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/apply-amount/src/tpl.project.newloan.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/apply-amount/src/tpl.project.ransombank.js",
@@ -545,45 +607,7 @@
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/lib/jquery-1.11.3/jquery.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/script/lib/jquery-2.1.4/jquery.js",
 		"/Library/WebServer/Documents/RiskMgr/source/web/images/loading2.gif",
-		"/Library/WebServer/Documents/RiskMgr/source/web/images/loading-big.gif",
-		"/Library/WebServer/Documents/RiskMgr/source/web/images/loading-big2.gif",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/customer/src/selector.tmpl.html",
-		"/Users/lizhenwen/Desktop/team/考核面谈.txt",
-		"/Users/lizhenwen/Desktop/hybrid目录基本说明.txt",
-		"/Library/WebServer/Documents/qzact/common.m/share/src/index.js",
-		"/Library/WebServer/Documents/readab/readability.js",
-		"/Library/WebServer/Documents/readab/readability-print.css",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/customer/src/readability.css",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/modal/src/modal.tmpl.html",
-		"/Library/WebServer/Documents/qzact/common.m/share/src/share.js",
-		"/Library/WebServer/Documents/qzact/common.m/shareV2/src/share.js",
-		"/Library/WebServer/Documents/qzact/common.m/shareV2/src/index.js",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/GBK Encoding Support/Main.sublime-menu",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/SublimeTmpl/Main.sublime-menu",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/ConvertToUTF8/Main.sublime-menu",
-		"/Library/PreferencePanes/Razer Orochi.prefPane/Contents/Resources/English.lproj/Help/index.html",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/SublimeOnSaveBuild/SublimeOnSaveBuild.sublime-settings",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/SublimeOnSaveBuild/package-metadata.json",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/User/jsc-tmpl.sublime-build",
-		"/Library/PreferencePanes/Razer Mamba.prefPane/Contents/Resources/English.lproj/Help/index.html",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/apply-amount/src/tpl.view.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/unit/cookie.js",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/User/jsc.sublime-build",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/page/debugger/src/index.js",
-		"/Library/WebServer/Documents/RiskMgr/source/web/risk.sublime-project",
-		"/Library/WebServer/Documents/RiskMgr/source/web/risk.sublime-workspace",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/BracketHighlighter/bh_core.sublime-settings",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/Can I Use/useIt.pyc",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/User/ColorPicker.sublime-settings",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/ColorPicker/ColorPicker.sublime-settings",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/Package Control/Package Control.sublime-settings",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/User/SublimeLinter.sublime-settings",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/ColorPicker/Default (OSX).sublime-keymap",
-		"/Library/WebServer/Documents/RiskMgr/source/web/script/components/pager/src/index.js",
-		"/Library/WebServer/Documents/JSC/jsc.js",
-		"/Library/WebServer/Documents/JSC/index.js",
-		"/Users/lizhenwen/Library/Application Support/Sublime Text 2/Packages/JSC/jsc.py"
+		"/Library/WebServer/Documents/RiskMgr/source/web/images/loading-big.gif"
 	],
 	"find":
 	{
@@ -601,6 +625,24 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"disabled",
+			"ListBox",
+			"ListContainer",
+			".focus(",
+			"validateElements",
+			"data-target",
+			"data_test",
+			"route",
+			"Ori",
+			"submit",
+			"table",
+			"type",
+			"modinfo",
+			"defaultAction",
+			"initPage",
+			"getHybridPerformance",
+			"http://pub.idqqimg.com/qqmobile/qqapi.js?_bid=152",
+			"mqq.device.getNetworkType",
 			"text-align",
 			"container",
 			"list",
@@ -710,25 +752,7 @@
 			"ele",
 			"Ele",
 			"ele",
-			"Ele",
-			"ele",
-			"Ele",
-			"ele",
-			"9",
-			"mod",
-			"type",
-			"val",
-			"Val",
-			"val",
-			"Val",
-			"val",
-			"obj",
-			"rs",
-			"display: block",
-			"block",
-			":focus",
-			"input:focus",
-			"align"
+			"Ele"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -750,8 +774,180 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "script/page/trade/apply/src/view.js",
+					"settings":
+					{
+						"buffer_size": 2316,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2080,
+								2080
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"expr": true,
+								"laxcomma": true,
+								"regexdash": true,
+								"smarttabs": true,
+								"sub": true,
+								"trailing": true,
+								"undef": true,
+								"unused": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1474.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
