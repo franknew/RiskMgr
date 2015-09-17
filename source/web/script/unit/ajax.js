@@ -12,8 +12,8 @@ define(function(require, exports, module){
 		Serialize = require('./serialize');
 
 	var HOST_TEST = '127.0.0.1',	//测试环境
-		HOST_REAL = '203.195.163.209',	//线上域名
-		DEBUG = location.host==HOST_TEST,	//标记测试环境
+		HOST_REAL = location.host,	//线上域名
+		DEBUG = HOST_REAL==HOST_TEST,	//标记测试环境
 		SKEY_NAME = 'skey';
 
 	var MOD = {
@@ -102,8 +102,8 @@ define(function(require, exports, module){
 			var rs = url,
 				host = '//'+HOST_REAL;
 
-			if (!/^(http:\/\/|\/\/)/.test(url)) {	//risk模块名的方式
-				if (DEBUG) {
+			if (!/^(http:\/\/|\/\/)/.test(url)) {	//没有加http，走risk模块名的方式
+				if (DEBUG && navigator.userAgent.indexOf(' Mac OS X ')!==-1) {//mac下的测试环境才用反向代理
 					host = '//'+HOST_TEST+'/cgi';	//测试环境用反向代理，解决跨域问题
 				}
 				rs = host+'/Service/Execute/'+url;
