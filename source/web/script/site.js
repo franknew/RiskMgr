@@ -5,7 +5,7 @@
 
 (function  () {
 
-	var CDN = location.origin+location.pathname;
+	var CDN = location.origin+location.pathname.replace(/\/.*\..*/,'/');;
 	seajs.config({
 		alias:{
 			'jquery':CDN+'script/lib/jquery-2.1.4/jquery.js',
