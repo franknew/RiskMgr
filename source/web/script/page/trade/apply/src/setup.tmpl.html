@@ -12,6 +12,13 @@
 			<%if (!data.canEdit) {%>
 			<li data-target="Approval">审批信息<span class="chevron"></span></li>
 			<%}%>
+			<%
+			//还需要判断审批之后才能看到
+			if (data.mode!=='add' && data.mode!=='edit') {
+			%>
+			<li data-target="Approval">收费情况<span class="chevron"></span></li>
+			<li data-target="Approval">保后跟踪<span class="chevron"></span></li>
+			<%}%>
 		</ul>
 		<div class="step-content">
 			<%=this.SetupCustomer(data)%>

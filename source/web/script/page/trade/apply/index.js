@@ -1790,6 +1790,11 @@ __p.push('<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');
 if (!data.canEdit) {__p.push('			<li data-target="Approval">审批信息<span class="chevron"></span></li>');
+}__p.push('			');
+
+			//还需要判断审批之后才能看到
+			if (data.mode!=='add' && data.mode!=='edit') {
+			__p.push('			<li data-target="Approval">收费情况<span class="chevron"></span></li>\n			<li data-target="Approval">保后跟踪<span class="chevron"></span></li>');
 }__p.push('		</ul>\n		<div class="step-content">');
 _p(this.SetupCustomer(data));
 __p.push('			');
