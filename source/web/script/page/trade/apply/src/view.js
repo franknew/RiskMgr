@@ -45,7 +45,7 @@ define(function(require, exports, module){
 				content:html
 			});
 
-			if (canEdit) {
+			//if (canEdit) {
 				Wizzard.init({
 					container:'#J_Wizzard',
 					success:function() {
@@ -56,7 +56,7 @@ define(function(require, exports, module){
 						}
 					}
 				});
-			}
+			//}
 
 			this._initEvent();
 

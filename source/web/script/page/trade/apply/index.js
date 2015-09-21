@@ -1321,7 +1321,7 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 				content:html
 			});
 
-			if (canEdit) {
+			//if (canEdit) {
 				Wizzard.init({
 					container:'#J_Wizzard',
 					success:function() {
@@ -1332,7 +1332,7 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 						}
 					}
 				});
-			}
+			//}
 
 			this._initEvent();
 
@@ -1794,7 +1794,7 @@ if (!data.canEdit) {__p.push('			<li data-target="Approval">审批信息<span cl
 
 			//还需要判断审批之后才能看到
 			if (data.mode!=='add' && data.mode!=='edit') {
-			__p.push('			<li data-target="Approval">收费情况<span class="chevron"></span></li>\n			<li data-target="Approval">保后跟踪<span class="chevron"></span></li>');
+			__p.push('			<li data-target="Charge">收费情况<span class="chevron"></span></li>\n			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
 }__p.push('		</ul>\n		<div class="step-content">');
 _p(this.SetupCustomer(data));
 __p.push('			');
