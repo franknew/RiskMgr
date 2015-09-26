@@ -2,6 +2,9 @@
 using DreamWorkflow.Engine.Form;
 using DreamWorkflow.Engine.Model;
 using IBatisNet.DataMapper;
+using RiskMgr.Form;
+using RiskMgr.Model;
+using RiskMgr.DAL;
 using SOAFramework.Service.Core.Model;
 using System;
 using System.Collections.Generic;
@@ -12,19 +15,11 @@ namespace RiskMgr.BLL
 {
     public class TaskBLL
     {
-        public List<Task> Query(TaskQueryForm form)
+        public List<FullTask> Query(QueryMyTaskServiceForm form)
         {
-            ISqlMapper mapper = null;
-            if (ServiceSession.Current.Context.Parameters.ContainsKey("Mapper"))
-            {
-                mapper = ServiceSession.Current.Context.Parameters["Mapper"] as ISqlMapper;
-            }
-            else
-            {
-                mapper = Mapper.Instance();
-            }
-            TaskDao dao = new TaskDao(mapper);
-            return dao.Query(form);
+            ISqlMapper mapper = Common.GetMapperFromSession();
+            FullTaskDao dao = new FullTaskDao(mapper);
+            return dao.QueryTaskByRelationship(form);
         }
     }
 }

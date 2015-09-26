@@ -2,6 +2,7 @@
 using DreamWorkflow.Engine.Form;
 using DreamWorkflow.Engine.Model;
 using RiskMgr.BLL;
+using RiskMgr.Form;
 using RiskMgr.Model;
 using SOAFramework.Service.Core;
 using System;
@@ -33,12 +34,12 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [QueryAction]
-        public List<Task> QueryMyApply()
+        public List<FullTask> QueryMyApply()
         {
             UserBLL userbll = new UserBLL();
             TaskBLL taskbll = new TaskBLL();
             var user = userbll.GetCurrentUser();
-            return taskbll.Query(new TaskQueryForm { Creator = user.User.ID });
+            return taskbll.Query(new QueryMyTaskServiceForm { Creator = user.User.ID });
         }
 
         /// <summary>
@@ -46,12 +47,12 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [QueryAction]
-        public List<Task> QueryMyProcessing()
+        public List<FullTask> QueryMyProcessing()
         {
             UserBLL userbll = new UserBLL();
             TaskBLL taskbll = new TaskBLL();
             var user = userbll.GetCurrentUser();
-            return taskbll.Query(new TaskQueryForm { UserID = user.User.ID, Status = (int)TaskProcessStatus.Started });
+            return taskbll.Query(new QueryMyTaskServiceForm { UserID = user.User.ID, Status = (int)TaskProcessStatus.Started });
         }
 
         /// <summary>
@@ -59,12 +60,21 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [QueryAction]
-        public List<Task> QueryMyProcessed()
+        public List<FullTask> QueryMyProcessed()
         {
             UserBLL userbll = new UserBLL();
             TaskBLL taskbll = new TaskBLL();
             var user = userbll.GetCurrentUser();
-            return taskbll.Query(new TaskQueryForm { UserID = user.User.ID, Status = (int)TaskProcessStatus.Processed });
+            return taskbll.Query(new QueryMyTaskServiceForm { UserID = user.User.ID, Status = (int)TaskProcessStatus.Processed });
+        }
+
+        [QueryAction]
+        public List<FullTask> QueryMyTask(QueryMyTaskServiceForm form)
+        {
+            UserBLL userbll = new UserBLL();
+            TaskBLL taskbll = new TaskBLL();
+            var user = userbll.GetCurrentUser();
+            return taskbll.Query(new QueryMyTaskServiceForm { UserID = user.User.ID, Status = form.Status });
         }
     }
 }

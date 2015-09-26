@@ -115,6 +115,10 @@ namespace RiskMgr.BLL
 
         public InitApprovalResultForm QueryDetail(string projectid)
         {
+            if (string.IsNullOrEmpty(projectid))
+            {
+                throw new Exception("没有项目ID");
+            }
             InitApprovalResultForm form = new InitApprovalResultForm();
             var mapper = Common.GetMapperFromSession();
             ProjectDao projectdao = new ProjectDao(mapper);
@@ -124,6 +128,10 @@ namespace RiskMgr.BLL
             Customer_AssetDao cadao = new Customer_AssetDao(mapper);
             Asset_ProjectDao apdao = new Asset_ProjectDao(mapper);
             form.Project = projectdao.Query(new ProjectQueryForm { ID = projectid }).FirstOrDefault();
+            if (form.Project == null)
+            {
+                throw new Exception("项目ID：" + projectid + "不存在！");
+            }
             var cps = cpdao.Query(new Customer_ProjectQueryForm { ProjectID = projectid });
             var aps = apdao.Query(new Asset_ProjectQueryForm { ProjectID = projectid });
             List<string> customerids = new List<string>();
@@ -157,6 +165,7 @@ namespace RiskMgr.BLL
             return form;
         }
 
+        [QueryAction]
         public List<Project> QueryMyProject(WorkflowProcessStatus processStatus)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
@@ -174,29 +183,26 @@ namespace RiskMgr.BLL
             return projectdao.Query(new ProjectQueryForm { Ids = projectids });
         }
 
-        public List<ProjectTask> QueryMyApply()
+        [QueryAction]
+        public List<InitApprovalResultForm> QueryMyApply()
         {
+            List<InitApprovalResultForm> list = new List<InitApprovalResultForm>();
             ISqlMapper mapper = Common.GetMapperFromSession();
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
             WorkflowDao wfdao = new WorkflowDao(mapper);
             ProjectDao projectdao = new ProjectDao(mapper);
+            var users = TableCacheHelper.GetDataFromCache<User>(typeof(UserDao));
             var workflows = wfdao.Query(new WorkflowQueryForm { Creator = user.User.ID });
-            var projectids = (from wf in workflows
-                              select wf.ProcessID).ToList();
-            var projcts = projectdao.Query(new ProjectQueryForm { Ids = projectids });
-            List<ProjectTask> projecttasks = projcts.ToDataTable().ToList<ProjectTask>().ToList();
-            projecttasks.ForEach(t =>
+            foreach (Workflow wf in workflows)
             {
-                var workflow = workflows.Find(p => p.ProcessID == t.ID);
-                if (workflow != null)
+                if (!string.IsNullOrEmpty(wf.ProcessID))
                 {
-                    WorkflowProcessStatus status = WorkflowProcessStatus.Started;
-                    Enum.TryParse<WorkflowProcessStatus>(workflow.Status.Value.ToString(), out status);
-                    t.ProcessStatus = status;
+                    var form = QueryDetail(wf.ProcessID);
+                    list.Add(form);
                 }
-            });
-            return projecttasks;
+            }
+            return list;
         }
     }
 }

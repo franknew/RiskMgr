@@ -26,7 +26,7 @@
     </isNotNull>
     <isNotNull property="Ids">
         <iterate property="Ids" open="(" close=")" conjunction="OR">
-         Ids=#Ids[]#
+         Id=#Ids[]#
         </iterate>
     </isNotNull>
     </dynamic>

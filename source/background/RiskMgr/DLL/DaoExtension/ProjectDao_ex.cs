@@ -10,9 +10,9 @@ namespace RiskMgr.DAL
 {
     public partial class ProjectDao : SimpleDao<Project, ProjectQueryForm, ProjectUpdateForm>
     {
-        public List<Project> QueryProjectByRelationship(QueryProjectServiceForm form)
+        public List<ProjectTask> QueryProjectByRelationship(QueryProjectServiceForm form)
         {
-            return Mapper.QueryForList<Project>("QueryProjectByRelationship", form).ToList();
+            return Mapper.QueryForList<ProjectTask>("QueryProjectByRelationship", form).ToList();
         }
     }
 }

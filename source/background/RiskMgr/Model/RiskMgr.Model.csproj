@@ -54,6 +54,7 @@
     <Compile Include="Entity\Customer.cs" />
     <Compile Include="Entity\Customer_Asset.cs" />
     <Compile Include="Entity\Customer_Project.cs" />
+    <Compile Include="Entity\FullTask.cs" />
     <Compile Include="Entity\FullUser.cs" />
     <Compile Include="Entity\Asset_ex.cs" />
     <Compile Include="Entity\LogonHistory.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="ServiceForm\InitApprovalServiceForm.cs" />
     <Compile Include="ServiceForm\LogonServiceForm.cs" />
     <Compile Include="ServiceForm\QueryDataDictionaryByGroupNamesServiceForm.cs" />
+    <Compile Include="ServiceForm\QueryMyTaskServiceForm.cs" />
     <Compile Include="ServiceForm\UpdateUserServiceForm.cs" />
     <Compile Include="UpdateForm\AssetUpdateForm.cs" />
     <Compile Include="UpdateForm\Asset_ProjectUpdateForm.cs" />

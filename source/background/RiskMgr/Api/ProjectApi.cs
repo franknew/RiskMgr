@@ -34,7 +34,10 @@ namespace RiskMgr.Api
             {
                 foreach (var a in form.Assets)
                 {
-                    assets.Add(new Asset_Project { AssetID = a.ID });
+                    if (!string.IsNullOrEmpty(a.ID))
+                    {
+                        assets.Add(new Asset_Project { AssetID = a.ID });
+                    }
                     //处理公权人
                     if (a.Joint != null)
                     {
@@ -101,9 +104,9 @@ namespace RiskMgr.Api
         /// <param name="form"></param>
         /// <returns></returns>
         [QueryAction]
-        public InitApprovalResultForm InitApproval(InitApprovalServiceForm form)
+        public InitApprovalResultForm InitApproval(ProjectQueryForm form)
         {
-            return bll.QueryDetail(form.WorkflowID);
+            return bll.QueryDetail(form.ID);
         }
 
         /// <summary>
@@ -121,7 +124,7 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [QueryAction]
-        public List<ProjectTask> QueryMyApply()
+        public List<InitApprovalResultForm> QueryMyApply()
         {
             return bll.QueryMyApply();
         }

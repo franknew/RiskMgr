@@ -29,7 +29,7 @@ namespace RiskMgr.Api
             TaskBLL taskbll = new TaskBLL();
             form.Menu = menubll.GetCurrentUserMenu();
             form.User = userbll.GetCurrentUser();
-            var task = taskbll.Query(new TaskQueryForm { UserID = form.User.UserInfo.ID });
+            var task = taskbll.Query(new QueryMyTaskServiceForm { UserID = form.User.UserInfo.ID });
             task.Sort((l, r) =>
             {
                 if (l.CreateTime > r.CreateTime)
