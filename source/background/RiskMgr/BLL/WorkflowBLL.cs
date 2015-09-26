@@ -14,13 +14,13 @@ namespace RiskMgr.BLL
         private ICache cache = CacheFactory.Create();
 
         
-        public bool Approval(string workflowid, string activityid, Approval approval)
+        public bool Approval(string workflowid, string activityid, string taskid, Approval approval)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             WorkflowModel workflow = WorkflowModel.Load(workflowid);
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
-            workflow.ProcessActivity(activityid, approval, user.User.ID, new WorkflowAuthority());
+            workflow.ProcessActivity(activityid, approval, taskid, user.User.ID, new WorkflowAuthority());
             return true;
         }
     }

@@ -26,7 +26,7 @@ namespace RiskMgr.Api
         [ApprovalAction]
         public bool Approval(ApprovalServiceForm form)
         {
-            return bll.Approval(form.WorkflowID, form.ActivityID, form.Approval);
+            return bll.Approval(form.WorkflowID, form.ActivityID, form.TaskID, form.Approval);
         }
 
         /// <summary>

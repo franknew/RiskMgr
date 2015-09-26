@@ -17,10 +17,11 @@ namespace RiskMgr.BLL
 {
     public class ProjectBLL
     {
-        public string Add(Project project, List<Asset_Project> assets, List<Customer_Project> customers, List<Customer> updatecustomers)
+        public string Add(Project project, List<Asset> assets, List<Customer_Project> customers, List<Customer> updatecustomers)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao projectdao = new ProjectDao(mapper);
+            AssetDao assetdao = new AssetDao(mapper);
             Asset_ProjectDao apdao = new Asset_ProjectDao(mapper);
             Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
             CustomerDao customerdao = new CustomerDao(mapper);
@@ -31,16 +32,82 @@ namespace RiskMgr.BLL
             {
                 foreach (var asset in assets)
                 {
-                    asset.ProjectID = project.ID;
-                    apdao.Add(asset);
-                }
-            }
-            if (customers != null)
-            {
-                foreach (var customer in customers)
-                {
-                    customer.ProjectID = project.ID;
-                    cpdao.Add(customer);
+                    //处理房产，房产证相同就更新
+                    Asset tmp = assetdao.Query(new AssetQueryForm
+                    {
+                        Code = asset.Code,
+                    }).FirstOrDefault();
+                    if (tmp != null)
+                    {
+                        assetdao.Update(new AssetUpdateForm
+                        {
+                            Entity = new Asset
+                            {
+                                Usage = asset.Usage,
+                                Address = asset.Address,
+                                Area = asset.Area,
+                                RegPrice = asset.RegPrice,
+                            },
+                            AssetQueryForm = new AssetQueryForm { ID = tmp.ID },
+                        });
+                    }
+                    else
+                    {
+                        assetdao.Add(asset);
+                    }
+                    //处理房产和公权人
+                    foreach (var j in asset.Joint)
+                    {
+                        var c = customerdao.Query(new CustomerQueryForm { ID = j.ID }).FirstOrDefault();
+                        if (c == null)
+                        {
+                            c = customerdao.Query(new CustomerQueryForm { IdentityCode = j.IdentityCode, Enabled = 1 }).FirstOrDefault();
+                            if (c != null)
+                            {
+                                customerdao.Update(new CustomerUpdateForm
+                                {
+                                    Entity = new Customer
+                                    {
+                                        Name = j.Name,
+                                        Phone = j.Phone,
+                                        IdentityCode = j.IdentityCode,
+                                    },
+                                    CustomerQueryForm = new CustomerQueryForm { ID = c.ID},
+                                });
+                            }
+                            else
+                            {
+                                customerdao.Add(j);
+                                c = j;
+                            }
+                        }
+                        else
+                        {
+                            customerdao.Update(new CustomerUpdateForm
+                            {
+                                Entity = new Customer
+                                {
+                                    Name = j.Name,
+                                    Phone = j.Phone,
+                                    IdentityCode = j.IdentityCode,
+                                },
+                                CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
+                            });
+                        }
+                        Customer_Asset ca = new Customer_Asset
+                        {
+                            AssetID = asset.ID,
+                            CustomerID = c.ID,
+                        };
+                        cadao.Add(ca);
+                    }
+                    //处理房产和项目关系
+                    Asset_Project ap = new Asset_Project
+                    {
+                        AssetID = asset.ID,
+                        ProjectID = project.ID,
+                    };
+                    apdao.Add(ap);
                 }
             }
             if (updatecustomers != null)
@@ -66,7 +133,7 @@ namespace RiskMgr.BLL
                                     BankCode = customer.BankCode,
                                     WorkUnit = customer.WorkUnit,
                                 },
-                                CustomerQueryForm = new CustomerQueryForm { IdentityCode = customer.IdentityCode },
+                                CustomerQueryForm = new CustomerQueryForm { IdentityCode = customer.IdentityCode, Enabled = 1 },
                             });
                         }
                         else
@@ -93,6 +160,14 @@ namespace RiskMgr.BLL
                             CustomerQueryForm = new CustomerQueryForm { ID = customer.ID },
                         });
                     }
+                }
+            }
+            if (customers != null)
+            {
+                foreach (var customer in customers)
+                {
+                    customer.ProjectID = project.ID;
+                    cpdao.Add(customer);
                 }
             }
             projectid = project.ID;

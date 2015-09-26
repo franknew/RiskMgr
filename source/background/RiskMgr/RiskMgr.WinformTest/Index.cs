@@ -200,5 +200,15 @@ namespace RiskMgr.WinformTest
             var response = SDKFactory.Client.Execute(request);
             MessageBox.Show(response.ResponseBody);
         }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            ApprovalRequest request = new ApprovalRequest();
+            request.form = new ApprovalServiceForm
+            {
+                ActivityID = "cf90846148874e59a9caaf13cbf136be",
+                TaskID = "",
+            };
+        }
     }
 }

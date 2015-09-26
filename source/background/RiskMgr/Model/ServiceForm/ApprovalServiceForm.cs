@@ -22,5 +22,10 @@ namespace RiskMgr.Model
         /// 审批结果
         /// </summary>
         public Approval Approval { get; set; }
+
+        /// <summary>
+        /// 表示从哪一个任务处理的流程
+        /// </summary>
+        public string TaskID { get; set; }
     }
 }

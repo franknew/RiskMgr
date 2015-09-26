@@ -25,32 +25,8 @@ namespace RiskMgr.Api
         [EditAction]
         public string Add(AddProjectServiceForm form)
         {
-            List<Asset_Project> assets = new List<Asset_Project>();
             List<Customer_Project> customers = new List<Customer_Project>();
             List<Customer> updateCustomers = new List<Customer>();
-
-
-            if (form.Assets != null)
-            {
-                foreach (var a in form.Assets)
-                {
-                    if (!string.IsNullOrEmpty(a.ID))
-                    {
-                        assets.Add(new Asset_Project { AssetID = a.ID });
-                    }
-                    //处理公权人
-                    if (a.Joint != null)
-                    {
-                        foreach (var third in a.Joint)
-                        {
-                            if (!updateCustomers.Exists(t => t.IdentityCode.Equals(third.IdentityCode)))
-                            {
-                                updateCustomers.Add(third);
-                            }
-                        }
-                    }
-                }
-            }
 
             customers.AddRange(GetRelationship(form.Buyers, (int)CustomerType.Buyer));
             customers.AddRange(GetRelationship(form.Sellers, (int)CustomerType.Seller));
@@ -63,8 +39,8 @@ namespace RiskMgr.Api
                 updateCustomers.AddRange(form.Sellers);
             }
 
-            var result = bll.Add(form.Project, assets, customers, updateCustomers);
-            
+            var result = bll.Add(form.Project, form.Assets, customers, updateCustomers);
+
             //处理流程
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
             UserBLL userbll = new UserBLL();
@@ -84,7 +60,7 @@ namespace RiskMgr.Api
         {
             return bll.Query(form);
         }
-        
+
         private List<Customer_Project> GetRelationship(List<Customer> customers, int type)
         {
             List<Customer_Project> result = new List<Customer_Project>();
