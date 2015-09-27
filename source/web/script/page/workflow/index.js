@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["risk/unit/route","jquery","risk/unit/ajax","risk/components/pager/index"],function(require,exports,module){
+define(["risk/unit/route","jquery","risk/unit/ajax","risk/unit/string","risk/components/pager/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -75,10 +75,11 @@ define.pack("./index",["risk/unit/route","./list","./tmpl"],function(require, ex
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/components/pager/index","./tmpl"],function(require, exports, module){
+define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/string","risk/components/pager/index","./tmpl"],function(require, exports, module){
 	var $ = require('jquery'),
 		ajax = require('risk/unit/ajax'),
 		route = require('risk/unit/route'),
+		string = require('risk/unit/string'),
 		pager = require('risk/components/pager/index'),
 		tmpl = require('./tmpl');
 
@@ -216,6 +217,7 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 
+	var RString = require('risk/unit/string');
 	var List = data||[];
 
 	var i=0,Cur;
@@ -233,7 +235,7 @@ _p(Cur.Remark);
 __p.push('</td>\n		<td>');
 _p(Cur.Creator);
 __p.push('</td>\n		<td>');
-_p(Cur.LastUpdateTime);
+_p(RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm'));
 __p.push('</td>\n	</tr>');
 
 		}

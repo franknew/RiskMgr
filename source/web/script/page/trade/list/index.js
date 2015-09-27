@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["risk/unit/route","jquery","risk/unit/ajax","risk/components/pager/index"],function(require,exports,module){
+define(["risk/unit/route","jquery","risk/unit/ajax","risk/unit/string","risk/components/pager/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -80,10 +80,11 @@ define.pack("./index",["risk/unit/route","./list","./tmpl"],function(require, ex
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/components/pager/index","./tmpl"],function(require, exports, module){
+define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/string","risk/components/pager/index","./tmpl"],function(require, exports, module){
 	var $ = require('jquery'),
 		ajax = require('risk/unit/ajax'),
 		route = require('risk/unit/route'),
+		string = require('risk/unit/string'),
 		pager = require('risk/components/pager/index'),
 		tmpl = require('./tmpl');
 
@@ -220,7 +221,7 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th rowspan="2">编号</th>\n				<th rowspan="2">业务员</th>\n				<th colspan="2" class="text-center">客户信息</th>\n				<th rowspan="2">收费状态</th>\n				<th rowspan="2">返佣状态</th>\n				<th rowspan="2">尾款状态</th>\n				<th rowspan="2">当前进度</th>\n				<th colspan="2" class="text-center">房产信息</th>\n			</tr>\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>房产证号</th>\n				<th>地址</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th rowspan="2">编号</th>\n				<th rowspan="2">业务员</th>\n				<th colspan="2" class="text-center">客户信息</th>\n				<th rowspan="2">收费状态</th>\n				<th rowspan="2">返佣状态</th>\n				<th rowspan="2">尾款状态</th>\n				<th rowspan="2">当前进度</th>\n				<th colspan="2" class="text-center">房产信息</th>\n				<th rowspan="2">申请时间</th>\n			</tr>\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>房产证号</th>\n				<th>地址</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -231,6 +232,7 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 
+	var RString = require('risk/unit/string');
 	var List = data||[];
 
 	var i=0,Cur;
@@ -238,8 +240,45 @@ var __p=[],_p=function(s){__p.push(s)};
 
 		for(;Cur=List[i++];) {
 __p.push('	<tr data-hook="view" class="pointer-item" data-id="');
-_p(Cur.ID);
-__p.push('">\n		<td>SN00001</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip"><tr>\n				<td>李振文</td>\n				<td>430611198765432123</td>\n			</tr><tr>\n				<td>赵兰琴</td>\n				<td>515151515141414141</td>\n			</tr></table>\n		</td>\n		<td>已收费</td>\n		<td>已返佣</td>\n		<td>已退尾款</td>\n		<td>总经理审核中</td>\n		<td>20001234</td>\n		<td>福田区深圳市景田西路赛格景苑A802</td>\n	</tr>');
+_p(Cur.Project.ID);
+__p.push('">\n		<td>SN00001</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip">');
+
+			var bi=0,CurBuyer,
+				Buyers = Cur.Buyers||[];
+			for(;CurBuyer=Buyers[bi++];) {
+			__p.push('			<tr>\n				<td>');
+_p(CurBuyer.Name);
+__p.push('</td>\n				<td>');
+_p(CurBuyer.IdentityCode);
+__p.push('</td>\n			</tr>');
+
+			}
+			
+			var bi=0,CurSeller,
+				Sellers = Cur.Sellers||[];
+			for(;CurSeller=Sellers[bi++];) {
+			__p.push('			<tr>\n				<td>');
+_p(CurSeller.Name);
+__p.push('</td>\n				<td>');
+_p(CurSeller.IdentityCode);
+__p.push('</td>\n			</tr>');
+
+			}
+			__p.push('\n			</table>\n		</td>\n		<td>已收费</td>\n		<td>已返佣</td>\n		<td>已退尾款</td>\n		<td>总经理审核中</td>\n		<td colspan="2">\n			<table class="no-strip">');
+
+			var bi=0,CurAssets,
+				Assets = Cur.Assets||[];
+			for(;CurAssets=Assets[bi++];) {
+			__p.push('			<tr>\n				<td>');
+_p(CurAssets.Name);
+__p.push('</td>\n				<td>');
+_p(CurAssets.IdentityCode);
+__p.push('</td>\n			</tr>');
+
+			}
+			__p.push('			</table>\n		</td>\n		<td>');
+_p(RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm'));
+__p.push('</td>\n	</tr>');
 
 		}
 	}else{

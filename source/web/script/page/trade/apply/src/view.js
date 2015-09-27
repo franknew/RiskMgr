@@ -64,7 +64,6 @@ define(function(require, exports, module){
 			$('#TEST').click(function(ev) {
 				ev.preventDefault();
 				var data = require('./test-data');
-				console.log('ttt',data);
 				MOD.submit(mode,data);
 			});
 		},
@@ -88,16 +87,12 @@ define(function(require, exports, module){
 		//提交表单
 		submit:function(mode,data) {
 			var dataCustomer = Customer.getData();
-			var data = {
+			var data = data || {
 				Buyers:dataCustomer.buyer,
 				Sellers:dataCustomer.seller,
 				Assets:Property.getData(),
 				Project:Project.getData()
 			};
-
-			if (data) {//使用测试数据
-				data = data;
-			}
 
 			Ajax.post({
 				url:'RiskMgr.Api.ProjectApi/Add',

@@ -4,7 +4,6 @@
 */
 
 (function  () {
-
 	var CDN = location.origin+location.pathname.replace(/\/.*\..*/,'/');;
 	seajs.config({
 		alias:{

@@ -56,6 +56,7 @@
 				<th rowspan="2">尾款状态</th>
 				<th rowspan="2">当前进度</th>
 				<th colspan="2" class="text-center">房产信息</th>
+				<th rowspan="2">申请时间</th>
 			</tr>
 			<tr>
 				<th>姓名</th>
@@ -75,6 +76,7 @@
 
 <script type="text/html" id="ListItem">
 <%
+	var RString = require('risk/unit/string');
 	var List = data||[];
 
 	var i=0,Cur;
@@ -82,24 +84,61 @@
 
 		for(;Cur=List[i++];) {
 %>
-	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>">
+	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.Project.ID%>">
 		<td>SN00001</td>
 		<td>ye wu yuan</td>
 		<td colspan="2">
-			<table class="no-strip"><tr>
-				<td>李振文</td>
-				<td>430611198765432123</td>
-			</tr><tr>
-				<td>赵兰琴</td>
-				<td>515151515141414141</td>
-			</tr></table>
+			<table class="no-strip">
+
+			<%
+			var bi=0,CurBuyer,
+				Buyers = Cur.Buyers||[];
+			for(;CurBuyer=Buyers[bi++];) {
+			%>
+			<tr>
+				<td><%=CurBuyer.Name%></td>
+				<td><%=CurBuyer.IdentityCode%></td>
+			</tr>
+			<%
+			}
+			%>
+
+			<%
+			var bi=0,CurSeller,
+				Sellers = Cur.Sellers||[];
+			for(;CurSeller=Sellers[bi++];) {
+			%>
+			<tr>
+				<td><%=CurSeller.Name%></td>
+				<td><%=CurSeller.IdentityCode%></td>
+			</tr>
+			<%
+			}
+			%>
+
+			</table>
 		</td>
 		<td>已收费</td>
 		<td>已返佣</td>
 		<td>已退尾款</td>
 		<td>总经理审核中</td>
-		<td>20001234</td>
-		<td>福田区深圳市景田西路赛格景苑A802</td>
+		<td colspan="2">
+			<table class="no-strip">
+			<%
+			var bi=0,CurAssets,
+				Assets = Cur.Assets||[];
+			for(;CurAssets=Assets[bi++];) {
+			%>
+			<tr>
+				<td><%=CurAssets.Name%></td>
+				<td><%=CurAssets.IdentityCode%></td>
+			</tr>
+			<%
+			}
+			%>
+			</table>
+		</td>
+		<td><%=RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm')%></td>
 	</tr>
 <%
 		}

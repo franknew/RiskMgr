@@ -12,8 +12,12 @@ define(function(require, exports, module){
 
 	var MOD = {
 		get:function(id,callback) {
-			require.async('./test-data',function(d) {
-				callback(d);
+			Ajax.post({
+				url:'RiskMgr.Api.ProjectApi/InitApproval',
+				data:{ID:id},
+				success:function(da) {
+					callback(da);
+				}
 			});
 		}
 	};

@@ -78,12 +78,12 @@ define(function(require, exports, module) {
 		//加载指定的模块
 		load:function(modname) {
 			var reg = new RegExp('\b'+modname+'\b','');
-			if (!reg.test(location.hash)) {	//填上当前页的mod
+			if (!reg.test(location.hash)) {	//填上当前页的mod，并会自动触发hashchange事件
 				location.hash = modname;
+			}else {	//当前页重复刷新
+				var modinfo = this._getMod(modname);
+				this._load(modinfo);
 			}
-
-			var modinfo = this._getMod(modname);
-			this._load(modinfo);
 		},
 		/** 获取当前展示的模块url id
 		 * @param

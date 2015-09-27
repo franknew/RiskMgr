@@ -19,6 +19,72 @@ define(function(require, exports, module){
 		*/
 		decodeHtml : function(str) {
 			return (str + '').replace(/&quot;/g, '\x22').replace(/&#0*39;/g, '\x27').replace(/&#0*96;/g, '\x60').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&');
+		},
+		/**
+		* 日期格式化方法
+		* @param {Date} date 待格式化Date对象或者是时间戳(毫秒级)
+		* @param {String} format 格式化的格式，例如：'yyyy-MM-dd HH:mm:ss'
+		* @returns {String} 格式化后字符串
+		*/
+		date:function(date, format){
+			var res = format,
+				tt = '',
+				dateType = typeof(date);
+
+			//兼容时间戳
+			if (dateType=='number' || dateType=='string') {
+				date = new Date(date*1);
+			}
+
+			res = res.replace(/yyyy|yy/, function($0) {
+				var fullyear = date.getFullYear() + '',
+					len = fullyear.length;
+				return fullyear.slice(len - $0.length, len);
+			}).replace(/MM|M/, function($0) {
+				if($0.length === 2 && date.getMonth() < 9) {
+					return '0' + (date.getMonth() + 1);
+				} else {
+					return date.getMonth() + 1;
+				}
+			}).replace(/dd|d/, function($0) {
+				if($0.length === 2 && date.getDate() < 10) {
+					return '0' + date.getDate();
+				} else {
+					return date.getDate();
+				}
+			}).replace(/HH|H/, function($0) {
+				if($0.length === 2 && date.getHours() < 10) {
+					return '0' + date.getHours();
+				} else {
+					return date.getHours();
+				}
+			}).replace(/hh|h/, function($0) {
+				var hours = date.getHours();
+				if(hours > 11) {
+					tt = 'PM';
+				} else {
+					tt = 'AM';
+				}
+				hours = hours > 12 ? hours - 12 : hours;
+				if($0.length === 2 && hours < 10) {
+					return '0' + hours;
+				} else {
+					return hours;
+				}
+			}).replace(/mm/, function($0) {
+				if(date.getMinutes() < 10) {
+					return '0' + date.getMinutes();
+				} else {
+					return date.getMinutes();
+				}
+			}).replace(/ss/, function($0) {
+				if(date.getSeconds() < 10) {
+					return '0' + date.getSeconds();
+				} else {
+					return date.getSeconds();
+				}
+			}).replace('tt', tt);
+			return res;
 		}
 	};
 

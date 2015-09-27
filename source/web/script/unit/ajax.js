@@ -146,7 +146,7 @@ define(function(require, exports, module){
 		_formatError:function(error,url) {
 			if (!error) {
 				return function(XMLHttpRequest, textStatus, errorThrown) {
-					msg.error(MOD._errorMessage('http '+XMLHttpRequest.status,textStatus,errorThrown,url));
+					msg.error(MOD._errorMessage(XMLHttpRequest.status,textStatus,errorThrown,url));
 				};
 			}
 
@@ -174,8 +174,9 @@ define(function(require, exports, module){
 			return rs;
 		},
 		//获取统一的错误提示文案
-		_errorMessage:function(code,message,errorThrown,url) {
-			return '('+code+') '+message+(errorThrown?'<br/><span style="color:#C78583;font-size:12px;">'+errorThrown+'</span>':'')+(url?'<br/><span style="color:#C78583;font-size:12px;">'+url+'</span>':'');
+		_errorMessage:function(http_code,message,errorThrown,url) {
+			var statusText = http_code==200?'':'(http '+http_code+') ';
+			return statusText+message+(errorThrown?'<br/><span style="color:#C78583;font-size:12px;">'+errorThrown+'</span>':'')+(url?'<br/><span style="color:#C78583;font-size:12px;">'+url+'</span>':'');
 		}
 	};
 	return MOD;

@@ -159,8 +159,12 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
 
 	var MOD = {
 		get:function(id,callback) {
-			require.async('./test-data',function(d) {
-				callback(d);
+			Ajax.post({
+				url:'RiskMgr.Api.ProjectApi/InitApproval',
+				data:{ID:id},
+				success:function(da) {
+					callback(da);
+				}
 			});
 		}
 	};
@@ -1340,7 +1344,6 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 			$('#TEST').click(function(ev) {
 				ev.preventDefault();
 				var data = require('./test-data');
-				console.log('ttt',data);
 				MOD.submit(mode,data);
 			});
 		},
@@ -1364,16 +1367,12 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 		//提交表单
 		submit:function(mode,data) {
 			var dataCustomer = Customer.getData();
-			var data = {
+			var data = data || {
 				Buyers:dataCustomer.buyer,
 				Sellers:dataCustomer.seller,
 				Assets:Property.getData(),
 				Project:Project.getData()
 			};
-
-			if (data) {//使用测试数据
-				data = data;
-			}
 
 			Ajax.post({
 				url:'RiskMgr.Api.ProjectApi/Add',
@@ -1608,7 +1607,7 @@ return __p.join("");
 'SetupApproval': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>审批信息</h3>\n		</div>\n		<div class="content">\n			<div class="well">\n				<div class="form-group">\n					<div class="col-sm-12">\n					<label>调查报告</label>\n					<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">风控意见</label>\n					<div class="col-sm-9">\n						<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">经理意见</label>\n					<div class="col-sm-9">\n						<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">收费情况</label>\n					<div class="col-sm-9">\n						收取担保费：￥1999<br/>\n						担保费时间：<br>\n						放款金额：￥222万元<br/>\n						放款时间：2015<br/>\n						回款金额：万元<br/>\n						回款时间：<br/>\n						滞纳金：<br/>\n						滞纳金时间：<br/>\n						是否有展期费用：（超出时间的费用）\n					</div>\n				</div>\n			</div>\n		</div>\n	</div>');
+__p.push('<div class="step-pane" id="Approval">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>审批信息</h3>\n		</div>\n		<div class="content">\n			<div class="well">\n				<div class="form-group">\n					<div class="col-sm-12">\n					<label>调查报告</label>\n					<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">风控意见</label>\n					<div class="col-sm-9">\n						<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">经理意见</label>\n					<div class="col-sm-9">\n						<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">收费情况</label>\n					<div class="col-sm-9">\n						收取担保费：￥1999<br/>\n						担保费时间：<br>\n						放款金额：￥222万元<br/>\n						放款时间：2015<br/>\n						回款金额：万元<br/>\n						回款时间：<br/>\n						滞纳金：<br/>\n						滞纳金时间：<br/>\n						是否有展期费用：（超出时间的费用）\n					</div>\n				</div>\n			</div>\n		</div>\n	</div>');
 if (data.mode == 'approval') {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n			&nbsp;&nbsp;\n			<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n		</div>\n	</div>');
 }__p.push('</div>');
 

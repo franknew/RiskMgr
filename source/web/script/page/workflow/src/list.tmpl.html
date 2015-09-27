@@ -50,6 +50,7 @@
 
 <script type="text/html" id="ListItem">
 <%
+	var RString = require('risk/unit/string');
 	var List = data||[];
 
 	var i=0,Cur;
@@ -61,7 +62,7 @@
 		<td><%=Cur.Name%></td>
 		<td><%=Cur.Remark%></td>
 		<td><%=Cur.Creator%></td>
-		<td><%=Cur.LastUpdateTime%></td>
+		<td><%=RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm')%></td>
 	</tr>
 <%
 		}

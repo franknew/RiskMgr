@@ -8,6 +8,7 @@ define(function(require, exports, module){
 	var $ = require('jquery'),
 		ajax = require('risk/unit/ajax'),
 		route = require('risk/unit/route'),
+		string = require('risk/unit/string'),
 		pager = require('risk/components/pager/index'),
 		tmpl = require('./tmpl');
 
