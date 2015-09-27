@@ -14,5 +14,16 @@ namespace RiskMgr.DAL
         {
             return Mapper.QueryForList<ProjectTask>("QueryProjectByRelationship", form).ToList();
         }
+
+        public int QueryMaxProjectIndex(ProjectQueryForm form)
+        {
+            object obj = Mapper.QueryForObject("QueryMaxProjectIndex", form);
+            int result = 0;
+            if (obj != null)
+            {
+                result = (int)obj;
+            }
+            return result;
+        }
     }
 }

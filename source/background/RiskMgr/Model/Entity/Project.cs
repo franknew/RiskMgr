@@ -228,5 +228,9 @@ namespace RiskMgr.Model
         /// </summary>
         public string Stagnationer { get; set; }
         
+        /// <summary>
+        /// 索引，用来记录条数
+        /// </summary>
+        public int Index { get; set; }
     }
 }

@@ -274,7 +274,8 @@
     `PredictDays`,
     `ChargeType`,
     `CheckNumbersAndLimit`,
-    `Stagnationer`
+    `Stagnationer`,
+    `Index`
   )
   VALUES
   (
@@ -327,7 +328,8 @@
         #PredictDays#,
         #ChargeType#,
         #CheckNumbersAndLimit#,
-        #Stagnationer#
+        #Stagnationer#,
+        #Index#
   )
   </insert>
   <update id="UpdateProject" parameterClass="ProjectUpdateForm">
@@ -480,6 +482,9 @@
         <isNotNull prepend="," property="Entity.Stagnationer">
         `Stagnationer`=#Entity.Stagnationer#
         </isNotNull>
+      <isNotNull prepend="," property="Entity.Index">
+        `Index`=#Entity.Index#
+      </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ProjectQueryForm.ID">

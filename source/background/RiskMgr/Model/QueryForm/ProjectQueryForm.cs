@@ -123,6 +123,8 @@ namespace RiskMgr.Form
         public string CheckNumbersAndLimit { get; set; }
         
         public string Stagnationer { get; set; }
+
+        public int Index { get; set; }
         
     }
 }

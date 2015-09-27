@@ -27,17 +27,22 @@ namespace RiskMgr.BLL
             CustomerDao customerdao = new CustomerDao(mapper);
             Customer_AssetDao cadao = new Customer_AssetDao(mapper);
             string projectid = null;
+            DateTime createstart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            DateTime createend = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+            int index = projectdao.QueryMaxProjectIndex(new ProjectQueryForm { CreateTime_Start = createstart, CreateTime_End = createend });
+            string code = DateTime.Now.ToString("yyMMdd") + (index + 1).ToString();
+            project.Name = code;
             projectdao.Add(project);
             if (assets != null)
             {
                 foreach (var asset in assets)
                 {
                     //处理房产，房产证相同就更新
-                    Asset tmp = assetdao.Query(new AssetQueryForm
+                    Asset a = assetdao.Query(new AssetQueryForm
                     {
                         Code = asset.Code,
                     }).FirstOrDefault();
-                    if (tmp != null)
+                    if (a != null)
                     {
                         assetdao.Update(new AssetUpdateForm
                         {
@@ -48,12 +53,14 @@ namespace RiskMgr.BLL
                                 Area = asset.Area,
                                 RegPrice = asset.RegPrice,
                             },
-                            AssetQueryForm = new AssetQueryForm { ID = tmp.ID },
+                            AssetQueryForm = new AssetQueryForm { ID = a.ID, Eanbled = 1 },
                         });
                     }
                     else
                     {
+                        asset.Eanbled = 1;
                         assetdao.Add(asset);
+                        a = asset;
                     }
                     //处理房产和公权人
                     foreach (var j in asset.Joint)
@@ -72,7 +79,7 @@ namespace RiskMgr.BLL
                                         Phone = j.Phone,
                                         IdentityCode = j.IdentityCode,
                                     },
-                                    CustomerQueryForm = new CustomerQueryForm { ID = c.ID},
+                                    CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
                                 });
                             }
                             else
@@ -96,7 +103,7 @@ namespace RiskMgr.BLL
                         }
                         Customer_Asset ca = new Customer_Asset
                         {
-                            AssetID = asset.ID,
+                            AssetID = a.ID,
                             CustomerID = c.ID,
                         };
                         cadao.Add(ca);
@@ -104,7 +111,7 @@ namespace RiskMgr.BLL
                     //处理房产和项目关系
                     Asset_Project ap = new Asset_Project
                     {
-                        AssetID = asset.ID,
+                        AssetID = a.ID,
                         ProjectID = project.ID,
                     };
                     apdao.Add(ap);
@@ -190,10 +197,6 @@ namespace RiskMgr.BLL
 
         public InitApprovalResultForm QueryDetail(string projectid)
         {
-            if (string.IsNullOrEmpty(projectid))
-            {
-                throw new Exception("没有项目ID");
-            }
             InitApprovalResultForm form = new InitApprovalResultForm();
             var mapper = Common.GetMapperFromSession();
             ProjectDao projectdao = new ProjectDao(mapper);
@@ -202,10 +205,13 @@ namespace RiskMgr.BLL
             Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
             Customer_AssetDao cadao = new Customer_AssetDao(mapper);
             Asset_ProjectDao apdao = new Asset_ProjectDao(mapper);
+            WorkflowDao wfdao = new WorkflowDao(mapper);
+            ActivityDao acdao = new ActivityDao(mapper);
+            TaskDao taskdao = new TaskDao(mapper);
             form.Project = projectdao.Query(new ProjectQueryForm { ID = projectid }).FirstOrDefault();
             if (form.Project == null)
             {
-                throw new Exception("项目ID：" + projectid + "不存在！");
+                return form;
             }
             var cps = cpdao.Query(new Customer_ProjectQueryForm { ProjectID = projectid });
             var aps = apdao.Query(new Asset_ProjectQueryForm { ProjectID = projectid });
@@ -235,6 +241,39 @@ namespace RiskMgr.BLL
                     var jointids = (from t in cadao.Query(new Customer_AssetQueryForm { AssetID = a.ID })
                                     select t.CustomerID).ToList();
                     a.Joint = customerdao.Query(new CustomerQueryForm { Ids = jointids });
+                }
+            }
+
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            //处理流程相关信息
+            var workflow = wfdao.Query(new WorkflowQueryForm { ProcessID = projectid }).FirstOrDefault();
+            if (workflow != null)
+            {
+                form.WorkflowID = workflow.ID;
+                if (workflow.Creator == user.User.ID)
+                {
+                    form.BusinessStatus = ActionStatus.Editable;
+                    form.FinaceStatus = ActionStatus.Queryable;
+                }
+                else
+                {
+                    form.BusinessStatus = ActionStatus.Queryable;
+                    form.FinaceStatus = ActionStatus.Queryable;
+                }
+                var activity = acdao.Query(new ActivityQueryForm { WorkflowID = form.WorkflowID, Status = (int)ActivityProcessStatus.Processing }).FirstOrDefault();
+                if (activity != null)
+                {
+                    form.ActivityID = activity.ID;
+                    var task = taskdao.Query(new TaskQueryForm { ActivityID = form.ActivityID, UserID = user.User.ID }).FirstOrDefault();
+                    if (task != null)
+                    {
+                        form.TaskID = task.ID;
+                        if (task.Status != (int)TaskProcessStatus.Processed)
+                        {
+                            form.BusinessStatus = ActionStatus.Approvalable;
+                        }
+                    }
                 }
             }
             return form;

@@ -16,7 +16,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
@@ -52,7 +52,7 @@
         `Phone`=#Phone#
     </isNotNull>
     <isNotNull prepend="AND" property="OrignalName">
-        `OrignalName` LIKE '%$OrignalName$%'
+        `OrignalName`=#OrignalName#
     </isNotNull>
     <isNotNull prepend="AND" property="OrignalIdentityCode">
         `OrignalIdentityCode`=#OrignalIdentityCode#
@@ -75,11 +75,16 @@
     <isNotNull prepend="AND" property="Enabled">
         `Enabled`=#Enabled#
     </isNotNull>
+    <isNotNull property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         Id=#Ids[]#
+        </iterate>
+    </isNotNull>
     </dynamic>
     <isNotNull property="PageSize">
-    <isGreaterThan property="PageSize" compareValue="0">
-     LIMIT #StartIndex#, #PageSize# 
-    </isGreaterThan>
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddCustomer" parameterClass="Customer">
@@ -191,7 +196,7 @@
         `ID`=#CustomerQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="CustomerQueryForm.Name">
-        `Name` LIKE '%$CustomerQueryForm.Name$%'
+        `Name`=#CustomerQueryForm.Name#
     </isNotNull>
     <isNotNull prepend="AND" property="CustomerQueryForm.Creator">
         `Creator`=#CustomerQueryForm.Creator#
@@ -227,7 +232,7 @@
         `Phone`=#CustomerQueryForm.Phone#
     </isNotNull>
     <isNotNull prepend="AND" property="CustomerQueryForm.OrignalName">
-        `OrignalName` LIKE '%$CustomerQueryForm.OrignalName$%'
+        `OrignalName`=#CustomerQueryForm.OrignalName#
     </isNotNull>
     <isNotNull prepend="AND" property="CustomerQueryForm.OrignalIdentityCode">
         `OrignalIdentityCode`=#CustomerQueryForm.OrignalIdentityCode#
@@ -328,7 +333,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
@@ -364,7 +369,7 @@
         `Phone`=#Phone#
     </isNotNull>
     <isNotNull prepend="AND" property="OrignalName">
-        `OrignalName` LIKE '%$OrignalName$%'
+        `OrignalName`=#OrignalName#
     </isNotNull>
     <isNotNull prepend="AND" property="OrignalIdentityCode">
         `OrignalIdentityCode`=#OrignalIdentityCode#

@@ -31,16 +31,21 @@
         `Identity`=#Identity#
     </isNotNull>
     <isNotNull prepend="AND" property="CnName">
-        `CnName` LIKE '%$CnName$%'
+        `CnName`=#CnName#
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
         `Remark` LIKE '%$Remark$%'
     </isNotNull>
+    <isNotNull property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         Id=#Ids[]#
+        </iterate>
+    </isNotNull>
     </dynamic>
     <isNotNull property="PageSize">
-    <isGreaterThan property="PageSize" compareValue="0">
-     LIMIT #StartIndex#, #PageSize# 
-    </isGreaterThan>
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddUserInfo" parameterClass="UserInfo">
@@ -112,7 +117,7 @@
         `Identity`=#UserInfoQueryForm.Identity#
     </isNotNull>
     <isNotNull prepend="AND" property="UserInfoQueryForm.CnName">
-        `CnName` LIKE '%$UserInfoQueryForm.CnName$%'
+        `CnName`=#UserInfoQueryForm.CnName#
     </isNotNull>
     <isNotNull prepend="AND" property="UserInfoQueryForm.Remark">
         `Remark` LIKE '%$UserInfoQueryForm.Remark$%'
@@ -168,7 +173,7 @@
         `Identity`=#Identity#
     </isNotNull>
     <isNotNull prepend="AND" property="CnName">
-        `CnName` LIKE '%$CnName$%'
+        `CnName`=#CnName#
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
         `Remark` LIKE '%$Remark$%'

@@ -16,7 +16,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
@@ -54,17 +54,17 @@
     <isNotNull prepend="AND" property="Code">
         `Code`=#Code#
     </isNotNull>
-    <isNotNull prepend="AND" property="Area">
-        `Area`=#Area#
+    <isNotNull prepend="AND" property="Area_Start">
+        `Area`&gt;=#Area_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="RegPrice">
-        `RegPrice`=#RegPrice#
+    <isNotNull prepend="AND" property="Area_End">
+        `Area`&lt;=#Area_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="OwnerID">
-        `OwnerID`=#OwnerID#
+    <isNotNull prepend="AND" property="RegPrice_Start">
+        `RegPrice`&gt;=#RegPrice_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="BuyerID">
-        `BuyerID`=#BuyerID#
+    <isNotNull prepend="AND" property="RegPrice_End">
+        `RegPrice`&lt;=#RegPrice_End#
     </isNotNull>
     <isNotNull prepend="AND" property="IssueType">
         `IssueType`=#IssueType#
@@ -75,11 +75,22 @@
     <isNotNull prepend="AND" property="Eanbled">
         `Eanbled`=#Eanbled#
     </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerPrice_Start">
+        `ChangeOwnerPrice`&gt;=#ChangeOwnerPrice_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerPrice_End">
+        `ChangeOwnerPrice`&lt;=#ChangeOwnerPrice_End#
+    </isNotNull>
+    <isNotNull property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         Id=#Ids[]#
+        </iterate>
+    </isNotNull>
     </dynamic>
     <isNotNull property="PageSize">
-    <isGreaterThan property="PageSize" compareValue="0">
-     LIMIT #StartIndex#, #PageSize# 
-    </isGreaterThan>
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddAsset" parameterClass="Asset">
@@ -99,11 +110,10 @@
     `Code`,
     `Area`,
     `RegPrice`,
-    `OwnerID`,
-    `BuyerID`,
     `IssueType`,
     `IsTraded`,
-    `Eanbled`
+    `Eanbled`,
+    `ChangeOwnerPrice`
   )
   VALUES
   (
@@ -121,11 +131,10 @@
         #Code#,
         #Area#,
         #RegPrice#,
-        #OwnerID#,
-        #BuyerID#,
         #IssueType#,
         #IsTraded#,
-        #Eanbled#
+        #Eanbled#,
+        #ChangeOwnerPrice#
   )
   </insert>
   <update id="UpdateAsset" parameterClass="AssetUpdateForm">
@@ -170,12 +179,6 @@
         <isNotNull prepend="," property="Entity.RegPrice">
         `RegPrice`=#Entity.RegPrice#
         </isNotNull>
-        <isNotNull prepend="," property="Entity.OwnerID">
-        `OwnerID`=#Entity.OwnerID#
-        </isNotNull>
-        <isNotNull prepend="," property="Entity.BuyerID">
-        `BuyerID`=#Entity.BuyerID#
-        </isNotNull>
         <isNotNull prepend="," property="Entity.IssueType">
         `IssueType`=#Entity.IssueType#
         </isNotNull>
@@ -185,13 +188,16 @@
         <isNotNull prepend="," property="Entity.Eanbled">
         `Eanbled`=#Entity.Eanbled#
         </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerPrice">
+        `ChangeOwnerPrice`=#Entity.ChangeOwnerPrice#
+        </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="AssetQueryForm.ID">
         `ID`=#AssetQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="AssetQueryForm.Name">
-        `Name` LIKE '%$AssetQueryForm.Name$%'
+        `Name`=#AssetQueryForm.Name#
     </isNotNull>
     <isNotNull prepend="AND" property="AssetQueryForm.Creator">
         `Creator`=#AssetQueryForm.Creator#
@@ -229,17 +235,17 @@
     <isNotNull prepend="AND" property="AssetQueryForm.Code">
         `Code`=#AssetQueryForm.Code#
     </isNotNull>
-    <isNotNull prepend="AND" property="AssetQueryForm.Area">
-        `Area`=#AssetQueryForm.Area#
+    <isNotNull prepend="AND" property="AssetQueryForm.Area_Start">
+        `Area`&gt;=#AssetQueryForm.Area_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="AssetQueryForm.RegPrice">
-        `RegPrice`=#AssetQueryForm.RegPrice#
+    <isNotNull prepend="AND" property="AssetQueryForm.Area_End">
+        `Area`&lt;=#AssetQueryForm.Area_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="AssetQueryForm.OwnerID">
-        `OwnerID`=#AssetQueryForm.OwnerID#
+    <isNotNull prepend="AND" property="AssetQueryForm.RegPrice_Start">
+        `RegPrice`&gt;=#AssetQueryForm.RegPrice_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="AssetQueryForm.BuyerID">
-        `BuyerID`=#AssetQueryForm.BuyerID#
+    <isNotNull prepend="AND" property="AssetQueryForm.RegPrice_End">
+        `RegPrice`&lt;=#AssetQueryForm.RegPrice_End#
     </isNotNull>
     <isNotNull prepend="AND" property="AssetQueryForm.IssueType">
         `IssueType`=#AssetQueryForm.IssueType#
@@ -249,6 +255,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="AssetQueryForm.Eanbled">
         `Eanbled`=#AssetQueryForm.Eanbled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.ChangeOwnerPrice_Start">
+        `ChangeOwnerPrice`&gt;=#AssetQueryForm.ChangeOwnerPrice_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.ChangeOwnerPrice_End">
+        `ChangeOwnerPrice`&lt;=#AssetQueryForm.ChangeOwnerPrice_End#
     </isNotNull>
     </dynamic>
   </update>
@@ -296,17 +308,17 @@
     <isNotNull prepend="AND" property="Code">
         `Code`=#Code#
     </isNotNull>
-    <isNotNull prepend="AND" property="Area">
-        `Area`=#Area#
+    <isNotNull prepend="AND" property="Area_Start">
+        `Area`&gt;=#Area_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="RegPrice">
-        `RegPrice`=#RegPrice#
+    <isNotNull prepend="AND" property="Area_End">
+        `Area`&lt;=#Area_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="OwnerID">
-        `OwnerID`=#OwnerID#
+    <isNotNull prepend="AND" property="RegPrice_Start">
+        `RegPrice`&gt;=#RegPrice_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="BuyerID">
-        `BuyerID`=#BuyerID#
+    <isNotNull prepend="AND" property="RegPrice_End">
+        `RegPrice`&lt;=#RegPrice_End#
     </isNotNull>
     <isNotNull prepend="AND" property="IssueType">
         `IssueType`=#IssueType#
@@ -316,6 +328,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="Eanbled">
         `Eanbled`=#Eanbled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerPrice_Start">
+        `ChangeOwnerPrice`&gt;=#ChangeOwnerPrice_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerPrice_End">
+        `ChangeOwnerPrice`&lt;=#ChangeOwnerPrice_End#
     </isNotNull>
   </delete>
    <select id="QueryAssetLastUpdateTime" resultClass="DateTime">
@@ -328,7 +346,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
@@ -366,17 +384,17 @@
     <isNotNull prepend="AND" property="Code">
         `Code`=#Code#
     </isNotNull>
-    <isNotNull prepend="AND" property="Area">
-        `Area`=#Area#
+    <isNotNull prepend="AND" property="Area_Start">
+        `Area`&gt;=#Area_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="RegPrice">
-        `RegPrice`=#RegPrice#
+    <isNotNull prepend="AND" property="Area_End">
+        `Area`&lt;=#Area_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="OwnerID">
-        `OwnerID`=#OwnerID#
+    <isNotNull prepend="AND" property="RegPrice_Start">
+        `RegPrice`&gt;=#RegPrice_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="BuyerID">
-        `BuyerID`=#BuyerID#
+    <isNotNull prepend="AND" property="RegPrice_End">
+        `RegPrice`&lt;=#RegPrice_End#
     </isNotNull>
     <isNotNull prepend="AND" property="IssueType">
         `IssueType`=#IssueType#
@@ -386,6 +404,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="Eanbled">
         `Eanbled`=#Eanbled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerPrice_Start">
+        `ChangeOwnerPrice`&gt;=#ChangeOwnerPrice_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerPrice_End">
+        `ChangeOwnerPrice`&lt;=#ChangeOwnerPrice_End#
     </isNotNull>
     </dynamic>
    </select>

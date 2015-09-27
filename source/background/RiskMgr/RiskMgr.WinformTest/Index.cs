@@ -10,6 +10,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using RiskMgr.Api;
+using RiskMgr.BLL;
 
 namespace RiskMgr.WinformTest
 {
@@ -195,10 +197,8 @@ namespace RiskMgr.WinformTest
 
         private void button13_Click(object sender, EventArgs e)
         {
-            QueryMyProcessingRequest request = new QueryMyProcessingRequest();
-            request.token = token;
-            var response = SDKFactory.Client.Execute(request);
-            MessageBox.Show(response.ResponseBody);
+            ProjectBLL bll = new ProjectBLL();
+            var response = bll.QueryMyApply();
         }
 
         private void button14_Click(object sender, EventArgs e)
@@ -210,5 +210,7 @@ namespace RiskMgr.WinformTest
                 TaskID = "",
             };
         }
+
+
     }
 }

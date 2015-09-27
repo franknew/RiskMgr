@@ -16,7 +16,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
@@ -48,11 +48,19 @@
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
+    <isNotNull prepend="AND" property="ImagePath">
+        `ImagePath`=#ImagePath#
+    </isNotNull>
+    <isNotNull property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         Id=#Ids[]#
+        </iterate>
+    </isNotNull>
     </dynamic>
     <isNotNull property="PageSize">
-    <isGreaterThan property="PageSize" compareValue="0">
-     LIMIT #StartIndex#, #PageSize# 
-    </isGreaterThan>
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
     </isNotNull>
   </select>
   <insert id="AddMenu" parameterClass="Menu">
@@ -67,7 +75,8 @@
     `Enabled`,
     `Remark`,
     `LastUpdateTime`,
-    `LastUpdator`
+    `LastUpdator`,
+    `ImagePath`
   )
   VALUES
   (
@@ -80,7 +89,8 @@
         #Enabled#,
         #Remark#,
         #LastUpdateTime#,
-        #LastUpdator#
+        #LastUpdator#,
+        #ImagePath#
   )
   </insert>
   <update id="UpdateMenu" parameterClass="MenuUpdateForm">
@@ -113,13 +123,16 @@
         <isNotNull prepend="," property="Entity.LastUpdator">
         `LastUpdator`=#Entity.LastUpdator#
         </isNotNull>
+        <isNotNull prepend="," property="Entity.ImagePath">
+        `ImagePath`=#Entity.ImagePath#
+        </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="MenuQueryForm.ID">
         `ID`=#MenuQueryForm.ID#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Name">
-        `Name` LIKE '%$MenuQueryForm.Name$%'
+        `Name`=#MenuQueryForm.Name#
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.Creator">
         `Creator`=#MenuQueryForm.Creator#
@@ -150,6 +163,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="MenuQueryForm.LastUpdator">
         `LastUpdator`=#MenuQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MenuQueryForm.ImagePath">
+        `ImagePath`=#MenuQueryForm.ImagePath#
     </isNotNull>
     </dynamic>
   </update>
@@ -191,6 +207,9 @@
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
+    <isNotNull prepend="AND" property="ImagePath">
+        `ImagePath`=#ImagePath#
+    </isNotNull>
   </delete>
    <select id="QueryMenuLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Menu`
@@ -202,7 +221,7 @@
         `ID`=#ID#
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
-        `Name` LIKE '%$Name$%'
+        `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
@@ -233,6 +252,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ImagePath">
+        `ImagePath`=#ImagePath#
     </isNotNull>
     </dynamic>
    </select>

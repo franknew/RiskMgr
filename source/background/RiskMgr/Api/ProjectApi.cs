@@ -82,6 +82,10 @@ namespace RiskMgr.Api
         [QueryAction]
         public InitApprovalResultForm InitApproval(ProjectQueryForm form)
         {
+            if (string.IsNullOrEmpty(form.ID))
+            {
+                throw new Exception("没有项目ID");
+            }
             return bll.QueryDetail(form.ID);
         }
 

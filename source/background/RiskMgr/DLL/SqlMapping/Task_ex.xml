@@ -14,8 +14,8 @@
       <isNotNull prepend="AND" property="ID">
         t.`ID`=#ID#
       </isNotNull>
-      <isNotNull prepend="AND" property="AcitivityID">
-        t.`AcitivityID`=#AcitivityID#
+      <isNotNull prepend="AND" property="ActivityID">
+        t.`ActivityID`=#ActivityID#
       </isNotNull>
       <isNotNull prepend="AND" property="Name">
         t.`Name`=#Name#
