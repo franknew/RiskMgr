@@ -105,6 +105,7 @@ namespace RiskMgr.BLL
                         {
                             AssetID = a.ID,
                             CustomerID = c.ID,
+                            ProjectID = project.ID,
                         };
                         cadao.Add(ca);
                     }
@@ -208,6 +209,7 @@ namespace RiskMgr.BLL
             WorkflowDao wfdao = new WorkflowDao(mapper);
             ActivityDao acdao = new ActivityDao(mapper);
             TaskDao taskdao = new TaskDao(mapper);
+            ApprovalDao appdao = new ApprovalDao(mapper);
             form.Project = projectdao.Query(new ProjectQueryForm { ID = projectid }).FirstOrDefault();
             if (form.Project == null)
             {
@@ -238,7 +240,7 @@ namespace RiskMgr.BLL
             {
                 foreach (var a in form.Assets)
                 {
-                    var jointids = (from t in cadao.Query(new Customer_AssetQueryForm { AssetID = a.ID })
+                    var jointids = (from t in cadao.Query(new Customer_AssetQueryForm { AssetID = a.ID, ProjectID = projectid })
                                     select t.CustomerID).ToList();
                     a.Joint = customerdao.Query(new CustomerQueryForm { Ids = jointids });
                 }
@@ -251,6 +253,7 @@ namespace RiskMgr.BLL
             if (workflow != null)
             {
                 form.WorkflowID = workflow.ID;
+                form.Approvals = appdao.Query(new ApprovalQueryForm { WorkflowID = form.WorkflowID });
                 if (workflow.Creator == user.User.ID)
                 {
                     form.BusinessStatus = ActionStatus.Editable;

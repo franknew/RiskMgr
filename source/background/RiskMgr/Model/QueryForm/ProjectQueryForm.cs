@@ -123,8 +123,42 @@ namespace RiskMgr.Form
         public string CheckNumbersAndLimit { get; set; }
         
         public string Stagnationer { get; set; }
-
-        public int Index { get; set; }
+        
+        public Int32? Index { get; set; }
+        
+        public DateTime? InsuranceFee_Start { get; set; }
+        
+        public DateTime? InsuranceFee_End { get; set; }
+        
+        public DateTime? InsuranceTime_Start { get; set; }
+        
+        public DateTime? InsuranceTime_End { get; set; }
+        
+        public DateTime? ExportMoney_Start { get; set; }
+        
+        public DateTime? ExportMoney_End { get; set; }
+        
+        public DateTime? ExportTime_Start { get; set; }
+        
+        public DateTime? ExportTime_End { get; set; }
+        
+        public DateTime? ReturnBackMoney_Start { get; set; }
+        
+        public DateTime? ReturnBackMoney_End { get; set; }
+        
+        public DateTime? ReturnBackTime_Start { get; set; }
+        
+        public DateTime? ReturnBackTime_End { get; set; }
+        
+        public DateTime? DelayFee_Start { get; set; }
+        
+        public DateTime? DelayFee_End { get; set; }
+        
+        public DateTime? DelayTime_Start { get; set; }
+        
+        public DateTime? DelayTime_End { get; set; }
+        
+        public UInt64? HasExpired { get; set; }
         
     }
 }

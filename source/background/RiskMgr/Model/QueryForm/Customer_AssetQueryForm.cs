@@ -14,5 +14,6 @@ namespace RiskMgr.Form
         
         public Int32? Type { get; set; }
         
+        public string ProjectID { get; set; }
     }
 }

@@ -25,5 +25,6 @@ namespace RiskMgr.Model
     {
         Buyer = 1,
         Seller = 2,
+        Joint = 3,
     }
 }

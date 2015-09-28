@@ -1,11 +1,12 @@
-﻿using RiskMgr.Model;
+﻿using DreamWorkflow.Engine.Model;
+using RiskMgr.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace RiskMgr.Form
-{ 
+{
     public class InitApprovalResultForm : AddProjectServiceForm
     {
         /// <summary>
@@ -23,5 +24,10 @@ namespace RiskMgr.Form
         public string ActivityID { get; set; }
 
         public string TaskID { get; set; }
+
+        /// <summary>
+        /// 历史审批数据
+        /// </summary>
+        public List<Approval> Approvals { get; set; }
     }
 }

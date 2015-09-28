@@ -24,6 +24,9 @@
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
+      <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+      </isNotNull>
     <isNotNull property="Ids">
         <iterate property="Ids" open="(" close=")" conjunction="OR">
          Id=#Ids[]#
@@ -37,20 +40,22 @@
     </isNotNull>
   </select>
   <insert id="AddCustomer_Asset" parameterClass="Customer_Asset">
-  INSERT INTO `Customer_Asset`
-  (
+    INSERT INTO `Customer_Asset`
+    (
     `ID`,
     `CustomerID`,
     `AssetID`,
+    `ProjectID`,
     `Type`
-  )
-  VALUES
-  (
-        #ID#,
-        #CustomerID#,
-        #AssetID#,
-        #Type#
-  )
+    )
+    VALUES
+    (
+    #ID#,
+    #CustomerID#,
+    #AssetID#,
+    #ProjectID#,
+    #Type#
+    )
   </insert>
   <update id="UpdateCustomer_Asset" parameterClass="Customer_AssetUpdateForm">
   UPDATE `Customer_Asset`
@@ -64,6 +69,9 @@
         <isNotNull prepend="," property="Entity.Type">
         `Type`=#Entity.Type#
         </isNotNull>
+      <isNotNull prepend="," property="Entity.ProjectID">
+        `ProjectID`=#Entity.ProjectID#
+      </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="Customer_AssetQueryForm.ID">
@@ -78,6 +86,9 @@
     <isNotNull prepend="AND" property="Customer_AssetQueryForm.Type">
         `Type`=#Customer_AssetQueryForm.Type#
     </isNotNull>
+      <isNotNull prepend="AND" property="Customer_AssetQueryForm.ProjectID">
+        `ProjectID`=#Customer_AssetQueryForm.ProjectID#
+      </isNotNull>
     </dynamic>
   </update>
   <delete id="DeleteCustomer_Asset" parameterClass="Customer_AssetQueryForm">
@@ -93,6 +104,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+      `ProjectID`=#ProjectID#
     </isNotNull>
   </delete>
    <select id="QueryCustomer_AssetRecordCount" resultClass="int" parameterClass="Customer_AssetQueryForm">
@@ -110,6 +124,9 @@
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
+      <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+      </isNotNull>
     </dynamic>
    </select>
   </statements>

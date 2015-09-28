@@ -210,9 +210,63 @@
     <isNotNull prepend="AND" property="Stagnationer">
         `Stagnationer`=#Stagnationer#
     </isNotNull>
+    <isNotNull prepend="AND" property="Index">
+        `Index`=#Index#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFee_Start">
+        `InsuranceFee`&gt;=#InsuranceFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFee_End">
+        `InsuranceFee`&lt;=#InsuranceFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceTime_Start">
+        `InsuranceTime`&gt;=#InsuranceTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceTime_End">
+        `InsuranceTime`&lt;=#InsuranceTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportMoney_Start">
+        `ExportMoney`&gt;=#ExportMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportMoney_End">
+        `ExportMoney`&lt;=#ExportMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportTime_Start">
+        `ExportTime`&gt;=#ExportTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportTime_End">
+        `ExportTime`&lt;=#ExportTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_Start">
+        `ReturnBackMoney`&gt;=#ReturnBackMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_End">
+        `ReturnBackMoney`&lt;=#ReturnBackMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_Start">
+        `ReturnBackTime`&gt;=#ReturnBackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_End">
+        `ReturnBackTime`&lt;=#ReturnBackTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayFee_Start">
+        `DelayFee`&gt;=#DelayFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayFee_End">
+        `DelayFee`&lt;=#DelayFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTime_Start">
+        `DelayTime`&gt;=#DelayTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTime_End">
+        `DelayTime`&lt;=#DelayTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="HasExpired">
+        `HasExpired`=#HasExpired#
+    </isNotNull>
     <isNotNull property="Ids">
         <iterate property="Ids" open="(" close=")" conjunction="OR">
-         Id=#Ids[]#
+         ID=#Ids[]#
         </iterate>
     </isNotNull>
     </dynamic>
@@ -275,7 +329,16 @@
     `ChargeType`,
     `CheckNumbersAndLimit`,
     `Stagnationer`,
-    `Index`
+    `Index`,
+    `InsuranceFee`,
+    `InsuranceTime`,
+    `ExportMoney`,
+    `ExportTime`,
+    `ReturnBackMoney`,
+    `ReturnBackTime`,
+    `DelayFee`,
+    `DelayTime`,
+    `HasExpired`
   )
   VALUES
   (
@@ -329,7 +392,16 @@
         #ChargeType#,
         #CheckNumbersAndLimit#,
         #Stagnationer#,
-        #Index#
+        #Index#,
+        #InsuranceFee#,
+        #InsuranceTime#,
+        #ExportMoney#,
+        #ExportTime#,
+        #ReturnBackMoney#,
+        #ReturnBackTime#,
+        #DelayFee#,
+        #DelayTime#,
+        #HasExpired#
   )
   </insert>
   <update id="UpdateProject" parameterClass="ProjectUpdateForm">
@@ -482,9 +554,36 @@
         <isNotNull prepend="," property="Entity.Stagnationer">
         `Stagnationer`=#Entity.Stagnationer#
         </isNotNull>
-      <isNotNull prepend="," property="Entity.Index">
+        <isNotNull prepend="," property="Entity.Index">
         `Index`=#Entity.Index#
-      </isNotNull>
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.InsuranceFee">
+        `InsuranceFee`=#Entity.InsuranceFee#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.InsuranceTime">
+        `InsuranceTime`=#Entity.InsuranceTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ExportMoney">
+        `ExportMoney`=#Entity.ExportMoney#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ExportTime">
+        `ExportTime`=#Entity.ExportTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ReturnBackMoney">
+        `ReturnBackMoney`=#Entity.ReturnBackMoney#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ReturnBackTime">
+        `ReturnBackTime`=#Entity.ReturnBackTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.DelayFee">
+        `DelayFee`=#Entity.DelayFee#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.DelayTime">
+        `DelayTime`=#Entity.DelayTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.HasExpired">
+        `HasExpired`=#Entity.HasExpired#
+        </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ProjectQueryForm.ID">
@@ -684,6 +783,60 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ProjectQueryForm.Stagnationer">
         `Stagnationer`=#ProjectQueryForm.Stagnationer#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.Index">
+        `Index`=#ProjectQueryForm.Index#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.InsuranceFee_Start">
+        `InsuranceFee`&gt;=#ProjectQueryForm.InsuranceFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.InsuranceFee_End">
+        `InsuranceFee`&lt;=#ProjectQueryForm.InsuranceFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.InsuranceTime_Start">
+        `InsuranceTime`&gt;=#ProjectQueryForm.InsuranceTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.InsuranceTime_End">
+        `InsuranceTime`&lt;=#ProjectQueryForm.InsuranceTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ExportMoney_Start">
+        `ExportMoney`&gt;=#ProjectQueryForm.ExportMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ExportMoney_End">
+        `ExportMoney`&lt;=#ProjectQueryForm.ExportMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ExportTime_Start">
+        `ExportTime`&gt;=#ProjectQueryForm.ExportTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ExportTime_End">
+        `ExportTime`&lt;=#ProjectQueryForm.ExportTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ReturnBackMoney_Start">
+        `ReturnBackMoney`&gt;=#ProjectQueryForm.ReturnBackMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ReturnBackMoney_End">
+        `ReturnBackMoney`&lt;=#ProjectQueryForm.ReturnBackMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ReturnBackTime_Start">
+        `ReturnBackTime`&gt;=#ProjectQueryForm.ReturnBackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ReturnBackTime_End">
+        `ReturnBackTime`&lt;=#ProjectQueryForm.ReturnBackTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DelayFee_Start">
+        `DelayFee`&gt;=#ProjectQueryForm.DelayFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DelayFee_End">
+        `DelayFee`&lt;=#ProjectQueryForm.DelayFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DelayTime_Start">
+        `DelayTime`&gt;=#ProjectQueryForm.DelayTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DelayTime_End">
+        `DelayTime`&lt;=#ProjectQueryForm.DelayTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.HasExpired">
+        `HasExpired`=#ProjectQueryForm.HasExpired#
     </isNotNull>
     </dynamic>
   </update>
@@ -886,6 +1039,60 @@
     </isNotNull>
     <isNotNull prepend="AND" property="Stagnationer">
         `Stagnationer`=#Stagnationer#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Index">
+        `Index`=#Index#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFee_Start">
+        `InsuranceFee`&gt;=#InsuranceFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFee_End">
+        `InsuranceFee`&lt;=#InsuranceFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceTime_Start">
+        `InsuranceTime`&gt;=#InsuranceTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceTime_End">
+        `InsuranceTime`&lt;=#InsuranceTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportMoney_Start">
+        `ExportMoney`&gt;=#ExportMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportMoney_End">
+        `ExportMoney`&lt;=#ExportMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportTime_Start">
+        `ExportTime`&gt;=#ExportTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportTime_End">
+        `ExportTime`&lt;=#ExportTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_Start">
+        `ReturnBackMoney`&gt;=#ReturnBackMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_End">
+        `ReturnBackMoney`&lt;=#ReturnBackMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_Start">
+        `ReturnBackTime`&gt;=#ReturnBackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_End">
+        `ReturnBackTime`&lt;=#ReturnBackTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayFee_Start">
+        `DelayFee`&gt;=#DelayFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayFee_End">
+        `DelayFee`&lt;=#DelayFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTime_Start">
+        `DelayTime`&gt;=#DelayTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTime_End">
+        `DelayTime`&lt;=#DelayTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="HasExpired">
+        `HasExpired`=#HasExpired#
     </isNotNull>
   </delete>
    <select id="QueryProjectLastUpdateTime" resultClass="DateTime">
@@ -1091,6 +1298,60 @@
     </isNotNull>
     <isNotNull prepend="AND" property="Stagnationer">
         `Stagnationer`=#Stagnationer#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Index">
+        `Index`=#Index#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFee_Start">
+        `InsuranceFee`&gt;=#InsuranceFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFee_End">
+        `InsuranceFee`&lt;=#InsuranceFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceTime_Start">
+        `InsuranceTime`&gt;=#InsuranceTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceTime_End">
+        `InsuranceTime`&lt;=#InsuranceTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportMoney_Start">
+        `ExportMoney`&gt;=#ExportMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportMoney_End">
+        `ExportMoney`&lt;=#ExportMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportTime_Start">
+        `ExportTime`&gt;=#ExportTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ExportTime_End">
+        `ExportTime`&lt;=#ExportTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_Start">
+        `ReturnBackMoney`&gt;=#ReturnBackMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_End">
+        `ReturnBackMoney`&lt;=#ReturnBackMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_Start">
+        `ReturnBackTime`&gt;=#ReturnBackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_End">
+        `ReturnBackTime`&lt;=#ReturnBackTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayFee_Start">
+        `DelayFee`&gt;=#DelayFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayFee_End">
+        `DelayFee`&lt;=#DelayFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTime_Start">
+        `DelayTime`&gt;=#DelayTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTime_End">
+        `DelayTime`&lt;=#DelayTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="HasExpired">
+        `HasExpired`=#HasExpired#
     </isNotNull>
     </dynamic>
    </select>

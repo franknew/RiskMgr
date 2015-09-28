@@ -229,8 +229,54 @@ namespace RiskMgr.Model
         public string Stagnationer { get; set; }
         
         /// <summary>
-        /// 索引，用来记录条数
+        /// 索引
         /// </summary>
-        public int Index { get; set; }
+        public int? Index { get; set; }
+        
+        /// <summary>
+        /// 收取担保费
+        /// </summary>
+        public decimal? InsuranceFee { get; set; }
+        
+        /// <summary>
+        /// 担保时间
+        /// </summary>
+        public DateTime? InsuranceTime { get; set; }
+        
+        /// <summary>
+        /// 放款金额
+        /// </summary>
+        public decimal? ExportMoney { get; set; }
+        
+        /// <summary>
+        /// 放款时间
+        /// </summary>
+        public DateTime? ExportTime { get; set; }
+        
+        /// <summary>
+        /// 汇款金额
+        /// </summary>
+        public decimal? ReturnBackMoney { get; set; }
+        
+        /// <summary>
+        /// 汇款时间
+        /// </summary>
+        public DateTime? ReturnBackTime { get; set; }
+        
+        /// <summary>
+        /// 滞纳金
+        /// </summary>
+        public decimal? DelayFee { get; set; }
+        
+        /// <summary>
+        /// 滞纳金时间
+        /// </summary>
+        public DateTime? DelayTime { get; set; }
+        
+        /// <summary>
+        /// 是否有展期费用
+        /// </summary>
+        public int? HasExpired { get; set; }
+        
     }
 }
