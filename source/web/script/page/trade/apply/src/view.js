@@ -86,13 +86,15 @@ define(function(require, exports, module){
 		},
 		//提交表单
 		submit:function(mode,data) {
-			var dataCustomer = Customer.getData();
-			var data = data || {
-				Buyers:dataCustomer.buyer,
-				Sellers:dataCustomer.seller,
-				Assets:Property.getData(),
-				Project:Project.getData()
-			};
+			if (!data) {
+				var dataCustomer = Customer.getData();
+				data = {
+					Buyers:dataCustomer.buyer,
+					Sellers:dataCustomer.seller,
+					Assets:Property.getData(),
+					Project:Project.getData()
+				};
+			}
 
 			Ajax.post({
 				url:'RiskMgr.Api.ProjectApi/Add',
