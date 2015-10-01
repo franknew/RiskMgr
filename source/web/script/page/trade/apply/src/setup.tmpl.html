@@ -1,4 +1,9 @@
 <script type="text/html" id="Setup">
+<%
+	var DataView = data.data || {},
+		Approvals = DataView.Approvals;	//审批信息
+	//Approvals = [1,2,3];
+%>
 <div class="col-md-12">
 <button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>
 	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">
@@ -9,24 +14,22 @@
 			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>
 			<li data-target="Assets">房产信息<span class="chevron"></span></li>
 			<li data-target="Project">项目信息<span class="chevron"></span></li>
-			<%if (!data.canEdit) {%>
+
+			<%if (data.mode!=='add' && data.mode!=='edit') {%>
 			<li data-target="Approval">审批信息<span class="chevron"></span></li>
+				<%if (Approvals && Approvals.length>0) {%>
+				<li data-target="Charge">收费情况<span class="chevron"></span></li>
+				<li data-target="Followup">保后跟踪<span class="chevron"></span></li>
+				<%}%>
 			<%}%>
-			<%
-			//还需要判断审批之后才能看到
-			if (data.mode!=='add' && data.mode!=='edit') {
-			%>
-			<li data-target="Charge">收费情况<span class="chevron"></span></li>
-			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>
-			<%}%>
+
 		</ul>
 		<div class="step-content">
 			<%=this.SetupCustomer(data)%>
 			<%=this.SetupProperty(data)%>
 			<%=this.SetupProject(data)%>
-			<%if (!data.canEdit) {%>
 			<%=this.SetupApproval(data)%>
-			<%}%>
+			<%=this.SetupCharge(data)%>
 		</div>
 	</form>
 </div>

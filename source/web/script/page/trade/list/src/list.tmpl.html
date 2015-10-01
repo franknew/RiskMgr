@@ -51,12 +51,12 @@
 				<th rowspan="2">编号</th>
 				<th rowspan="2">业务员</th>
 				<th colspan="2" class="text-center">客户信息</th>
+				<th colspan="2" class="text-center">房产信息</th>
+				<th rowspan="2">申请时间</th>
 				<th rowspan="2">收费状态</th>
 				<th rowspan="2">返佣状态</th>
 				<th rowspan="2">尾款状态</th>
 				<th rowspan="2">当前进度</th>
-				<th colspan="2" class="text-center">房产信息</th>
-				<th rowspan="2">申请时间</th>
 			</tr>
 			<tr>
 				<th>姓名</th>
@@ -118,10 +118,6 @@
 
 			</table>
 		</td>
-		<td>已收费</td>
-		<td>已返佣</td>
-		<td>已退尾款</td>
-		<td>总经理审核中</td>
 		<td colspan="2">
 			<table class="no-strip">
 			<%
@@ -139,6 +135,10 @@
 			</table>
 		</td>
 		<td><%=RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm')%></td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
 	</tr>
 <%
 		}

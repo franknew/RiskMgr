@@ -38,6 +38,7 @@ define.pack = function(){
 //apply/src/setup.project.js
 //apply/src/setup.property.js
 //apply/src/test-data.js
+//apply/src/tpl.charge.js
 //apply/src/tpl.project.base.js
 //apply/src/tpl.project.newloan.js
 //apply/src/tpl.project.ransombank.js
@@ -46,6 +47,7 @@ define.pack = function(){
 //apply/src/wizzard.js
 //apply/src/choose.tmpl.html
 //apply/src/setup.approval.tmpl.html
+//apply/src/setup.charge.tmpl.html
 //apply/src/setup.customer.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
@@ -59,6 +61,7 @@ define.pack = function(){
 //apply/src/setup.project.js
 //apply/src/setup.property.js
 //apply/src/test-data.js
+//apply/src/tpl.charge.js
 //apply/src/tpl.project.base.js
 //apply/src/tpl.project.newloan.js
 //apply/src/tpl.project.ransombank.js
@@ -688,6 +691,121 @@ define.pack("./test-data",[],function(require, exports, module){
       }
   };
 return rs;
+});/**
+ * 项目信息form表单：收费情况
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-21 21:00:52
+ */
+
+define.pack("./tpl.charge",[],function(require, exports, module){
+	var MOD = [
+		[{
+			type:'label',
+			col:3,
+			html:'收取担保费'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'Danbaofei',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'担保费时间'
+		},{
+			col:'3',
+			type:'date',
+			required:true,
+			name:'DanbaoDate',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'放款金额'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'Fangkuanjine',
+			placeholder:'',
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			html:'放款时间'
+		},{
+			col:'3',
+			type:'date',
+			required:true,
+			name:'FangkuanTime',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'回款金额'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'Fangkuanjine',
+			placeholder:'',
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			html:'回款时间'
+		},{
+			col:'3',
+			type:'date',
+			required:true,
+			name:'FangkuanTime',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'滞纳金'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'Fangkuanjine',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'滞纳金时间'
+		},{
+			col:'3',
+			type:'date',
+			required:true,
+			name:'FangkuanTime',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'是否有展期费用'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'Fangkuanjine',
+			placeholder:'',
+			suffix:'元'
+		}]
+	];
+
+	return MOD;
 });/**
  * 项目信息form表单：基本信息
  * @authors viktorli (i@lizhenwen.com)
@@ -1592,6 +1710,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 //tmpl file list:
 //apply/src/choose.tmpl.html
 //apply/src/setup.approval.tmpl.html
+//apply/src/setup.charge.tmpl.html
 //apply/src/setup.customer.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
@@ -1609,8 +1728,58 @@ return __p.join("");
 'SetupApproval': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="step-pane" id="Approval">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>审批信息</h3>\n		</div>\n		<div class="content">\n			<div class="well">\n				<div class="form-group">\n					<div class="col-sm-12">\n					<label>调查报告</label>\n					<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">风控意见</label>\n					<div class="col-sm-9">\n						<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">经理意见</label>\n					<div class="col-sm-9">\n						<textarea class="form-control"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<label class="col-sm-3 control-label">收费情况</label>\n					<div class="col-sm-9">\n						收取担保费：￥1999<br/>\n						担保费时间：<br>\n						放款金额：￥222万元<br/>\n						放款时间：2015<br/>\n						回款金额：万元<br/>\n						回款时间：<br/>\n						滞纳金：<br/>\n						滞纳金时间：<br/>\n						是否有展期费用：（超出时间的费用）\n					</div>\n				</div>\n			</div>\n		</div>\n	</div>');
-if (data.mode == 'approval') {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n			&nbsp;&nbsp;\n			<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n		</div>\n	</div>');
+
+	var RString = require('risk/unit/string');
+	var DataView = data.data || {},
+		Approvals = DataView.Approvals || {},	//审批信息
+		ApprovalsDone = Approvals.Done || [],
+		CurrentWorkflow = Approvals.CurrentWorkflow || {},
+		CurrentApproval = Approvals.CurrentApproval || [];
+__p.push('<div class="step-pane" id="Approval">');
+if (ApprovalsDone.length>0) {__p.push('		<div class="block-transparent">\n			<div class="header"><h3>审批信息</h3></div>\n			<div class="content">');
+
+					var i=0,cur;
+					for(;cur=ApprovalsDone[i++];) {
+				__p.push('					<div class="well">\n						<div class="form-group">\n							<div class="col-sm-12">\n							<label>');
+_p(cur.title);
+__p.push('</label>\n							<div>');
+_p(cur.content);
+__p.push('</div>\n							<div>');
+_p(cur.handler);
+__p.push(' ');
+_p(RString.date(cur.time,"yyyy-MM-dd"));
+__p.push('</div>\n							</div>\n						</div>\n					</div>');
+}__p.push('			</div>\n		</div>');
+} if (CurrentApproval.length>0) { __p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content">\n				<div class="well">');
+
+						var i=0,cur;
+						for(;cur=CurrentApproval[i++];) {
+					__p.push('							<div class="form-group">\n								<div class="col-sm-12">\n								<label>');
+_p(cur.title);
+__p.push('</label>\n								<div><textarea name="');
+_p(cur.key);
+__p.push('"></textarea></div>\n								</div>\n							</div>');
+}__p.push('					<div class="form-group">\n						<div class="text-center col-sm-12">\n							<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n							&nbsp;&nbsp;\n							<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>');
+}else {__p.push('		<div class="alert alert-info" role="alert">\n			当前审批流程到了<b>');
+_p(CurrentWorkflow.handler);
+__p.push('</b>\n		</div>');
+}__p.push('</div>');
+
+return __p.join("");
+},
+
+'SetupCharge': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var DataView = data.data || {},
+		Approvals = DataView.Approvals;	//审批信息
+	var Former = require('risk/components/former/index'),
+		TplCharge = require('./tpl.charge');
+__p.push('<div class="step-pane" id="Charge">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>收费情况</h3>\n			</div>\n			<div class="content">\n				<div class="well">');
+_p(Former.make(TplCharge,{data:DataView,disabled:!data.canEdit}));
+__p.push('				</div>\n			</div>\n		</div>');
+if (data.canEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>\n			</div>\n		</div>');
 }__p.push('</div>');
 
 return __p.join("");
@@ -1787,26 +1956,27 @@ return __p.join("");
 'Setup': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
+
+	var DataView = data.data || {},
+		Approvals = DataView.Approvals;	//审批信息
+	//Approvals = [1,2,3];
 __p.push('<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');
-if (!data.canEdit) {__p.push('			<li data-target="Approval">审批信息<span class="chevron"></span></li>');
+if (data.mode!=='add' && data.mode!=='edit') {__p.push('			<li data-target="Approval">审批信息<span class="chevron"></span></li>');
+if (Approvals && Approvals.length>0) {__p.push('				<li data-target="Charge">收费情况<span class="chevron"></span></li>\n				<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
 }__p.push('			');
-
-			//还需要判断审批之后才能看到
-			if (data.mode!=='add' && data.mode!=='edit') {
-			__p.push('			<li data-target="Charge">收费情况<span class="chevron"></span></li>\n			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
-}__p.push('		</ul>\n		<div class="step-content">');
+}__p.push('\n		</ul>\n		<div class="step-content">');
 _p(this.SetupCustomer(data));
 __p.push('			');
 _p(this.SetupProperty(data));
 __p.push('			');
 _p(this.SetupProject(data));
 __p.push('			');
-if (!data.canEdit) {__p.push('			');
 _p(this.SetupApproval(data));
 __p.push('			');
-}__p.push('		</div>\n	</form>\n</div>');
+_p(this.SetupCharge(data));
+__p.push('		</div>\n	</form>\n</div>');
 
 return __p.join("");
 }

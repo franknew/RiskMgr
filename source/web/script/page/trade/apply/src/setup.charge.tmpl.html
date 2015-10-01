@@ -1,0 +1,27 @@
+<script type="text/html" id="SetupCharge">
+<%
+	var DataView = data.data || {},
+		Approvals = DataView.Approvals;	//审批信息
+	var Former = require('risk/components/former/index'),
+		TplCharge = require('./tpl.charge');
+%>
+<div class="step-pane" id="Charge">
+		<div class="block-transparent">
+			<div class="header">
+				<h3>收费情况</h3>
+			</div>
+			<div class="content">
+				<div class="well">
+					<%=Former.make(TplCharge,{data:DataView,disabled:!data.canEdit})%>
+				</div>
+			</div>
+		</div>
+		<%if (data.canEdit) {%>
+		<div class="form-group">
+			<div class="text-center col-sm-12">
+				<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>
+			</div>
+		</div>
+		<%}%>
+</div>
+</script>

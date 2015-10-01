@@ -1,54 +1,67 @@
 <script type="text/html" id="SetupApproval">
+<%
+	var RString = require('risk/unit/string');
+	var DataView = data.data || {},
+		Approvals = DataView.Approvals || {},	//审批信息
+		ApprovalsDone = Approvals.Done || [],
+		CurrentWorkflow = Approvals.CurrentWorkflow || {},
+		CurrentApproval = Approvals.CurrentApproval || [];
+%>
 <div class="step-pane" id="Approval">
-	<div class="block-transparent">
-		<div class="header">
-			<h3>审批信息</h3>
+	<%if (ApprovalsDone.length>0) {%>
+		<div class="block-transparent">
+			<div class="header"><h3>审批信息</h3></div>
+			<div class="content">
+				<%
+					var i=0,cur;
+					for(;cur=ApprovalsDone[i++];) {
+				%>
+					<div class="well">
+						<div class="form-group">
+							<div class="col-sm-12">
+							<label><%=cur.title%></label>
+							<div><%=cur.content%></div>
+							<div><%=cur.handler%> <%=RString.date(cur.time,"yyyy-MM-dd")%></div>
+							</div>
+						</div>
+					</div>
+				<%}%>
+			</div>
 		</div>
-		<div class="content">
-			<div class="well">
-				<div class="form-group">
-					<div class="col-sm-12">
-					<label>调查报告</label>
-					<textarea class="form-control"></textarea>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">风控意见</label>
-					<div class="col-sm-9">
-						<textarea class="form-control"></textarea>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">经理意见</label>
-					<div class="col-sm-9">
-						<textarea class="form-control"></textarea>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">收费情况</label>
-					<div class="col-sm-9">
-						收取担保费：￥1999<br/>
-						担保费时间：<br>
-						放款金额：￥222万元<br/>
-						放款时间：2015<br/>
-						回款金额：万元<br/>
-						回款时间：<br/>
-						滞纳金：<br/>
-						滞纳金时间：<br/>
-						是否有展期费用：（超出时间的费用）
+	<%}%>
+
+	<% if (CurrentApproval.length>0) { %>
+		<div class="block-transparent">
+			<div class="header">
+				<h3>审批意见</h3>
+			</div>
+			<div class="content">
+				<div class="well">
+					<%
+						var i=0,cur;
+						for(;cur=CurrentApproval[i++];) {
+					%>
+							<div class="form-group">
+								<div class="col-sm-12">
+								<label><%=cur.title%></label>
+								<div><textarea name="<%=cur.key%>"></textarea></div>
+								</div>
+							</div>
+					<%}%>
+					<div class="form-group">
+						<div class="text-center col-sm-12">
+							<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>
+							&nbsp;&nbsp;
+							<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<%if (data.mode == 'approval') {%>
-	<div class="form-group">
-		<div class="text-center col-sm-12">
-			<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>
-			&nbsp;&nbsp;
-			<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>
+	<%}else {%>
+		<div class="alert alert-info" role="alert">
+			当前审批流程到了<b><%=CurrentWorkflow.handler%></b>
 		</div>
-	</div>
 	<%}%>
 </div>
 </script>
