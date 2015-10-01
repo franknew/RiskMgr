@@ -270,9 +270,9 @@ __p.push('</td>\n			</tr>');
 				Assets = Cur.Assets||[];
 			for(;CurAssets=Assets[bi++];) {
 			__p.push('			<tr>\n				<td>');
-_p(CurAssets.Name);
+_p(CurAssets.Code);
 __p.push('</td>\n				<td>');
-_p(CurAssets.IdentityCode);
+_p(CurAssets.Address);
 __p.push('</td>\n			</tr>');
 
 			}
