@@ -39,6 +39,7 @@ define.pack = function(){
 //apply/src/setup.property.js
 //apply/src/test-data.js
 //apply/src/tpl.charge.js
+//apply/src/tpl.followup.js
 //apply/src/tpl.project.base.js
 //apply/src/tpl.project.newloan.js
 //apply/src/tpl.project.ransombank.js
@@ -49,6 +50,7 @@ define.pack = function(){
 //apply/src/setup.approval.tmpl.html
 //apply/src/setup.charge.tmpl.html
 //apply/src/setup.customer.tmpl.html
+//apply/src/setup.followup.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
 //apply/src/setup.tmpl.html
@@ -62,6 +64,7 @@ define.pack = function(){
 //apply/src/setup.property.js
 //apply/src/test-data.js
 //apply/src/tpl.charge.js
+//apply/src/tpl.followup.js
 //apply/src/tpl.project.base.js
 //apply/src/tpl.project.newloan.js
 //apply/src/tpl.project.ransombank.js
@@ -803,6 +806,231 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			placeholder:'',
 			suffix:'元'
 		}]
+	];
+
+	return MOD;
+});/**
+ * 项目信息form表单：收费情况
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-21 21:00:52
+ */
+
+define.pack("./tpl.followup",[],function(require, exports, module){
+	var MOD = [
+		[{
+			type:'label',
+			col:3,
+			html:'新房产证号'
+		},{
+			col:'3',
+			type:'text',
+			name:'XIN',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'过户人工编号'
+		},{
+			col:'3',
+			type:'text',
+			name:'XIN',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'过户办文编号'
+		},{
+			col:'3',
+			type:'text',
+			name:'XIN',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'过户收文日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'过户办文编号2'
+		},{
+			col:'3',
+			type:'text',
+			name:'XIN',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'过户收文日期2'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'过户办文编号3'
+		},{
+			col:'3',
+			type:'text',
+			name:'XIN',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'过户收文日期3'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'过户说明'
+		},{
+			col:'9',
+			type:'textarea',
+			name:'XIN',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'抵押回执编号'
+		},{
+			col:'9',
+			type:'text',
+			name:'XIN',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'抵押收文日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'预计完成日'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'抵押回执编号2'
+		},{
+			col:'9',
+			type:'text',
+			name:'XIN',
+			placeholder:''
+		}],
+		[{
+			type:'label',
+			col:3,
+			html:'抵押收文日期2'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'预计完成日2'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'抵押回执编号3'
+		},{
+			col:'9',
+			type:'text',
+			name:'XIN',
+			placeholder:''
+		}],
+		[{
+			type:'label',
+			col:3,
+			html:'抵押收文日期3'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'预计完成日3'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		}],
+		[{
+			type:'label',
+			col:3,
+			html:'抵押驻点人员'
+		},{
+			col:'3',
+			type:'select',
+			name:'XIN',
+			placeholder:'',
+			options:[]
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'抵押备注说明'
+		},{
+			col:'9',
+			type:'textarea',
+			name:'XIN',
+			placeholder:''
+		}],
+		[{
+			type:'label',
+			col:3,
+			html:'解保日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'XIN',
+			placeholder:''
+		}],
+
 	];
 
 	return MOD;
@@ -1712,6 +1940,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 //apply/src/setup.approval.tmpl.html
 //apply/src/setup.charge.tmpl.html
 //apply/src/setup.customer.tmpl.html
+//apply/src/setup.followup.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
 //apply/src/setup.tmpl.html
@@ -1773,13 +2002,15 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	var DataView = data.data || {},
-		Approvals = DataView.Approvals;	//审批信息
+		Charge = DataView.Charge,	//财务信息
+		ChargeCanEdit = DataView.ChargeCanEdit;
+
 	var Former = require('risk/components/former/index'),
 		TplCharge = require('./tpl.charge');
 __p.push('<div class="step-pane" id="Charge">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>收费情况</h3>\n			</div>\n			<div class="content">\n				<div class="well">');
-_p(Former.make(TplCharge,{data:DataView,disabled:!data.canEdit}));
+_p(Former.make(TplCharge,{data:Charge,disabled:!data.canEdit}));
 __p.push('				</div>\n			</div>\n		</div>');
-if (data.canEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>\n			</div>\n		</div>');
+if (data.canEdit && DataView.ChargeCanEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>\n			</div>\n		</div>');
 }__p.push('</div>');
 
 return __p.join("");
@@ -1846,6 +2077,25 @@ __p.push('		');
 
 			}
 		__p.push('	</div>');
+
+return __p.join("");
+},
+
+'SetupFollowup': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var DataView = data.data || {},
+		FollowupCanEdit = DataView.FollowupCanEdit,
+		Followup = DataView.Followup;	//保后跟踪
+
+	var Former = require('risk/components/former/index'),
+		TplFollowup = require('./tpl.followup');
+__p.push('<div class="step-pane" id="Followup">\n	<div class="block-transparent">\n		<div class="header"><h3>保后跟踪</h3></div>\n		<div class="content">');
+_p(Former.make(TplFollowup,{data:Followup,disabled:!data.canEdit}));
+__p.push('		</div>\n	</div>');
+if (data.canEdit && FollowupCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>\n		</div>\n	</div>');
+}__p.push('</div>');
 
 return __p.join("");
 },
@@ -1957,14 +2207,43 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 
+	//测试数据
+	data.data["Approvals"]  = {
+			"CurrentWorkflow":{
+				"handler":"李振文"
+			}
+			,"Done":[{
+				"title":"之前的审批123",
+				"key":"ApprovalTest123",
+				"content":"我同意啊哈哈",
+				"handler":"李振文",
+				"time":1443670754853
+			}]
+			,"CurrentApproval":[{
+				"title":"审批标题啊",
+				"key":"ApprovalTest222"
+			},{
+				"title":"可以多个审批标题不",
+				"key":"ApprovalTest333"
+			}]
+		};
+
+		data.data["ChargeCanEdit"]  = true;
+		data.data["Charge"]  = {"key":"value"};
+
+		data.data["FollowupCanEdit"]  = true;
+		data.data["Followup"]  = {"key":"value"};
+
 	var DataView = data.data || {},
-		Approvals = DataView.Approvals;	//审批信息
-	//Approvals = [1,2,3];
-__p.push('<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
+		Approvals = DataView.Approvals || {},	//审批信息
+		Charge = DataView.Charge,	//财务信息
+		Followup = DataView.Followup;	//保后跟踪
+__p.push('\n<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');
-if (data.mode!=='add' && data.mode!=='edit') {__p.push('			<li data-target="Approval">审批信息<span class="chevron"></span></li>');
-if (Approvals && Approvals.length>0) {__p.push('				<li data-target="Charge">收费情况<span class="chevron"></span></li>\n				<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
+if (data.mode!=='add' && data.mode!=='edit') {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');
+if (DataView.ChargeCanEdit || Charge) {__p.push('				<li data-target="Charge">收费情况<span class="chevron"></span></li>');
+}if (DataView.FollowupCanEdit || Followup) {__p.push('				<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
 }__p.push('			');
 }__p.push('\n		</ul>\n		<div class="step-content">');
 _p(this.SetupCustomer(data));
@@ -1976,6 +2255,8 @@ __p.push('			');
 _p(this.SetupApproval(data));
 __p.push('			');
 _p(this.SetupCharge(data));
+__p.push('			');
+_p(this.SetupFollowup(data));
 __p.push('		</div>\n	</form>\n</div>');
 
 return __p.join("");
