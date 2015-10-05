@@ -20,7 +20,8 @@ namespace RiskMgr.BLL
             WorkflowModel workflow = WorkflowModel.Load(workflowid);
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
-            workflow.ProcessActivity(activityid, approval, taskid, user.User.ID, new WorkflowAuthority());
+            string userid = user.User.ID;
+            workflow.ProcessActivity(activityid, approval, taskid, userid, new WorkflowAuthority());
             return true;
         }
     }

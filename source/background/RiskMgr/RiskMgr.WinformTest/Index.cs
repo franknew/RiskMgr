@@ -12,6 +12,7 @@ using System.Text;
 using System.Windows.Forms;
 using RiskMgr.Api;
 using RiskMgr.BLL;
+using DreamWorkflow.Engine.Model;
 
 namespace RiskMgr.WinformTest
 {
@@ -189,10 +190,13 @@ namespace RiskMgr.WinformTest
 
         private void button12_Click(object sender, EventArgs e)
         {
-            QueryMyApplyRequest request = new QueryMyApplyRequest();
-            request.token = token;
-            var response = SDKFactory.Client.Execute(request);
-            MessageBox.Show(response.ResponseBody);
+            //QueryMyApplyRequest request = new QueryMyApplyRequest();
+            //request.token = token;
+            //var response = SDKFactory.Client.Execute(request);
+            //MessageBox.Show(response.ResponseBody);
+
+            ProjectApi api = new ProjectApi();
+            var data = api.QueryMyApply();
         }
 
         private void button13_Click(object sender, EventArgs e)
@@ -203,14 +207,24 @@ namespace RiskMgr.WinformTest
 
         private void button14_Click(object sender, EventArgs e)
         {
-            ApprovalRequest request = new ApprovalRequest();
-            request.form = new ApprovalServiceForm
+            WorkflowApi api = new WorkflowApi();
+            api.Approval(new ApprovalServiceForm
             {
-                ActivityID = "cf90846148874e59a9caaf13cbf136be",
-                TaskID = "",
-            };
+                ActivityID = "653064cd7bc84692ab301092240f603d",
+                WorkflowID = "d48dc827001e4af5a1265d5fd3268657",
+                TaskID = "2b11644fabd840cb847613e1ab4ff18d",
+                Approval = new Approval
+                {
+                    Status = 1,
+                    Remark = "test agree",
+                }
+            });
         }
 
-
+        private void button15_Click(object sender, EventArgs e)
+        {
+            ProjectApi api = new ProjectApi();
+            api.InitApproval(new ProjectQueryForm { ID = textBox1.Text });
+        }
     }
 }

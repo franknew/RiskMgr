@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="ActionAttribute.cs" />
     <Compile Include="Entity\Action.cs" />
+    <Compile Include="Entity\ApprovalInfo.cs" />
     <Compile Include="Entity\Asset.cs" />
     <Compile Include="Entity\Asset_Project.cs" />
     <Compile Include="Entity\Customer.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="ServiceForm\AddProjectServiceForm.cs" />
     <Compile Include="ServiceForm\AddUserServiceForm.cs" />
     <Compile Include="ServiceForm\ApprovalServiceForm.cs" />
+    <Compile Include="ServiceForm\FinaceApprovalServiceForm.cs" />
     <Compile Include="ServiceForm\InitApprovalServiceForm.cs" />
     <Compile Include="ServiceForm\LogonServiceForm.cs" />
     <Compile Include="ServiceForm\QueryDataDictionaryByGroupNamesServiceForm.cs" />

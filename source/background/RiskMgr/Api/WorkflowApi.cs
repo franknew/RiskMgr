@@ -26,6 +26,18 @@ namespace RiskMgr.Api
         [ApprovalAction]
         public bool Approval(ApprovalServiceForm form)
         {
+            if (string.IsNullOrEmpty(form.WorkflowID))
+            {
+                throw new Exception("没有WorkflowID");
+            }
+            if (string.IsNullOrEmpty(form.ActivityID))
+            {
+                throw new Exception("没有ActivityID");
+            }
+            if (string.IsNullOrEmpty(form.TaskID))
+            {
+                throw new Exception("没有TaskID");
+            }
             return bll.Approval(form.WorkflowID, form.ActivityID, form.TaskID, form.Approval);
         }
 

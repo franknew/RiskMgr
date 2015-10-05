@@ -32,6 +32,7 @@ namespace RiskMgr.BLL
             int index = projectdao.QueryMaxProjectIndex(new ProjectQueryForm { CreateTime_Start = createstart, CreateTime_End = createend });
             string code = DateTime.Now.ToString("yyMMdd") + (index + 1).ToString();
             project.Name = code;
+            project.Index = index + 1;
             projectdao.Add(project);
             if (assets != null)
             {
@@ -210,6 +211,10 @@ namespace RiskMgr.BLL
             ActivityDao acdao = new ActivityDao(mapper);
             TaskDao taskdao = new TaskDao(mapper);
             ApprovalDao appdao = new ApprovalDao(mapper);
+            User_RoleDao urdao = new User_RoleDao(mapper);
+            RoleDao roledao = new RoleDao(mapper);
+            UserInfoDao userdao = new UserInfoDao(mapper);
+
             form.Project = projectdao.Query(new ProjectQueryForm { ID = projectid }).FirstOrDefault();
             if (form.Project == null)
             {
@@ -253,28 +258,70 @@ namespace RiskMgr.BLL
             if (workflow != null)
             {
                 form.WorkflowID = workflow.ID;
-                form.Approvals = appdao.Query(new ApprovalQueryForm { WorkflowID = form.WorkflowID });
-                if (workflow.Creator == user.User.ID)
+                var approvals = appdao.Query(new ApprovalQueryForm { WorkflowID = form.WorkflowID });
+                List<string> useridlist = new List<string>();
+                foreach (var approval in approvals)
                 {
-                    form.BusinessStatus = ActionStatus.Editable;
-                    form.FinaceStatus = ActionStatus.Queryable;
+                    useridlist.Add(approval.Creator);
                 }
-                else
+                List<UserInfo> userlist = userdao.Query(new UserInfoQueryForm { Ids = useridlist });
+                
+                var activityids = new List<string>();
+                foreach (var a in approvals)
                 {
-                    form.BusinessStatus = ActionStatus.Queryable;
-                    form.FinaceStatus = ActionStatus.Queryable;
+                    activityids.Add(a.ActivityID);
                 }
-                var activity = acdao.Query(new ActivityQueryForm { WorkflowID = form.WorkflowID, Status = (int)ActivityProcessStatus.Processing }).FirstOrDefault();
+                var activities = acdao.Query(new ActivityQueryForm { WorkflowID = form.WorkflowID});
+                List<ApprovalInfo> approvalinfo = approvals.ToDataTable().ToList<ApprovalInfo>().ToList();
+                foreach (var a in approvalinfo)
+                {
+                    var ac = activities.Find(t => t.ID == a.ActivityID);
+                    if (ac != null)
+                    {
+                        a.ActivityName = ac.Name;
+                    }
+                    var userinfo = userlist.Find(t => t.ID == a.Creator);
+                    if (userinfo != null)
+                    {
+                        a.Processor = userinfo.CnName;
+                    }
+                }
+                form.Approvals = approvalinfo;
+                form.Action = ActionStatus.Queryable;
+                var activity = activities.Find(t => t.Status == (int)ActivityProcessStatus.Processing);
                 if (activity != null)
                 {
-                    form.ActivityID = activity.ID;
-                    var task = taskdao.Query(new TaskQueryForm { ActivityID = form.ActivityID, UserID = user.User.ID }).FirstOrDefault();
+                    form.CurrentActivity = activity;
+                    var task = taskdao.Query(new TaskQueryForm { ActivityID = activity.ID, UserID = user.User.ID }).FirstOrDefault();
                     if (task != null)
                     {
                         form.TaskID = task.ID;
-                        if (task.Status != (int)TaskProcessStatus.Processed)
+                        if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == user.User.ID && workflow.Creator == task.UserID)
                         {
-                            form.BusinessStatus = ActionStatus.Approvalable;
+                            form.Action = ActionStatus.Editable;
+                        }
+                        else if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == user.User.ID)
+                        {
+                            form.Action = ActionStatus.Approvalable;
+                        }
+                        var ur = urdao.Query(new User_RoleQueryForm { UserID = task.UserID }).FirstOrDefault();
+                        if (ur != null)
+                        {
+                            var role = roledao.Query(new RoleQueryForm { ID = ur.RoleID }).FirstOrDefault();
+                            if (role != null)
+                            {
+                                switch (role.ID)
+                                {
+                                    case "5"://财务
+                                        form.ChargeCanEdit = true;
+                                        form.Action = ActionStatus.Editable;
+                                        break;
+                                    case "6"://保后跟踪
+                                        form.FollowupCanEdit = true;
+                                        form.Action = ActionStatus.Editable;
+                                        break;
+                                }
+                            }
                         }
                     }
                 }
@@ -282,7 +329,6 @@ namespace RiskMgr.BLL
             return form;
         }
 
-        [QueryAction]
         public List<Project> QueryMyProject(WorkflowProcessStatus processStatus)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
@@ -300,7 +346,6 @@ namespace RiskMgr.BLL
             return projectdao.Query(new ProjectQueryForm { Ids = projectids });
         }
 
-        [QueryAction]
         public List<InitApprovalResultForm> QueryMyApply()
         {
             List<InitApprovalResultForm> list = new List<InitApprovalResultForm>();
@@ -320,6 +365,68 @@ namespace RiskMgr.BLL
                 }
             }
             return list;
+        }
+
+        public bool UpdateFinance(string workflowid, string activityid, string taskid, Project project)
+        {
+            ISqlMapper mapper = Common.GetMapperFromSession();
+            ProjectDao dao = new ProjectDao(mapper);
+            dao.Update(new ProjectUpdateForm
+            {
+                Entity = new Project
+                {
+                    InsuranceFee = project.InsuranceFee,
+                    InsuranceTime = project.InsuranceTime,
+                    ExportMoney = project.ExportMoney,
+                    ExportTime = project.ExportTime,
+                    ReturnBackMoney = project.ReturnBackMoney,
+                    ReturnBackTime = project.ReturnBackTime,
+                    DelayFee = project.DelayFee,
+                    DelayTime = project.DelayTime,
+                    HasExpired = project.HasExpired,
+                },
+                ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
+            });
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            WorkflowModel model = WorkflowModel.Load(workflowid);
+            model.ProcessActivity(activityid, new Approval { Status = (int)ApprovalStatus.None }, taskid, user.User.ID, new WorkflowAuthority());
+            return true;
+        }
+
+        public bool UpdateTracking(Project project)
+        {
+            ISqlMapper mapper = Common.GetMapperFromSession();
+            ProjectDao dao = new ProjectDao(mapper);
+            dao.Update(new ProjectUpdateForm
+            {
+                Entity = new Project
+                {
+                    NewAssetCode = project.NewAssetCode,
+                    ChangeOwnerManualCode = project.ChangeOwnerManualCode,
+                    ChangeOwnerProfileCode2 = project.ChangeOwnerProfileCode2,
+                    ChangeOwnerProfileCode3 = project.ChangeOwnerProfileCode3,
+                    ChangeOwnerProfileCode1 = project.ChangeOwnerProfileCode1,
+                    ChangeOwnerProfileTime1 = project.ChangeOwnerProfileTime1,
+                    ChangeOwnerProfileTime2 = project.ChangeOwnerProfileTime2,
+                    ChangeOwnerProfileTime3 = project.ChangeOwnerProfileTime3,
+                    ChangeOwnerRemark = project.ChangeOwnerRemark,
+                    MortgageFeedbackCode1 = project.MortgageFeedbackCode1,
+                    MortgageFeedbackCode2 = project.MortgageFeedbackCode2,
+                    MortgageFeedbackCode3 = project.MortgageFeedbackCode3,
+                    MortgageOverTime1 = project.MortgageOverTime1,
+                    MortgageOverTime2 = project.MortgageOverTime2,
+                    MortgageOverTime3 = project.MortgageOverTime3,
+                    MortgagePredictTime1 = project.MortgagePredictTime1,
+                    MortgagePredictTime2 = project.MortgagePredictTime2,
+                    MortgagePredictTime3 = project.MortgagePredictTime3,
+                    MortgagePerson = project.MortgagePerson,
+                    MortgageRemark = project.MortgageRemark,
+                    InsuranceFreeTime = project.InsuranceFreeTime,
+                },
+                ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
+            });
+            return true;
         }
     }
 }

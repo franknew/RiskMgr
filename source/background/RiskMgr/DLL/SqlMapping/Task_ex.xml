@@ -6,7 +6,7 @@
   </alias>
   <statements>
     <select id="QueryTaskByRelationship" resultClass="FullTask" parameterClass="QueryMyTaskServiceForm">
-      SELECT t.*,apply.Name AS Applier, process.Name AS Processor FROM Task AS t 
+      SELECT t.*,apply.Name AS Applier, process.Name AS Processor, wf.ProcessID AS `ProcessID` FROM Task AS t
       LEFT JOIN Workflow wf ON t.WorkflowID=wf.ID
       INNER JOIN User AS apply ON apply.ID=wf.Creator
       INNER JOIN User AS process ON process.ID=t.UserID

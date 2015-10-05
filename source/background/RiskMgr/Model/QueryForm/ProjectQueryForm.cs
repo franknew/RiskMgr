@@ -158,7 +158,69 @@ namespace RiskMgr.Form
         
         public DateTime? DelayTime_End { get; set; }
         
-        public UInt64? HasExpired { get; set; }
+        public decimal? HasExpired { get; set; }
+        
+        public string NewAssetCode { get; set; }
+        
+        public string ChangeOwnerManualCode { get; set; }
+        
+        public string ChangeOwnerProfileCode1 { get; set; }
+        
+        public DateTime? ChangeOwnerProfileTime1_Start { get; set; }
+        
+        public DateTime? ChangeOwnerProfileTime1_End { get; set; }
+        
+        public string ChangeOwnerProfileCode2 { get; set; }
+        
+        public DateTime? ChangeOwnerProfileTime2_Start { get; set; }
+        
+        public DateTime? ChangeOwnerProfileTime2_End { get; set; }
+        
+        public string ChangeOwnerProfileCode3 { get; set; }
+        
+        public DateTime? ChangeOwnerProfileTime3_Start { get; set; }
+        
+        public DateTime? ChangeOwnerProfileTime3_End { get; set; }
+        
+        public string ChangeOwnerRemark { get; set; }
+        
+        public string MortgageFeedbackCode1 { get; set; }
+        
+        public DateTime? MortgageOverTime1_Start { get; set; }
+        
+        public DateTime? MortgageOverTime1_End { get; set; }
+        
+        public DateTime? MortgagePredictTime1_Start { get; set; }
+        
+        public DateTime? MortgagePredictTime1_End { get; set; }
+        
+        public string MortgageFeedbackCode2 { get; set; }
+        
+        public string MortgageFeedbackCode3 { get; set; }
+        
+        public DateTime? MortgageOverTime2_Start { get; set; }
+        
+        public DateTime? MortgageOverTime2_End { get; set; }
+        
+        public DateTime? MortgageOverTime3_Start { get; set; }
+        
+        public DateTime? MortgageOverTime3_End { get; set; }
+        
+        public DateTime? MortgagePredictTime2_Start { get; set; }
+        
+        public DateTime? MortgagePredictTime2_End { get; set; }
+        
+        public DateTime? MortgagePredictTime3_Start { get; set; }
+        
+        public DateTime? MortgagePredictTime3_End { get; set; }
+        
+        public string MortgagePerson { get; set; }
+        
+        public string MortgageRemark { get; set; }
+        
+        public DateTime? InsuranceFreeTime_Start { get; set; }
+        
+        public DateTime? InsuranceFreeTime_End { get; set; }
         
     }
 }

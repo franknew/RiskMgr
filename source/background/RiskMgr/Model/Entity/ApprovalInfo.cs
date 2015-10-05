@@ -6,12 +6,10 @@ using System.Text;
 
 namespace RiskMgr.Model
 {
-    public class FullTask : Task
+    public class ApprovalInfo : Approval
     {
-        public string Applier { get; set; }
+        public string ActivityName { get; set; }
 
         public string Processor { get; set; }
-
-        public string ProcessID { get; set; }
     }
 }

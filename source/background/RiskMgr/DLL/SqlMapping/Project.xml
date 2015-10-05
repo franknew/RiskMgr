@@ -264,6 +264,99 @@
     <isNotNull prepend="AND" property="HasExpired">
         `HasExpired`=#HasExpired#
     </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetCode">
+        `NewAssetCode`=#NewAssetCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerManualCode">
+        `ChangeOwnerManualCode`=#ChangeOwnerManualCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode1">
+        `ChangeOwnerProfileCode1`=#ChangeOwnerProfileCode1#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime1_Start">
+        `ChangeOwnerProfileTime1`&gt;=#ChangeOwnerProfileTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime1_End">
+        `ChangeOwnerProfileTime1`&lt;=#ChangeOwnerProfileTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode2">
+        `ChangeOwnerProfileCode2`=#ChangeOwnerProfileCode2#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime2_Start">
+        `ChangeOwnerProfileTime2`&gt;=#ChangeOwnerProfileTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime2_End">
+        `ChangeOwnerProfileTime2`&lt;=#ChangeOwnerProfileTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode3">
+        `ChangeOwnerProfileCode3`=#ChangeOwnerProfileCode3#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime3_Start">
+        `ChangeOwnerProfileTime3`&gt;=#ChangeOwnerProfileTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime3_End">
+        `ChangeOwnerProfileTime3`&lt;=#ChangeOwnerProfileTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode1">
+        `MortgageFeedbackCode1`=#MortgageFeedbackCode1#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime1_Start">
+        `MortgageOverTime1`&gt;=#MortgageOverTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime1_End">
+        `MortgageOverTime1`&lt;=#MortgageOverTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime1_Start">
+        `MortgagePredictTime1`&gt;=#MortgagePredictTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime1_End">
+        `MortgagePredictTime1`&lt;=#MortgagePredictTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode2">
+        `MortgageFeedbackCode2`=#MortgageFeedbackCode2#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode3">
+        `MortgageFeedbackCode3`=#MortgageFeedbackCode3#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime2_Start">
+        `MortgageOverTime2`&gt;=#MortgageOverTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime2_End">
+        `MortgageOverTime2`&lt;=#MortgageOverTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime3_Start">
+        `MortgageOverTime3`&gt;=#MortgageOverTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime3_End">
+        `MortgageOverTime3`&lt;=#MortgageOverTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime2_Start">
+        `MortgagePredictTime2`&gt;=#MortgagePredictTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime2_End">
+        `MortgagePredictTime2`&lt;=#MortgagePredictTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime3_Start">
+        `MortgagePredictTime3`&gt;=#MortgagePredictTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime3_End">
+        `MortgagePredictTime3`&lt;=#MortgagePredictTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePerson">
+        `MortgagePerson`=#MortgagePerson#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageRemark">
+        `MortgageRemark`=#MortgageRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFreeTime_Start">
+        `InsuranceFreeTime`&gt;=#InsuranceFreeTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFreeTime_End">
+        `InsuranceFreeTime`&lt;=#InsuranceFreeTime_End#
+    </isNotNull>
     <isNotNull property="Ids">
         <iterate property="Ids" open="(" close=")" conjunction="OR">
          ID=#Ids[]#
@@ -338,7 +431,28 @@
     `ReturnBackTime`,
     `DelayFee`,
     `DelayTime`,
-    `HasExpired`
+    `HasExpired`,
+    `NewAssetCode`,
+    `ChangeOwnerManualCode`,
+    `ChangeOwnerProfileCode1`,
+    `ChangeOwnerProfileTime1`,
+    `ChangeOwnerProfileCode2`,
+    `ChangeOwnerProfileTime2`,
+    `ChangeOwnerProfileCode3`,
+    `ChangeOwnerProfileTime3`,
+    `ChangeOwnerRemark`,
+    `MortgageFeedbackCode1`,
+    `MortgageOverTime1`,
+    `MortgagePredictTime1`,
+    `MortgageFeedbackCode2`,
+    `MortgageFeedbackCode3`,
+    `MortgageOverTime2`,
+    `MortgageOverTime3`,
+    `MortgagePredictTime2`,
+    `MortgagePredictTime3`,
+    `MortgagePerson`,
+    `MortgageRemark`,
+    `InsuranceFreeTime`
   )
   VALUES
   (
@@ -401,7 +515,28 @@
         #ReturnBackTime#,
         #DelayFee#,
         #DelayTime#,
-        #HasExpired#
+        #HasExpired#,
+        #NewAssetCode#,
+        #ChangeOwnerManualCode#,
+        #ChangeOwnerProfileCode1#,
+        #ChangeOwnerProfileTime1#,
+        #ChangeOwnerProfileCode2#,
+        #ChangeOwnerProfileTime2#,
+        #ChangeOwnerProfileCode3#,
+        #ChangeOwnerProfileTime3#,
+        #ChangeOwnerRemark#,
+        #MortgageFeedbackCode1#,
+        #MortgageOverTime1#,
+        #MortgagePredictTime1#,
+        #MortgageFeedbackCode2#,
+        #MortgageFeedbackCode3#,
+        #MortgageOverTime2#,
+        #MortgageOverTime3#,
+        #MortgagePredictTime2#,
+        #MortgagePredictTime3#,
+        #MortgagePerson#,
+        #MortgageRemark#,
+        #InsuranceFreeTime#
   )
   </insert>
   <update id="UpdateProject" parameterClass="ProjectUpdateForm">
@@ -583,6 +718,69 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.HasExpired">
         `HasExpired`=#Entity.HasExpired#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.NewAssetCode">
+        `NewAssetCode`=#Entity.NewAssetCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerManualCode">
+        `ChangeOwnerManualCode`=#Entity.ChangeOwnerManualCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerProfileCode1">
+        `ChangeOwnerProfileCode1`=#Entity.ChangeOwnerProfileCode1#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerProfileTime1">
+        `ChangeOwnerProfileTime1`=#Entity.ChangeOwnerProfileTime1#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerProfileCode2">
+        `ChangeOwnerProfileCode2`=#Entity.ChangeOwnerProfileCode2#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerProfileTime2">
+        `ChangeOwnerProfileTime2`=#Entity.ChangeOwnerProfileTime2#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerProfileCode3">
+        `ChangeOwnerProfileCode3`=#Entity.ChangeOwnerProfileCode3#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerProfileTime3">
+        `ChangeOwnerProfileTime3`=#Entity.ChangeOwnerProfileTime3#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#Entity.ChangeOwnerRemark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageFeedbackCode1">
+        `MortgageFeedbackCode1`=#Entity.MortgageFeedbackCode1#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageOverTime1">
+        `MortgageOverTime1`=#Entity.MortgageOverTime1#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgagePredictTime1">
+        `MortgagePredictTime1`=#Entity.MortgagePredictTime1#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageFeedbackCode2">
+        `MortgageFeedbackCode2`=#Entity.MortgageFeedbackCode2#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageFeedbackCode3">
+        `MortgageFeedbackCode3`=#Entity.MortgageFeedbackCode3#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageOverTime2">
+        `MortgageOverTime2`=#Entity.MortgageOverTime2#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageOverTime3">
+        `MortgageOverTime3`=#Entity.MortgageOverTime3#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgagePredictTime2">
+        `MortgagePredictTime2`=#Entity.MortgagePredictTime2#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgagePredictTime3">
+        `MortgagePredictTime3`=#Entity.MortgagePredictTime3#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgagePerson">
+        `MortgagePerson`=#Entity.MortgagePerson#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageRemark">
+        `MortgageRemark`=#Entity.MortgageRemark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.InsuranceFreeTime">
+        `InsuranceFreeTime`=#Entity.InsuranceFreeTime#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -837,6 +1035,99 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ProjectQueryForm.HasExpired">
         `HasExpired`=#ProjectQueryForm.HasExpired#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.NewAssetCode">
+        `NewAssetCode`=#ProjectQueryForm.NewAssetCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerManualCode">
+        `ChangeOwnerManualCode`=#ProjectQueryForm.ChangeOwnerManualCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileCode1">
+        `ChangeOwnerProfileCode1`=#ProjectQueryForm.ChangeOwnerProfileCode1#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileTime1_Start">
+        `ChangeOwnerProfileTime1`&gt;=#ProjectQueryForm.ChangeOwnerProfileTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileTime1_End">
+        `ChangeOwnerProfileTime1`&lt;=#ProjectQueryForm.ChangeOwnerProfileTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileCode2">
+        `ChangeOwnerProfileCode2`=#ProjectQueryForm.ChangeOwnerProfileCode2#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileTime2_Start">
+        `ChangeOwnerProfileTime2`&gt;=#ProjectQueryForm.ChangeOwnerProfileTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileTime2_End">
+        `ChangeOwnerProfileTime2`&lt;=#ProjectQueryForm.ChangeOwnerProfileTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileCode3">
+        `ChangeOwnerProfileCode3`=#ProjectQueryForm.ChangeOwnerProfileCode3#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileTime3_Start">
+        `ChangeOwnerProfileTime3`&gt;=#ProjectQueryForm.ChangeOwnerProfileTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerProfileTime3_End">
+        `ChangeOwnerProfileTime3`&lt;=#ProjectQueryForm.ChangeOwnerProfileTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#ProjectQueryForm.ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageFeedbackCode1">
+        `MortgageFeedbackCode1`=#ProjectQueryForm.MortgageFeedbackCode1#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageOverTime1_Start">
+        `MortgageOverTime1`&gt;=#ProjectQueryForm.MortgageOverTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageOverTime1_End">
+        `MortgageOverTime1`&lt;=#ProjectQueryForm.MortgageOverTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgagePredictTime1_Start">
+        `MortgagePredictTime1`&gt;=#ProjectQueryForm.MortgagePredictTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgagePredictTime1_End">
+        `MortgagePredictTime1`&lt;=#ProjectQueryForm.MortgagePredictTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageFeedbackCode2">
+        `MortgageFeedbackCode2`=#ProjectQueryForm.MortgageFeedbackCode2#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageFeedbackCode3">
+        `MortgageFeedbackCode3`=#ProjectQueryForm.MortgageFeedbackCode3#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageOverTime2_Start">
+        `MortgageOverTime2`&gt;=#ProjectQueryForm.MortgageOverTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageOverTime2_End">
+        `MortgageOverTime2`&lt;=#ProjectQueryForm.MortgageOverTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageOverTime3_Start">
+        `MortgageOverTime3`&gt;=#ProjectQueryForm.MortgageOverTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageOverTime3_End">
+        `MortgageOverTime3`&lt;=#ProjectQueryForm.MortgageOverTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgagePredictTime2_Start">
+        `MortgagePredictTime2`&gt;=#ProjectQueryForm.MortgagePredictTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgagePredictTime2_End">
+        `MortgagePredictTime2`&lt;=#ProjectQueryForm.MortgagePredictTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgagePredictTime3_Start">
+        `MortgagePredictTime3`&gt;=#ProjectQueryForm.MortgagePredictTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgagePredictTime3_End">
+        `MortgagePredictTime3`&lt;=#ProjectQueryForm.MortgagePredictTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgagePerson">
+        `MortgagePerson`=#ProjectQueryForm.MortgagePerson#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.MortgageRemark">
+        `MortgageRemark`=#ProjectQueryForm.MortgageRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.InsuranceFreeTime_Start">
+        `InsuranceFreeTime`&gt;=#ProjectQueryForm.InsuranceFreeTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.InsuranceFreeTime_End">
+        `InsuranceFreeTime`&lt;=#ProjectQueryForm.InsuranceFreeTime_End#
     </isNotNull>
     </dynamic>
   </update>
@@ -1093,6 +1384,99 @@
     </isNotNull>
     <isNotNull prepend="AND" property="HasExpired">
         `HasExpired`=#HasExpired#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetCode">
+        `NewAssetCode`=#NewAssetCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerManualCode">
+        `ChangeOwnerManualCode`=#ChangeOwnerManualCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode1">
+        `ChangeOwnerProfileCode1`=#ChangeOwnerProfileCode1#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime1_Start">
+        `ChangeOwnerProfileTime1`&gt;=#ChangeOwnerProfileTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime1_End">
+        `ChangeOwnerProfileTime1`&lt;=#ChangeOwnerProfileTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode2">
+        `ChangeOwnerProfileCode2`=#ChangeOwnerProfileCode2#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime2_Start">
+        `ChangeOwnerProfileTime2`&gt;=#ChangeOwnerProfileTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime2_End">
+        `ChangeOwnerProfileTime2`&lt;=#ChangeOwnerProfileTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode3">
+        `ChangeOwnerProfileCode3`=#ChangeOwnerProfileCode3#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime3_Start">
+        `ChangeOwnerProfileTime3`&gt;=#ChangeOwnerProfileTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime3_End">
+        `ChangeOwnerProfileTime3`&lt;=#ChangeOwnerProfileTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode1">
+        `MortgageFeedbackCode1`=#MortgageFeedbackCode1#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime1_Start">
+        `MortgageOverTime1`&gt;=#MortgageOverTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime1_End">
+        `MortgageOverTime1`&lt;=#MortgageOverTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime1_Start">
+        `MortgagePredictTime1`&gt;=#MortgagePredictTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime1_End">
+        `MortgagePredictTime1`&lt;=#MortgagePredictTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode2">
+        `MortgageFeedbackCode2`=#MortgageFeedbackCode2#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode3">
+        `MortgageFeedbackCode3`=#MortgageFeedbackCode3#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime2_Start">
+        `MortgageOverTime2`&gt;=#MortgageOverTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime2_End">
+        `MortgageOverTime2`&lt;=#MortgageOverTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime3_Start">
+        `MortgageOverTime3`&gt;=#MortgageOverTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime3_End">
+        `MortgageOverTime3`&lt;=#MortgageOverTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime2_Start">
+        `MortgagePredictTime2`&gt;=#MortgagePredictTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime2_End">
+        `MortgagePredictTime2`&lt;=#MortgagePredictTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime3_Start">
+        `MortgagePredictTime3`&gt;=#MortgagePredictTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime3_End">
+        `MortgagePredictTime3`&lt;=#MortgagePredictTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePerson">
+        `MortgagePerson`=#MortgagePerson#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageRemark">
+        `MortgageRemark`=#MortgageRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFreeTime_Start">
+        `InsuranceFreeTime`&gt;=#InsuranceFreeTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFreeTime_End">
+        `InsuranceFreeTime`&lt;=#InsuranceFreeTime_End#
     </isNotNull>
   </delete>
    <select id="QueryProjectLastUpdateTime" resultClass="DateTime">
@@ -1352,6 +1736,99 @@
     </isNotNull>
     <isNotNull prepend="AND" property="HasExpired">
         `HasExpired`=#HasExpired#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetCode">
+        `NewAssetCode`=#NewAssetCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerManualCode">
+        `ChangeOwnerManualCode`=#ChangeOwnerManualCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode1">
+        `ChangeOwnerProfileCode1`=#ChangeOwnerProfileCode1#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime1_Start">
+        `ChangeOwnerProfileTime1`&gt;=#ChangeOwnerProfileTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime1_End">
+        `ChangeOwnerProfileTime1`&lt;=#ChangeOwnerProfileTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode2">
+        `ChangeOwnerProfileCode2`=#ChangeOwnerProfileCode2#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime2_Start">
+        `ChangeOwnerProfileTime2`&gt;=#ChangeOwnerProfileTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime2_End">
+        `ChangeOwnerProfileTime2`&lt;=#ChangeOwnerProfileTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode3">
+        `ChangeOwnerProfileCode3`=#ChangeOwnerProfileCode3#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime3_Start">
+        `ChangeOwnerProfileTime3`&gt;=#ChangeOwnerProfileTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime3_End">
+        `ChangeOwnerProfileTime3`&lt;=#ChangeOwnerProfileTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode1">
+        `MortgageFeedbackCode1`=#MortgageFeedbackCode1#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime1_Start">
+        `MortgageOverTime1`&gt;=#MortgageOverTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime1_End">
+        `MortgageOverTime1`&lt;=#MortgageOverTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime1_Start">
+        `MortgagePredictTime1`&gt;=#MortgagePredictTime1_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime1_End">
+        `MortgagePredictTime1`&lt;=#MortgagePredictTime1_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode2">
+        `MortgageFeedbackCode2`=#MortgageFeedbackCode2#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode3">
+        `MortgageFeedbackCode3`=#MortgageFeedbackCode3#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime2_Start">
+        `MortgageOverTime2`&gt;=#MortgageOverTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime2_End">
+        `MortgageOverTime2`&lt;=#MortgageOverTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime3_Start">
+        `MortgageOverTime3`&gt;=#MortgageOverTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageOverTime3_End">
+        `MortgageOverTime3`&lt;=#MortgageOverTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime2_Start">
+        `MortgagePredictTime2`&gt;=#MortgagePredictTime2_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime2_End">
+        `MortgagePredictTime2`&lt;=#MortgagePredictTime2_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime3_Start">
+        `MortgagePredictTime3`&gt;=#MortgagePredictTime3_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictTime3_End">
+        `MortgagePredictTime3`&lt;=#MortgagePredictTime3_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePerson">
+        `MortgagePerson`=#MortgagePerson#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageRemark">
+        `MortgageRemark`=#MortgageRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFreeTime_Start">
+        `InsuranceFreeTime`&gt;=#InsuranceFreeTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsuranceFreeTime_End">
+        `InsuranceFreeTime`&lt;=#InsuranceFreeTime_End#
     </isNotNull>
     </dynamic>
    </select>

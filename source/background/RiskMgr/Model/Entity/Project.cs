@@ -276,7 +276,112 @@ namespace RiskMgr.Model
         /// <summary>
         /// 是否有展期费用
         /// </summary>
-        public int? HasExpired { get; set; }
+        public decimal? HasExpired { get; set; }
+        
+        /// <summary>
+        /// 新房产证号
+        /// </summary>
+        public string NewAssetCode { get; set; }
+        
+        /// <summary>
+        /// 过户人工编号
+        /// </summary>
+        public string ChangeOwnerManualCode { get; set; }
+        
+        /// <summary>
+        /// 过户办文编号1
+        /// </summary>
+        public string ChangeOwnerProfileCode1 { get; set; }
+        
+        /// <summary>
+        /// 过户收文日期1
+        /// </summary>
+        public DateTime? ChangeOwnerProfileTime1 { get; set; }
+        
+        /// <summary>
+        /// 过户办文编号2
+        /// </summary>
+        public string ChangeOwnerProfileCode2 { get; set; }
+        
+        /// <summary>
+        /// 过户收文日期2
+        /// </summary>
+        public DateTime? ChangeOwnerProfileTime2 { get; set; }
+        
+        /// <summary>
+        /// 过户办文编号3
+        /// </summary>
+        public string ChangeOwnerProfileCode3 { get; set; }
+        
+        /// <summary>
+        /// 过户收文日期3
+        /// </summary>
+        public DateTime? ChangeOwnerProfileTime3 { get; set; }
+        
+        /// <summary>
+        /// 过户说明
+        /// </summary>
+        public string ChangeOwnerRemark { get; set; }
+        
+        /// <summary>
+        /// 抵押回执编号
+        /// </summary>
+        public string MortgageFeedbackCode1 { get; set; }
+        
+        /// <summary>
+        /// 抵押收文日期
+        /// </summary>
+        public DateTime? MortgageOverTime1 { get; set; }
+        
+        /// <summary>
+        /// 预计完成日1
+        /// </summary>
+        public DateTime? MortgagePredictTime1 { get; set; }
+        
+        /// <summary>
+        /// 抵押回执编号2
+        /// </summary>
+        public string MortgageFeedbackCode2 { get; set; }
+        
+        /// <summary>
+        /// 抵押回执编号3
+        /// </summary>
+        public string MortgageFeedbackCode3 { get; set; }
+        
+        /// <summary>
+        /// 抵押收文日期2
+        /// </summary>
+        public DateTime? MortgageOverTime2 { get; set; }
+        
+        /// <summary>
+        /// 抵押收文日期3
+        /// </summary>
+        public DateTime? MortgageOverTime3 { get; set; }
+        
+        /// <summary>
+        /// 预计完成日2
+        /// </summary>
+        public DateTime? MortgagePredictTime2 { get; set; }
+        
+        /// <summary>
+        /// 预计完成日3
+        /// </summary>
+        public DateTime? MortgagePredictTime3 { get; set; }
+        
+        /// <summary>
+        /// 抵押驻点人员
+        /// </summary>
+        public string MortgagePerson { get; set; }
+        
+        /// <summary>
+        /// 抵押备注说明
+        /// </summary>
+        public string MortgageRemark { get; set; }
+        
+        /// <summary>
+        /// 解保日期
+        /// </summary>
+        public DateTime? InsuranceFreeTime { get; set; }
         
     }
 }

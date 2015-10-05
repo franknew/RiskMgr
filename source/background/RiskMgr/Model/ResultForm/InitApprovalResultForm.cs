@@ -12,22 +12,24 @@ namespace RiskMgr.Form
         /// <summary>
         /// 业务模块对表单的操作状态。1：可查询 2：可编辑 3：可审批
         /// </summary>
-        public ActionStatus BusinessStatus { get; set; }
+        public bool ChargeCanEdit { get; set; }
 
         /// <summary>
         /// 财务模块对表单的操作状态。1：可查询 2：可编辑 3：可审批
         /// </summary>
-        public ActionStatus FinaceStatus { get; set; }
+        public bool FollowupCanEdit { get; set; }
+
+        public ActionStatus Action { get; set; }
 
         public string WorkflowID { get; set; }
-
-        public string ActivityID { get; set; }
 
         public string TaskID { get; set; }
 
         /// <summary>
         /// 历史审批数据
         /// </summary>
-        public List<Approval> Approvals { get; set; }
+        public List<ApprovalInfo> Approvals { get; set; }
+
+        public Activity CurrentActivity { get; set; }
     }
 }

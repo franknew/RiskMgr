@@ -108,5 +108,27 @@ namespace RiskMgr.Api
         {
             return bll.QueryMyApply();
         }
+
+        /// <summary>
+        /// 财务审批
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [ApprovalAction]
+        public bool UpdateCharge(FinaceApprovalServiceForm form)
+        {
+            return bll.UpdateFinance(form.WorkflowID, form.ActivityID, form.TaskID, form.Project);
+        }
+
+        /// <summary>
+        /// 保后跟踪
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [EditAction]
+        public bool UpdateTracking(Project form)
+        {
+            return bll.UpdateTracking(form);
+        }
     }
 }

@@ -23,8 +23,17 @@ namespace RiskMgr.Model
 
     public enum CustomerType
     {
+        /// <summary>
+        /// 买家
+        /// </summary>
         Buyer = 1,
+        /// <summary>
+        /// 卖家
+        /// </summary>
         Seller = 2,
+        /// <summary>
+        /// 第三方
+        /// </summary>
         Joint = 3,
     }
 }
