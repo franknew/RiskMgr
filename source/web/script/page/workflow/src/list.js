@@ -88,7 +88,7 @@ define(function(require, exports, module){
 				ev.preventDefault();
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
-				route.load('page=trade/apply&action=approval&id='+id);
+				route.load('page=trade/apply&action=approval&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();

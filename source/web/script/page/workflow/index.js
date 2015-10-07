@@ -159,7 +159,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 				ev.preventDefault();
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
-				route.load('page=trade/apply&action=approval&id='+id);
+				route.load('page=trade/apply&action=approval&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();
@@ -225,15 +225,19 @@ var __p=[],_p=function(s){__p.push(s)};
 
 		for(;Cur=List[i++];) {
 __p.push('	<tr data-hook="view" class="pointer-item" data-id="');
-_p(Cur.ID);
-__p.push('" data-data=\'');
-_p(JSON.stringify(Cur));
-__p.push('\'>\n		<td>');
+_p(Cur.ProcessID);
+__p.push('" data-workflowid="');
+_p(Cur.WorkflowID);
+__p.push('" data-activityid="');
+_p(Cur.ActivityID);
+__p.push('" data-taskid="');
+_p(Cur.TaskID);
+__p.push('">\n		<td>');
 _p(Cur.Name);
 __p.push('</td>\n		<td>');
-_p(Cur.Remark);
+_p(Cur.Title);
 __p.push('</td>\n		<td>');
-_p(Cur.Creator);
+_p(Cur.Applier);
 __p.push('</td>\n		<td>');
 _p(RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm'));
 __p.push('</td>\n	</tr>');

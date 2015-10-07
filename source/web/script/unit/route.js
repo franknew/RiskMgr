@@ -91,6 +91,9 @@ define(function(require, exports, module) {
 		getCurrent:function() {
 			return _CURRENT;
 		},
+		getParams:function() {
+
+		},
 		/** 绑定事件
 		 * @param
 		 */

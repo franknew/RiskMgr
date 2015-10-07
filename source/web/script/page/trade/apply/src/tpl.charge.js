@@ -7,6 +7,9 @@
 define(function(require, exports, module){
 	var MOD = [
 		[{
+			type:'hidden',
+			name:'ID'
+		},{
 			type:'label',
 			col:3,
 			html:'收取担保费'
@@ -14,7 +17,7 @@ define(function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Danbaofei',
+			name:'InsuranceFee',
 			placeholder:'',
 			suffix:'元'
 		},{
@@ -25,7 +28,7 @@ define(function(require, exports, module){
 			col:'3',
 			type:'date',
 			required:true,
-			name:'DanbaoDate',
+			name:'InsuranceTime',
 			placeholder:''
 		}],
 
@@ -37,7 +40,7 @@ define(function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Fangkuanjine',
+			name:'ExportMoney',
 			placeholder:'',
 			suffix:'万元'
 		},{
@@ -48,7 +51,7 @@ define(function(require, exports, module){
 			col:'3',
 			type:'date',
 			required:true,
-			name:'FangkuanTime',
+			name:'ExportTime',
 			placeholder:''
 		}],
 
@@ -60,7 +63,7 @@ define(function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Fangkuanjine',
+			name:'ReturnBackMoney',
 			placeholder:'',
 			suffix:'万元'
 		},{
@@ -71,7 +74,7 @@ define(function(require, exports, module){
 			col:'3',
 			type:'date',
 			required:true,
-			name:'FangkuanTime',
+			name:'ReturnBackTime',
 			placeholder:''
 		}],
 
@@ -83,7 +86,7 @@ define(function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Fangkuanjine',
+			name:'DelayFee',
 			placeholder:'',
 			suffix:'元'
 		},{
@@ -94,19 +97,19 @@ define(function(require, exports, module){
 			col:'3',
 			type:'date',
 			required:true,
-			name:'FangkuanTime',
+			name:'DelayTime',
 			placeholder:''
 		}],
 
 		[{
 			type:'label',
 			col:3,
-			html:'是否有展期费用'
+			html:'展期费用'
 		},{
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Fangkuanjine',
+			name:'HasExpired',
 			placeholder:'',
 			suffix:'元'
 		}]

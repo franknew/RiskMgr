@@ -80,7 +80,11 @@ define(function(require, exports, module){
 			return this;
 		},
 		_getEvent:function() {
-			var ev = $.event.fix(window.event);
+			var ev = window.event;
+
+			if (ev) {
+				ev = $.event.fix(window.event);
+			}
 
 			return ev;
 		},

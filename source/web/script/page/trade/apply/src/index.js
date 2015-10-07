@@ -49,6 +49,10 @@ define(function(require, exports, module){
 			this._shown(params);
 		},
 		_shown:function(params) {
+
+			//显示页面的主入口，先清理缓存
+			require('./data').clearCache();
+
 			var mode = params.action;
 			var html = '<div class="loading">Loading...</div>',
 				head = {
@@ -61,12 +65,12 @@ define(function(require, exports, module){
 				content:html
 			});
 
-			require('./data').get(params.id,function(data) {
+			require('./data').get().done(function(data) {
 				Views.init({
 					mode:params.action,
 					head:head+'<small>('+data.id+')</small>',
 					data:data
-				})
+				});
 			});
 		}
 	};

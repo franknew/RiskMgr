@@ -1,6 +1,8 @@
 <script type="text/html" id="Setup">
 <%
 	//测试数据
+	/**
+	if (data.data) {
 	data.data["Approvals"]  = {
 			"CurrentWorkflow":{
 				"handler":"李振文"
@@ -26,6 +28,15 @@
 
 		data.data["FollowupCanEdit"]  = true;
 		data.data["Followup"]  = {"key":"value"};
+	}
+	**/
+
+	/**
+	if (data.data){
+		data.data["ChargeCanEdit"] = true;
+		data.data["FollowupCanEdit"] = true;
+	}
+	**/
 %>
 
 <%
@@ -33,6 +44,10 @@
 		Approvals = DataView.Approvals || {},	//审批信息
 		Charge = DataView.Charge,	//财务信息
 		Followup = DataView.Followup;	//保后跟踪
+
+	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),
+		ShowCharge = ShowApproval && (DataView.ChargeCanEdit || Charge),
+		ShowFollow = ShowApproval && (DataView.FollowupCanEdit || Followup);
 %>
 
 <div class="col-md-12">
@@ -46,16 +61,16 @@
 			<li data-target="Assets">房产信息<span class="chevron"></span></li>
 			<li data-target="Project">项目信息<span class="chevron"></span></li>
 
-			<%if (data.mode!=='add' && data.mode!=='edit') {%>
+			<%if (ShowApproval) {%>
 				<li data-target="Approval">审批信息<span class="chevron"></span></li>
+			<%}%>
 
-				<%if (DataView.ChargeCanEdit || Charge) {%>
-				<li data-target="Charge">收费情况<span class="chevron"></span></li>
-				<%}%>
+			<%if (ShowCharge) {%>
+			<li data-target="Charge">收费情况<span class="chevron"></span></li>
+			<%}%>
 
-				<%if (DataView.FollowupCanEdit || Followup) {%>
-				<li data-target="Followup">保后跟踪<span class="chevron"></span></li>
-				<%}%>
+			<%if (ShowFollow) {%>
+			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>
 			<%}%>
 
 		</ul>
@@ -63,9 +78,18 @@
 			<%=this.SetupCustomer(data)%>
 			<%=this.SetupProperty(data)%>
 			<%=this.SetupProject(data)%>
+
+			<%if (ShowApproval) {%>
 			<%=this.SetupApproval(data)%>
+			<%}%>
+
+			<%if (ShowCharge) {%>
 			<%=this.SetupCharge(data)%>
+			<%}%>
+
+			<%if (ShowFollow) {%>
 			<%=this.SetupFollowup(data)%>
+			<%}%>
 		</div>
 	</form>
 </div>

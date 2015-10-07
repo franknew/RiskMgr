@@ -1,7 +1,7 @@
 <script type="text/html" id="SetupCharge">
 <%
 	var DataView = data.data || {},
-		Charge = DataView.Charge,	//财务信息
+		ChargeData = DataView.Project,	//财务信息
 		ChargeCanEdit = DataView.ChargeCanEdit;
 
 	var Former = require('risk/components/former/index'),
@@ -14,11 +14,11 @@
 			</div>
 			<div class="content">
 				<div class="well">
-					<%=Former.make(TplCharge,{data:Charge,disabled:!data.canEdit})%>
+					<%=Former.make(TplCharge,{data:ChargeData,disabled:!ChargeCanEdit})%>
 				</div>
 			</div>
 		</div>
-		<%if (data.canEdit && DataView.ChargeCanEdit) {%>
+		<%if (ChargeCanEdit) {%>
 		<div class="form-group">
 			<div class="text-center col-sm-12">
 				<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>

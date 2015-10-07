@@ -13,7 +13,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'NewAssetCode',
 			placeholder:''
 		},{
 			type:'label',
@@ -22,7 +22,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'ChangeOwnerManualCode',
 			placeholder:''
 		}],
 
@@ -33,7 +33,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'ChangeOwnerProfileCode1',
 			placeholder:''
 		},{
 			type:'label',
@@ -42,7 +42,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'ChangeOwnerProfileTime1',
 			placeholder:''
 		}],
 
@@ -53,7 +53,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'ChangeOwnerProfileCode2',
 			placeholder:''
 		},{
 			type:'label',
@@ -62,7 +62,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'ChangeOwnerProfileTime2',
 			placeholder:''
 		}],
 
@@ -73,7 +73,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'ChangeOwnerProfileCode3',
 			placeholder:''
 		},{
 			type:'label',
@@ -82,7 +82,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'ChangeOwnerProfileTime3',
 			placeholder:''
 		}],
 
@@ -93,7 +93,7 @@ define(function(require, exports, module){
 		},{
 			col:'9',
 			type:'textarea',
-			name:'XIN',
+			name:'ChangeOwnerRemark',
 			placeholder:''
 		}],
 
@@ -104,7 +104,7 @@ define(function(require, exports, module){
 		},{
 			col:'9',
 			type:'text',
-			name:'XIN',
+			name:'MortgageFeedbackCode1',
 			placeholder:''
 		}],
 
@@ -115,7 +115,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgageOverTime1',
 			placeholder:''
 		},{
 			type:'label',
@@ -124,7 +124,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgagePredictTime1',
 			placeholder:''
 		}],
 
@@ -135,7 +135,7 @@ define(function(require, exports, module){
 		},{
 			col:'9',
 			type:'text',
-			name:'XIN',
+			name:'MortgageFeedbackCode2',
 			placeholder:''
 		}],
 		[{
@@ -145,7 +145,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgageOverTime2',
 			placeholder:''
 		},{
 			type:'label',
@@ -154,7 +154,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgagePredictTime2',
 			placeholder:''
 		}],
 
@@ -165,7 +165,7 @@ define(function(require, exports, module){
 		},{
 			col:'9',
 			type:'text',
-			name:'XIN',
+			name:'MortgageFeedbackCode3',
 			placeholder:''
 		}],
 		[{
@@ -175,7 +175,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgageOverTime3',
 			placeholder:''
 		},{
 			type:'label',
@@ -184,7 +184,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgagePredictTime3',
 			placeholder:''
 		}],
 		[{
@@ -193,10 +193,9 @@ define(function(require, exports, module){
 			html:'抵押驻点人员'
 		},{
 			col:'3',
-			type:'select',
-			name:'XIN',
-			placeholder:'',
-			options:[]
+			type:'text',
+			name:'MortgagePerson',
+			placeholder:''
 		}],
 
 		[{
@@ -206,7 +205,7 @@ define(function(require, exports, module){
 		},{
 			col:'9',
 			type:'textarea',
-			name:'XIN',
+			name:'MortgageRemark',
 			placeholder:''
 		}],
 		[{
@@ -216,7 +215,7 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'InsuranceFreeTime',
 			placeholder:''
 		}],
 

@@ -92,7 +92,7 @@ define(function(require, exports, module){
 					'mine':'view',
 					'approval':'approval'
 				}[mode] || mode;
-				route.load('page=trade/apply&action='+act+'&id='+id);
+				route.load('page=trade/apply&action='+act+'&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();

@@ -58,10 +58,10 @@
 
 		for(;Cur=List[i++];) {
 %>
-	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ProcessID%>" data-workflowid="<%=Cur.WorkflowID%>" data-activityid="<%=Cur.ActivityID%>" data-taskid="<%=Cur.TaskID%>">
 		<td><%=Cur.Name%></td>
-		<td><%=Cur.Remark%></td>
-		<td><%=Cur.Creator%></td>
+		<td><%=Cur.Title%></td>
+		<td><%=Cur.Applier%></td>
 		<td><%=RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm')%></td>
 	</tr>
 <%

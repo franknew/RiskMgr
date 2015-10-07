@@ -168,7 +168,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 					'mine':'view',
 					'approval':'approval'
 				}[mode] || mode;
-				route.load('page=trade/apply&action='+act+'&id='+id);
+				route.load('page=trade/apply&action='+act+'&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();
@@ -221,7 +221,7 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th rowspan="2">编号</th>\n				<th rowspan="2">业务员</th>\n				<th colspan="2" class="text-center">客户信息</th>\n				<th colspan="2" class="text-center">房产信息</th>\n				<th rowspan="2">申请时间</th>\n				<th rowspan="2">收费状态</th>\n				<th rowspan="2">返佣状态</th>\n				<th rowspan="2">尾款状态</th>\n				<th rowspan="2">当前进度</th>\n			</tr>\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>房产证号</th>\n				<th>地址</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th rowspan="2">编号</th>\n				<th rowspan="2">业务员</th>\n				<th colspan="2" class="text-center">客户信息</th>\n				<th colspan="2" class="text-center">房产信息</th>\n				<th rowspan="2">申请时间</th>\n				<!--\n				<th rowspan="2">收费状态</th>\n				<th rowspan="2">返佣状态</th>\n				<th rowspan="2">尾款状态</th>\n				<th rowspan="2">当前进度</th>\n				-->\n			</tr>\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>房产证号</th>\n				<th>地址</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -239,8 +239,15 @@ var __p=[],_p=function(s){__p.push(s)};
 	if (List.length>0) {
 
 		for(;Cur=List[i++];) {
+			console.log('ccc',Cur);
 __p.push('	<tr data-hook="view" class="pointer-item" data-id="');
 _p(Cur.Project.ID);
+__p.push('" data-workflowid="');
+_p(Cur.WorkflowID);
+__p.push('" data-activityid="');
+_p(Cur.CurrentActivity.ID);
+__p.push('" data-taskid="');
+_p(Cur.TaskID);
 __p.push('">\n		<td>SN00001</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip">');
 
 			var bi=0,CurBuyer,
@@ -278,7 +285,7 @@ __p.push('</td>\n			</tr>');
 			}
 			__p.push('			</table>\n		</td>\n		<td>');
 _p(RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm'));
-__p.push('</td>\n		<td>-</td>\n		<td>-</td>\n		<td>-</td>\n		<td>-</td>\n	</tr>');
+__p.push('</td>\n		<!--\n		<td>-</td>\n		<td>-</td>\n		<td>-</td>\n		<td>-</td>\n		-->\n	</tr>');
 
 		}
 	}else{

@@ -16,7 +16,10 @@ define(function(require, exports, module){
 
 	var Customer = require('./setup.customer'),
 		Property = require('./setup.property'),
-		Project = require('./setup.project');
+		Project = require('./setup.project'),
+		Approval = require('./setup.approval'),
+		Charge = require('./setup.charge'),
+		Followup = require('./setup.followup');
 
 	var MOD = {
 		/**
@@ -71,6 +74,9 @@ define(function(require, exports, module){
 			Customer.init();
 			Property.init();
 			Project.init();
+			Approval.init();
+			Charge.init();
+			Followup.init();
 
 			route.on('click','cancel',function(ev) {//取消按钮
 				ev.preventDefault();

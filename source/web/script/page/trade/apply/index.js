@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/ajax","risk/components/msg/index","risk/components/modal/index","risk/unit/route","risk/components/former/index","risk/unit/serialize","risk/page/customer/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
+define(["jquery","risk/unit/ajax","risk/components/msg/index","risk/components/modal/index","risk/unit/uri","risk/unit/route","risk/unit/serialize","risk/components/former/index","risk/page/customer/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -34,7 +34,10 @@ define.pack = function(){
 //apply/src/autoComplete.js
 //apply/src/data.js
 //apply/src/index.js
+//apply/src/setup.approval.js
+//apply/src/setup.charge.js
 //apply/src/setup.customer.js
+//apply/src/setup.followup.js
 //apply/src/setup.project.js
 //apply/src/setup.property.js
 //apply/src/test-data.js
@@ -59,7 +62,10 @@ define.pack = function(){
 //apply/src/autoComplete.js
 //apply/src/data.js
 //apply/src/index.js
+//apply/src/setup.approval.js
+//apply/src/setup.charge.js
 //apply/src/setup.customer.js
+//apply/src/setup.followup.js
 //apply/src/setup.project.js
 //apply/src/setup.property.js
 //apply/src/test-data.js
@@ -157,21 +163,51 @@ define.pack("./autoComplete",["jquery","risk/unit/ajax"],function(require, expor
  * @date    2015-08-29 16:07:24
  */
 
-define.pack("./data",["jquery","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax"],function(require, exports, module){
+define.pack("./data",["jquery","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","risk/unit/uri"],function(require, exports, module){
 	var $ = require('jquery'),
 		msg = require('risk/components/msg/index'),
 		Modal = require('risk/components/modal/index'),
-		Ajax = require('risk/unit/ajax');
+		Ajax = require('risk/unit/ajax'),
+		Uri = require('risk/unit/uri');
 
+	var _CACHE,_DEFER;
 	var MOD = {
-		get:function(id,callback) {
-			Ajax.post({
-				url:'RiskMgr.Api.ProjectApi/InitApproval',
-				data:{ID:id},
-				success:function(da) {
-					callback(da);
+		/** 拉取数据
+		 * @param [cache=true] 是否读缓存，默认为true
+		 */
+		get:(function() {
+			var _getNew = function(callback) {
+				var data = Uri('http://www.qq.com/?'+location.hash.substr(1)).params;
+				delete data.action;
+				delete data.page;
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/InitApproval',
+					data:data,
+					success:function(da) {
+						callback(da);
+					}
+				});
+			};
+			return function(cache) {
+				if (arguments.length<=0) {
+					cache = true;
 				}
-			});
+				if (_CACHE && _DEFER && cache) {
+					_DEFER.resolve(_CACHE);
+				}else if ( !cache || !_DEFER) {
+					_DEFER = $.Deferred();
+					_getNew(function(da) {
+						_CACHE = da;
+						_DEFER.resolve(_CACHE);
+					});
+				}
+
+				return _DEFER;
+			};
+		})(),
+		clearCache:function() {
+			_CACHE = null;
+			_DEFER = null;
 		}
 	};
 
@@ -227,6 +263,10 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./view","./data"],fu
 			this._shown(params);
 		},
 		_shown:function(params) {
+
+			//显示页面的主入口，先清理缓存
+			require('./data').clearCache();
+
 			var mode = params.action;
 			var html = '<div class="loading">Loading...</div>',
 				head = {
@@ -239,12 +279,108 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./view","./data"],fu
 				content:html
 			});
 
-			require('./data').get(params.id,function(data) {
+			require('./data').get().done(function(data) {
 				Views.init({
 					mode:params.action,
 					head:head+'<small>('+data.id+')</small>',
 					data:data
-				})
+				});
+			});
+		}
+	};
+
+	return MOD;
+});/**
+ * 审批相关
+ * @authors viktorli (i@lizhenwen.com)
+ */
+
+define.pack("./setup.approval",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./data"],function(require, exports, module){
+	var $ = require('jquery'),
+		Ajax = require('risk/unit/ajax'),
+		Route = require('risk/unit/route'),
+		Msg = require('risk/components/msg/index');
+
+	var Data = require('./data');
+
+	var MOD = {
+		init:function() {
+			Route.on('click','approval-pass',function(ev) {//审批通过
+				ev.preventDefault();
+				MOD._submit(true);
+			}).on('click','approval-fail',function(ev) {//审批不通过
+				ev.preventDefault();
+				MOD._submit(false);
+			});
+		},
+		/** 提交审批
+		 * @param result {Boolen} 是否通过
+		 */
+		_submit:function(result,success) {
+			var ipt = $('#Approval textarea[name="Remark"]'),
+				remark = $.trim(ipt.val());
+			if (!remark) {
+				Msg.error('请输入审批意见');
+				ipt.focus();
+				return false;
+			}
+			Data.get().done(function(da) {
+				Ajax.post({
+					url:'RiskMgr.Api.WorkflowApi/Approval',
+					data:{
+						WorkflowID:da.WorkflowID,
+						ActivityID:da.CurrentActivity.ID,
+						TaskID:da.TaskID,
+						Approval:{
+							Remark:remark,
+							Status:result?1:2
+						}
+					},
+					success:function(da) {
+						Msg.success('处理成功.');
+						Route.load('page=workflow');
+						success && success(da);
+					}
+				});
+			});
+		}
+	};
+
+	return MOD;
+});/**
+ * 财务相关
+ * @authors viktorli (i@lizhenwen.com)
+ */
+
+define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./data"],function(require, exports, module){
+	var $ = require('jquery'),
+		Serialize = require('risk/unit/serialize'),
+		Ajax = require('risk/unit/ajax'),
+		route = require('risk/unit/route'),
+		Msg = require('risk/components/msg/index');
+
+	var Data = require('./data');
+
+	var MOD = {
+		init:function() {
+			route.on('click','charge-submit',function(ev) {//提交财务信息
+				ev.preventDefault();
+
+				Data.get().done(function(da) {
+					Ajax.post({
+						url:'RiskMgr.Api.ProjectApi/UpdateCharge',
+						data:{
+							ID:da.Project.ID,
+							WorkflowID:da.WorkflowID,
+							ActivityID:da.CurrentActivity.ID,
+							TaskID:da.TaskID,
+							Project:Serialize($('#Charge'))
+						},
+						success:function(da) {
+							Msg.success('提交成功.');
+						}
+					});
+				});
 			});
 		}
 	};
@@ -362,6 +498,44 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {});
 
+		}
+	};
+
+	return MOD;
+});/**
+ * 保后跟踪
+ * @authors viktorli (i@lizhenwen.com)
+ */
+
+define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./data"],function(require, exports, module){
+	var $ = require('jquery'),
+		Ajax = require('risk/unit/ajax'),
+		Route = require('risk/unit/route'),
+		Msg = require('risk/components/msg/index');
+
+	var Data = require('./data');
+
+	var MOD = {
+		init:function() {
+			Route.on('click','followup-submit',function(ev) {//提交保后跟踪信息
+				ev.preventDefault();
+
+				Data.get().done(function(da) {
+					Ajax.post({
+						url:'RiskMgr.Api.ProjectApi/UpdateTracking',
+						data:{
+							ID:da.Project.ID,
+							WorkflowID:da.WorkflowID,
+							ActivityID:da.CurrentActivity.ID,
+							TaskID:da.TaskID
+						},
+						form:$('#Followup'),
+						success:function(da) {
+							Msg.success('提交成功.');
+						}
+					});
+				});
+			});
 		}
 	};
 
@@ -703,6 +877,9 @@ return rs;
 define.pack("./tpl.charge",[],function(require, exports, module){
 	var MOD = [
 		[{
+			type:'hidden',
+			name:'ID'
+		},{
 			type:'label',
 			col:3,
 			html:'收取担保费'
@@ -710,7 +887,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Danbaofei',
+			name:'InsuranceFee',
 			placeholder:'',
 			suffix:'元'
 		},{
@@ -721,7 +898,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'date',
 			required:true,
-			name:'DanbaoDate',
+			name:'InsuranceTime',
 			placeholder:''
 		}],
 
@@ -733,7 +910,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Fangkuanjine',
+			name:'ExportMoney',
 			placeholder:'',
 			suffix:'万元'
 		},{
@@ -744,7 +921,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'date',
 			required:true,
-			name:'FangkuanTime',
+			name:'ExportTime',
 			placeholder:''
 		}],
 
@@ -756,7 +933,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Fangkuanjine',
+			name:'ReturnBackMoney',
 			placeholder:'',
 			suffix:'万元'
 		},{
@@ -767,7 +944,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'date',
 			required:true,
-			name:'FangkuanTime',
+			name:'ReturnBackTime',
 			placeholder:''
 		}],
 
@@ -779,7 +956,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Fangkuanjine',
+			name:'DelayFee',
 			placeholder:'',
 			suffix:'元'
 		},{
@@ -790,19 +967,19 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'date',
 			required:true,
-			name:'FangkuanTime',
+			name:'DelayTime',
 			placeholder:''
 		}],
 
 		[{
 			type:'label',
 			col:3,
-			html:'是否有展期费用'
+			html:'展期费用'
 		},{
 			col:'3',
 			type:'number',
 			required:true,
-			name:'Fangkuanjine',
+			name:'HasExpired',
 			placeholder:'',
 			suffix:'元'
 		}]
@@ -824,7 +1001,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'NewAssetCode',
 			placeholder:''
 		},{
 			type:'label',
@@ -833,7 +1010,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'ChangeOwnerManualCode',
 			placeholder:''
 		}],
 
@@ -844,7 +1021,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'ChangeOwnerProfileCode1',
 			placeholder:''
 		},{
 			type:'label',
@@ -853,7 +1030,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'ChangeOwnerProfileTime1',
 			placeholder:''
 		}],
 
@@ -864,7 +1041,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'ChangeOwnerProfileCode2',
 			placeholder:''
 		},{
 			type:'label',
@@ -873,7 +1050,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'ChangeOwnerProfileTime2',
 			placeholder:''
 		}],
 
@@ -884,7 +1061,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'text',
-			name:'XIN',
+			name:'ChangeOwnerProfileCode3',
 			placeholder:''
 		},{
 			type:'label',
@@ -893,7 +1070,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'ChangeOwnerProfileTime3',
 			placeholder:''
 		}],
 
@@ -904,7 +1081,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'9',
 			type:'textarea',
-			name:'XIN',
+			name:'ChangeOwnerRemark',
 			placeholder:''
 		}],
 
@@ -915,7 +1092,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'9',
 			type:'text',
-			name:'XIN',
+			name:'MortgageFeedbackCode1',
 			placeholder:''
 		}],
 
@@ -926,7 +1103,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgageOverTime1',
 			placeholder:''
 		},{
 			type:'label',
@@ -935,7 +1112,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgagePredictTime1',
 			placeholder:''
 		}],
 
@@ -946,7 +1123,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'9',
 			type:'text',
-			name:'XIN',
+			name:'MortgageFeedbackCode2',
 			placeholder:''
 		}],
 		[{
@@ -956,7 +1133,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgageOverTime2',
 			placeholder:''
 		},{
 			type:'label',
@@ -965,7 +1142,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgagePredictTime2',
 			placeholder:''
 		}],
 
@@ -976,7 +1153,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'9',
 			type:'text',
-			name:'XIN',
+			name:'MortgageFeedbackCode3',
 			placeholder:''
 		}],
 		[{
@@ -986,7 +1163,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgageOverTime3',
 			placeholder:''
 		},{
 			type:'label',
@@ -995,7 +1172,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'MortgagePredictTime3',
 			placeholder:''
 		}],
 		[{
@@ -1004,10 +1181,9 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 			html:'抵押驻点人员'
 		},{
 			col:'3',
-			type:'select',
-			name:'XIN',
-			placeholder:'',
-			options:[]
+			type:'text',
+			name:'MortgagePerson',
+			placeholder:''
 		}],
 
 		[{
@@ -1017,7 +1193,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'9',
 			type:'textarea',
-			name:'XIN',
+			name:'MortgageRemark',
 			placeholder:''
 		}],
 		[{
@@ -1027,7 +1203,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			name:'XIN',
+			name:'InsuranceFreeTime',
 			placeholder:''
 		}],
 
@@ -1630,7 +1806,7 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.project","./test-data"],function(require, exports, module){
+define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.project","./setup.approval","./setup.charge","./setup.followup","./test-data"],function(require, exports, module){
 
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
@@ -1642,7 +1818,10 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 
 	var Customer = require('./setup.customer'),
 		Property = require('./setup.property'),
-		Project = require('./setup.project');
+		Project = require('./setup.project'),
+		Approval = require('./setup.approval'),
+		Charge = require('./setup.charge'),
+		Followup = require('./setup.followup');
 
 	var MOD = {
 		/**
@@ -1697,6 +1876,9 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 			Customer.init();
 			Property.init();
 			Project.init();
+			Approval.init();
+			Charge.init();
+			Followup.init();
 
 			route.on('click','cancel',function(ev) {//取消按钮
 				ev.preventDefault();
@@ -1961,38 +2143,37 @@ var __p=[],_p=function(s){__p.push(s)};
 	var RString = require('risk/unit/string');
 	var DataView = data.data || {},
 		Approvals = DataView.Approvals || {},	//审批信息
-		ApprovalsDone = Approvals.Done || [],
-		CurrentWorkflow = Approvals.CurrentWorkflow || {},
-		CurrentApproval = Approvals.CurrentApproval || [];
-__p.push('<div class="step-pane" id="Approval">');
-if (ApprovalsDone.length>0) {__p.push('		<div class="block-transparent">\n			<div class="header"><h3>审批信息</h3></div>\n			<div class="content">');
+		CurrentActivity = DataView.CurrentActivity || [];
+__p.push('\n<div class="step-pane" id="Approval">');
+ if (DataView.Action==3 && CurrentActivity) { __p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content" style="margin:0 auto;max-width:500px;width:100%;">\n				<div class="form-group">\n					<label class="col-sm-12">');
+_p(CurrentActivity.Name);
+__p.push('</label>\n					<div class="col-sm-12">\n						<textarea class="form-control" name="Remark" rows="5"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="text-center col-sm-12">\n						<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n						&nbsp;&nbsp;\n						<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n					</div>\n				</div>\n			</div>\n		</div>');
+}else {__p.push('		<div class="alert alert-info" role="alert">\n			当前审批流程到了<strong>');
+_p(CurrentActivity.Name);
+__p.push('</strong>，审批人：<strong>');
+_p(CurrentActivity.Processor||'?');
+__p.push('</strong>，到达时间：<strong>');
+_p(RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm"));
+__p.push('</strong>\n		</div>');
+}if (Approvals.length>0) {__p.push('		<div class="block-transparent">\n			<div class="content">\n				<ul class="list-group tickets">');
 
 					var i=0,cur;
-					for(;cur=ApprovalsDone[i++];) {
-				__p.push('					<div class="well">\n						<div class="form-group">\n							<div class="col-sm-12">\n							<label>');
-_p(cur.title);
-__p.push('</label>\n							<div>');
-_p(cur.content);
-__p.push('</div>\n							<div>');
-_p(cur.handler);
-__p.push(' ');
-_p(RString.date(cur.time,"yyyy-MM-dd"));
-__p.push('</div>\n							</div>\n						</div>\n					</div>');
-}__p.push('			</div>\n		</div>');
-} if (CurrentApproval.length>0) { __p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content">\n				<div class="well">');
-
-						var i=0,cur;
-						for(;cur=CurrentApproval[i++];) {
-					__p.push('							<div class="form-group">\n								<div class="col-sm-12">\n								<label>');
-_p(cur.title);
-__p.push('</label>\n								<div><textarea name="');
-_p(cur.key);
-__p.push('"></textarea></div>\n								</div>\n							</div>');
-}__p.push('					<div class="form-group">\n						<div class="text-center col-sm-12">\n							<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n							&nbsp;&nbsp;\n							<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n						</div>\n					</div>\n				</div>\n			</div>\n		</div>');
-}else {__p.push('		<div class="alert alert-info" role="alert">\n			当前审批流程到了<b>');
-_p(CurrentWorkflow.handler);
-__p.push('</b>\n		</div>');
-}__p.push('</div>');
+					for(;cur=Approvals[i++];) {
+				__p.push('					<li class="list-group-item" href="#">\n						<h4 class="name">');
+_p(cur.ActivityName);
+__p.push(' <span class="label ');
+_p(cur.Status==1?'label-success':'label-danger');
+__p.push('">');
+_p(cur.Status==1?'通过':'不通过');
+__p.push('</span></h4>\n						<p>');
+_p(cur.Processor);
+__p.push('：');
+_p(cur.Remark);
+__p.push('</p>\n						<span class="date">');
+_p(RString.date(cur.LastUpdateTime,"yyyy-MM-dd HH:mm"));
+__p.push('</span>\n					</li>');
+}__p.push('				</ul>\n			</div>\n		</div>');
+}__p.push('\n</div>');
 
 return __p.join("");
 },
@@ -2002,15 +2183,15 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	var DataView = data.data || {},
-		Charge = DataView.Charge,	//财务信息
+		ChargeData = DataView.Project,	//财务信息
 		ChargeCanEdit = DataView.ChargeCanEdit;
 
 	var Former = require('risk/components/former/index'),
 		TplCharge = require('./tpl.charge');
 __p.push('<div class="step-pane" id="Charge">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>收费情况</h3>\n			</div>\n			<div class="content">\n				<div class="well">');
-_p(Former.make(TplCharge,{data:Charge,disabled:!data.canEdit}));
+_p(Former.make(TplCharge,{data:ChargeData,disabled:!ChargeCanEdit}));
 __p.push('				</div>\n			</div>\n		</div>');
-if (data.canEdit && DataView.ChargeCanEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>\n			</div>\n		</div>');
+if (ChargeCanEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>\n			</div>\n		</div>');
 }__p.push('</div>');
 
 return __p.join("");
@@ -2087,14 +2268,14 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	var DataView = data.data || {},
 		FollowupCanEdit = DataView.FollowupCanEdit,
-		Followup = DataView.Followup;	//保后跟踪
+		FollowupData = DataView.Project;	//保后跟踪
 
 	var Former = require('risk/components/former/index'),
 		TplFollowup = require('./tpl.followup');
 __p.push('<div class="step-pane" id="Followup">\n	<div class="block-transparent">\n		<div class="header"><h3>保后跟踪</h3></div>\n		<div class="content">');
-_p(Former.make(TplFollowup,{data:Followup,disabled:!data.canEdit}));
+_p(Former.make(TplFollowup,{data:FollowupData,disabled:!FollowupCanEdit}));
 __p.push('		</div>\n	</div>');
-if (data.canEdit && FollowupCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>\n		</div>\n	</div>');
+if (FollowupCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn btn-success" type="button" data-hook="followup-submit"><i class="fa fa-check"></i> 提交</button>\n		</div>\n	</div>');
 }__p.push('</div>');
 
 return __p.join("");
@@ -2157,7 +2338,7 @@ __p.push('		</div>\n		<div class="form-group">');
 if (data.canEdit) {__p.push('<button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>');
 }__p.push('				&nbsp;&nbsp;');
 _p((JointLen||data.canEdit)?'(房产共权人、保证人、配偶、辅助联系人、第三方借款人)':'');
-__p.push('			</div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">\n				<table class="no-border no-strip j-property-joint" style="background-color:#fff;margin-top:10px; ');
+__p.push('			</div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">\n				<table class="no-border no-strip j-property-joint" style="background-color:#E8E8E8;margin-top:10px; ');
 _p(JointLen?'':'display:none;');
 __p.push('">\n					<thead class="no-border">\n						<tr>\n							<th>姓名</th>\n							<th>电话</th>\n							<th>证件号</th>\n							<th>&nbsp;</th>\n						</tr>\n					</thead>\n					<tbody class="no-border-x no-border-y">');
 
@@ -2208,6 +2389,8 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	//测试数据
+	/**
+	if (data.data) {
 	data.data["Approvals"]  = {
 			"CurrentWorkflow":{
 				"handler":"李振文"
@@ -2233,31 +2416,46 @@ var __p=[],_p=function(s){__p.push(s)};
 
 		data.data["FollowupCanEdit"]  = true;
 		data.data["Followup"]  = {"key":"value"};
+	}
+	**/
+
+	/**
+	if (data.data){
+		data.data["ChargeCanEdit"] = true;
+		data.data["FollowupCanEdit"] = true;
+	}
+	**/
 
 	var DataView = data.data || {},
 		Approvals = DataView.Approvals || {},	//审批信息
 		Charge = DataView.Charge,	//财务信息
 		Followup = DataView.Followup;	//保后跟踪
+
+	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),
+		ShowCharge = ShowApproval && (DataView.ChargeCanEdit || Charge),
+		ShowFollow = ShowApproval && (DataView.FollowupCanEdit || Followup);
 __p.push('\n<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');
-if (data.mode!=='add' && data.mode!=='edit') {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');
-if (DataView.ChargeCanEdit || Charge) {__p.push('				<li data-target="Charge">收费情况<span class="chevron"></span></li>');
-}if (DataView.FollowupCanEdit || Followup) {__p.push('				<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
-}__p.push('			');
+if (ShowApproval) {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');
+}if (ShowCharge) {__p.push('			<li data-target="Charge">收费情况<span class="chevron"></span></li>');
+}if (ShowFollow) {__p.push('			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
 }__p.push('\n		</ul>\n		<div class="step-content">');
 _p(this.SetupCustomer(data));
 __p.push('			');
 _p(this.SetupProperty(data));
 __p.push('			');
 _p(this.SetupProject(data));
-__p.push('			');
+if (ShowApproval) {__p.push('			');
 _p(this.SetupApproval(data));
 __p.push('			');
+}if (ShowCharge) {__p.push('			');
 _p(this.SetupCharge(data));
 __p.push('			');
+}if (ShowFollow) {__p.push('			');
 _p(this.SetupFollowup(data));
-__p.push('		</div>\n	</form>\n</div>');
+__p.push('			');
+}__p.push('		</div>\n	</form>\n</div>');
 
 return __p.join("");
 }

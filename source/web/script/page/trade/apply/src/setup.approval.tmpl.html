@@ -3,65 +3,56 @@
 	var RString = require('risk/unit/string');
 	var DataView = data.data || {},
 		Approvals = DataView.Approvals || {},	//审批信息
-		ApprovalsDone = Approvals.Done || [],
-		CurrentWorkflow = Approvals.CurrentWorkflow || {},
-		CurrentApproval = Approvals.CurrentApproval || [];
+		CurrentActivity = DataView.CurrentActivity || [];
 %>
-<div class="step-pane" id="Approval">
-	<%if (ApprovalsDone.length>0) {%>
-		<div class="block-transparent">
-			<div class="header"><h3>审批信息</h3></div>
-			<div class="content">
-				<%
-					var i=0,cur;
-					for(;cur=ApprovalsDone[i++];) {
-				%>
-					<div class="well">
-						<div class="form-group">
-							<div class="col-sm-12">
-							<label><%=cur.title%></label>
-							<div><%=cur.content%></div>
-							<div><%=cur.handler%> <%=RString.date(cur.time,"yyyy-MM-dd")%></div>
-							</div>
-						</div>
-					</div>
-				<%}%>
-			</div>
-		</div>
-	<%}%>
 
-	<% if (CurrentApproval.length>0) { %>
+<div class="step-pane" id="Approval">
+
+	<% if (DataView.Action==3 && CurrentActivity) { %>
 		<div class="block-transparent">
 			<div class="header">
 				<h3>审批意见</h3>
 			</div>
-			<div class="content">
-				<div class="well">
-					<%
-						var i=0,cur;
-						for(;cur=CurrentApproval[i++];) {
-					%>
-							<div class="form-group">
-								<div class="col-sm-12">
-								<label><%=cur.title%></label>
-								<div><textarea name="<%=cur.key%>"></textarea></div>
-								</div>
-							</div>
-					<%}%>
-					<div class="form-group">
-						<div class="text-center col-sm-12">
-							<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>
-							&nbsp;&nbsp;
-							<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>
-						</div>
+			<div class="content" style="margin:0 auto;max-width:500px;width:100%;">
+				<div class="form-group">
+					<label class="col-sm-12"><%=CurrentActivity.Name%></label>
+					<div class="col-sm-12">
+						<textarea class="form-control" name="Remark" rows="5"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="text-center col-sm-12">
+						<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>
+						&nbsp;&nbsp;
+						<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	<%}else {%>
 		<div class="alert alert-info" role="alert">
-			当前审批流程到了<b><%=CurrentWorkflow.handler%></b>
+			当前审批流程到了<strong><%=CurrentActivity.Name%></strong>，审批人：<strong><%=CurrentActivity.Processor||'?'%></strong>，到达时间：<strong><%=RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm")%></strong>
 		</div>
 	<%}%>
+
+	<%if (Approvals.length>0) {%>
+		<div class="block-transparent">
+			<div class="content">
+				<ul class="list-group tickets">
+				<%
+					var i=0,cur;
+					for(;cur=Approvals[i++];) {
+				%>
+					<li class="list-group-item" href="#">
+						<h4 class="name"><%=cur.ActivityName%> <span class="label <%=cur.Status==1?'label-success':'label-danger'%>"><%=cur.Status==1?'通过':'不通过'%></span></h4>
+						<p><%=cur.Processor%>：<%=cur.Remark%></p>
+						<span class="date"><%=RString.date(cur.LastUpdateTime,"yyyy-MM-dd HH:mm")%></span>
+					</li>
+				<%}%>
+				</ul>
+			</div>
+		</div>
+	<%}%>
+
 </div>
 </script>
