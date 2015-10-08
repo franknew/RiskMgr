@@ -121,6 +121,17 @@ namespace RiskMgr.Api
         }
 
         /// <summary>
+        /// 更新财务信息
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        [EditAction]
+        public bool UpdateFinance(Project project)
+        {
+            return bll.UpdateFinance(project);
+        }
+
+        /// <summary>
         /// 保后跟踪
         /// </summary>
         /// <param name="form"></param>

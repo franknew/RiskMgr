@@ -30,6 +30,14 @@ namespace RiskMgr.Form
         /// </summary>
         public List<ApprovalInfo> Approvals { get; set; }
 
+        /// <summary>
+        /// 当前流程，不是当前正在处于处理状态的流程
+        /// </summary>
         public Activity CurrentActivity { get; set; }
+
+        /// <summary>
+        /// 当前处理状态流程的处理人
+        /// </summary>
+        public string Operator { get; set; }
     }
 }

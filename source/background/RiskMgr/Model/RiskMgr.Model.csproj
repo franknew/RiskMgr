@@ -55,6 +55,7 @@
     <Compile Include="Entity\Customer.cs" />
     <Compile Include="Entity\Customer_Asset.cs" />
     <Compile Include="Entity\Customer_Project.cs" />
+    <Compile Include="Entity\FullActivity.cs" />
     <Compile Include="Entity\FullTask.cs" />
     <Compile Include="Entity\FullUser.cs" />
     <Compile Include="Entity\Asset_ex.cs" />
