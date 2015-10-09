@@ -324,17 +324,12 @@ namespace RiskMgr.BLL
                             switch (role.ID)
                             {
                                 case "5"://财务
-                                    Activity managerActivity = activities.Find(t => t.Name.Contains("经理"));
-                                    if (managerActivity != null && managerActivity.Status == (int)ActivityProcessStatus.Processed)
-                                    {
-                                        form.ChargeCanEdit = true;
-                                        form.Action = ActionStatus.Editable;
-                                    }
-                                    break;
                                 case "6"://保后跟踪
                                     Activity financeActivity = activities.Find(t => t.Name.Contains("财务"));
                                     if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
                                     {
+                                        form.ChargeCanEdit = true;
+                                        form.Action = ActionStatus.Editable;
                                         form.FollowupCanEdit = true;
                                         form.Action = ActionStatus.Editable;
                                     }
