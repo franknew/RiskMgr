@@ -28,6 +28,11 @@ namespace RiskMgr.WinformTest
 
         private void button1_Click(object sender, EventArgs e)
         {
+            string dt = "{\"dt\":\"2010-01-01\"}";
+            string dt1 = "{\"2010-01-01\"}";
+            jsonTest t = JsonHelper.Deserialize<jsonTest>(dt);
+            var t1 = JsonHelper.Deserialize<DateTime?>(dt1);
+
             LogonRequest request = new LogonRequest();
             request.form = new LogonServiceForm
             {
@@ -226,5 +231,10 @@ namespace RiskMgr.WinformTest
             ProjectApi api = new ProjectApi();
             api.InitApproval(new ProjectQueryForm { ID = textBox1.Text });
         }
+    }
+
+    public class jsonTest
+    {
+        public DateTime? dt { get; set; }
     }
 }

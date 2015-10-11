@@ -256,7 +256,7 @@ namespace RiskMgr.BLL
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
-            //string userid = "4";
+            //string userid = "3";
 
             #region 处理流程
             //处理流程相关信息
@@ -288,6 +288,13 @@ namespace RiskMgr.BLL
                 form.Approvals = approvalinfo;
                 form.Action = ActionStatus.Queryable;
                 var activity = activities.Find(t => t.Status == (int)ActivityProcessStatus.Processing);
+                //处理财务和跟踪的显示问题
+                Activity financeActivity = activities.Find(t => t.Name.Contains("财务"));
+                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+                {
+                    form.DisplayCharge = true;
+                    form.DisplayTracking = true;
+                }
                 //获得流程相关的信息
                 if (activity != null)
                 {
@@ -315,37 +322,26 @@ namespace RiskMgr.BLL
                     }
                     #region 为财务和保后跟踪特别处理
                     //为财务和保后跟踪特别处理
-                    var ur = urdao.Query(new User_RoleQueryForm { UserID = userid }).FirstOrDefault();
-                    if (ur != null)
+                    var roles = urdao.Query(new User_RoleQueryForm { UserID = userid });
+                    if (roles.Exists(t=>t.RoleID == "5"))//处理财务
                     {
-                        var role = roledao.Query(new RoleQueryForm { ID = ur.RoleID }).FirstOrDefault();
-                        if (role != null)
+                        if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
                         {
-                            Activity financeActivity = activities.Find(t => t.Name.Contains("财务"));
-                            switch (role.ID)
-                            {
-                                case "5"://财务
-                                    if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
-                                    {
-                                        form.DisplayCharge = true;
-                                        form.ChargeCanEdit = true;
-                                    }
-                                    else if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
-                                    {
-                                        form.DisplayCharge = true;
-                                        form.Action = ActionStatus.Editable;
-                                    }
-                                    break;
-                                case "6"://保后跟踪
-                                    if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
-                                    {
-                                        form.DisplayCharge = true;
-                                        form.DisplayTracking = true;
-                                        form.FollowupCanEdit = true;
-                                        form.Action = ActionStatus.Queryable;
-                                    }
-                                    break;
-                            }
+                            form.DisplayCharge = true;
+                            form.Action = ActionStatus.Editable;
+                        }
+                        else if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+                        {
+                            form.DisplayCharge = true;
+                            form.ChargeCanEdit = true;
+                        }
+                    }
+                    else if (roles.Exists(t=>t.RoleID == "6"))//处理跟踪
+                    {
+                        if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+                        {
+                            form.FollowupCanEdit = true;
+                            form.Action = ActionStatus.Queryable;
                         }
                     }
                     #endregion

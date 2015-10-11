@@ -126,9 +126,9 @@ namespace RiskMgr.Api
         /// <param name="project"></param>
         /// <returns></returns>
         [EditAction]
-        public bool UpdateFinance(Project project)
+        public bool UpdateFinance(FinaceApprovalServiceForm form)
         {
-            return bll.UpdateFinance(project);
+            return bll.UpdateFinance(form.Project);
         }
 
         /// <summary>
