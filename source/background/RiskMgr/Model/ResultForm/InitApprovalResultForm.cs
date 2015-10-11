@@ -39,5 +39,15 @@ namespace RiskMgr.Form
         /// 当前处理状态流程的处理人
         /// </summary>
         public string Operator { get; set; }
+
+        /// <summary>
+        /// 是否显示收费信息
+        /// </summary>
+        public bool DisplayCharge { get; set; }
+
+        /// <summary>
+        /// 是否显示跟踪信息
+        /// </summary>
+        public bool DisplayTracking { get; set; }
     }
 }

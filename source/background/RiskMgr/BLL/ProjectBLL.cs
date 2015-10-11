@@ -321,17 +321,28 @@ namespace RiskMgr.BLL
                         var role = roledao.Query(new RoleQueryForm { ID = ur.RoleID }).FirstOrDefault();
                         if (role != null)
                         {
+                            Activity financeActivity = activities.Find(t => t.Name.Contains("财务"));
                             switch (role.ID)
                             {
                                 case "5"://财务
-                                case "6"://保后跟踪
-                                    Activity financeActivity = activities.Find(t => t.Name.Contains("财务"));
                                     if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
                                     {
+                                        form.DisplayCharge = true;
                                         form.ChargeCanEdit = true;
+                                    }
+                                    else if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
+                                    {
+                                        form.DisplayCharge = true;
                                         form.Action = ActionStatus.Editable;
+                                    }
+                                    break;
+                                case "6"://保后跟踪
+                                    if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+                                    {
+                                        form.DisplayCharge = true;
+                                        form.DisplayTracking = true;
                                         form.FollowupCanEdit = true;
-                                        form.Action = ActionStatus.Editable;
+                                        form.Action = ActionStatus.Queryable;
                                     }
                                     break;
                             }
