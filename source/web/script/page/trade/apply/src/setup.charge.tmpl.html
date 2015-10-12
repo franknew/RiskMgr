@@ -2,7 +2,7 @@
 <%
 	var DataView = data.data || {},
 		ChargeData = DataView.Project,	//财务信息
-		ChargeCanEdit = DataView.ChargeCanEdit;
+		ChargeCanEdit = DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2);
 
 	var Former = require('risk/components/former/index'),
 		TplCharge = require('./tpl.charge');

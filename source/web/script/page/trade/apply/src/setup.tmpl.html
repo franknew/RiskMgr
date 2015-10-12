@@ -46,8 +46,8 @@
 		Followup = DataView.Followup;	//保后跟踪
 
 	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),
-		ShowCharge = ShowApproval && (DataView.ChargeCanEdit || Charge),
-		ShowFollow = ShowApproval && (DataView.FollowupCanEdit || Followup);
+		ShowCharge = ShowApproval && DataView.DisplayCharge,
+		ShowFollow = ShowApproval && DataView.DisplayTracking;
 %>
 
 <div class="col-md-12">

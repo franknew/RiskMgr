@@ -27,6 +27,9 @@ define(function(require, exports, module){
 		* @returns {String} 格式化后字符串
 		*/
 		date:function(date, format){
+			if (!date) {
+				return ;
+			}
 			var res = format,
 				tt = '',
 				dateType = typeof(date);

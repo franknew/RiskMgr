@@ -5,7 +5,10 @@
  */
 
 define(function(require, exports, module){
-	var $ = require('jquery');
+	var $ = require('jquery'),
+		RString = require('risk/unit/string');
+
+	var SelectData = require('risk/data-dictionary');
 
 	var MOD = {
 		/**
@@ -87,14 +90,23 @@ define(function(require, exports, module){
 				case 'select':
 					itemState.tag = 'select';
 					itemState.sub = (function(o) {
+						var items = o;
+						if (typeof(items) == 'string') {
+							items = (SelectData[o] || []).concat([]);	//concat防止原始数据被修改
+							items.unshift({
+								name:(item.required?'* ':'')+(item.remark||'请选择'),
+								value:''
+							});
+						}
 						var rs = [];
 						var i=0,cur;
-						for(;cur=o[i++];) {
+						for(;cur=items[i++];) {
 							rs.push({
 								tag:'option',
 								html:cur.name,
 								attr:{
-									value:cur.value
+									value:cur.value,
+									selected:cur.selected?'selected':undefined
 								}
 							});
 						}
@@ -117,6 +129,10 @@ define(function(require, exports, module){
 					attr.value = item.value;
 					html = '<div class="checkbox"><label>'+this._createInput(itemState,defaultValue)+' '+(item.placeholder||'')+'</label></div>';
 					break;
+				case 'date':
+					if (defaultValue && /^\d{13}$/.test(defaultValue)) {	//如果是纯13位的数字，标示为时间戳进行转化
+						defaultValue = RString.date(defaultValue,'yyyy-MM-dd');
+					}
 				/*--
 				case 'color':
 				case 'date':

@@ -25,13 +25,8 @@ define(function(require, exports, module){
 			type:'select',
 			name:'CardType',
 			required:true,
-			options:[{
-				name:'证件类型',
-				value:''
-			},{
-				name:'身份证',
-				value:'1'
-			}]
+			options:"证件类型",
+			remark:'证件类型'
 		},{
 			col:4,
 			type:'text',
@@ -56,31 +51,15 @@ define(function(require, exports, module){
 			type:'select',
 			name:'Gender',
 			required:true,
-			options:[{
-				name:'* 性别',
-				value:''
-			},{
-				name:'男',
-				value:1
-			},{
-				name:'女',
-				value:2
-			}]
+			options:"性别",
+			remark:'性别'
 		},{
 			col:3,
 			type:'select',
 			name:'Marrage',
 			required:true,
-			options:[{
-				name:'* 婚姻',
-				value:''
-			},{
-				name:'未婚',
-				value:1
-			},{
-				name:'已婚',
-				value:2
-			}]
+			options:"婚姻",
+			remark:'婚姻'
 		}],
 
 		[{
@@ -133,16 +112,7 @@ define(function(require, exports, module){
 			col:4,
 			type:'select',
 			name:'BankType',
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'招商银行',
-				value:'1'
-			},{
-				name:'中国银行',
-				value:'2'
-			}]
+			options:"银行"
 		}],
 
 		[{

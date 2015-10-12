@@ -16,16 +16,7 @@ define(function(require, exports, module){
 			type:'select',
 			name:'OrignalMortgageBank',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'招商银行',
-				value:1
-			},{
-				name:'中国银行',
-				value:2
-			}]
+			options:'银行'
 		},{
 			type:'label',
 			col:3,
@@ -48,16 +39,7 @@ define(function(require, exports, module){
 			type:'select',
 			name:'OrignalFundCenter',
 			required:true,
-			options:[{
-				name:'无',
-				value:''
-			},{
-				name:'AAA',
-				value:1
-			},{
-				name:'BBB',
-				value:2
-			}]
+			options:'公积金中心'
 		},{
 			type:'label',
 			col:3,
@@ -76,16 +58,7 @@ define(function(require, exports, module){
 			col:"3",
 			type:'select',
 			name:'SupplyCardCopy',
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'否',
-				value:1
-			},{
-				name:'是',
-				value:2
-			}]
+			options:'是否'
 		},{
 			type:'label',
 			col:'3',

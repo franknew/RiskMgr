@@ -1,5 +1,5 @@
 /**
- * 额度列表
+ * 客户列表
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
@@ -8,18 +8,30 @@ define(function(require, exports, module){
 	var $ = require('jquery'),
 		ajax = require('risk/unit/ajax'),
 		route = require('risk/unit/route'),
-		string = require('risk/unit/string'),
 		pager = require('risk/components/pager/index'),
-		tmpl = require('./tmpl');
+		tmpl = require('./tmpl'),
+		dialog = require('./dialog');
 
 	var MOD = {
-		/** 初始化填充列表
-		 * @param
-		 */
-		init:function(params) {
+		initPage:function(params) {
+			params = params || {};
+			var currentPage = params.current || 1,
+				that = this;
+
+			var html = tmpl.list();
+			route.show({
+				head:'员工管理',
+				content:html
+			});
+
 			this.fill({
-				container:route.container.find('#ListContainer'),
-				mode:params.mode
+				container:route.container.find('#ListContainer')
+			});
+
+
+			route.on('click','add',function(ev) {//按钮：新增
+				ev.preventDefault();
+				dialog.add();
 			});
 		},
 		/** 填充列表主体html到指定容器
@@ -30,7 +42,6 @@ define(function(require, exports, module){
 		 */
 		fill:function(setting) {
 			setting = setting||{};
-			var mode = setting.mode;
 
 			var container = $(setting.container),
 				current = setting.current || 1,
@@ -43,7 +54,7 @@ define(function(require, exports, module){
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.List(da);
+					var html = tmpl.ListBox(da.Record);
 
 					container.html(html);
 
@@ -57,27 +68,31 @@ define(function(require, exports, module){
 								current:num,
 								size:size,
 								success:function(da) {
-									that._fill(container,da);
+									that._fill(container,da.Record);
 								}
 							});
 						}
 					});
 
-					that._initFillEvent(container,setting);
+					that._initFillEvent(container);
 
 					success && success();
 				},
-				error:setting.error
+				error:function(xhr,msg) {
+					route.show({
+						head:'员工管理',
+						content:msg
+					});
+				}
 			});
 		},
 		_fill:function(container,data) {
 			var html = tmpl.ListItem(data);
-			container.find('#J_Lister').html(html);
+			container.find('#J_ListBox').html(html);
 		},
-		_initFillEvent:function(container,setting) {
+		_initFillEvent:function(container) {
 			var that = this,
-				key = '__initFillCustomerEvent__',
-				mode = setting.mode;
+				key = '__initFillCustomerEvent__';
 			if (container.data(key)) {
 				return false;
 			}
@@ -88,7 +103,7 @@ define(function(require, exports, module){
 				ev.preventDefault();
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
-				route.load('page=trade/apply&action=approval&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
+				dialog.view(id,elem);
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();
@@ -97,26 +112,20 @@ define(function(require, exports, module){
 				});
 			});
 		},
-		/** 查询接口
+		/** 查询列表接口
 		 * @param conf {Obejct} 配置项：
 		 *      size: 每页个数
 		 *      current: 拉取第几页
 		 *      form: 搜索的表单
 		 */
 		query:function(conf) {
-			var searchForm = $('#J_SearchForm'),
-				type = searchForm.find('[name="SearchType"]').val() || 'processing',
-				url = {
-					'processing':'RiskMgr.Api.WorkflowApi/QueryMyProcessing',
-					'processed':'RiskMgr.Api.WorkflowApi/QueryMyProcessed'
-				}[type];
 			return ajax.post({
-				url:url,
+				url:'RiskMgr.Api.UserApi/QueryUser',
 				data:{
 					PageSize:conf.size||10,
 					CurrentIndex:conf.current || 1
 				},
-				form:$('#J_SearchForm'),
+				form:$('#J_CustomerSearchForm'),
 				formDropEmpty:true,
 				success:conf.success,
 				error:conf.error

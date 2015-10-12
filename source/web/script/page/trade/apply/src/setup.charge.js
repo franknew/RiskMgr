@@ -18,8 +18,12 @@ define(function(require, exports, module){
 				ev.preventDefault();
 
 				Data.get().done(function(da) {
+					var action = da&&da.Action,
+						edit = da&&da.ChargeCanEdit,
+						url = action==2?'RiskMgr.Api.ProjectApi/UpdateCharge' : 'RiskMgr.Api.ProjectApi/UpdateFinance';
+
 					Ajax.post({
-						url:'RiskMgr.Api.ProjectApi/UpdateCharge',
+						url: url,
 						data:{
 							ID:da.Project.ID,
 							WorkflowID:da.WorkflowID,

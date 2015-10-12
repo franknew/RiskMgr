@@ -367,8 +367,12 @@ define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","r
 				ev.preventDefault();
 
 				Data.get().done(function(da) {
+					var action = da&&da.Action,
+						edit = da&&da.ChargeCanEdit,
+						url = action==2?'RiskMgr.Api.ProjectApi/UpdateCharge' : 'RiskMgr.Api.ProjectApi/UpdateFinance';
+
 					Ajax.post({
-						url:'RiskMgr.Api.ProjectApi/UpdateCharge',
+						url: url,
 						data:{
 							ID:da.Project.ID,
 							WorkflowID:da.WorkflowID,
@@ -1228,16 +1232,7 @@ define.pack("./tpl.project.base",[],function(require, exports, module){
 			type:'select',
 			name:'Source',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'预存',
-				value:1
-			},{
-				name:'神马村',
-				value:2
-			}]
+			options:'项目来源'
 		},{
 			type:'label',
 			col:3,
@@ -1318,16 +1313,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			type:'select',
 			name:'NewCreditBank',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'招商银行',
-				value:1
-			},{
-				name:'中国银行',
-				value:2
-			}]
+			options:'银行'
 		},{
 			type:'label',
 			col:3,
@@ -1350,16 +1336,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			type:'select',
 			name:'ShortTermAssetRansomBank',
 			required:true,
-			options:[{
-				name:'无',
-				value:''
-			},{
-				name:'AAA',
-				value:1
-			},{
-				name:'BBB',
-				value:2
-			}]
+			options:'银行'
 		},{
 			type:'label',
 			col:3,
@@ -1557,16 +1534,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			type:'select',
 			name:'OrignalMortgageBank',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'招商银行',
-				value:1
-			},{
-				name:'中国银行',
-				value:2
-			}]
+			options:'银行'
 		},{
 			type:'label',
 			col:3,
@@ -1589,16 +1557,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			type:'select',
 			name:'OrignalFundCenter',
 			required:true,
-			options:[{
-				name:'无',
-				value:''
-			},{
-				name:'AAA',
-				value:1
-			},{
-				name:'BBB',
-				value:2
-			}]
+			options:'公积金中心'
 		},{
 			type:'label',
 			col:3,
@@ -1617,16 +1576,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			col:"3",
 			type:'select',
 			name:'SupplyCardCopy',
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'否',
-				value:1
-			},{
-				name:'是',
-				value:2
-			}]
+			options:'是否'
 		},{
 			type:'label',
 			col:'3',
@@ -1730,16 +1680,7 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 			type:'select',
 			name:'AssetRansomType',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'预存',
-				value:1
-			},{
-				name:'神马村',
-				value:2
-			}]
+			options:'赎楼方式'
 		},{
 			type:'label',
 			col:3,
@@ -1763,16 +1704,7 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 			type:'select',
 			required:true,
 			name:'ChargeType',
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'赎楼前收取',
-				value:1
-			},{
-				name:'赎楼后收取',
-				value:2
-			}]
+			options:'收费方式'
 		}],
 
 		[{
@@ -2145,15 +2077,17 @@ var __p=[],_p=function(s){__p.push(s)};
 		Approvals = DataView.Approvals || {},	//审批信息
 		CurrentActivity = DataView.CurrentActivity || [];
 __p.push('\n<div class="step-pane" id="Approval">');
- if (DataView.Action==3 && CurrentActivity) { __p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content" style="margin:0 auto;max-width:500px;width:100%;">\n				<div class="form-group">\n					<label class="col-sm-12">');
+
+	if (DataView.Action==3 && CurrentActivity.ActivityDefinitionID<5) {	//action==3代表是可以审批
+	 __p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content" style="margin:0 auto;max-width:500px;width:100%;">\n				<div class="form-group">\n					<label class="col-sm-12">');
 _p(CurrentActivity.Name);
 __p.push('</label>\n					<div class="col-sm-12">\n						<textarea class="form-control" name="Remark" rows="5"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="text-center col-sm-12">\n						<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n						&nbsp;&nbsp;\n						<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n					</div>\n				</div>\n			</div>\n		</div>');
 }else {__p.push('		<div class="alert alert-info" role="alert">\n			当前审批流程到了<strong>');
 _p(CurrentActivity.Name);
 __p.push('</strong>，审批人：<strong>');
-_p(CurrentActivity.Processor||'?');
+_p(DataView.Operator||'?');
 __p.push('</strong>，到达时间：<strong>');
-_p(RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm"));
+_p(RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm:ss"));
 __p.push('</strong>\n		</div>');
 }if (Approvals.length>0) {__p.push('		<div class="block-transparent">\n			<div class="content">\n				<ul class="list-group tickets">');
 
@@ -2170,7 +2104,7 @@ _p(cur.Processor);
 __p.push('：');
 _p(cur.Remark);
 __p.push('</p>\n						<span class="date">');
-_p(RString.date(cur.LastUpdateTime,"yyyy-MM-dd HH:mm"));
+_p(RString.date(cur.LastUpdateTime,"yyyy-MM-dd HH:mm:ss"));
 __p.push('</span>\n					</li>');
 }__p.push('				</ul>\n			</div>\n		</div>');
 }__p.push('\n</div>');
@@ -2184,7 +2118,7 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	var DataView = data.data || {},
 		ChargeData = DataView.Project,	//财务信息
-		ChargeCanEdit = DataView.ChargeCanEdit;
+		ChargeCanEdit = DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2);
 
 	var Former = require('risk/components/former/index'),
 		TplCharge = require('./tpl.charge');
@@ -2267,7 +2201,7 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	var DataView = data.data || {},
-		FollowupCanEdit = DataView.FollowupCanEdit,
+		FollowupCanEdit = DataView.FollowupCanEdit || (DataView.DisplayTracking && DataView.Action==2),
 		FollowupData = DataView.Project;	//保后跟踪
 
 	var Former = require('risk/components/former/index'),
@@ -2432,8 +2366,8 @@ var __p=[],_p=function(s){__p.push(s)};
 		Followup = DataView.Followup;	//保后跟踪
 
 	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),
-		ShowCharge = ShowApproval && (DataView.ChargeCanEdit || Charge),
-		ShowFollow = ShowApproval && (DataView.FollowupCanEdit || Followup);
+		ShowCharge = ShowApproval && DataView.DisplayCharge,
+		ShowFollow = ShowApproval && DataView.DisplayTracking;
 __p.push('\n<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');

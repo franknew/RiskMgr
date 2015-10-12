@@ -503,16 +503,7 @@ define.pack("./tpl.view",["risk/page/customer/index","risk/page/customer/src/tpl
 			type:'select',
 			name:'Usage',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'1111',
-				value:1
-			},{
-				name:'2222',
-				value:2
-			}]
+			options:'房产用途'
 		}],
 
 		[{
@@ -525,16 +516,7 @@ define.pack("./tpl.view",["risk/page/customer/index","risk/page/customer/src/tpl
 			type:'select',
 			name:'Position',
 			required:true,
-			options:[{
-				name:'* 请选择',
-				value:''
-			},{
-				name:'南山区',
-				value:'1'
-			},{
-				name:'罗湖区',
-				value:'2'
-			}]
+			options:'地区'
 		},{
 			col:7,
 			type:'text',

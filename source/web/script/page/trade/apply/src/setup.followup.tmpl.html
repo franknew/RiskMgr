@@ -1,7 +1,7 @@
 <script type="text/html" id="SetupFollowup">
 <%
 	var DataView = data.data || {},
-		FollowupCanEdit = DataView.FollowupCanEdit,
+		FollowupCanEdit = DataView.FollowupCanEdit || (DataView.DisplayTracking && DataView.Action==2),
 		FollowupData = DataView.Project;	//保后跟踪
 
 	var Former = require('risk/components/former/index'),

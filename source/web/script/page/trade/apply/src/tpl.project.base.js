@@ -16,16 +16,7 @@ define(function(require, exports, module){
 			type:'select',
 			name:'Source',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'预存',
-				value:1
-			},{
-				name:'神马村',
-				value:2
-			}]
+			options:'项目来源'
 		},{
 			type:'label',
 			col:3,

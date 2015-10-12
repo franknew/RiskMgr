@@ -45,22 +45,7 @@ define(function(require, exports, module){
 			type:'select',
 			name:'Role',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'业务员',
-				value:1
-			},{
-				name:'业务员组长',
-				value:2
-			},{
-				name:'风控',
-				value:3
-			},{
-				name:'总经理',
-				value:4
-			}]
+			options:"职位"
 		}],
 
 		[{

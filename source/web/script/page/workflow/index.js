@@ -175,8 +175,14 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 		 *      form: 搜索的表单
 		 */
 		query:function(conf) {
+			var searchForm = $('#J_SearchForm'),
+				type = searchForm.find('[name="SearchType"]').val() || 'processing',
+				url = {
+					'processing':'RiskMgr.Api.WorkflowApi/QueryMyProcessing',
+					'processed':'RiskMgr.Api.WorkflowApi/QueryMyProcessed'
+				}[type];
 			return ajax.post({
-				url:'RiskMgr.Api.WorkflowApi/QueryMyProcessing',
+				url:url,
 				data:{
 					PageSize:conf.size||10,
 					CurrentIndex:conf.current || 1
@@ -198,7 +204,7 @@ var tmpl = {
 'ListContainer': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">\n		<div class="form-group">\n			<label>项目</label>\n			<select class="form-control">\n				<option>额度申请</option>\n			</select>\n		</div>\n		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control">\n				<option>全部</option>\n				<option selected="selected">待审批</option>\n				<option>已审批</option>\n			</select>\n		</div>\n		<div class="form-group">\n			<label>申请人</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
+__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">\n		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control" name="SearchType">\n				<!--<option value="all">全部</option>-->\n				<option selected="selected" value="processing">待审批</option>\n				<option value="processed">已审批</option>\n			</select>\n		</div>\n		<!--\n		<div class="form-group">\n			<label>申请人</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		-->\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
 
 return __p.join("");
 },
@@ -206,7 +212,7 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<th>项目名</th>\n			<th>说明</th>\n			<th>申请人</th>\n			<th>申请时间</th>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<th>项目名</th>\n			<th>说明</th>\n			<th>申请人</th>\n			<th>申请时间</th>\n			<th>审批状态</th>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -239,7 +245,9 @@ _p(Cur.Title);
 __p.push('</td>\n		<td>');
 _p(Cur.Applier);
 __p.push('</td>\n		<td>');
-_p(RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm'));
+_p(RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm:ss'));
+__p.push('</td>\n		<td>');
+_p(Cur.Status);
 __p.push('</td>\n	</tr>');
 
 		}

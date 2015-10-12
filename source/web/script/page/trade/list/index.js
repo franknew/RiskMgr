@@ -284,7 +284,7 @@ __p.push('</td>\n			</tr>');
 
 			}
 			__p.push('			</table>\n		</td>\n		<td>');
-_p(RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm'));
+_p(RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm:ss'));
 __p.push('</td>\n		<!--\n		<td>-</td>\n		<td>-</td>\n		<td>-</td>\n		<td>-</td>\n		-->\n	</tr>');
 
 		}

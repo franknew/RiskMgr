@@ -40,16 +40,7 @@ define(function(require, exports, module){
 			type:'select',
 			name:'AssetRansomType',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'预存',
-				value:1
-			},{
-				name:'神马村',
-				value:2
-			}]
+			options:'赎楼方式'
 		},{
 			type:'label',
 			col:3,
@@ -73,16 +64,7 @@ define(function(require, exports, module){
 			type:'select',
 			required:true,
 			name:'ChargeType',
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'赎楼前收取',
-				value:1
-			},{
-				name:'赎楼后收取',
-				value:2
-			}]
+			options:'收费方式'
 		}],
 
 		[{

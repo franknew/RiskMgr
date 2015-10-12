@@ -1,5 +1,5 @@
 /**
- * 员工通用dialog弹窗
+ * 客户通用dialog弹窗
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-18 12:22:58
  */
@@ -14,10 +14,10 @@ define(function(require, exports, module){
 		viewTpl = require('./tpl.view');
 
 	var MOD = {
-		view:function(id) {
+		view:function(id,oriBox) {
 			this._getData(id,function(data) {
 				modal.show({
-					title:'查看员工',
+					title:'员工详情',
 					content:former.make(viewTpl,{
 						data:data,
 						disabled:true
@@ -32,6 +32,9 @@ define(function(require, exports, module){
 						value:'删除',
 						style:'danger',
 						callback:function() {
+							if (!confirm('确认删除员工“'+data.CnName+'('+data.Name+')”？')) {
+								return ;
+							}
 							var dialog = this;
 							ajax.post({
 								url:'RiskMgr.Api.UserApi/Delete',
@@ -39,6 +42,10 @@ define(function(require, exports, module){
 								success:function(data, textStatus, jqXHR) {
 									msg.success('删除成功.');
 									dialog.close();
+
+									$(oriBox).css('background-color','red').slideUp('fast',function() {
+										$(this).remove();
+									});
 								}
 							});
 						}
@@ -79,9 +86,9 @@ define(function(require, exports, module){
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');
 							dialog.close();
-							//添加完毕，刷新员工列表页
+							//添加完毕，刷新客户列表页
 							if (!success || !success()) {	//如果回调返回false则默认跳转
-								route.load('page=employee');
+								route.load('page=customer');
 							}
 						}
 					});
@@ -93,7 +100,7 @@ define(function(require, exports, module){
 		_getData:function(id,callback) {
 			if (!id) {
 				callback && callback();
-			}else {	//查看指定id的员工
+			}else {	//查看指定id的客户
 				ajax.post({
 					url:'RiskMgr.Api.UserApi/QueryUser',
 					data:{

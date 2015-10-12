@@ -16,16 +16,7 @@ define(function(require, exports, module){
 			type:'select',
 			name:'NewCreditBank',
 			required:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'招商银行',
-				value:1
-			},{
-				name:'中国银行',
-				value:2
-			}]
+			options:'银行'
 		},{
 			type:'label',
 			col:3,
@@ -48,16 +39,7 @@ define(function(require, exports, module){
 			type:'select',
 			name:'ShortTermAssetRansomBank',
 			required:true,
-			options:[{
-				name:'无',
-				value:''
-			},{
-				name:'AAA',
-				value:1
-			},{
-				name:'BBB',
-				value:2
-			}]
+			options:'银行'
 		},{
 			type:'label',
 			col:3,

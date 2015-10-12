@@ -1,0 +1,203 @@
+/**
+ * 数据字典
+ * @authors viktorli (i@lizhenwen.com)
+ */
+define(function(require, exports, module){
+
+	var MOD = {
+		"证件类型":[{
+			selected:true,
+			value:"1",
+			name:"身份证"
+		},{
+			value:"2",
+			name:"护照"
+		},{
+			value:"3",
+			name:"军官证"
+		},{
+			value:"4",
+			name:"回乡证"
+		},{
+			value:"5",
+			name:"台胞证"
+		},{
+			value:"6",
+			name:"港澳通行证"
+		},{
+			value:"7",
+			name:"警官证"
+		},{
+			value:"8",
+			name:"士兵证"
+		}],
+
+		"性别":[{
+			value:"1",
+			name:"男"
+		},{
+			value:"2",
+			name:"女"
+		}],
+
+		"婚姻":[{
+			value:"1",
+			name:"已婚"
+		},{
+			value:"2",
+			name:"未婚"
+		}],
+
+		"银行":[{
+			value:"1",
+			name:"中国银行"
+		},{
+			value:"2",
+			name:"广发银行"
+		},{
+			value:"3",
+			name:"中信银行"
+		},{
+			value:"4",
+			name:"中国建设银行"
+		},{
+			value:"5",
+			name:"兴业银行"
+		},{
+			value:"6",
+			name:"宁波银行"
+		},{
+			value:"7",
+			name:"中国民生银行"
+		},{
+			value:"8",
+			name:"杭州银行"
+		},{
+			value:"9",
+			name:"中国农业银行"
+		},{
+			value:"10",
+			name:"平安银行"
+		},{
+			value:"11",
+			name:"浦发银行"
+		},{
+			value:"12",
+			name:"中国工商银行"
+		},{
+			value:"13",
+			name:"交通银行"
+		},{
+			value:"14",
+			name:"上海银行"
+		},{
+			value:"15",
+			name:"中国光大银行"
+		},{
+			value:"16",
+			name:"中国邮政储蓄银行"
+		},{
+			value:"17",
+			name:"招商银行"
+		}],
+
+		"地区":[{
+			value:"1",
+			name:"罗湖区"
+		},{
+			value:"2",
+			name:"福田区"
+		},{
+			value:"3",
+			name:"南山区"
+		},{
+			value:"4",
+			name:"宝安区"
+		},{
+			value:"5",
+			name:"龙岗区"
+		},{
+			value:"6",
+			name:"盐田区"
+		},{
+			value:"7",
+			name:"光明新区"
+		},{
+			value:"8",
+			name:"坪山新区"
+		},{
+			value:"9",
+			name:"龙华新区"
+		},{
+			value:"10",
+			name:"大鹏新区"
+		}],
+
+		"房产用途":[{
+			value:"1",
+			name:"住宅"
+		},{
+			value:"2",
+			name:"商用"
+		}],
+
+		"项目来源":[{
+			value:"1",
+			name:"中介"
+		},{
+			value:"2",
+			name:"2222"
+		}],
+
+		"是否":[{
+			value:"1",
+			name:"是"
+		},{
+			value:"2",
+			name:"否"
+		}],
+
+		"赎楼方式":[{
+			value:"1",
+			name:"111"
+		},{
+			value:"2",
+			name:"2222"
+		}],
+
+		"收费方式":[{
+			value:"1",
+			name:"111"
+		},{
+			value:"2",
+			name:"2222"
+		}],
+
+		"公积金中心":[{
+			value:"1",
+			name:"111"
+		},{
+			value:"2",
+			name:"2222"
+		}],
+
+		"职位":[{
+			value:"1",
+			name:"业务员"
+		},{
+			value:"2",
+			name:"业务经理"
+		},{
+			value:"3",
+			name:"风控"
+		},{
+			value:"4",
+			name:"总经理"
+		},{
+			value:"5",
+			name:"管理员"
+		}]
+	};
+
+	return MOD;
+});

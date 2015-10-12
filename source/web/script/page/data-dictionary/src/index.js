@@ -1,5 +1,5 @@
 /**
- * 员工管理- 页面路由初始化
+ * 客户管理- 页面路由初始化
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-23 16:53:06
  */
@@ -33,6 +33,10 @@ define(function(require, exports, module){
 			dialogCust.show({
 				type:'edit'
 			});
+		},
+		//选择器浮层
+		selector:function(conf) {
+			require('./selector').show(conf);
 		}
 	};
 

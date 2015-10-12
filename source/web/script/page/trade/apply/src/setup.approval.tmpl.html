@@ -8,7 +8,9 @@
 
 <div class="step-pane" id="Approval">
 
-	<% if (DataView.Action==3 && CurrentActivity) { %>
+	<%
+	if (DataView.Action==3 && CurrentActivity.ActivityDefinitionID<5) {	//action==3代表是可以审批
+	 %>
 		<div class="block-transparent">
 			<div class="header">
 				<h3>审批意见</h3>
@@ -31,7 +33,7 @@
 		</div>
 	<%}else {%>
 		<div class="alert alert-info" role="alert">
-			当前审批流程到了<strong><%=CurrentActivity.Name%></strong>，审批人：<strong><%=CurrentActivity.Processor||'?'%></strong>，到达时间：<strong><%=RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm")%></strong>
+			当前审批流程到了<strong><%=CurrentActivity.Name%></strong>，审批人：<strong><%=DataView.Operator||'?'%></strong>，到达时间：<strong><%=RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm:ss")%></strong>
 		</div>
 	<%}%>
 
@@ -46,7 +48,7 @@
 					<li class="list-group-item" href="#">
 						<h4 class="name"><%=cur.ActivityName%> <span class="label <%=cur.Status==1?'label-success':'label-danger'%>"><%=cur.Status==1?'通过':'不通过'%></span></h4>
 						<p><%=cur.Processor%>：<%=cur.Remark%></p>
-						<span class="date"><%=RString.date(cur.LastUpdateTime,"yyyy-MM-dd HH:mm")%></span>
+						<span class="date"><%=RString.date(cur.LastUpdateTime,"yyyy-MM-dd HH:mm:ss")%></span>
 					</li>
 				<%}%>
 				</ul>

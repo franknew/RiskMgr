@@ -5,23 +5,19 @@
 <div class="block-flat">
 	<form class="form-inline" id="J_SearchForm">
 		<div class="form-group">
-			<label>项目</label>
-			<select class="form-control">
-				<option>额度申请</option>
-			</select>
-		</div>
-		<div class="form-group">
 			<label>单据状态</label>
-			<select class="form-control">
-				<option>全部</option>
-				<option selected="selected">待审批</option>
-				<option>已审批</option>
+			<select class="form-control" name="SearchType">
+				<!--<option value="all">全部</option>-->
+				<option selected="selected" value="processing">待审批</option>
+				<option value="processed">已审批</option>
 			</select>
 		</div>
+		<!--
 		<div class="form-group">
 			<label>申请人</label>
 			<input type="text" name="Name" class="form-control" placeholder="">
 		</div>
+		-->
 		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>
 	</form>
 	<hr/>
@@ -38,6 +34,7 @@
 			<th>说明</th>
 			<th>申请人</th>
 			<th>申请时间</th>
+			<th>审批状态</th>
 		</thead>
 		<tbody class="no-border-x no-border-y" id="J_Lister">
 			<%=this.ListItem(data)%>
@@ -62,7 +59,8 @@
 		<td><%=Cur.Name%></td>
 		<td><%=Cur.Title%></td>
 		<td><%=Cur.Applier%></td>
-		<td><%=RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm')%></td>
+		<td><%=RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm:ss')%></td>
+		<td><%=Cur.Status%></td>
 	</tr>
 <%
 		}
