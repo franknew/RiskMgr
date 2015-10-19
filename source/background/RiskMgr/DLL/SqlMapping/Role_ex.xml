@@ -3,7 +3,7 @@
   <statements>
     <select id="QueryRoleByUserID" resultClass="Role" parameterClass="string">
       SELECT * FROM Role r
-      INNER JOIN User_Role ur ON r.ID=ur.UserID
+      INNER JOIN User_Role ur ON r.ID=ur.RoleID
       WHERE ur.UserID = #UserID#
     </select>
   </statements>
