@@ -1,4 +1,5 @@
-﻿using RiskMgr.Model;
+﻿using DreamWorkflow.Engine.Model;
+using RiskMgr.Model;
 using SOAFramework.Library.DAL;
 using System;
 using System.Collections.Generic;
@@ -28,5 +29,10 @@ namespace RiskMgr.Form
         /// 房产ID
         /// </summary>
         public List<Asset> Assets { get; set; }
+
+        /// <summary>
+        /// 调查报告
+        /// </summary>
+        public string Report { get; set; }
     }
 }

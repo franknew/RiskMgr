@@ -39,12 +39,16 @@
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
-    <isNotNull property="Ids">
+    <isNotNull prepend="AND" property="ParentID">
+        `ParentID`=#ParentID#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
         <iterate property="Ids" open="(" close=")" conjunction="OR">
-         Id=#Ids[]#
+         `ID`=#Ids[]#
         </iterate>
     </isNotNull>
     </dynamic>
+        ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
         <isGreaterThan property="PageSize" compareValue="0">
          LIMIT #StartIndex#, #PageSize# 
@@ -60,7 +64,8 @@
     `CreateTime`,
     `Remark`,
     `LastUpdateTime`,
-    `LastUpdator`
+    `LastUpdator`,
+    `ParentID`
   )
   VALUES
   (
@@ -70,7 +75,8 @@
         #CreateTime#,
         #Remark#,
         #LastUpdateTime#,
-        #LastUpdator#
+        #LastUpdator#,
+        #ParentID#
   )
   </insert>
   <update id="UpdateRole" parameterClass="RoleUpdateForm">
@@ -93,6 +99,9 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.LastUpdator">
         `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ParentID">
+        `ParentID`=#Entity.ParentID#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -122,6 +131,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="RoleQueryForm.LastUpdator">
         `LastUpdator`=#RoleQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.ParentID">
+        `ParentID`=#RoleQueryForm.ParentID#
     </isNotNull>
     </dynamic>
   </update>
@@ -153,6 +165,14 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ParentID">
+        `ParentID`=#ParentID#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         `ID`=#Ids[]#
+        </iterate>
     </isNotNull>
   </delete>
    <select id="QueryRoleLastUpdateTime" resultClass="DateTime">
@@ -187,6 +207,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ParentID">
+        `ParentID`=#ParentID#
     </isNotNull>
     </dynamic>
    </select>

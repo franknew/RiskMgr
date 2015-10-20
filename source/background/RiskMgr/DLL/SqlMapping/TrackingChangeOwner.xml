@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="TrackingChangeOwner" type="RiskMgr.Model.TrackingChangeOwner" />
+    <typeAlias alias="TrackingChangeOwnerQueryForm" type="RiskMgr.Form.TrackingChangeOwnerQueryForm" />
+    <typeAlias alias="TrackingChangeOwnerUpdateForm" type="RiskMgr.Form.TrackingChangeOwnerUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryTrackingChangeOwner" resultClass="TrackingChangeOwner" parameterClass="TrackingChangeOwnerQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `TrackingChangeOwner` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerCode">
+        `ChangeOwnerCode`=#ChangeOwnerCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerTime_Start">
+        `ChangeOwnerTime`&gt;=#ChangeOwnerTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerTime_End">
+        `ChangeOwnerTime`&lt;=#ChangeOwnerTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetCode">
+        `NewAssetCode`=#NewAssetCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         `ID`=#Ids[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddTrackingChangeOwner" parameterClass="TrackingChangeOwner">
+  INSERT INTO `TrackingChangeOwner`
+  (
+    `ID`,
+    `ProjectID`,
+    `Creator`,
+    `CreateTime`,
+    `LastUpdater`,
+    `LastUpdateTime`,
+    `ChangeOwnerCode`,
+    `ChangeOwnerTime`,
+    `NewAssetCode`,
+    `ChangeOwnerRemark`
+  )
+  VALUES
+  (
+        #ID#,
+        #ProjectID#,
+        #Creator#,
+        #CreateTime#,
+        #LastUpdater#,
+        #LastUpdateTime#,
+        #ChangeOwnerCode#,
+        #ChangeOwnerTime#,
+        #NewAssetCode#,
+        #ChangeOwnerRemark#
+  )
+  </insert>
+  <update id="UpdateTrackingChangeOwner" parameterClass="TrackingChangeOwnerUpdateForm">
+  UPDATE `TrackingChangeOwner`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.ProjectID">
+        `ProjectID`=#Entity.ProjectID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdater">
+        `LastUpdater`=#Entity.LastUpdater#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerCode">
+        `ChangeOwnerCode`=#Entity.ChangeOwnerCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerTime">
+        `ChangeOwnerTime`=#Entity.ChangeOwnerTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.NewAssetCode">
+        `NewAssetCode`=#Entity.NewAssetCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#Entity.ChangeOwnerRemark#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ID">
+        `ID`=#TrackingChangeOwnerQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ProjectID">
+        `ProjectID`=#TrackingChangeOwnerQueryForm.ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.Creator">
+        `Creator`=#TrackingChangeOwnerQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#TrackingChangeOwnerQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#TrackingChangeOwnerQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.LastUpdater">
+        `LastUpdater`=#TrackingChangeOwnerQueryForm.LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#TrackingChangeOwnerQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#TrackingChangeOwnerQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerCode">
+        `ChangeOwnerCode`=#TrackingChangeOwnerQueryForm.ChangeOwnerCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerTime_Start">
+        `ChangeOwnerTime`&gt;=#TrackingChangeOwnerQueryForm.ChangeOwnerTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerTime_End">
+        `ChangeOwnerTime`&lt;=#TrackingChangeOwnerQueryForm.ChangeOwnerTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.NewAssetCode">
+        `NewAssetCode`=#TrackingChangeOwnerQueryForm.NewAssetCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#TrackingChangeOwnerQueryForm.ChangeOwnerRemark#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteTrackingChangeOwner" parameterClass="TrackingChangeOwnerQueryForm">
+    DELETE FROM `TrackingChangeOwner` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerCode">
+        `ChangeOwnerCode`=#ChangeOwnerCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerTime_Start">
+        `ChangeOwnerTime`&gt;=#ChangeOwnerTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerTime_End">
+        `ChangeOwnerTime`&lt;=#ChangeOwnerTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetCode">
+        `NewAssetCode`=#NewAssetCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         `ID`=#Ids[]#
+        </iterate>
+    </isNotNull>
+  </delete>
+   <select id="QueryTrackingChangeOwnerLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `TrackingChangeOwner`
+   </select>
+   <select id="QueryTrackingChangeOwnerRecordCount" resultClass="int" parameterClass="TrackingChangeOwnerQueryForm">
+   SELECT COUNT(*) FROM `TrackingChangeOwner` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerCode">
+        `ChangeOwnerCode`=#ChangeOwnerCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerTime_Start">
+        `ChangeOwnerTime`&gt;=#ChangeOwnerTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerTime_End">
+        `ChangeOwnerTime`&lt;=#ChangeOwnerTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetCode">
+        `NewAssetCode`=#NewAssetCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerRemark">
+        `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

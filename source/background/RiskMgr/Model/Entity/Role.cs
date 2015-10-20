@@ -13,5 +13,10 @@ namespace RiskMgr.Model
         /// </summary>
         public string Remark { get; set; }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ParentID { get; set; }
+        
     }
 }

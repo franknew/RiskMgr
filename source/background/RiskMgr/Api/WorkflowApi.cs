@@ -80,6 +80,11 @@ namespace RiskMgr.Api
             return taskbll.Query(new QueryMyTaskServiceForm { UserID = user.User.ID, Status = (int)TaskProcessStatus.Processed });
         }
 
+        /// <summary>
+        /// 查询我的任务
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [QueryAction]
         public List<FullTask> QueryMyTask(QueryMyTaskServiceForm form)
         {
@@ -87,6 +92,17 @@ namespace RiskMgr.Api
             TaskBLL taskbll = new TaskBLL();
             var user = userbll.GetCurrentUser();
             return taskbll.Query(new QueryMyTaskServiceForm { UserID = user.User.ID, Status = form.Status });
+        }
+
+        /// <summary>
+        /// 流程作废
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [ApprovalAction]
+        public bool StopWorkflow(Task form)
+        {
+            return bll.StopWorkflow(form.WorkflowID, form.ID);
         }
     }
 }

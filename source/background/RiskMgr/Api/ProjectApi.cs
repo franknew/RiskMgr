@@ -45,7 +45,21 @@ namespace RiskMgr.Api
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
-            wfdm.StartNew(user.User.ID, result, new WorkflowAuthority());
+            var workflow = wfdm.StartNew(user.User.ID, result, new WorkflowAuthority());
+            //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
+            var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == user.User.ID);
+            if (task != null)
+            {
+                workflow.ProcessActivity(workflow.CurrentActivity.Value.ID, new Approval
+                {
+                    Creator = user.User.ID,
+                    LastUpdator = user.User.ID,
+                    Remark = form.Report,
+                    Status = (int)ApprovalStatus.Agree,
+                    ActivityID = workflow.CurrentActivity.Value.ID,
+                    WorkflowID = workflow.Value.ID,
+                }, task.ID, user.User.ID, new WorkflowAuthority());
+            }
 
             return result;
         }
@@ -137,7 +151,7 @@ namespace RiskMgr.Api
         /// <param name="form"></param>
         /// <returns></returns>
         [EditAction]
-        public bool UpdateTracking(Project form)
+        public bool UpdateTracking(UpdateTrackingServiceForm form)
         {
             return bll.UpdateTracking(form);
         }

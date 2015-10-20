@@ -59,11 +59,13 @@
     <Compile Include="DaoExtension\TaskDao_ex.cs" />
     <Compile Include="Dao\AssetDao.cs" />
     <Compile Include="Dao\Asset_ProjectDao.cs" />
+    <Compile Include="Dao\BankAccountDao.cs" />
     <Compile Include="Dao\CustomerDao.cs" />
     <Compile Include="Dao\Customer_AssetDao.cs" />
     <Compile Include="Dao\Customer_ProjectDao.cs" />
     <Compile Include="Dao\FullUserDao.cs" />
     <Compile Include="Dao\LogonHistoryDao.cs" />
+    <Content Include="SqlMapping\BankAccount.xml" />
     <Content Include="SqlMapping\Customer_Asset.xml" />
     <Content Include="SqlMapping\Customer_ex.xml" />
     <Content Include="sql.sql" />
@@ -74,10 +76,13 @@
     <Compile Include="Dao\MenuDao.cs" />
     <Compile Include="Dao\Menu_RoleDao.cs" />
     <Compile Include="Dao\ModuleDao.cs" />
+    <Compile Include="Dao\PaymentDao.cs" />
     <Compile Include="Dao\PostDao.cs" />
     <Compile Include="Dao\ProjectDao.cs" />
     <Compile Include="Dao\RoleDao.cs" />
     <Compile Include="Dao\Role_Module_ActionDao.cs" />
+    <Compile Include="Dao\TrackingChangeOwnerDao.cs" />
+    <Compile Include="Dao\TrackingMortgageDao.cs" />
     <Compile Include="Dao\UserDao.cs" />
     <Compile Include="Dao\UserInfoDao.cs" />
     <Compile Include="Dao\User_PostDao.cs" />
@@ -96,6 +101,7 @@
     <Content Include="SqlMapping\Menu_Role_ex.xml" />
     <Content Include="SqlMapping\Module.xml" />
     <Content Include="SqlMapping\Module_ex.xml" />
+    <Content Include="SqlMapping\Payment.xml" />
     <Content Include="SqlMapping\Post.xml" />
     <Content Include="SqlMapping\Project.xml" />
     <Content Include="SqlMapping\Project_ex.xml" />
@@ -107,6 +113,8 @@
     <Content Include="SqlMapping\Task_ex.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="SqlMapping\TrackingChangeOwner.xml" />
+    <Content Include="SqlMapping\TrackingMortgage.xml" />
     <Content Include="SqlMapping\User.xml">
       <SubType>Designer</SubType>
     </Content>

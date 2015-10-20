@@ -39,12 +39,13 @@
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
-    <isNotNull property="Ids">
+    <isNotNull prepend="AND"  property="Ids">
         <iterate property="Ids" open="(" close=")" conjunction="OR">
-         Id=#Ids[]#
+         `ID`=#Ids[]#
         </iterate>
     </isNotNull>
     </dynamic>
+        ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
         <isGreaterThan property="PageSize" compareValue="0">
          LIMIT #StartIndex#, #PageSize# 
@@ -153,6 +154,11 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         `ID`=#Ids[]#
+        </iterate>
     </isNotNull>
   </delete>
    <select id="QueryModuleLastUpdateTime" resultClass="DateTime">

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="TrackingMortgage" type="RiskMgr.Model.TrackingMortgage" />
+    <typeAlias alias="TrackingMortgageQueryForm" type="RiskMgr.Form.TrackingMortgageQueryForm" />
+    <typeAlias alias="TrackingMortgageUpdateForm" type="RiskMgr.Form.TrackingMortgageUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryTrackingMortgage" resultClass="TrackingMortgage" parameterClass="TrackingMortgageQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `TrackingMortgage` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode">
+        `MortgageFeedbackCode`=#MortgageFeedbackCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackTime_Start">
+        `MortgageFeedbackTime`&gt;=#MortgageFeedbackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackTime_End">
+        `MortgageFeedbackTime`&lt;=#MortgageFeedbackTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictCompleteTime_Start">
+        `MortgagePredictCompleteTime`&gt;=#MortgagePredictCompleteTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictCompleteTime_End">
+        `MortgagePredictCompleteTime`&lt;=#MortgagePredictCompleteTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         `ID`=#Ids[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddTrackingMortgage" parameterClass="TrackingMortgage">
+  INSERT INTO `TrackingMortgage`
+  (
+    `ID`,
+    `ProjectID`,
+    `Creator`,
+    `CreateTime`,
+    `LastUpdater`,
+    `LastUpdateTime`,
+    `MortgageFeedbackCode`,
+    `MortgageFeedbackTime`,
+    `MortgagePredictCompleteTime`
+  )
+  VALUES
+  (
+        #ID#,
+        #ProjectID#,
+        #Creator#,
+        #CreateTime#,
+        #LastUpdater#,
+        #LastUpdateTime#,
+        #MortgageFeedbackCode#,
+        #MortgageFeedbackTime#,
+        #MortgagePredictCompleteTime#
+  )
+  </insert>
+  <update id="UpdateTrackingMortgage" parameterClass="TrackingMortgageUpdateForm">
+  UPDATE `TrackingMortgage`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.ProjectID">
+        `ProjectID`=#Entity.ProjectID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdater">
+        `LastUpdater`=#Entity.LastUpdater#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageFeedbackCode">
+        `MortgageFeedbackCode`=#Entity.MortgageFeedbackCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgageFeedbackTime">
+        `MortgageFeedbackTime`=#Entity.MortgageFeedbackTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.MortgagePredictCompleteTime">
+        `MortgagePredictCompleteTime`=#Entity.MortgagePredictCompleteTime#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.ID">
+        `ID`=#TrackingMortgageQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.ProjectID">
+        `ProjectID`=#TrackingMortgageQueryForm.ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.Creator">
+        `Creator`=#TrackingMortgageQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#TrackingMortgageQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#TrackingMortgageQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.LastUpdater">
+        `LastUpdater`=#TrackingMortgageQueryForm.LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#TrackingMortgageQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#TrackingMortgageQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.MortgageFeedbackCode">
+        `MortgageFeedbackCode`=#TrackingMortgageQueryForm.MortgageFeedbackCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.MortgageFeedbackTime_Start">
+        `MortgageFeedbackTime`&gt;=#TrackingMortgageQueryForm.MortgageFeedbackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.MortgageFeedbackTime_End">
+        `MortgageFeedbackTime`&lt;=#TrackingMortgageQueryForm.MortgageFeedbackTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.MortgagePredictCompleteTime_Start">
+        `MortgagePredictCompleteTime`&gt;=#TrackingMortgageQueryForm.MortgagePredictCompleteTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingMortgageQueryForm.MortgagePredictCompleteTime_End">
+        `MortgagePredictCompleteTime`&lt;=#TrackingMortgageQueryForm.MortgagePredictCompleteTime_End#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteTrackingMortgage" parameterClass="TrackingMortgageQueryForm">
+    DELETE FROM `TrackingMortgage` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode">
+        `MortgageFeedbackCode`=#MortgageFeedbackCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackTime_Start">
+        `MortgageFeedbackTime`&gt;=#MortgageFeedbackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackTime_End">
+        `MortgageFeedbackTime`&lt;=#MortgageFeedbackTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictCompleteTime_Start">
+        `MortgagePredictCompleteTime`&gt;=#MortgagePredictCompleteTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictCompleteTime_End">
+        `MortgagePredictCompleteTime`&lt;=#MortgagePredictCompleteTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         `ID`=#Ids[]#
+        </iterate>
+    </isNotNull>
+  </delete>
+   <select id="QueryTrackingMortgageLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `TrackingMortgage`
+   </select>
+   <select id="QueryTrackingMortgageRecordCount" resultClass="int" parameterClass="TrackingMortgageQueryForm">
+   SELECT COUNT(*) FROM `TrackingMortgage` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackCode">
+        `MortgageFeedbackCode`=#MortgageFeedbackCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackTime_Start">
+        `MortgageFeedbackTime`&gt;=#MortgageFeedbackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgageFeedbackTime_End">
+        `MortgageFeedbackTime`&lt;=#MortgageFeedbackTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictCompleteTime_Start">
+        `MortgagePredictCompleteTime`&gt;=#MortgagePredictCompleteTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="MortgagePredictCompleteTime_End">
+        `MortgagePredictCompleteTime`&lt;=#MortgagePredictCompleteTime_End#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

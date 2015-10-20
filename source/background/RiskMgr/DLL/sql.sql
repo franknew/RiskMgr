@@ -252,3 +252,16 @@ CustomerID VARCHAR(32) NULL,
 AssetID VARCHAR(32) NULL,
 `Type` INT NULL COMMENT '1.房主 2.公权人'
 );
+
+CREATE TABLE `BankAccount` (
+  `ID` varchar(32) NOT NULL,
+  `BankType` int(11) DEFAULT NULL COMMENT '银行类型',
+  `BankName` varchar(200) DEFAULT NULL COMMENT '银行名称',
+  `BankAccountCode` varchar(50) DEFAULT NULL COMMENT '银行账号',
+  `Creator` varchar(32) DEFAULT NULL,
+  `CreateTime` datetime DEFAULT NULL,
+  `Name` varchar(50) DEFAULT NULL,
+  `LastUpdater` varchar(32) DEFAULT NULL,
+  `LastUpdateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk ROW_FORMAT=DYNAMIC;

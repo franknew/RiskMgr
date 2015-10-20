@@ -19,6 +19,7 @@ namespace RiskMgr.BLL
     {
         public string Add(Project project, List<Asset> assets, List<Customer_Project> customers, List<Customer> updatecustomers)
         {
+            #region 初始化变量 
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao projectdao = new ProjectDao(mapper);
             AssetDao assetdao = new AssetDao(mapper);
@@ -26,6 +27,9 @@ namespace RiskMgr.BLL
             Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
             CustomerDao customerdao = new CustomerDao(mapper);
             Customer_AssetDao cadao = new Customer_AssetDao(mapper);
+            #endregion
+
+            #region 处理项目信息
             string projectid = null;
             DateTime createstart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             DateTime createend = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
@@ -34,6 +38,9 @@ namespace RiskMgr.BLL
             project.Name = code;
             project.Index = index + 1;
             projectdao.Add(project);
+            #endregion
+
+            #region 处理房产信息
             if (assets != null)
             {
                 foreach (var asset in assets)
@@ -119,6 +126,9 @@ namespace RiskMgr.BLL
                     apdao.Add(ap);
                 }
             }
+            #endregion
+
+            #region 处理客户信息
             if (updatecustomers != null)
             {
                 foreach (var customer in updatecustomers)
@@ -179,6 +189,8 @@ namespace RiskMgr.BLL
                     cpdao.Add(customer);
                 }
             }
+            #endregion
+
             projectid = project.ID;
             return projectid;
         }
@@ -348,6 +360,7 @@ namespace RiskMgr.BLL
                 }
             }
             #endregion
+
             return form;
         }
 
@@ -423,38 +436,40 @@ namespace RiskMgr.BLL
             return true;
         }
 
-        public bool UpdateTracking(Project project)
+        public bool UpdateTracking(UpdateTrackingServiceForm project)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao dao = new ProjectDao(mapper);
+            TrackingMortgageDao tmdao = new TrackingMortgageDao(mapper);
+            TrackingChangeOwnerDao tcodao = new TrackingChangeOwnerDao(mapper);
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
             dao.Update(new ProjectUpdateForm
             {
                 Entity = new Project
                 {
                     NewAssetCode = project.NewAssetCode,
                     ChangeOwnerManualCode = project.ChangeOwnerManualCode,
-                    ChangeOwnerProfileCode2 = project.ChangeOwnerProfileCode2,
-                    ChangeOwnerProfileCode3 = project.ChangeOwnerProfileCode3,
-                    ChangeOwnerProfileCode1 = project.ChangeOwnerProfileCode1,
-                    ChangeOwnerProfileTime1 = project.ChangeOwnerProfileTime1,
-                    ChangeOwnerProfileTime2 = project.ChangeOwnerProfileTime2,
-                    ChangeOwnerProfileTime3 = project.ChangeOwnerProfileTime3,
-                    ChangeOwnerRemark = project.ChangeOwnerRemark,
-                    MortgageFeedbackCode1 = project.MortgageFeedbackCode1,
-                    MortgageFeedbackCode2 = project.MortgageFeedbackCode2,
-                    MortgageFeedbackCode3 = project.MortgageFeedbackCode3,
-                    MortgageOverTime1 = project.MortgageOverTime1,
-                    MortgageOverTime2 = project.MortgageOverTime2,
-                    MortgageOverTime3 = project.MortgageOverTime3,
-                    MortgagePredictTime1 = project.MortgagePredictTime1,
-                    MortgagePredictTime2 = project.MortgagePredictTime2,
-                    MortgagePredictTime3 = project.MortgagePredictTime3,
                     MortgagePerson = project.MortgagePerson,
                     MortgageRemark = project.MortgageRemark,
                     InsuranceFreeTime = project.InsuranceFreeTime,
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
+            tcodao.Delete(new TrackingChangeOwnerQueryForm { ProjectID = project.ID });
+            foreach (TrackingChangeOwner co in project.ChangeOwner)
+            {
+                co.ProjectID = project.ID;
+                co.Creator = co.LastUpdater = user.User.ID;
+                tcodao.Add(co);
+            }
+            tmdao.Delete(new TrackingMortgageQueryForm { ProjectID = project.ID });
+            foreach (TrackingMortgage m in project.Mortgage)
+            {
+                m.ProjectID = project.ID;
+                m.Creator = m.LastUpdater = user.User.ID;
+                tmdao.Add(m);
+            }
             return true;
         }
     }

@@ -36,9 +36,9 @@
     <isNotNull prepend="AND" property="Remark">
         `Remark` LIKE '%$Remark$%'
     </isNotNull>
-    <isNotNull property="Ids">
+    <isNotNull prepend="AND"  property="Ids">
         <iterate property="Ids" open="(" close=")" conjunction="OR">
-         Id=#Ids[]#
+         `ID`=#Ids[]#
         </iterate>
     </isNotNull>
     </dynamic>
@@ -149,6 +149,11 @@
     </isNotNull>
     <isNotNull prepend="AND" property="Remark">
         `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         `ID`=#Ids[]#
+        </iterate>
     </isNotNull>
   </delete>
    <select id="QueryUserInfoRecordCount" resultClass="int" parameterClass="UserInfoQueryForm">

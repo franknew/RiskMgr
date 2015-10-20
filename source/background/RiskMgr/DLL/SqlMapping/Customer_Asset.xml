@@ -24,12 +24,12 @@
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
-      <isNotNull prepend="AND" property="ProjectID">
+    <isNotNull prepend="AND" property="ProjectID">
         `ProjectID`=#ProjectID#
-      </isNotNull>
-    <isNotNull property="Ids">
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
         <iterate property="Ids" open="(" close=")" conjunction="OR">
-         Id=#Ids[]#
+         `ID`=#Ids[]#
         </iterate>
     </isNotNull>
     </dynamic>
@@ -40,22 +40,22 @@
     </isNotNull>
   </select>
   <insert id="AddCustomer_Asset" parameterClass="Customer_Asset">
-    INSERT INTO `Customer_Asset`
-    (
+  INSERT INTO `Customer_Asset`
+  (
     `ID`,
     `CustomerID`,
     `AssetID`,
-    `ProjectID`,
-    `Type`
-    )
-    VALUES
-    (
-    #ID#,
-    #CustomerID#,
-    #AssetID#,
-    #ProjectID#,
-    #Type#
-    )
+    `Type`,
+    `ProjectID`
+  )
+  VALUES
+  (
+        #ID#,
+        #CustomerID#,
+        #AssetID#,
+        #Type#,
+        #ProjectID#
+  )
   </insert>
   <update id="UpdateCustomer_Asset" parameterClass="Customer_AssetUpdateForm">
   UPDATE `Customer_Asset`
@@ -69,9 +69,9 @@
         <isNotNull prepend="," property="Entity.Type">
         `Type`=#Entity.Type#
         </isNotNull>
-      <isNotNull prepend="," property="Entity.ProjectID">
+        <isNotNull prepend="," property="Entity.ProjectID">
         `ProjectID`=#Entity.ProjectID#
-      </isNotNull>
+        </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="Customer_AssetQueryForm.ID">
@@ -86,9 +86,9 @@
     <isNotNull prepend="AND" property="Customer_AssetQueryForm.Type">
         `Type`=#Customer_AssetQueryForm.Type#
     </isNotNull>
-      <isNotNull prepend="AND" property="Customer_AssetQueryForm.ProjectID">
+    <isNotNull prepend="AND" property="Customer_AssetQueryForm.ProjectID">
         `ProjectID`=#Customer_AssetQueryForm.ProjectID#
-      </isNotNull>
+    </isNotNull>
     </dynamic>
   </update>
   <delete id="DeleteCustomer_Asset" parameterClass="Customer_AssetQueryForm">
@@ -106,7 +106,12 @@
         `Type`=#Type#
     </isNotNull>
     <isNotNull prepend="AND" property="ProjectID">
-      `ProjectID`=#ProjectID#
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Ids">
+        <iterate property="Ids" open="(" close=")" conjunction="OR">
+         `ID`=#Ids[]#
+        </iterate>
     </isNotNull>
   </delete>
    <select id="QueryCustomer_AssetRecordCount" resultClass="int" parameterClass="Customer_AssetQueryForm">
@@ -124,9 +129,9 @@
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
-      <isNotNull prepend="AND" property="ProjectID">
+    <isNotNull prepend="AND" property="ProjectID">
         `ProjectID`=#ProjectID#
-      </isNotNull>
+    </isNotNull>
     </dynamic>
    </select>
   </statements>

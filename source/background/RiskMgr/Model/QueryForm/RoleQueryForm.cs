@@ -10,5 +10,7 @@ namespace RiskMgr.Form
     {
         public string Remark { get; set; }
         
+        public string ParentID { get; set; }
+        
     }
 }
