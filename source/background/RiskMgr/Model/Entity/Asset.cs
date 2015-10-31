@@ -61,12 +61,17 @@ namespace RiskMgr.Model
         /// <summary>
         /// 
         /// </summary>
-        public int? Eanbled { get; set; }
+        public int? Enabled { get; set; }
         
         /// <summary>
         /// 评估过户总价
         /// </summary>
         public decimal? ChangeOwnerPrice { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? IsDeleted { get; set; }
         
     }
 }

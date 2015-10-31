@@ -10,37 +10,45 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `UserInfo` 
+    SELECT * FROM `UserInfo`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="QQ">
         `QQ`=#QQ#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Mobile">
         `Mobile`=#Mobile#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="WX">
         `WX`=#WX#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Address">
         `Address`=#Address#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Identity">
         `Identity`=#Identity#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="CnName">
         `CnName`=#CnName#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Remark">
         `Remark` LIKE '%$Remark$%'
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
-    </isNotNull>
+    
     </dynamic>
     <isNotNull property="PageSize">
         <isGreaterThan property="PageSize" compareValue="0">
@@ -129,6 +137,11 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="QQ">
         `QQ`=#QQ#
     </isNotNull>
@@ -150,17 +163,17 @@
     <isNotNull prepend="AND" property="Remark">
         `Remark`=#Remark#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
-    </isNotNull>
   </delete>
    <select id="QueryUserInfoRecordCount" resultClass="int" parameterClass="UserInfoQueryForm">
    SELECT COUNT(*) FROM `UserInfo` 
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="QQ">
         `QQ`=#QQ#

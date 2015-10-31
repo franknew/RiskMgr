@@ -7,13 +7,13 @@
 
   <statements>
     <select id="QueryProjectByRelationship" resultClass="ProjectTask" parameterClass="QueryProjectServiceForm">
-      SELECT p.*,ac.ID AS ActivityID FROM PROJECT AS p LEFT JOIN
+      SELECT p.*,ac.ID AS ActivityID FROM Project AS p 
       LEFT JOIN Customer_Project bp ON bp.ProjectID=p.ID AND bp.Type=1
       LEFT JOIN Customer AS b ON bp.CustomerID=b.ID AND b.Enabled=1
       LEFT JOIN Customer_Project bs ON bs.ProjectID=p.ID AND bp.Type=2
-      LEFT JOIN Customer AS s ON bs.CustomerID=s.ID AND s.Enabled=1
+      LEFT JOIN Customer AS s ON bs.CustomerID=s.ID AND s.Enabled=1 AND s.IsDeleted=0
       LEFT JOIN Asset_Project AS ap ON ap.ProjectID=p.ID
-      LEFT JOIN Asset AS a ON a.ID=ap.AssetID AND a.Enabled=1
+      LEFT JOIN Asset AS a ON a.ID=ap.AssetID AND a.Enabled=1 AND a.IsDeleted=0
       LEFT JOIN Workflow wf ON wf.ProcessID=p.ID
       LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID AND ac.Status=2 
       <dynamic prepend="WHERE">
@@ -233,8 +233,8 @@
         <isNotNull prepend="AND" property="AssetCode">
           a.AssetCode LIKE '%AssetCode%'
         </isNotNull>
-        <isNotNull prepend="AND" property="Address">
-          a.Address LIKE '%Address%'
+        <isNotNull prepend="AND" property="AssetAddress">
+          a.Address LIKE '%AssetAddress%'
         </isNotNull>
         <isNotNull property="PageSize">
           <isGreaterThan property="PageSize" compareValue="0">

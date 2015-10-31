@@ -25,6 +25,7 @@ namespace RiskMgr.BLL
         public List<Asset> Query(AssetQueryForm form)
         {
             AssetDao dao = new AssetDao();
+            form.IsDeleted = 0;
             return dao.Query(form);
         }
 

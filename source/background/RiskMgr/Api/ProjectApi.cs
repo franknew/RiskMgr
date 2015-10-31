@@ -72,7 +72,15 @@ namespace RiskMgr.Api
         [QueryAction]
         public List<InitApprovalResultForm> Query(QueryProjectServiceForm form)
         {
-            return bll.Query(form);
+            var list = bll.QueryProjectByRelationship(form);
+            if (list.Count == 0)
+            {
+                return new List<InitApprovalResultForm>();
+            }
+            var projectids = (from p in list select p.ID).ToList();
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            return bll.Query(projectids, userid);
         }
 
         private List<Customer_Project> GetRelationship(List<Customer> customers, int type)
@@ -100,7 +108,9 @@ namespace RiskMgr.Api
             {
                 throw new Exception("没有项目ID");
             }
-            return bll.QueryDetail(form.ID);
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            return bll.QueryDetail(form.ID, userid);
         }
 
         /// <summary>
@@ -120,7 +130,9 @@ namespace RiskMgr.Api
         [QueryAction]
         public List<InitApprovalResultForm> QueryMyApply()
         {
-            return bll.QueryMyApply();
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            return bll.QueryMyApply(userid);
         }
 
         /// <summary>

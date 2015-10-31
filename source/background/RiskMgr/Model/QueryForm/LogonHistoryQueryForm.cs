@@ -8,8 +8,10 @@ namespace RiskMgr.Form
 {
     public class LogonHistoryQueryForm : BaseQueryForm
     {
+        public List<String> IDs { get; set;}
         public string UserID { get; set; }
         
+        public List<String> UserIDs { get; set;}
         public string Token { get; set; }
         
         public DateTime? LogonTime_Start { get; set; }

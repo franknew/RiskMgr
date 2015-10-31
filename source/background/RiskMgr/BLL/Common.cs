@@ -9,6 +9,8 @@ namespace RiskMgr.BLL
 {
     public class Common
     {
+        public const string DataAuthorityKey = "_dataauthorityuseridlist";
+
         public static ISqlMapper GetMapperFromSession()
         {
             ISqlMapper mapper = null;
@@ -21,6 +23,16 @@ namespace RiskMgr.BLL
                 mapper = Mapper.Instance();
             }
             return mapper;
+        }
+
+        public static List<string> GetDataAuthorityUserIDList()
+        {
+            List<string> list = null;
+            if (ServiceSession.Current != null && ServiceSession.Current.Context.Parameters.ContainsKey("_Mapper"))
+            {
+                list = ServiceSession.Current.Context.Parameters[DataAuthorityKey] as List<string>;
+            }
+            return list;
         }
     }
 }

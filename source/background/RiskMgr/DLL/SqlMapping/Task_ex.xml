@@ -6,10 +6,10 @@
   </alias>
   <statements>
     <select id="QueryTaskByRelationship" resultClass="FullTask" parameterClass="QueryMyTaskServiceForm">
-      SELECT t.*,apply.Name AS Applier, process.Name AS Processor, wf.ProcessID AS `ProcessID` FROM Task AS t
+      SELECT t.*,apply.CnName AS Applier, process.CnName AS Processor, wf.ProcessID AS `ProcessID` FROM Task AS t
       LEFT JOIN Workflow wf ON t.WorkflowID=wf.ID
-      INNER JOIN User AS apply ON apply.ID=wf.Creator
-      INNER JOIN User AS process ON process.ID=t.UserID
+      INNER JOIN UserInfo AS apply ON apply.ID=wf.Creator
+      INNER JOIN UserInfo AS process ON process.ID=t.UserID
       <dynamic prepend="WHERE">
       <isNotNull prepend="AND" property="ID">
         t.`ID`=#ID#
@@ -68,9 +68,9 @@
         <isNotNull prepend="AND" property="ApplierName">
           `apply.Name LIKE '$ApplierName$'
         </isNotNull>
-      <isNotNull property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-          t.Id=#Ids[]#
+      <isNotNull property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+          t.Id=#IDs[]#
         </iterate>
       </isNotNull>
     </dynamic>

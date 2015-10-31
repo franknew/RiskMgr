@@ -82,11 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetApi.cs" />
-    <Compile Include="AuthFilter.cs" />
+    <Compile Include="Filter\AuthFilter.cs" />
     <Compile Include="CustomerApi.cs" />
+    <Compile Include="Filter\DataAuthorityFilter.cs" />
     <Compile Include="DataDictionaryApi.cs" />
     <Compile Include="IndexApi.cs" />
-    <Compile Include="InitDBFilter.cs" />
+    <Compile Include="Filter\InitDBFilter.cs" />
     <Compile Include="LogonApi.cs" />
     <Compile Include="ProjectApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

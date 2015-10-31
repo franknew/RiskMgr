@@ -10,37 +10,48 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `LogonHistory` 
+    SELECT * FROM `LogonHistory`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="UserID">
         `UserID`=#UserID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="UserIDs">
+        <iterate property="UserIDs" open="(" close=")" conjunction="OR">
+         `UserID`=#UserIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Token">
         `Token`=#Token#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LogonTime_Start">
         `LogonTime`&gt;=#LogonTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="LogonTime_End">
         `LogonTime`&lt;=#LogonTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="IP">
         `IP`=#IP#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="ActiveTime_Start">
         `ActiveTime`&gt;=#ActiveTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="ActiveTime_End">
         `ActiveTime`&lt;=#ActiveTime_End#
     </isNotNull>
-    <isNotNull property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         Id=#Ids[]#
-        </iterate>
-    </isNotNull>
+    
     </dynamic>
     <isNotNull property="PageSize">
         <isGreaterThan property="PageSize" compareValue="0">
@@ -119,8 +130,18 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="UserID">
         `UserID`=#UserID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="UserIDs">
+        <iterate property="UserIDs" open="(" close=")" conjunction="OR">
+         `UserID`=#UserIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Token">
         `Token`=#Token#
@@ -147,8 +168,18 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="UserID">
         `UserID`=#UserID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="UserIDs">
+        <iterate property="UserIDs" open="(" close=")" conjunction="OR">
+         `UserID`=#UserIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Token">
         `Token`=#Token#

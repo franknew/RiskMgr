@@ -10,26 +10,46 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `Customer_Asset` 
+    SELECT * FROM `Customer_Asset`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="CustomerID">
         `CustomerID`=#CustomerID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="CustomerIDs">
+        <iterate property="CustomerIDs" open="(" close=")" conjunction="OR">
+         `CustomerID`=#CustomerIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="AssetID">
         `AssetID`=#AssetID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="AssetIDs">
+        <iterate property="AssetIDs" open="(" close=")" conjunction="OR">
+         `AssetID`=#AssetIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="ProjectID">
         `ProjectID`=#ProjectID#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
+    
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
         </iterate>
     </isNotNull>
     </dynamic>
@@ -96,11 +116,26 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="CustomerID">
         `CustomerID`=#CustomerID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="CustomerIDs">
+        <iterate property="CustomerIDs" open="(" close=")" conjunction="OR">
+         `CustomerID`=#CustomerIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="AssetID">
         `AssetID`=#AssetID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="AssetIDs">
+        <iterate property="AssetIDs" open="(" close=")" conjunction="OR">
+         `AssetID`=#AssetIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
@@ -108,9 +143,9 @@
     <isNotNull prepend="AND" property="ProjectID">
         `ProjectID`=#ProjectID#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
         </iterate>
     </isNotNull>
   </delete>
@@ -120,17 +155,37 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="CustomerID">
         `CustomerID`=#CustomerID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="CustomerIDs">
+        <iterate property="CustomerIDs" open="(" close=")" conjunction="OR">
+         `CustomerID`=#CustomerIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="AssetID">
         `AssetID`=#AssetID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="AssetIDs">
+        <iterate property="AssetIDs" open="(" close=")" conjunction="OR">
+         `AssetID`=#AssetIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
     <isNotNull prepend="AND" property="ProjectID">
         `ProjectID`=#ProjectID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
     </isNotNull>
     </dynamic>
    </select>

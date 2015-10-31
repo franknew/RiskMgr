@@ -10,16 +10,29 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `Customer` 
+    SELECT * FROM `Customer`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -27,59 +40,74 @@
     <isNotNull prepend="AND" property="CreateTime_End">
         `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_End">
         `LastUpdateTime`&lt;=#LastUpdateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Gender">
         `Gender`=#Gender#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Marrage">
         `Marrage`=#Marrage#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="CardType">
         `CardType`=#CardType#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="IdentityCode">
         `IdentityCode`=#IdentityCode#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Phone">
         `Phone`=#Phone#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="OrignalName">
         `OrignalName`=#OrignalName#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="OrignalIdentityCode">
         `OrignalIdentityCode`=#OrignalIdentityCode#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="BankType">
         `BankType`=#BankType#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="BankCode">
         `BankCode`=#BankCode#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Address">
         `Address`=#Address#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="WorkUnit">
         `WorkUnit`=#WorkUnit#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Remark">
         `Remark` LIKE '%$Remark$%'
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Enabled">
         `Enabled`=#Enabled#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
+    
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
     </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -109,7 +137,8 @@
     `Address`,
     `WorkUnit`,
     `Remark`,
-    `Enabled`
+    `Enabled`,
+    `IsDeleted`
   )
   VALUES
   (
@@ -131,7 +160,8 @@
         #Address#,
         #WorkUnit#,
         #Remark#,
-        #Enabled#
+        #Enabled#,
+        #IsDeleted#
   )
   </insert>
   <update id="UpdateCustomer" parameterClass="CustomerUpdateForm">
@@ -190,6 +220,9 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.Enabled">
         `Enabled`=#Entity.Enabled#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IsDeleted">
+        `IsDeleted`=#Entity.IsDeleted#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -256,18 +289,31 @@
     <isNotNull prepend="AND" property="CustomerQueryForm.Enabled">
         `Enabled`=#CustomerQueryForm.Enabled#
     </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.IsDeleted">
+        `IsDeleted`=#CustomerQueryForm.IsDeleted#
+    </isNotNull>
     </dynamic>
   </update>
-  <delete id="DeleteCustomer" parameterClass="CustomerQueryForm">
-    DELETE FROM `Customer` WHERE 1=1
+  <update id="DeleteCustomer" parameterClass="CustomerQueryForm">
+    UPDATE `Customer` SET IsDelete=1 WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -323,12 +369,10 @@
     <isNotNull prepend="AND" property="Enabled">
         `Enabled`=#Enabled#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
     </isNotNull>
-  </delete>
+  </update>
    <select id="QueryCustomerLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Customer`
    </select>
@@ -338,11 +382,21 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -397,6 +451,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="Enabled">
         `Enabled`=#Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
     </isNotNull>
     </dynamic>
    </select>

@@ -22,7 +22,10 @@ namespace RiskMgr.Model
         /// 1.房主 2.公权人
         /// </summary>
         public int? Type { get; set; }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public string ProjectID { get; set; }
         
     }

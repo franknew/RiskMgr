@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using RiskMgr.Api;
 using RiskMgr.BLL;
 using DreamWorkflow.Engine.Model;
+using DreamWorkflow.Engine;
 
 namespace RiskMgr.WinformTest
 {
@@ -28,16 +29,16 @@ namespace RiskMgr.WinformTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string dt = "{\"dt\":\"2010-01-01\"}";
-            string dt1 = "{\"2010-01-01\"}";
-            jsonTest t = JsonHelper.Deserialize<jsonTest>(dt);
-            var t1 = JsonHelper.Deserialize<DateTime?>(dt1);
+            //string dt = "{\"dt\":\"2010-01-01\"}";
+            //string dt1 = "{\"2010-01-01\"}";
+            //jsonTest t = JsonHelper.Deserialize<jsonTest>(dt);
+            //var t1 = JsonHelper.Deserialize<DateTime?>(dt1);
 
             LogonRequest request = new LogonRequest();
             request.form = new LogonServiceForm
             {
-                UserName = "admin",
-                Password = "admin",
+                username = "admin",
+                password = "admin",
             };
             var response = SDKFactory.Client.Execute(request);
             token = response.form.token;
@@ -137,53 +138,24 @@ namespace RiskMgr.WinformTest
 
         private void button10_Click(object sender, EventArgs e)
         {
-            AddProjectRequest request = new AddProjectRequest();
-            request.form = new AddProjectServiceForm
+            string userid = "13";
+            //处理流程
+            WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
+            var workflow = wfdm.StartNew(userid, "03785300e113489ebba9ec85dd1450ed", new WorkflowAuthority());
+            //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
+            var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
+            if (task != null)
             {
-                Project = new Project
+                workflow.ProcessActivity(workflow.CurrentActivity.Value.ID, new Approval
                 {
-                    AgentName = "agent",
-                    AgentContact = "agentcontact",
-                    AssetRansomer = "frank",
-                    Creator = "frank",
-                    DealMoney = 10,
-                    EarnestMoney = 20,
-                    GuaranteeMoney = 30,
-                    GuaranteeMonth = 1,
-                    Name = "test",
-                    Source = 1,
-                    Stagnationer = "frank",
-                    SupervisionMoney = 40,
-                    SupervisionBank = "bank",
-                    TrusteeshipAccount = "aaaa",
-                    SupplyCardCopy = 1,
-                    LoanMoney = 50,
-
-                },
-                Buyers = new List<Customer>
-                {
-                    new Customer
-                    {
-                        Gender = 1,
-                        Name = "addprojecttest",
-                        OrignalIdentityCode = "111",
-                        OrignalName = "old name",
-                        BankCode = "22222",
-                        BankType = 1,
-                        CardType = 1,
-                        Enabled = 1,
-                        IdentityCode = "123123",
-                    },
-                    new Customer
-                    {
-                        ID = "420ef3acca3243af846137e30961e5ce",
-                        BankCode = "hello world",
-                    },
-                },
-            };
-            request.token = token;
-            var response = SDKFactory.Client.Execute(request);
-            MessageBox.Show(response.ResponseBody);
+                    Creator = userid,
+                    LastUpdator = userid,
+                    Remark = "test",
+                    Status = (int)ApprovalStatus.Agree,
+                    ActivityID = workflow.CurrentActivity.Value.ID,
+                    WorkflowID = workflow.Value.ID,
+                }, task.ID, userid, new WorkflowAuthority());
+            }
         }
 
         private void button11_Click(object sender, EventArgs e)
@@ -207,7 +179,8 @@ namespace RiskMgr.WinformTest
         private void button13_Click(object sender, EventArgs e)
         {
             ProjectBLL bll = new ProjectBLL();
-            var response = bll.QueryMyApply();
+            string userid = "13";
+            var response = bll.QueryMyApply(userid);
         }
 
         private void button14_Click(object sender, EventArgs e)
@@ -230,6 +203,21 @@ namespace RiskMgr.WinformTest
         {
             ProjectApi api = new ProjectApi();
             api.InitApproval(new ProjectQueryForm { ID = textBox1.Text });
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            Workflow workflow = new Workflow();
+            RoleBLL rolebll = new RoleBLL();
+            CustomerBLL customerbll = new CustomerBLL();
+            List<string> ids = rolebll.GetUserSubUserIDs("13");
+            CustomerQueryForm form = new CustomerQueryForm();
+            form.Creators = ids;
+            var list = customerbll.Query(form);
+            PagingEntity<Customer> paggingList = new PagingEntity<Customer>();
+            paggingList.Record = list;
+            paggingList.PageCount = form.PageCount;
+            paggingList.RecordCount = form.RecordCount;
         }
     }
 

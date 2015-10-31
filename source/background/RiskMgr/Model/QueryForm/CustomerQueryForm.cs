@@ -8,6 +8,8 @@ namespace RiskMgr.Form
 {
     public class CustomerQueryForm : SimpleQueryForm
     {
+        public List<String> IDs { get; set;}
+        public List<String> Creators { get; set;}
         public UInt64? Gender { get; set; }
         
         public Int32? Marrage { get; set; }
@@ -33,6 +35,8 @@ namespace RiskMgr.Form
         public string Remark { get; set; }
         
         public UInt64? Enabled { get; set; }
+        
+        public UInt64? IsDeleted { get; set; }
         
     }
 }

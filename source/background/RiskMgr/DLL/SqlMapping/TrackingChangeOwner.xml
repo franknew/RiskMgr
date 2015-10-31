@@ -10,16 +10,34 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `TrackingChangeOwner` 
+    SELECT * FROM `TrackingChangeOwner`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ProjectID">
         `ProjectID`=#ProjectID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -27,35 +45,37 @@
     <isNotNull prepend="AND" property="CreateTime_End">
         `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LastUpdater">
         `LastUpdater`=#LastUpdater#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_End">
         `LastUpdateTime`&lt;=#LastUpdateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="ChangeOwnerCode">
         `ChangeOwnerCode`=#ChangeOwnerCode#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="ChangeOwnerTime_Start">
         `ChangeOwnerTime`&gt;=#ChangeOwnerTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerTime_End">
         `ChangeOwnerTime`&lt;=#ChangeOwnerTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="NewAssetCode">
         `NewAssetCode`=#NewAssetCode#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="ChangeOwnerRemark">
         `ChangeOwnerRemark`=#ChangeOwnerRemark#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
-    </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -170,11 +190,26 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ProjectID">
         `ProjectID`=#ProjectID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -206,11 +241,6 @@
     <isNotNull prepend="AND" property="ChangeOwnerRemark">
         `ChangeOwnerRemark`=#ChangeOwnerRemark#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
-    </isNotNull>
   </delete>
    <select id="QueryTrackingChangeOwnerLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `TrackingChangeOwner`
@@ -221,11 +251,26 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ProjectID">
         `ProjectID`=#ProjectID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#

@@ -73,5 +73,10 @@ namespace RiskMgr.Model
         /// </summary>
         public int? Enabled { get; set; }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? IsDeleted { get; set; }
+        
     }
 }

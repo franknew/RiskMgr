@@ -8,6 +8,7 @@ namespace RiskMgr.Form
 {
     public class UserInfoQueryForm : BaseQueryForm
     {
+        public List<String> IDs { get; set;}
         public string QQ { get; set; }
         
         public string Mobile { get; set; }

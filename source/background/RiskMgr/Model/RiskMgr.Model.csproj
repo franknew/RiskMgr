@@ -98,7 +98,7 @@
     <Compile Include="QueryForm\LogonHistoryQueryForm.cs" />
     <Compile Include="ResultForm\InitApprovalResultForm.cs" />
     <Compile Include="ResultForm\LogonResultForm.cs" />
-    <Compile Include="ResultForm\QueryProjectResultForm.cs" />
+    <Compile Include="ServiceForm\QueryProjectRServiceForm.cs" />
     <Compile Include="ResultForm\UserInitResultForm.cs" />
     <Compile Include="ServiceForm\AddProjectServiceForm.cs" />
     <Compile Include="ServiceForm\AddUserServiceForm.cs" />

@@ -14,6 +14,8 @@ namespace RiskMgr.Model
         /// </summary>
         public WorkflowProcessStatus ProcessStatus { get; set; }
 
+        public TaskProcessStatus TaskProcessStatus { get; set; }
+
         public string Processor { get; set; }
 
         public string AcitvityID { get; set; }

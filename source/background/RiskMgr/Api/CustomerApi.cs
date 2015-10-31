@@ -23,6 +23,9 @@ namespace RiskMgr.Api
         [EditAction]
         public string Add(Customer form)
         {
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            form.Creator = form.LastUpdator = userid;
             return bll.Add(form);
         }
 
@@ -34,6 +37,9 @@ namespace RiskMgr.Api
         [EditAction]
         public bool Update(Customer form)
         {
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            form.LastUpdator = userid;
             CustomerUpdateForm updateform = new CustomerUpdateForm
             {
                 Entity = form,
@@ -59,8 +65,11 @@ namespace RiskMgr.Api
         /// <param name="form"></param>
         /// <returns></returns>
         [QueryAction]
+        [DataAuthorityFilter]
         public PagingEntity<Customer> Query(CustomerQueryForm form)
         {
+            List<string> useridList = Common.GetDataAuthorityUserIDList();
+            form.Creators = useridList;
             var list = bll.Query(form);
             PagingEntity<Customer> paggingList = new PagingEntity<Customer>();
             paggingList.Record = list;

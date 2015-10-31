@@ -18,5 +18,15 @@ namespace RiskMgr.Model
         /// </summary>
         public string ParentID { get; set; }
         
+        /// <summary>
+        /// 数据访问权限类型：1.自己和下属部门数据，2.所有数据
+        /// </summary>
+        public int? DataAccessType { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? IsDeleted { get; set; }
+        
     }
 }

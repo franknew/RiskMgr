@@ -19,7 +19,7 @@ namespace RiskMgr.Model
         public string Token { get; set; }
         
         /// <summary>
-        /// 
+        /// 登录时间
         /// </summary>
         public DateTime? LogonTime { get; set; }
         
@@ -29,7 +29,7 @@ namespace RiskMgr.Model
         public string IP { get; set; }
         
         /// <summary>
-        /// 
+        /// 活动时间
         /// </summary>
         public DateTime? ActiveTime { get; set; }
         

@@ -8,6 +8,8 @@ namespace RiskMgr.Form
 {
     public class AssetQueryForm : SimpleQueryForm
     {
+        public List<String> IDs { get; set;}
+        public List<String> Creators { get; set;}
         public string Remark { get; set; }
         
         public Int32? Type { get; set; }
@@ -32,11 +34,13 @@ namespace RiskMgr.Form
         
         public UInt64? IsTraded { get; set; }
         
-        public UInt64? Eanbled { get; set; }
+        public UInt64? Enabled { get; set; }
         
         public DateTime? ChangeOwnerPrice_Start { get; set; }
         
         public DateTime? ChangeOwnerPrice_End { get; set; }
+        
+        public UInt64? IsDeleted { get; set; }
         
     }
 }

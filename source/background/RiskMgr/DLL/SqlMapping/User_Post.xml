@@ -10,20 +10,33 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `User_Post` 
+    SELECT * FROM `User_Post`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="UserID">
         `UserID`=#UserID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="UserIDs">
+        <iterate property="UserIDs" open="(" close=")" conjunction="OR">
+         `UserID`=#UserIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="PostID">
         `PostID`=#PostID#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
+    
+        <isNotNull prepend="AND"  property="PostIDs">
+        <iterate property="PostIDs" open="(" close=")" conjunction="OR">
+         `PostID`=#PostIDs[]#
         </iterate>
     </isNotNull>
     </dynamic>
@@ -74,15 +87,25 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="UserID">
         `UserID`=#UserID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="UserIDs">
+        <iterate property="UserIDs" open="(" close=")" conjunction="OR">
+         `UserID`=#UserIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="PostID">
         `PostID`=#PostID#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
+        <isNotNull prepend="AND"  property="PostIDs">
+        <iterate property="PostIDs" open="(" close=")" conjunction="OR">
+         `PostID`=#PostIDs[]#
         </iterate>
     </isNotNull>
   </delete>
@@ -92,11 +115,26 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="UserID">
         `UserID`=#UserID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="UserIDs">
+        <iterate property="UserIDs" open="(" close=")" conjunction="OR">
+         `UserID`=#UserIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="PostID">
         `PostID`=#PostID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="PostIDs">
+        <iterate property="PostIDs" open="(" close=")" conjunction="OR">
+         `PostID`=#PostIDs[]#
+        </iterate>
     </isNotNull>
     </dynamic>
    </select>

@@ -8,6 +8,8 @@ namespace RiskMgr.Form
 {
     public class ProjectQueryForm : SimpleQueryForm
     {
+        public List<String> IDs { get; set;}
+        public List<String> Creators { get; set;}
         public Int32? Type { get; set; }
         
         public Int32? Source { get; set; }
@@ -173,6 +175,8 @@ namespace RiskMgr.Form
         public DateTime? InsuranceFreeTime_Start { get; set; }
         
         public DateTime? InsuranceFreeTime_End { get; set; }
+        
+        public UInt64? IsDeleted { get; set; }
         
     }
 }

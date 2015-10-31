@@ -33,5 +33,10 @@ namespace RiskMgr.Model
         /// </summary>
         public string ImagePath { get; set; }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? IsDeleted { get; set; }
+        
     }
 }

@@ -33,6 +33,7 @@ namespace RiskMgr.BLL
         public List<Customer> Query(CustomerQueryForm form)
         {
             CustomerDao dao = new CustomerDao();
+            form.IsDeleted = 0;
             return dao.Query(form);
         }
 

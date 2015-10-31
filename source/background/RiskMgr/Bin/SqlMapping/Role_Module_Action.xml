@@ -10,23 +10,42 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `Role_Module_Action` 
+    SELECT * FROM `Role_Module_Action`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="RoleID">
         `RoleID`=#RoleID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="RoleIDs">
+        <iterate property="RoleIDs" open="(" close=")" conjunction="OR">
+         `RoleID`=#RoleIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="ModuleID">
         `ModuleID`=#ModuleID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ModuleIDs">
+        <iterate property="ModuleIDs" open="(" close=")" conjunction="OR">
+         `ModuleID`=#ModuleIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ActionID">
         `ActionID`=#ActionID#
     </isNotNull>
-    <isNotNull property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         Id=#Ids[]#
+    
+        <isNotNull prepend="AND"  property="ActionIDs">
+        <iterate property="ActionIDs" open="(" close=")" conjunction="OR">
+         `ActionID`=#ActionIDs[]#
         </iterate>
     </isNotNull>
     </dynamic>
@@ -85,14 +104,34 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="RoleID">
         `RoleID`=#RoleID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="RoleIDs">
+        <iterate property="RoleIDs" open="(" close=")" conjunction="OR">
+         `RoleID`=#RoleIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="ModuleID">
         `ModuleID`=#ModuleID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="ModuleIDs">
+        <iterate property="ModuleIDs" open="(" close=")" conjunction="OR">
+         `ModuleID`=#ModuleIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ActionID">
         `ActionID`=#ActionID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ActionIDs">
+        <iterate property="ActionIDs" open="(" close=")" conjunction="OR">
+         `ActionID`=#ActionIDs[]#
+        </iterate>
     </isNotNull>
   </delete>
    <select id="QueryRole_Module_ActionRecordCount" resultClass="int" parameterClass="Role_Module_ActionQueryForm">
@@ -101,14 +140,34 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="RoleID">
         `RoleID`=#RoleID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="RoleIDs">
+        <iterate property="RoleIDs" open="(" close=")" conjunction="OR">
+         `RoleID`=#RoleIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="ModuleID">
         `ModuleID`=#ModuleID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="ModuleIDs">
+        <iterate property="ModuleIDs" open="(" close=")" conjunction="OR">
+         `ModuleID`=#ModuleIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ActionID">
         `ActionID`=#ActionID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ActionIDs">
+        <iterate property="ActionIDs" open="(" close=")" conjunction="OR">
+         `ActionID`=#ActionIDs[]#
+        </iterate>
     </isNotNull>
     </dynamic>
    </select>

@@ -30,6 +30,8 @@ namespace RiskMgr.BLL
             #endregion
 
             #region 处理项目信息
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
             string projectid = null;
             DateTime createstart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             DateTime createend = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
@@ -37,6 +39,7 @@ namespace RiskMgr.BLL
             string code = DateTime.Now.ToString("yyMMdd") + (index + 1).ToString();
             project.Name = code;
             project.Index = index + 1;
+            project.Creator = project.LastUpdator = user.User.ID;
             projectdao.Add(project);
             #endregion
 
@@ -61,12 +64,12 @@ namespace RiskMgr.BLL
                                 Area = asset.Area,
                                 RegPrice = asset.RegPrice,
                             },
-                            AssetQueryForm = new AssetQueryForm { ID = a.ID, Eanbled = 1 },
+                            AssetQueryForm = new AssetQueryForm { ID = a.ID, Enabled = 1 },
                         });
                     }
                     else
                     {
-                        asset.Eanbled = 1;
+                        asset.Enabled = 1;
                         assetdao.Add(asset);
                         a = asset;
                     }
@@ -195,174 +198,388 @@ namespace RiskMgr.BLL
             return projectid;
         }
 
-        public List<InitApprovalResultForm> Query(QueryProjectServiceForm form)
+        //public List<InitApprovalResultForm> Query(QueryProjectServiceForm form)
+        //{
+        //    ISqlMapper mapper = Common.GetMapperFromSession();
+        //    ProjectDao dao = new ProjectDao(mapper);
+        //    var list = dao.QueryProjectByRelationship(form);
+        //    List<InitApprovalResultForm> result = new List<InitApprovalResultForm>();
+        //    foreach (var project in list)
+        //    {
+        //        var p = QueryDetail(project.ID);
+        //        result.Add(p);
+        //    }
+        //    return result;
+        //}
+
+        private InitApprovalResultForm QueryDetail(Project project, List<Customer> customers,
+            List<Asset> assets, List<Customer_Project> cps, List<Customer_Asset> cas, List<Asset_Project> aps,
+            List<Workflow> workflows, List<Activity> activities, List<Approval> approvals, List<Task> tasks,
+            List<UserInfo> users, List<User_Role> userroles, string currentuserid)
+        {
+            InitApprovalResultForm result = new InitApprovalResultForm();
+            var customerids = (from c in cps
+                               where c.ProjectID == project.ID
+                               select c.CustomerID).ToList();
+            var assetids = (from a in aps
+                            where a.ProjectID == project.ID
+                            select a.AssetID).ToList();
+            var buyerids = (from c in cps
+                            where c.ProjectID == project.ID && c.Type == (int)CustomerType.Buyer
+                            select c.CustomerID).ToList();
+            var sellerids = (from c in cps
+                             where c.ProjectID == project.ID && c.Type == (int)CustomerType.Seller
+                             select c.CustomerID).ToList();
+
+            result.Assets = (from a in assets
+                             where assetids.Exists(t => t == a.ID)
+                             select a).ToList();
+            result.Buyers = (from c in customers
+                             where buyerids.Exists(t => t == c.ID)
+                             select c).ToList();
+            result.Sellers = (from c in customers
+                              where sellerids.Exists(t => t == c.ID)
+                              select c).ToList();
+
+            foreach (var asset in result.Assets)
+            {
+                var jointids = (from a in cas
+                                where a.AssetID == asset.ID && a.ProjectID == project.ID && a.Type == (int)CustomerType.Joint
+                                select a.CustomerID).ToList();
+                asset.Joint = (from c in customers
+                               where jointids.Exists(t => t == c.ID)
+                               select c).ToList();
+            }
+            result.Project = project;
+
+            //处理流程
+            var workflow = workflows.Find(t => t.ProcessID == project.ID);
+            if (workflow == null)
+            {
+                return result;
+            }
+            result.WorkflowID = workflow.ID;
+            var currentactivities = activities.FindAll(t => t.WorkflowID == workflow.ID);
+            var currentapprovals = approvals.FindAll(t => t.WorkflowID == workflow.ID).ToDataTable().ToList<ApprovalInfo>().ToList();
+
+            //给审批信息添加节点名称和审批人
+            foreach (var a in currentapprovals)
+            {
+                var activity = currentactivities.Find(t => t.ID == a.ActivityID);
+                if (activity != null)
+                {
+                    a.ActivityName = activity.Name;
+                }
+                var approvaluser = users.Find(t => t.ID == a.Creator);
+                if (approvaluser != null)
+                {
+                    a.Processor = approvaluser.CnName;
+                }
+            }
+            result.Approvals = currentapprovals;
+
+            //查询当前流程的当前正在处理节点
+            var processingActivity = currentactivities.Find(t => t.Status == (int)ActivityProcessStatus.Processing);
+            if (processingActivity == null)
+            {
+                return result;
+            }
+            result.CurrentActivity = processingActivity;
+            result.Action = ActionStatus.Queryable;
+            //处理财务和保后跟踪
+            Activity financeActivity = currentactivities.Find(t => t.Name.Contains("财务"));
+            if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+            {
+                result.DisplayCharge = true;
+                result.DisplayTracking = true;
+            }
+            var currenttasks = tasks.FindAll(t => t.WorkflowID == workflow.ID && t.ActivityID == processingActivity.ID);
+            //处理中流程的操作人
+
+            var useridlist = (from a in currenttasks select a.UserID).ToList();
+            var usernamelist = (from u in users
+                                where useridlist.Exists(t => t == u.ID)
+                                select u.CnName).ToList();
+
+            result.Operator = string.Join(",", usernamelist);
+            
+            string userid = currentuserid;
+            var task = tasks.Find(t => t.WorkflowID == project.ID && t.ActivityID == processingActivity.ID && t.UserID == userid);
+
+            if (task != null)
+            {
+                result.TaskID = task.ID;
+                if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid && workflow.Creator == task.UserID)
+                {
+                    result.Action = ActionStatus.Editable;
+                }
+                else if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid)
+                {
+                    result.Action = ActionStatus.Approvalable;
+                }
+            }
+            #region 为财务和保后跟踪特别处理
+            //为财务和保后跟踪特别处理
+            var roles = userroles.FindAll(t => t.UserID == userid);
+            if (roles.Exists(t => t.RoleID == "5"))//处理财务
+            {
+                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
+                {
+                    result.DisplayCharge = true;
+                    result.Action = ActionStatus.Editable;
+                }
+                else if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+                {
+                    result.DisplayCharge = true;
+                    result.ChargeCanEdit = true;
+                }
+            }
+            else if (roles.Exists(t => t.RoleID == "6"))//处理跟踪
+            {
+                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+                {
+                    result.FollowupCanEdit = true;
+                    result.Action = ActionStatus.Queryable;
+                }
+            }
+            #endregion
+
+            return result;
+        }
+
+        public List<ProjectTask> QueryProjectByRelationship(QueryProjectServiceForm form)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao dao = new ProjectDao(mapper);
             var list = dao.QueryProjectByRelationship(form);
+            return list;
+        }
+
+        public List<InitApprovalResultForm> Query(List<string> projectids, string currentuserid)
+        {
+            #region init dao
             List<InitApprovalResultForm> result = new List<InitApprovalResultForm>();
-            foreach (var project in list)
+            if (projectids == null && projectids.Count ==0)
             {
-                var p = QueryDetail(project.ID);
-                result.Add(p);
+                return result;
+            }
+
+            ISqlMapper mapper = Common.GetMapperFromSession();
+            ProjectDao dao = new ProjectDao(mapper);
+            Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
+            Customer_AssetDao cadao = new Customer_AssetDao(mapper);
+            Asset_ProjectDao apdao = new Asset_ProjectDao(mapper);
+            WorkflowDao workflowdao = new WorkflowDao(mapper);
+            ActivityDao activitydao = new ActivityDao(mapper);
+            ApprovalDao appvoraldao = new ApprovalDao(mapper);
+            TaskDao taskdao = new TaskDao(mapper);
+            UserInfoDao uidao = new UserInfoDao(mapper);
+            User_RoleDao urdao = new User_RoleDao(mapper);
+            #endregion
+
+            #region 查询数据
+            List<Customer_Project> cps = new List<Customer_Project>();
+            List<Customer_Asset> cas = new List<Customer_Asset>();
+            List<Asset_Project> aps = new List<Asset_Project>();
+            List<Activity> activities = new List<Activity>();
+            List<Approval> approvals = new List<Approval>();
+            List<Task> tasks = new List<Task>();
+            var list = dao.Query(new ProjectQueryForm { IDs = projectids });
+            var projectidlist = (from p in list
+                                 select p.ID).ToList();
+            var workflows = workflowdao.Query(new WorkflowQueryForm { ProcessIDs = projectidlist });
+            var workflowids = (from w in workflows
+                               select w.ID).ToList();
+            if (projectidlist.Count > 0)
+            {
+                cps = cpdao.Query(new Customer_ProjectQueryForm { ProjectIDs = projectidlist });
+                cas = cadao.Query(new Customer_AssetQueryForm { ProjectIDs = projectidlist });
+                aps = apdao.Query(new Asset_ProjectQueryForm { ProjectIDs = projectidlist });
+            }
+            if (workflowids.Count > 0)
+            {
+                activities = activitydao.Query(new ActivityQueryForm { WorkflowIDs = workflowids });
+                approvals = appvoraldao.Query(new ApprovalQueryForm { WorkflowIDs = workflowids });
+                tasks = taskdao.Query(new TaskQueryForm { WorkflowIDs = workflowids });
+            }
+            var users = uidao.Query(new UserInfoQueryForm { });
+            var userroles = urdao.Query(new User_RoleQueryForm { });
+
+            //从缓存中取得
+            var customers = TableCacheHelper.GetDataFromCache<Customer>(typeof(CustomerDao));
+            var assets = TableCacheHelper.GetDataFromCache<Asset>(typeof(AssetDao));
+            #endregion
+
+            foreach (Project project in list)
+            {
+                result.Add(QueryDetail(project, customers, assets, cps, cas, aps, workflows, activities, approvals, tasks, users, userroles, currentuserid));
             }
             return result;
         }
 
-        public InitApprovalResultForm QueryDetail(string projectid)
+        public InitApprovalResultForm QueryDetail(string projectid, string currentuserid)
         {
-            #region 初始化变量
-            InitApprovalResultForm form = new InitApprovalResultForm();
-            var mapper = Common.GetMapperFromSession();
-            ProjectDao projectdao = new ProjectDao(mapper);
-            CustomerDao customerdao = new CustomerDao(mapper);
-            AssetDao assetdao = new AssetDao(mapper);
-            Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
-            Customer_AssetDao cadao = new Customer_AssetDao(mapper);
-            Asset_ProjectDao apdao = new Asset_ProjectDao(mapper);
-            WorkflowDao wfdao = new WorkflowDao(mapper);
-            ActivityDao acdao = new ActivityDao(mapper);
-            TaskDao taskdao = new TaskDao(mapper);
-            ApprovalDao appdao = new ApprovalDao(mapper);
-            User_RoleDao urdao = new User_RoleDao(mapper);
-            RoleDao roledao = new RoleDao(mapper);
-            UserInfoDao userdao = new UserInfoDao(mapper);
-            #endregion
-
-            form.Project = projectdao.Query(new ProjectQueryForm { ID = projectid }).FirstOrDefault();
-            if (form.Project == null)
+            List<string> projectids = new List<string>
             {
-                return form;
-            }
-            var cps = cpdao.Query(new Customer_ProjectQueryForm { ProjectID = projectid });
-            var aps = apdao.Query(new Asset_ProjectQueryForm { ProjectID = projectid });
-            List<string> customerids = new List<string>();
-            List<string> assetids = new List<string>();
-            foreach (var cp in cps)
-            {
-                customerids.Add(cp.CustomerID);
-            }
-            foreach (var ap in aps)
-            {
-                assetids.Add(ap.AssetID);
-            }
-            //处理客户
-            var buyerids = (from a in cps.FindAll(t => t.Type == (int)CustomerType.Buyer)
-                            select a.CustomerID).ToList();
-            var sellerids = (from a in cps.FindAll(t => t.Type == (int)CustomerType.Seller)
-                             select a.CustomerID).ToList();
-            form.Buyers = customerdao.Query(new CustomerQueryForm { Ids = buyerids });
-            form.Sellers = customerdao.Query(new CustomerQueryForm { Ids = sellerids });
-            //处理房产和公权人
-            form.Assets = assetdao.Query(new AssetQueryForm { Ids = assetids });
-            if (form.Assets != null)
-            {
-                foreach (var a in form.Assets)
-                {
-                    var jointids = (from t in cadao.Query(new Customer_AssetQueryForm { AssetID = a.ID, ProjectID = projectid })
-                                    select t.CustomerID).ToList();
-                    a.Joint = customerdao.Query(new CustomerQueryForm { Ids = jointids });
-                }
-            }
-
-            UserBLL userbll = new UserBLL();
-            var user = userbll.GetCurrentUser();
-            string userid = user.User.ID;
-            //string userid = "3";
-
-            #region 处理流程
-            //处理流程相关信息
-            var workflow = wfdao.Query(new WorkflowQueryForm { ProcessID = projectid }).FirstOrDefault();
-            if (workflow != null)
-            {
-                //查询所有审批人的信息
-                form.WorkflowID = workflow.ID;
-                var approvals = appdao.Query(new ApprovalQueryForm { WorkflowID = form.WorkflowID });
-                List<string> useridlist = (from a in approvals select a.Creator).ToList();
-                List<UserInfo> userlist = userdao.Query(new UserInfoQueryForm { Ids = useridlist });
-
-                var activities = acdao.Query(new ActivityQueryForm { WorkflowID = form.WorkflowID });
-                //查询历史审批意见
-                List<ApprovalInfo> approvalinfo = approvals.ToDataTable().ToList<ApprovalInfo>().ToList();
-                foreach (var a in approvalinfo)
-                {
-                    var ac = activities.Find(t => t.ID == a.ActivityID);
-                    if (ac != null)
-                    {
-                        a.ActivityName = ac.Name;
-                    }
-                    var userinfo = userlist.Find(t => t.ID == a.Creator);
-                    if (userinfo != null)
-                    {
-                        a.Processor = userinfo.CnName;
-                    }
-                }
-                form.Approvals = approvalinfo;
-                form.Action = ActionStatus.Queryable;
-                var activity = activities.Find(t => t.Status == (int)ActivityProcessStatus.Processing);
-                //处理财务和跟踪的显示问题
-                Activity financeActivity = activities.Find(t => t.Name.Contains("财务"));
-                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
-                {
-                    form.DisplayCharge = true;
-                    form.DisplayTracking = true;
-                }
-                //获得流程相关的信息
-                if (activity != null)
-                {
-                    //处理中流程的操作人
-                    var activeTasks = taskdao.Query(new TaskQueryForm { ActivityID = activity.ID });
-                    useridlist = (from a in activeTasks select a.UserID).ToList();
-                    userlist = userdao.Query(new UserInfoQueryForm { Ids = useridlist });
-
-                    form.Operator = string.Join(",", (from u in userlist select u.CnName).ToArray());
-
-                    form.CurrentActivity = activity;
-
-                    var task = taskdao.Query(new TaskQueryForm { ActivityID = activity.ID, UserID = userid }).FirstOrDefault();
-                    if (task != null)
-                    {
-                        form.TaskID = task.ID;
-                        if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid && workflow.Creator == task.UserID)
-                        {
-                            form.Action = ActionStatus.Editable;
-                        }
-                        else if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid)
-                        {
-                            form.Action = ActionStatus.Approvalable;
-                        }
-                    }
-                    #region 为财务和保后跟踪特别处理
-                    //为财务和保后跟踪特别处理
-                    var roles = urdao.Query(new User_RoleQueryForm { UserID = userid });
-                    if (roles.Exists(t=>t.RoleID == "5"))//处理财务
-                    {
-                        if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
-                        {
-                            form.DisplayCharge = true;
-                            form.Action = ActionStatus.Editable;
-                        }
-                        else if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
-                        {
-                            form.DisplayCharge = true;
-                            form.ChargeCanEdit = true;
-                        }
-                    }
-                    else if (roles.Exists(t=>t.RoleID == "6"))//处理跟踪
-                    {
-                        if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
-                        {
-                            form.FollowupCanEdit = true;
-                            form.Action = ActionStatus.Queryable;
-                        }
-                    }
-                    #endregion
-                }
-            }
-            #endregion
-
-            return form;
+                projectid,
+            };
+            return Query(projectids, currentuserid).FirstOrDefault();
         }
+
+        //public InitApprovalResultForm QueryDetail(string projectid)
+        //{
+        //    #region 初始化变量
+        //    InitApprovalResultForm form = new InitApprovalResultForm();
+        //    var mapper = Common.GetMapperFromSession();
+        //    ProjectDao projectdao = new ProjectDao(mapper);
+        //    CustomerDao customerdao = new CustomerDao(mapper);
+        //    AssetDao assetdao = new AssetDao(mapper);
+        //    Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
+        //    Customer_AssetDao cadao = new Customer_AssetDao(mapper);
+        //    Asset_ProjectDao apdao = new Asset_ProjectDao(mapper);
+        //    WorkflowDao wfdao = new WorkflowDao(mapper);
+        //    ActivityDao acdao = new ActivityDao(mapper);
+        //    TaskDao taskdao = new TaskDao(mapper);
+        //    ApprovalDao appdao = new ApprovalDao(mapper);
+        //    User_RoleDao urdao = new User_RoleDao(mapper);
+        //    RoleDao roledao = new RoleDao(mapper);
+        //    UserInfoDao userdao = new UserInfoDao(mapper);
+        //    #endregion
+
+        //    form.Project = projectdao.Query(new ProjectQueryForm { ID = projectid }).FirstOrDefault();
+        //    if (form.Project == null)
+        //    {
+        //        return form;
+        //    }
+        //    var cps = cpdao.Query(new Customer_ProjectQueryForm { ProjectID = projectid });
+        //    var aps = apdao.Query(new Asset_ProjectQueryForm { ProjectID = projectid });
+        //    List<string> customerids = new List<string>();
+        //    List<string> assetids = new List<string>();
+        //    foreach (var cp in cps)
+        //    {
+        //        customerids.Add(cp.CustomerID);
+        //    }
+        //    foreach (var ap in aps)
+        //    {
+        //        assetids.Add(ap.AssetID);
+        //    }
+        //    //处理客户
+        //    var buyerids = (from a in cps.FindAll(t => t.Type == (int)CustomerType.Buyer)
+        //                    select a.CustomerID).ToList();
+        //    var sellerids = (from a in cps.FindAll(t => t.Type == (int)CustomerType.Seller)
+        //                     select a.CustomerID).ToList();
+        //    form.Buyers = customerdao.Query(new CustomerQueryForm { Ids = buyerids });
+        //    form.Sellers = customerdao.Query(new CustomerQueryForm { Ids = sellerids });
+        //    //处理房产和公权人
+        //    form.Assets = assetdao.Query(new AssetQueryForm { Ids = assetids });
+        //    if (form.Assets != null)
+        //    {
+        //        foreach (var a in form.Assets)
+        //        {
+        //            var jointids = (from t in cadao.Query(new Customer_AssetQueryForm { AssetID = a.ID, ProjectID = projectid })
+        //                            select t.CustomerID).ToList();
+        //            a.Joint = customerdao.Query(new CustomerQueryForm { Ids = jointids });
+        //        }
+        //    }
+
+        //    UserBLL userbll = new UserBLL();
+        //    var user = userbll.GetCurrentUser();
+        //    string userid = user.User.ID;
+        //    //string userid = "3";
+
+        //    #region 处理流程
+        //    //处理流程相关信息
+        //    var workflow = wfdao.Query(new WorkflowQueryForm { ProcessID = projectid }).FirstOrDefault();
+        //    if (workflow != null)
+        //    {
+        //        //查询所有审批人的信息
+        //        form.WorkflowID = workflow.ID;
+        //        var approvals = appdao.Query(new ApprovalQueryForm { WorkflowID = form.WorkflowID });
+        //        List<string> useridlist = (from a in approvals select a.Creator).ToList();
+        //        List<UserInfo> userlist = userdao.Query(new UserInfoQueryForm { Ids = useridlist });
+
+        //        var activities = acdao.Query(new ActivityQueryForm { WorkflowID = form.WorkflowID });
+        //        //查询历史审批意见
+        //        List<ApprovalInfo> approvalinfo = approvals.ToDataTable().ToList<ApprovalInfo>().ToList();
+        //        foreach (var a in approvalinfo)
+        //        {
+        //            var ac = activities.Find(t => t.ID == a.ActivityID);
+        //            if (ac != null)
+        //            {
+        //                a.ActivityName = ac.Name;
+        //            }
+        //            var userinfo = userlist.Find(t => t.ID == a.Creator);
+        //            if (userinfo != null)
+        //            {
+        //                a.Processor = userinfo.CnName;
+        //            }
+        //        }
+        //        form.Approvals = approvalinfo;
+        //        form.Action = ActionStatus.Queryable;
+        //        var activity = activities.Find(t => t.Status == (int)ActivityProcessStatus.Processing);
+        //        //处理财务和跟踪的显示问题
+        //        Activity financeActivity = activities.Find(t => t.Name.Contains("财务"));
+        //        if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+        //        {
+        //            form.DisplayCharge = true;
+        //            form.DisplayTracking = true;
+        //        }
+        //        //获得流程相关的信息
+        //        if (activity != null)
+        //        {
+        //            //处理中流程的操作人
+        //            var activeTasks = taskdao.Query(new TaskQueryForm { ActivityID = activity.ID });
+        //            useridlist = (from a in activeTasks select a.UserID).ToList();
+        //            userlist = userdao.Query(new UserInfoQueryForm { Ids = useridlist });
+
+        //            form.Operator = string.Join(",", (from u in userlist select u.CnName).ToArray());
+
+        //            form.CurrentActivity = activity;
+
+        //            var task = taskdao.Query(new TaskQueryForm { ActivityID = activity.ID, UserID = userid }).FirstOrDefault();
+        //            if (task != null)
+        //            {
+        //                form.TaskID = task.ID;
+        //                if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid && workflow.Creator == task.UserID)
+        //                {
+        //                    form.Action = ActionStatus.Editable;
+        //                }
+        //                else if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid)
+        //                {
+        //                    form.Action = ActionStatus.Approvalable;
+        //                }
+        //            }
+        //            #region 为财务和保后跟踪特别处理
+        //            //为财务和保后跟踪特别处理
+        //            var roles = urdao.Query(new User_RoleQueryForm { UserID = userid });
+        //            if (roles.Exists(t => t.RoleID == "5"))//处理财务
+        //            {
+        //                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
+        //                {
+        //                    form.DisplayCharge = true;
+        //                    form.Action = ActionStatus.Editable;
+        //                }
+        //                else if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+        //                {
+        //                    form.DisplayCharge = true;
+        //                    form.ChargeCanEdit = true;
+        //                }
+        //            }
+        //            else if (roles.Exists(t => t.RoleID == "6"))//处理跟踪
+        //            {
+        //                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
+        //                {
+        //                    form.FollowupCanEdit = true;
+        //                    form.Action = ActionStatus.Queryable;
+        //                }
+        //            }
+        //            #endregion
+        //        }
+        //    }
+        //    #endregion
+
+        //    return form;
+        //}
 
         public List<Project> QueryMyProject(WorkflowProcessStatus processStatus)
         {
@@ -372,34 +589,28 @@ namespace RiskMgr.BLL
             ProjectDao projectdao = new ProjectDao(mapper);
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
-            var tasks = taskdao.Query(new TaskQueryForm { UserID = user.User.ID });
+            string userid = user.User.ID;
+            //string userid = "13";
+            var tasks = taskdao.Query(new TaskQueryForm { UserID = userid });
             List<string> workflowids = (from t in tasks
                                         select t.WorkflowID).ToList();
-            var workflows = wfdao.Query(new WorkflowQueryForm { Ids = workflowids, Status = (int)processStatus });
+            var workflows = wfdao.Query(new WorkflowQueryForm { IDs = workflowids, Status = (int)processStatus });
             List<string> projectids = (from wf in workflows
                                        select wf.ProcessID).ToList();
-            return projectdao.Query(new ProjectQueryForm { Ids = projectids });
+            return projectdao.Query(new ProjectQueryForm { IDs = projectids });
         }
 
-        public List<InitApprovalResultForm> QueryMyApply()
+        public List<InitApprovalResultForm> QueryMyApply(string curentuserid)
         {
             List<InitApprovalResultForm> list = new List<InitApprovalResultForm>();
             ISqlMapper mapper = Common.GetMapperFromSession();
             UserBLL userbll = new UserBLL();
-            var user = userbll.GetCurrentUser();
             WorkflowDao wfdao = new WorkflowDao(mapper);
             ProjectDao projectdao = new ProjectDao(mapper);
             var users = TableCacheHelper.GetDataFromCache<User>(typeof(UserDao));
-            var workflows = wfdao.Query(new WorkflowQueryForm { Creator = user.User.ID });
-            foreach (Workflow wf in workflows)
-            {
-                if (!string.IsNullOrEmpty(wf.ProcessID))
-                {
-                    var form = QueryDetail(wf.ProcessID);
-                    list.Add(form);
-                }
-            }
-            return list;
+            var workflows = wfdao.Query(new WorkflowQueryForm { Creator = curentuserid });
+            var projectids = (from w in workflows select w.ProcessID).ToList();
+            return Query(projectids, curentuserid);
         }
 
         public bool UpdateFinance(string workflowid, string activityid, string taskid, Project project)
@@ -456,6 +667,7 @@ namespace RiskMgr.BLL
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
+            //过户信息处理
             tcodao.Delete(new TrackingChangeOwnerQueryForm { ProjectID = project.ID });
             foreach (TrackingChangeOwner co in project.ChangeOwner)
             {
@@ -463,6 +675,7 @@ namespace RiskMgr.BLL
                 co.Creator = co.LastUpdater = user.User.ID;
                 tcodao.Add(co);
             }
+            //借贷信息处理
             tmdao.Delete(new TrackingMortgageQueryForm { ProjectID = project.ID });
             foreach (TrackingMortgage m in project.Mortgage)
             {

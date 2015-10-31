@@ -2,8 +2,8 @@
 <sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
   <statements>
     <select id="QueryRoleByUserID" resultClass="Role" parameterClass="string">
-      SELECT * FROM Role r
-      INNER JOIN User_Role ur ON r.ID=ur.UserID
+      SELECT r.* FROM Role r
+      INNER JOIN User_Role ur ON r.ID=ur.RoleID
       WHERE ur.UserID = #UserID#
     </select>
   </statements>

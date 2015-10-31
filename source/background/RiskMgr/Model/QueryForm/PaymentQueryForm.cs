@@ -8,8 +8,10 @@ namespace RiskMgr.Form
 {
     public class PaymentQueryForm : BaseQueryForm
     {
+        public List<String> IDs { get; set;}
         public string BankAccountID { get; set; }
         
+        public List<String> BankAccountIDs { get; set;}
         public DateTime? Paid_Start { get; set; }
         
         public DateTime? Paid_End { get; set; }

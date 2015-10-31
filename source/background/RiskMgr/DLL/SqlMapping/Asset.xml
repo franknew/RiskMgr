@@ -10,16 +10,29 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `Asset` 
+    SELECT * FROM `Asset`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -27,65 +40,79 @@
     <isNotNull prepend="AND" property="CreateTime_End">
         `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_End">
         `LastUpdateTime`&lt;=#LastUpdateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Remark">
         `Remark` LIKE '%$Remark$%'
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Usage">
         `Usage`=#Usage#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Position">
         `Position`=#Position#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Address">
         `Address`=#Address#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Code">
         `Code`=#Code#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Area_Start">
         `Area`&gt;=#Area_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="Area_End">
         `Area`&lt;=#Area_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="RegPrice_Start">
         `RegPrice`&gt;=#RegPrice_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="RegPrice_End">
         `RegPrice`&lt;=#RegPrice_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="IssueType">
         `IssueType`=#IssueType#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="IsTraded">
         `IsTraded`=#IsTraded#
     </isNotNull>
-    <isNotNull prepend="AND" property="Eanbled">
-        `Eanbled`=#Eanbled#
+    
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="ChangeOwnerPrice_Start">
         `ChangeOwnerPrice`&gt;=#ChangeOwnerPrice_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerPrice_End">
         `ChangeOwnerPrice`&lt;=#ChangeOwnerPrice_End#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
+    
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
     </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -113,8 +140,9 @@
     `RegPrice`,
     `IssueType`,
     `IsTraded`,
-    `Eanbled`,
-    `ChangeOwnerPrice`
+    `Enabled`,
+    `ChangeOwnerPrice`,
+    `IsDeleted`
   )
   VALUES
   (
@@ -134,8 +162,9 @@
         #RegPrice#,
         #IssueType#,
         #IsTraded#,
-        #Eanbled#,
-        #ChangeOwnerPrice#
+        #Enabled#,
+        #ChangeOwnerPrice#,
+        #IsDeleted#
   )
   </insert>
   <update id="UpdateAsset" parameterClass="AssetUpdateForm">
@@ -186,11 +215,14 @@
         <isNotNull prepend="," property="Entity.IsTraded">
         `IsTraded`=#Entity.IsTraded#
         </isNotNull>
-        <isNotNull prepend="," property="Entity.Eanbled">
-        `Eanbled`=#Entity.Eanbled#
+        <isNotNull prepend="," property="Entity.Enabled">
+        `Enabled`=#Entity.Enabled#
         </isNotNull>
         <isNotNull prepend="," property="Entity.ChangeOwnerPrice">
         `ChangeOwnerPrice`=#Entity.ChangeOwnerPrice#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IsDeleted">
+        `IsDeleted`=#Entity.IsDeleted#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -254,8 +286,8 @@
     <isNotNull prepend="AND" property="AssetQueryForm.IsTraded">
         `IsTraded`=#AssetQueryForm.IsTraded#
     </isNotNull>
-    <isNotNull prepend="AND" property="AssetQueryForm.Eanbled">
-        `Eanbled`=#AssetQueryForm.Eanbled#
+    <isNotNull prepend="AND" property="AssetQueryForm.Enabled">
+        `Enabled`=#AssetQueryForm.Enabled#
     </isNotNull>
     <isNotNull prepend="AND" property="AssetQueryForm.ChangeOwnerPrice_Start">
         `ChangeOwnerPrice`&gt;=#AssetQueryForm.ChangeOwnerPrice_Start#
@@ -263,18 +295,31 @@
     <isNotNull prepend="AND" property="AssetQueryForm.ChangeOwnerPrice_End">
         `ChangeOwnerPrice`&lt;=#AssetQueryForm.ChangeOwnerPrice_End#
     </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.IsDeleted">
+        `IsDeleted`=#AssetQueryForm.IsDeleted#
+    </isNotNull>
     </dynamic>
   </update>
-  <delete id="DeleteAsset" parameterClass="AssetQueryForm">
-    DELETE FROM `Asset` WHERE 1=1
+  <update id="DeleteAsset" parameterClass="AssetQueryForm">
+    UPDATE `Asset` SET IsDelete=1 WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -327,8 +372,8 @@
     <isNotNull prepend="AND" property="IsTraded">
         `IsTraded`=#IsTraded#
     </isNotNull>
-    <isNotNull prepend="AND" property="Eanbled">
-        `Eanbled`=#Eanbled#
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerPrice_Start">
         `ChangeOwnerPrice`&gt;=#ChangeOwnerPrice_Start#
@@ -336,12 +381,10 @@
     <isNotNull prepend="AND" property="ChangeOwnerPrice_End">
         `ChangeOwnerPrice`&lt;=#ChangeOwnerPrice_End#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
     </isNotNull>
-  </delete>
+  </update>
    <select id="QueryAssetLastUpdateTime" resultClass="DateTime">
         SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Asset`
    </select>
@@ -351,11 +394,21 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -408,14 +461,17 @@
     <isNotNull prepend="AND" property="IsTraded">
         `IsTraded`=#IsTraded#
     </isNotNull>
-    <isNotNull prepend="AND" property="Eanbled">
-        `Eanbled`=#Eanbled#
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerPrice_Start">
         `ChangeOwnerPrice`&gt;=#ChangeOwnerPrice_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerPrice_End">
         `ChangeOwnerPrice`&lt;=#ChangeOwnerPrice_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
     </isNotNull>
     </dynamic>
    </select>

@@ -26,7 +26,7 @@ namespace RiskMgr.Api
         [NoneAuthFilter]
         public LogonResultForm Logon(LogonServiceForm form)
         {
-            var result = bll.Logon(form.UserName, form.Password);
+            var result = bll.Logon(form.username, form.password);
             MenuBLL menubll = new MenuBLL();
             result.Menu = menubll.GetCurrentUserMenu(result.token);
             return result;

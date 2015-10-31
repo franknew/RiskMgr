@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DreamWorkflow.Engine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,7 @@ namespace RiskMgr.Form
         public string AssetCode { get; set; }
 
         public string AssetAddress { get; set; }
+
+        public TaskProcessStatus TaskProcessStatus { get; set; }
     }
 }

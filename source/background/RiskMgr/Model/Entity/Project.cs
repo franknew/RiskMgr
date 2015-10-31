@@ -303,5 +303,10 @@ namespace RiskMgr.Model
         /// </summary>
         public DateTime? InsuranceFreeTime { get; set; }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? IsDeleted { get; set; }
+        
     }
 }

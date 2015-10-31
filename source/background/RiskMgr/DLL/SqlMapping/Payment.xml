@@ -10,13 +10,25 @@
     <isGreaterThan compareProperty="PageSize" compareValue="0">
     
     </isGreaterThan>
-    SELECT * FROM `Payment` 
+    SELECT * FROM `Payment`
     <dynamic prepend="WHERE">
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="BankAccountID">
         `BankAccountID`=#BankAccountID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="BankAccountIDs">
+        <iterate property="BankAccountIDs" open="(" close=")" conjunction="OR">
+         `BankAccountID`=#BankAccountIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Paid_Start">
         `Paid`&gt;=#Paid_Start#
@@ -24,20 +36,18 @@
     <isNotNull prepend="AND" property="Paid_End">
         `Paid`&lt;=#Paid_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="PayTime_Start">
         `PayTime`&gt;=#PayTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="PayTime_End">
         `PayTime`&lt;=#PayTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
-    </isNotNull>
+    
     </dynamic>
     <isNotNull property="PageSize">
         <isGreaterThan property="PageSize" compareValue="0">
@@ -108,8 +118,18 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="BankAccountID">
         `BankAccountID`=#BankAccountID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="BankAccountIDs">
+        <iterate property="BankAccountIDs" open="(" close=")" conjunction="OR">
+         `BankAccountID`=#BankAccountIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Paid_Start">
         `Paid`&gt;=#Paid_Start#
@@ -126,11 +146,6 @@
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Ids">
-        <iterate property="Ids" open="(" close=")" conjunction="OR">
-         `ID`=#Ids[]#
-        </iterate>
-    </isNotNull>
   </delete>
    <select id="QueryPaymentRecordCount" resultClass="int" parameterClass="PaymentQueryForm">
    SELECT COUNT(*) FROM `Payment` 
@@ -138,8 +153,18 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="BankAccountID">
         `BankAccountID`=#BankAccountID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="BankAccountIDs">
+        <iterate property="BankAccountIDs" open="(" close=")" conjunction="OR">
+         `BankAccountID`=#BankAccountIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Paid_Start">
         `Paid`&gt;=#Paid_Start#
