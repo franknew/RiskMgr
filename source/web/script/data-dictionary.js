@@ -159,18 +159,19 @@ define(function(require, exports, module){
 
 		"赎楼方式":[{
 			value:"1",
-			name:"111"
-		},{
-			value:"2",
-			name:"2222"
+			name:"现金",
+			selected:true
 		}],
 
 		"收费方式":[{
 			value:"1",
-			name:"111"
+			name:"现金"
 		},{
 			value:"2",
-			name:"2222"
+			name:"转账"
+		},{
+			value:"3",
+			name:"刷卡"
 		}],
 
 		"公积金中心":[{
@@ -196,6 +197,20 @@ define(function(require, exports, module){
 		},{
 			value:"5",
 			name:"管理员"
+		}],
+
+		"共权人类型":[{
+			value:"1",
+			name:"房产共权人"
+		},{
+			value:"2",
+			name:"配偶"
+		},{
+			value:"3",
+			name:"第三方借款人"
+		},{
+			value:"4",
+			name:"辅助联系人"
 		}]
 	};
 

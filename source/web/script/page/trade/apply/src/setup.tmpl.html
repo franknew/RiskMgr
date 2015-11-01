@@ -1,42 +1,40 @@
 <script type="text/html" id="Setup">
 <%
 	//测试数据
-	/**
-	if (data.data) {
-	data.data["Approvals"]  = {
-			"CurrentWorkflow":{
-				"handler":"李振文"
-			}
-			,"Done":[{
-				"title":"之前的审批123",
-				"key":"ApprovalTest123",
-				"content":"我同意啊哈哈",
-				"handler":"李振文",
-				"time":1443670754853
-			}]
-			,"CurrentApproval":[{
-				"title":"审批标题啊",
-				"key":"ApprovalTest222"
-			},{
-				"title":"可以多个审批标题不",
-				"key":"ApprovalTest333"
-			}]
-		};
+	if (location.href.indexOf('testdata')!=-1) {
+		data.mode = 'view';
+		data.data = data.data || {};
+		if (data.data) {
+		data.data["Approvals"]  = {
+				"CurrentWorkflow":{
+					"handler":"李振文"
+				}
+				,"Done":[{
+					"title":"之前的审批123",
+					"key":"ApprovalTest123",
+					"content":"我同意啊哈哈",
+					"handler":"李振文",
+					"time":1443670754853
+				}]
+				,"CurrentApproval":[{
+					"title":"审批标题啊",
+					"key":"ApprovalTest222"
+				},{
+					"title":"可以多个审批标题不",
+					"key":"ApprovalTest333"
+				}]
+			};
 
-		data.data["ChargeCanEdit"]  = true;
-		data.data["Charge"]  = {"key":"value"};
+			data.data["DisplayCharge"]  = true;
+			data.data["Charge"]  = {"key":"value"};
 
-		data.data["FollowupCanEdit"]  = true;
-		data.data["Followup"]  = {"key":"value"};
+			data.data["DisplayTracking"]  = true;
+			data.data["Followup"]  = {"key":"value"};
+			data.data['FollowupCanEdit'] = true;
+
+			data.data["ChargeCanEdit"] = true;
+		}
 	}
-	**/
-
-	/**
-	if (data.data){
-		data.data["ChargeCanEdit"] = true;
-		data.data["FollowupCanEdit"] = true;
-	}
-	**/
 %>
 
 <%
@@ -51,7 +49,7 @@
 %>
 
 <div class="col-md-12">
-<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>
+<button class="btn btn btn-danger" id="TEST" style="position:absolute;top:-80px;right:80px;">直接提交测试数据</button>
 	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">
 		<ul class="wizard-steps">
 			<%if (data.mode=='add') {%>
@@ -59,6 +57,7 @@
 			<%}%>
 			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>
 			<li data-target="Assets">房产信息<span class="chevron"></span></li>
+			<li data-target="Guarantor">担保人<span class="chevron"></span></li>
 			<li data-target="Project">项目信息<span class="chevron"></span></li>
 
 			<%if (ShowApproval) {%>
@@ -77,6 +76,7 @@
 		<div class="step-content">
 			<%=this.SetupCustomer(data)%>
 			<%=this.SetupProperty(data)%>
+			<%=this.SetupGuarantor(data)%>
 			<%=this.SetupProject(data)%>
 
 			<%if (ShowApproval) {%>

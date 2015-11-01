@@ -13,9 +13,7 @@
 				<h3>收费情况</h3>
 			</div>
 			<div class="content">
-				<div class="well">
-					<%=Former.make(TplCharge,{data:ChargeData,disabled:!ChargeCanEdit})%>
-				</div>
+				<%=Former.make(TplCharge,{data:ChargeData,disabled:!ChargeCanEdit})%>
 			</div>
 		</div>
 		<%if (ChargeCanEdit) {%>

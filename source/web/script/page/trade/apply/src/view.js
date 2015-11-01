@@ -16,6 +16,7 @@ define(function(require, exports, module){
 
 	var Customer = require('./setup.customer'),
 		Property = require('./setup.property'),
+		Guarantor = require('./setup.guarantor'),
 		Project = require('./setup.project'),
 		Approval = require('./setup.approval'),
 		Charge = require('./setup.charge'),
@@ -57,6 +58,9 @@ define(function(require, exports, module){
 						}else {
 							that.submit(mode);
 						}
+					},
+					Guarantor:function() {
+						console.log('Guarantor:::',Guarantor.getData());
 					}
 				});
 			//}
@@ -73,6 +77,7 @@ define(function(require, exports, module){
 		_initEvent:function() {
 			Customer.init();
 			Property.init();
+			Guarantor.init();
 			Project.init();
 			Approval.init();
 			Charge.init();
@@ -98,7 +103,8 @@ define(function(require, exports, module){
 					Buyers:dataCustomer.buyer,
 					Sellers:dataCustomer.seller,
 					Assets:Property.getData(),
-					Project:Project.getData()
+					Project:Project.getData(),
+					Guarantor:Guarantor.getData()
 				};
 			}
 

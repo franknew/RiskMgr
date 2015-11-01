@@ -1,0 +1,85 @@
+<script type="text/html" id="SetupGuarantor">
+<%
+	var FormData = data.data || {};
+%>
+<div class="step-pane" id="Guarantor">
+	<div class="block-transparent">
+		<div class="header">
+			<h3>担保人 <!--<%if (data.canEdit) {%><button type="button" class="btn btn-default" data-hook="guarantor-import"><i class="fa fa-sign-in"></i> 导入现有客户</button><%}%>--></h3>
+		</div>
+		<div class="content">
+			<div class="list-group tickets" id="GuarantorBase"></div>
+			<%if (data.canEdit) {%>
+			<button type="button" class="btn btn-success" data-hook="guarantor-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加担保人&nbsp;&nbsp;</button>
+			<%}%>
+		</div>
+	</div>
+
+	<%if (data.canEdit) {%>
+	<div class="form-group">
+		<div class="text-center col-sm-12">
+			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>
+			&nbsp;&nbsp;
+			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>
+		</div>
+	</div>
+	<%}%>
+</div>
+</script>
+
+<script type="text/html" id="GuarantorItem">
+<%
+	var Former = require('risk/components/former/index'),
+		TplCustomer = require('risk/page/customer/tpl.view');
+%>
+
+	<div class="list-group-item">
+		<div class="j-guarantor-form">
+			<%=Former.make(TplCustomer,{
+				data:data,
+				disabled:!data.canEdit,
+				onlyRequired:true
+			})%>
+			<div class="form-group">
+				<div class="col-sm-2"><label class="control-label media-object">备注</label></div>
+				<div class="col-sm-10"><textarea name="GuarantorRemark" class="form-control"></textarea></div>
+			</div>
+		</div>
+		<hr style="border-bottom:1px dashed #dadada"/>
+		<div class="col-sm-offset-2 j-guarantor-house">
+
+			<%=this.GuarantorPropertyItem({
+				canEdit:true
+			})%>
+
+		</div>
+		<div class="col-sm-offset-2">
+			<button class="btn btn-default" data-hook="guarantor-addhouse"><i class="fa fa-plus"></i>增加房产</button>
+		</div>
+
+		<%if (data.canEdit) {%>
+		<hr style="border-bottom:1px dashed #dadada"/>
+		<div class="col-sm-offset-1">
+			<button type="button" class="btn btn-danger" data-hook="guarantor-remove">移除该担保人</button>
+		</div>
+		<%}%>
+	</div>
+</script>
+<script type="text/html" id="GuarantorPropertyItem">
+<%
+	var Former = require('risk/components/former/index'),
+		TplProperty = require('risk/page/Property/tpl.view');
+%>
+<div class="well well-sm j-houseitem">
+<%=Former.make(TplProperty,{
+	data:data,
+	disabled:!data.canEdit,
+	onlyRequired:true
+})%>
+		<%if (data.canEdit) {%>
+		<div class="col-sm-offset-1">
+			<button type="button" class="btn btn-danger btn-xs" data-hook="guarantor-removehouse">移除该房产</button>
+		</div>
+		<%}%>
+</div>
+</script>

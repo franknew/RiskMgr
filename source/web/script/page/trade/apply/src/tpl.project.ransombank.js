@@ -32,13 +32,11 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			required:true,
 			html:'原贷款公积金中心'
 		},{
 			col:"3",
 			type:'select',
 			name:'OrignalFundCenter',
-			required:true,
 			options:'公积金中心'
 		},{
 			type:'label',
@@ -53,22 +51,31 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'是否提供供楼卡复印件'
+			html:'扣款账号'
 		},{
 			col:"3",
-			type:'select',
-			name:'SupplyCardCopy',
-			options:'是否'
+			type:'text',
+			name:'DeductMoneyCard'
 		},{
+			type:'label',
+			col:3,
+			html:'扣款户名'
+		},{
+			col:"3",
+			type:'text',
+			name:'DeductMoneyCardName'
+		}],
+
+		[{
 			type:'label',
 			col:'3',
 			required:true,
-			html:'原贷款本息'
+			html:'赎楼金额'
 		},{
 			col:'3',
 			type:'number',
 			required:true,
-			name:'OrignalCreditPI',
+			name:'RedemptionAmount',
 			placeholder:'',
 			suffix:'万元'
 		}],
@@ -89,7 +96,6 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'number',
-			required:true,
 			name:'OrignalCreditFundMoney',
 			placeholder:'',
 			prefix:'公积金',

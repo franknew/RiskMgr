@@ -44,50 +44,23 @@ define(function(require, exports, module){
 		},{
 			type:'label',
 			col:3,
-			required:true,
 			html:'预存时间'
 		},{
 			col:"3",
 			type:'number',
 			name:'PredictDays',
-			required:true,
 			suffix:'天'
 		}],
 
 		[{
 			type:'label',
 			col:3,
-			required:true,
 			html:'收费方式'
 		},{
 			col:"3",
 			type:'select',
-			required:true,
 			name:'ChargeType',
 			options:'收费方式'
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'申请支票数量及限额'
-		},{
-			col:'3',
-			type:'text',
-			required:true,
-			name:'CheckNumbersAndLimit',
-			placeholder:''
-		},{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'驻点人员'
-		},{
-			col:'3',
-			type:'text',
-			name:'Stagnationer',
-			placeholder:''
 		}]
 	];
 

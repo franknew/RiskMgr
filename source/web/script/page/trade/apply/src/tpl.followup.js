@@ -7,83 +7,50 @@
 define(function(require, exports, module){
 	var MOD = [
 		[{
-			type:'label',
-			col:3,
-			html:'新房产证号'
-		},{
-			col:'3',
-			type:'text',
-			name:'NewAssetCode',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'过户人工编号'
-		},{
-			col:'3',
-			type:'text',
-			name:'ChangeOwnerManualCode',
-			placeholder:''
-		}],
+			type:'group',
+			name:'TransferInfo',
+			addText:'增加过户信息',
+			groups:[
+				[{
+					type:'label',
+					col:3,
+					html:'新房产证号'
+				},{
+					col:'3',
+					type:'text',
+					name:'NewAssetCode',
+					placeholder:''
+				},{
+					type:'label',
+					col:3,
+					html:'取证日期'
+				},{
+					col:'3',
+					type:'date',
+					name:'NewAssetDate',
+					placeholder:''
+				}],
 
-		[{
-			type:'label',
-			col:3,
-			html:'过户办文编号'
-		},{
-			col:'3',
-			type:'text',
-			name:'ChangeOwnerProfileCode1',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'过户收文日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'ChangeOwnerProfileTime1',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'过户办文编号2'
-		},{
-			col:'3',
-			type:'text',
-			name:'ChangeOwnerProfileCode2',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'过户收文日期2'
-		},{
-			col:'3',
-			type:'date',
-			name:'ChangeOwnerProfileTime2',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'过户办文编号3'
-		},{
-			col:'3',
-			type:'text',
-			name:'ChangeOwnerProfileCode3',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'过户收文日期3'
-		},{
-			col:'3',
-			type:'date',
-			name:'ChangeOwnerProfileTime3',
-			placeholder:''
+				[{
+					type:'label',
+					col:3,
+					html:'过户办文编号'
+				},{
+					col:'3',
+					type:'text',
+					name:'ChangeOwnerProfileCode',
+					placeholder:''
+				},{
+					type:'label',
+					col:3,
+					html:'过户收文日期'
+				},{
+					col:'3',
+					type:'date',
+					name:'ChangeOwnerProfileTime',
+					placeholder:''
+				}]
+			]
 		}],
 
 		[{
@@ -97,105 +64,46 @@ define(function(require, exports, module){
 			placeholder:''
 		}],
 
-		[{
-			type:'label',
-			col:3,
-			html:'抵押回执编号'
-		},{
-			col:'9',
-			type:'text',
-			name:'MortgageFeedbackCode1',
-			placeholder:''
-		}],
 
 		[{
-			type:'label',
-			col:3,
-			html:'抵押收文日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgageOverTime1',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'预计完成日'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgagePredictTime1',
-			placeholder:''
-		}],
+			type:'group',
+			name:'Mortgage',
+			addText:'增加抵押信息',
+			groups:[
+				[{
+					type:'label',
+					col:3,
+					html:'抵押回执编号'
+				},{
+					col:'9',
+					type:'text',
+					group:'Mortgage',
+					name:'MortgageFeedbackCode',
+					placeholder:''
+				}],
 
-		[{
-			type:'label',
-			col:3,
-			html:'抵押回执编号2'
-		},{
-			col:'9',
-			type:'text',
-			name:'MortgageFeedbackCode2',
-			placeholder:''
-		}],
-		[{
-			type:'label',
-			col:3,
-			html:'抵押收文日期2'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgageOverTime2',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'预计完成日2'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgagePredictTime2',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'抵押回执编号3'
-		},{
-			col:'9',
-			type:'text',
-			name:'MortgageFeedbackCode3',
-			placeholder:''
-		}],
-		[{
-			type:'label',
-			col:3,
-			html:'抵押收文日期3'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgageOverTime3',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'预计完成日3'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgagePredictTime3',
-			placeholder:''
-		}],
-		[{
-			type:'label',
-			col:3,
-			html:'抵押驻点人员'
-		},{
-			col:'3',
-			type:'text',
-			name:'MortgagePerson',
-			placeholder:''
+				[{
+					type:'label',
+					col:3,
+					html:'抵押收文日期'
+				},{
+					col:'3',
+					type:'date',
+					group:'Mortgage',
+					name:'MortgageOverTime',
+					placeholder:''
+				},{
+					type:'label',
+					col:3,
+					html:'预计完成日'
+				},{
+					col:'3',
+					type:'date',
+					group:'Mortgage',
+					name:'MortgagePredictTime',
+					placeholder:''
+				}]
+			]
 		}],
 
 		[{
@@ -209,9 +117,15 @@ define(function(require, exports, module){
 			placeholder:''
 		}],
 		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
 			type:'label',
 			col:3,
-			html:'解保日期'
+			html:'回款日期'
 		},{
 			col:'3',
 			type:'date',

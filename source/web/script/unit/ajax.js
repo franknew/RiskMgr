@@ -103,7 +103,7 @@ define(function(require, exports, module){
 				host = '//'+HOST_REAL;
 
 			if (!/^(http:\/\/|\/\/)/.test(url)) {	//没有加http，走risk模块名的方式
-				if (DEBUG && navigator.userAgent.indexOf(' Mac OS X ')!==-1) {//mac下的测试环境才用反向代理
+				if (DEBUG) {
 					host = '//'+HOST_TEST+'/cgi';	//测试环境用反向代理，解决跨域问题
 				}
 				rs = host+'/Service/Execute/'+url;

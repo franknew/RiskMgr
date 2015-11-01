@@ -10,12 +10,15 @@ define(function(require, exports, module){
 
 	var SelectData = require('risk/data-dictionary');
 
+	var GROUP_CACHE = {};
+
 	var MOD = {
 		/**
 		 * @param tpl 表单模板
 		 * @param conf 配置项：
 		 *     data: 表单的数据
 		 *     disabled: 是否全局禁用表单
+		 *     [onlyRequired=false] 只输出必填项
 		 */
 		make:function(tpl,conf) {
 			conf = conf || {};
@@ -25,10 +28,11 @@ define(function(require, exports, module){
 
 			var i=0,cur,cont='';
 			for(;cur=tpl[i++];) {
-				cont = '<div class="form-group">';
-				cont += this._group(cur,conf);
-				cont += '</div>';
-				group.push(cont);
+				cont = this._group(cur,conf);
+				if (cont) {	//因为onlyRequired功能，防止生成空div
+					cont = '<div class="form-group">'+cont+'</div>';
+					group.push(cont);
+				}
 			}
 
 			rs[1] = group.join('');
@@ -36,17 +40,60 @@ define(function(require, exports, module){
 
 			return rs;
 		},
-		_group:function(groups,conf) {
+		//生产group的容器
+		_makeGroupWrap:function(groupList,groupInfo,conf) {
+			groupInfo = groupInfo || {};
+			conf = conf || {};
+
+			GROUP_CACHE[groupInfo.name] = groupInfo;	//缓存起来，新增事件会去取。先这样吧
+
+			var groupName = groupInfo.name;
+
+			var rs = ['<div class="panel panel-default clearfix" style="border-color:#EFEFEF;" data-group-box="'+groupName+'">','','</div>'],
+				group = [];
+
+			var i=0,cur,cont='';
+			for(;cur=groupList[i++];) {
+				cont = this._group(cur,conf,groupName);
+				if (cont) {	//因为onlyRequired功能，防止生成空div
+					cont = '<div class="col-sm-12" style="padding:5px 0;">'+cont+'</div>';
+					group.push(cont);
+				}
+			}
+
+			rs[1] = (group.join(''));
+
+			if (groupInfo.addText && !conf.noButton) {
+				rs.push('<div class="col-sm-12 text-center"><button class="btn btn-default btn-sm" style="padding:4px 35px;" data-hook="former-group-add" data-group-name="'+groupName+'"><i class="fa fa-plus"></i>'+groupInfo.addText+'</button></div>');
+			}
+			rs = rs.join('');
+
+			return rs;
+		},
+		/**
+		 * @param groupName 传了的话就表示是一个group
+		 */
+		_group:function(groups,conf,groupName) {
 			var items = [],
 				data = conf.data,
 				disabled = conf.disabled;
 
 			var i=0,cur,item;
 			for(;cur=groups[i++];) {
+				if (conf.onlyRequired && !cur.required) {
+					continue;
+				}
+
+				if (cur.type=='group') {
+					items.push(this._makeGroupWrap(cur.groups,cur,conf));
+
+					this._initGroupEvent();
+					continue;
+				}
 
 				//全局disabled
-				item = '<div class="col-sm-'+(cur.col||12)+'">';
-				item += this._item(cur,data && data[cur.name],conf);
+				item = '<div class="col-sm-'+(cur.col||12)+' '+(cur.colClass||'')+'">';
+				item += this._item(cur,data && data[cur.name],conf,groupName);
 				item += '</div>';
 
 				items.push(item);
@@ -56,7 +103,7 @@ define(function(require, exports, module){
 
 			return items;
 		},
-		_item:function(item,defaultValue,conf) {
+		_item:function(item,defaultValue,conf,groupName) {
 			var rs = '',
 				type = item.type,
 				disabled = type=='hidden'?false:(('disabled' in item)?item.disabled:conf.disabled),
@@ -65,7 +112,8 @@ define(function(require, exports, module){
 					placeholder:item.placeholder,
 					required:item.required,
 					disabled:disabled,
-					class:item.class || 'form-control'
+					class:item.class || 'form-control',
+					'data-group':groupName
 				},
 				itemState = {
 					attr:attr,
@@ -76,6 +124,10 @@ define(function(require, exports, module){
 				html = false;
 
 			switch (type){
+				case 'button':
+					itemState.tag = 'button';
+					attr.class = 'btn btn-default '+item.class;
+					break;
 				case 'label':
 					itemState.tag = 'label';
 					attr.class = 'control-label media-object';
@@ -229,6 +281,31 @@ define(function(require, exports, module){
 					ele.defaultValue = val;
 					ele.value = val;
 			}
+		},
+		//初始化group的新增事件
+		_initGroupEvent:function() {
+			var key = '__initevent__',
+				done = GROUP_CACHE[key];
+			if (done) {
+				return ;
+			}
+
+			//标记进行过初始化，不需要重复
+			GROUP_CACHE[key] = true;
+
+			$(document.documentElement).on('click','[data-hook="former-group-add"]',function(ev) {
+				ev.preventDefault();
+				var elem = $(ev.currentTarget),
+					name = elem.data('group-name'),
+					data = GROUP_CACHE[name];
+				if (!data) {
+					alert('没有找到对应的分组缓存，请联系开发人员');
+					return ;
+				}
+				var html = MOD._makeGroupWrap(data.groups,data,{noButton:true});
+
+				elem.parent().before(html);
+			});
 		}
 	};
 

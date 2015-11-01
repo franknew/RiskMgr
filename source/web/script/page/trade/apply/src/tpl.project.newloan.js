@@ -32,27 +32,6 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			required:true,
-			html:'短期赎楼贷款银行'
-		},{
-			col:"3",
-			type:'select',
-			name:'ShortTermAssetRansomBank',
-			required:true,
-			options:'银行'
-		},{
-			type:'label',
-			col:3,
-			html:'支行'
-		},{
-			col:"3",
-			type:'text',
-			name:'ShortTermAssetRansomBranch',
-		}],
-
-		[{
-			type:'label',
-			col:3,
 			html:'担保金额'
 		},{
 			col:'3',
@@ -101,19 +80,6 @@ define(function(require, exports, module){
 			type:'label',
 			col:3,
 			required:true,
-			html:'贷款放款金额'
-		},{
-			col:"3",
-			type:'number',
-			name:'LoanMoney',
-			required:true,
-			suffix:'万元'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			required:true,
 			html:'成交金额'
 		},{
 			col:"3",
@@ -152,32 +118,20 @@ define(function(require, exports, module){
 			html:'资金监管银行'
 		},{
 			col:"3",
-			type:'text',
+			type:'select',
 			name:'SupervisionBank',
+			options:'银行',
 			required:true
 		}],
 
 		[{
 			type:'label',
 			col:3,
-			required:true,
-			html:'用于赎楼的金额'
-		},{
-			col:"3",
-			type:'number',
-			name:'AssetRansomMoney',
-			required:true,
-			suffix:'万元'
-		},{
-			type:'label',
-			col:3,
-			required:true,
 			html:'客户预存款'
 		},{
 			col:"3",
 			type:'number',
 			name:'CustomerPredepositMoney',
-			required:true,
 			suffix:'万元'
 		}],
 
@@ -194,9 +148,10 @@ define(function(require, exports, module){
 			required:true
 		},{
 			col:"3",
-			type:'text',
+			type:'select',
 			name:'CreditReceiverBank',
-			placeholder:'银行 - 支行',
+			remark:'银行 - 支行',
+			options:'银行',
 			required:true
 		},{
 			col:"3",
@@ -204,17 +159,6 @@ define(function(require, exports, module){
 			name:'CreditReceiverAccount',
 			placeholder:'账号',
 			required:true
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'工行安心托管账户'
-		},{
-			col:9,
-			type:'text',
-			name:'TrusteeshipAccount',
-			placeholder:''
 		}]
 	];
 

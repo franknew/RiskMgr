@@ -38,6 +38,7 @@ define.pack = function(){
 //apply/src/setup.charge.js
 //apply/src/setup.customer.js
 //apply/src/setup.followup.js
+//apply/src/setup.guarantor.js
 //apply/src/setup.project.js
 //apply/src/setup.property.js
 //apply/src/test-data.js
@@ -54,6 +55,7 @@ define.pack = function(){
 //apply/src/setup.charge.tmpl.html
 //apply/src/setup.customer.tmpl.html
 //apply/src/setup.followup.tmpl.html
+//apply/src/setup.guarantor.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
 //apply/src/setup.tmpl.html
@@ -66,6 +68,7 @@ define.pack = function(){
 //apply/src/setup.charge.js
 //apply/src/setup.customer.js
 //apply/src/setup.followup.js
+//apply/src/setup.guarantor.js
 //apply/src/setup.project.js
 //apply/src/setup.property.js
 //apply/src/test-data.js
@@ -217,7 +220,6 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
-
 define.pack("./index",["jquery","risk/unit/route","./tmpl","./view","./data"],function(require, exports, module){
 
 	var $ = require('jquery'),
@@ -511,11 +513,13 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
  * @authors viktorli (i@lizhenwen.com)
  */
 
-define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./data"],function(require, exports, module){
+define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/unit/serialize","./data"],function(require, exports, module){
 	var $ = require('jquery'),
 		Ajax = require('risk/unit/ajax'),
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
+
+		var Serialize = require('risk/unit/serialize');
 
 	var Data = require('./data');
 
@@ -540,6 +544,123 @@ define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","ris
 					});
 				});
 			});
+		}
+	};
+
+	return MOD;
+});/**
+ * 担保人信息
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-08-09 14:53:02
+ */
+
+define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/former/index","risk/components/msg/index","risk/unit/serialize","risk/page/customer/index","./tmpl"],function(require, exports, module){
+	require.get = require;
+
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
+		former = require('risk/components/former/index'),
+		msg = require('risk/components/msg/index'),
+		Serialize = require('risk/unit/serialize'),
+		Customer = require('risk/page/customer/index'),
+		CustomerFormTpl = require.get('risk/page/customer/tpl.view');
+
+	var Tmpl = require('./tmpl');
+
+	var CORE_NAME = ['Name','IdentityCode','CardType'];
+
+	var MOD = {
+		getData:function() {
+			var list = $('#GuarantorBase div.j-guarantor-form'),
+				data = [];
+
+			var assets = [];//房产
+
+			list.each(function(i,ele) {
+				var curData = Serialize(ele);
+				assets = curData.Assets = [];//房产
+				$(ele).parent('.list-group-item').find('.j-houseitem').each(function(ii,tr) {
+					assets.push(Serialize(tr));
+				});
+				data.push(curData);
+			});
+
+			return data;
+		},
+		init:function() {
+			route.on('click','guarantor-import',function(ev) {	//导入现有数据
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.parents('div.block-transparent:first').find('div.list-group:first');
+
+				Customer.selector({
+					success:function(data) {
+						MOD.add(box,data);
+					}
+				});
+
+			}).on('click','guarantor-remove',function(ev) {//移除
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					itemClass = 'div.list-group-item',
+					box = btn.parents(itemClass),
+					boxSize = box.siblings(itemClass).size();
+				box.slideUp('fase',function() {
+					box.remove();
+				});
+			}).on('click','guarantor-add',function(ev) {//新增
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.siblings('div.list-group');
+				MOD.add(box);
+			}).on('click','guarantor-addhouse',function(ev) {
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.parent().siblings('div.j-guarantor-house');
+
+				MOD.addHouse(box);
+			}).on('click','guarantor-removehouse',function(ev) {
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					itemClass = 'div.j-houseitem',
+					box = btn.parents(itemClass),
+					boxSize = box.siblings(itemClass).size();
+				//if (boxSize<=0) {
+					//msg.error('至少保留有一个房产.');
+					//return ;
+				//}else {
+					box.slideUp('fase',function() {
+						box.remove();
+					});
+				//}
+			})
+
+		},
+		add:function(box,data) {
+			box = $(box);
+			var html = Tmpl.GuarantorItem({
+					data:data,
+					canEdit:true
+				});
+
+			html = $(html);
+			if (data) {//导入的关键数据不可编辑
+				html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
+			}
+			html.hide();
+			html.appendTo(box).slideDown('fast', function() {});
+
+		},
+		addHouse:function(box,data) {
+			box = $(box);
+			console.log('bb',box);
+			var html = Tmpl.GuarantorPropertyItem({
+					data:data,
+					canEdit:true
+				});
+			html = $(html);
+			html.hide();
+			html.appendTo(box).slideDown('fast', function() {});
 		}
 	};
 
@@ -741,136 +862,173 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 
 define.pack("./test-data",[],function(require, exports, module){
   var rs = {
-      "Buyers": [{
-          "ID": "03a64ab0039345a0ac6d35b692ec6b24",
-          "Name": "阿萨德飞44",
-          "CardType": "1",
-          "IdentityCode": "237856234",
-          "Phone": "34234234",
-          "Gender": "1",
-          "Marrage": "1",
-          "Address": "然后统一集团研究与",
-          "OrignalName": "old name",
-          "OrignalIdentityCode": "111",
-          "BankCode": "22222",
-          "BankType": "1",
-          "WorkUnit": ""
-      }, {
-          "ID": "2a5f02f79ecb4782a2c041c995067948",
-          "Name": "阿萨法 ",
-          "CardType": "1",
-          "IdentityCode": "986799283948723984",
-          "Phone": "123123",
-          "Gender": "1",
-          "Marrage": "1",
-          "Address": "三个地方集团研究研究",
-          "OrignalName": "old name",
-          "OrignalIdentityCode": "111",
-          "BankCode": "22222",
-          "BankType": "1",
-          "WorkUnit": ""
-      }],
-      "Sellers": [{
-          "ID": "9c919ce940b84f7ca6e87674592e5be0",
-          "Name": "张克强",
-          "CardType": "1",
-          "IdentityCode": "234234234234234",
-          "Phone": "13222222222",
-          "Gender": "1",
-          "Marrage": "1",
-          "Address": "水电费水电费阿达撒饭",
-          "OrignalName": "old name",
-          "OrignalIdentityCode": "111",
-          "BankCode": "22222",
-          "BankType": "1",
-          "WorkUnit": "阿达撒饭额外服务而威尔"
-      }],
-      "Assets": [{
-          "ID": "",
-          "Code": "44444444",
-          "Usage": "1",
-          "Position": "2",
-          "Address": "景田西路八个道路",
-          "Area": "123",
-          "RegPrice": "44232",
-          "Joint": [{
-              "Name": "共权人111",
-              "Phone": "13333333333",
-              "IdentityCode": "442233323232345"
-          }, {
-              "Name": "共权人22222",
-              "Phone": "12312314244",
-              "IdentityCode": "123454235345345"
-          }]
-      }, {
-          "ID": "",
-          "Code": "5698238787",
-          "Usage": "1",
-          "Position": "1",
-          "Address": "深南路北环西路698",
-          "Area": "234234",
-          "RegPrice": "53425435",
-          "Joint": [{
-              "Name": "灌灌灌灌",
-              "Phone": "23424234",
-              "IdentityCode": "234234234234"
-          }]
-      }, {
-          "ID": "",
-          "Code": "123456",
-          "Usage": "1",
-          "Position": "1",
-          "Address": "地址地址",
-          "Area": "123123",
-          "RegPrice": "12312",
-          "Joint": []
-      }],
-      "Project": {
-          "Source": "1",
-          "AgentName": "神奇的中介",
-          "CertificateData": "2015-08-23",
-          "AgentContact": "",
-          "Rebater": "",
-          "RebateAccount": "",
-          "OtherRebateInfo": "",
-          "OrignalMortgageBank": "1",
-          "OrignalMortgageBranch": "很吊的支行",
-          "OrignalFundCenter": "2",
-          "OrignalFundBranch": "",
-          "SupplyCardCopy": "1",
-          "OrignalCreditPI": "1244",
-          "OrignalCreditCommerceMoney": "12213",
-          "OrignalCreditFundMoney": "42121",
-          "AssetRansomCustomerManager": "王八蛋",
-          "AssetRansomContactPhone": "13434343434",
-          "NewCreditBank": "1",
-          "NewCreditBranch": "啊啊啊",
-          "ShortTermAssetRansomBank": "1",
-          "ShortTermAssetRansomBranch": "",
-          "GuaranteeMoney": "32434",
-          "GuaranteeMonth": "234234",
-          "BuyerCreditCommerceMoney": "234234",
-          "BuyerCreditFundMoney": "",
-          "LoanMoney": "23423",
-          "DealMoney": "232",
-          "EarnestMoney": "2323",
-          "SupervisionMoney": "2323",
-          "SupervisionBank": "3223",
-          "AssetRansomMoney": "343",
-          "CustomerPredepositMoney": "443",
-          "CreditReceiverName": "设立",
-          "CreditReceiverBank": "可怜的",
-          "CreditReceiverAccount": "发动机",
-          "TrusteeshipAccount": "",
-          "AssetRansomPredictMoney": "23",
-          "AssetRansomer": "阿萨德飞",
-          "AssetRansomType": "2",
-          "PredictDays": "324",
-          "ChargeType": "2",
-          "CheckNumbersAndLimit": "32423",
-          "Stagnationer": ""
-      }
-  };
+    "Buyers": [{
+        "ID": "03a64ab0039345a0ac6d35b692ec6b24",
+        "Name": "灌灌灌灌",
+        "CardType": "1",
+        "IdentityCode": "234234234234",
+        "Phone": "34234234",
+        "Gender": "1",
+        "Marrage": "1",
+        "Address": "然后统一集团研究与",
+        "OrignalName": "old name",
+        "OrignalIdentityCode": "111",
+        "BankCode": "22222",
+        "BankType": "1",
+        "WorkUnit": ""
+    },
+    {
+        "ID": "2a5f02f79ecb4782a2c041c995067948",
+        "Name": "阿萨法 ",
+        "CardType": "1",
+        "IdentityCode": "986799283948723984",
+        "Phone": "123123",
+        "Gender": "1",
+        "Marrage": "1",
+        "Address": "三个地方集团研究研究",
+        "OrignalName": "old name",
+        "OrignalIdentityCode": "111",
+        "BankCode": "22222",
+        "BankType": "1",
+        "WorkUnit": ""
+    }],
+    "Sellers": [{
+        "ID": "2a5f02f79ecb4782a2c041c995067948",
+        "Name": "阿萨法 ",
+        "CardType": "1",
+        "IdentityCode": "986799283948723984",
+        "Phone": "123123",
+        "Gender": "1",
+        "Marrage": "1",
+        "Address": "三个地方集团研究研究",
+        "OrignalName": "old name",
+        "OrignalIdentityCode": "111",
+        "BankCode": "22222",
+        "BankType": "1",
+        "WorkUnit": ""
+    }],
+    "Assets": [{
+        "ID": "",
+        "Code": "23432",
+        "Usage": "2",
+        "Position": "2",
+        "Address": "234234",
+        "Area": "12312",
+        "RegPrice": "21323",
+        "Remark": "sdfgsdfg",
+        "Joint": [{
+            "JointType": "2",
+            "Name": "123123",
+            "Phone": "14124",
+            "IdentityCode": "324234234"
+        },
+        {
+            "JointType": "3",
+            "Name": "4534534",
+            "Phone": "5435",
+            "IdentityCode": "36436"
+        }]
+    },
+    {
+        "ID": "",
+        "Code": "dfg",
+        "Usage": "1",
+        "Position": "1",
+        "Address": "234234",
+        "Area": "32434",
+        "RegPrice": "3434",
+        "Remark": "dgdfgdfg",
+        "Joint": [{
+            "JointType": "3",
+            "Name": "4234",
+            "Phone": "2342",
+            "IdentityCode": "34234234"
+        }]
+    }],
+    "Project": {
+        "Source": "1",
+        "AgentName": "24234",
+        "CertificateData": "2015-11-02",
+        "AgentContact": "fghdfg",
+        "Rebater": "dfhf",
+        "RebateAccount": "g546456",
+        "OtherRebateInfo": "sdfgsdfg",
+        "OrignalMortgageBank": "3",
+        "OrignalMortgageBranch": "sad",
+        "OrignalFundCenter": "1",
+        "OrignalFundBranch": "234234234",
+        "SupplyCardCopy": "a1214234",
+        "SupplyCardCopy2": "22352",
+        "OrignalCreditPI": "532323",
+        "OrignalCreditCommerceMoney": "12222",
+        "OrignalCreditFundMoney": "3444",
+        "AssetRansomCustomerManager": "234234243",
+        "AssetRansomContactPhone": "234234234",
+        "NewCreditBank": "15",
+        "NewCreditBranch": "234234",
+        "GuaranteeMoney": "232323",
+        "GuaranteeMonth": "2323",
+        "BuyerCreditCommerceMoney": "2223",
+        "BuyerCreditFundMoney": "44",
+        "DealMoney": "6564",
+        "EarnestMoney": "7878",
+        "SupervisionMoney": "234",
+        "SupervisionBank": "14",
+        "CustomerPredepositMoney": "6656",
+        "CreditReceiverName": "dfgsdfg",
+        "CreditReceiverBank": "14",
+        "CreditReceiverAccount": "123123",
+        "AssetRansomPredictMoney": "34234",
+        "AssetRansomer": "sdfsd",
+        "AssetRansomType": "1",
+        "PredictDays": "434234",
+        "ChargeType": "1"
+    },
+    "Guarantor": [{
+        "Name": "sdfsdfg",
+        "CardType": "2",
+        "IdentityCode": "324234",
+        "Phone": "234234",
+        "Gender": "2",
+        "Marrage": "1",
+        "Address": "234234",
+        "GuarantorRemark": "234234",
+        "Assets": [{
+            "Code": "235423",
+            "Usage": "1",
+            "Position": "3",
+            "Address": "4535",
+            "Area": "435345",
+            "RegPrice": "343434"
+        },
+        {
+            "Code": "435345",
+            "Usage": "2",
+            "Position": "2",
+            "Address": "435435",
+            "Area": "43",
+            "RegPrice": "543543"
+        }]
+    },
+    {
+        "Name": "345345",
+        "CardType": "2",
+        "IdentityCode": "34534",
+        "Phone": "234234",
+        "Gender": "1",
+        "Marrage": "1",
+        "Address": "234234",
+        "GuarantorRemark": "2342345555",
+        "Assets": [{
+            "Code": "554543",
+            "Usage": "1",
+            "Position": "3",
+            "Address": "gfhdh",
+            "Area": "545",
+            "RegPrice": "545"
+        }]
+    }]
+};
 return rs;
 });/**
  * 项目信息form表单：收费情况
@@ -986,6 +1144,149 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			name:'HasExpired',
 			placeholder:'',
 			suffix:'元'
+		}],
+
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'RefundMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'退款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'RefundDate'
+		}],
+
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'出款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'出款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'PaymentMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'出款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'PaymentDate'
+		}],
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'扣款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'DeductMoneyName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'DeductMoneyAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'DeductMoneyBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'扣款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'DeductMoneyMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'扣款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'DeductMoneyDate'
 		}]
 	];
 
@@ -999,83 +1300,50 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 define.pack("./tpl.followup",[],function(require, exports, module){
 	var MOD = [
 		[{
-			type:'label',
-			col:3,
-			html:'新房产证号'
-		},{
-			col:'3',
-			type:'text',
-			name:'NewAssetCode',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'过户人工编号'
-		},{
-			col:'3',
-			type:'text',
-			name:'ChangeOwnerManualCode',
-			placeholder:''
-		}],
+			type:'group',
+			name:'TransferInfo',
+			addText:'增加过户信息',
+			groups:[
+				[{
+					type:'label',
+					col:3,
+					html:'新房产证号'
+				},{
+					col:'3',
+					type:'text',
+					name:'NewAssetCode',
+					placeholder:''
+				},{
+					type:'label',
+					col:3,
+					html:'取证日期'
+				},{
+					col:'3',
+					type:'date',
+					name:'NewAssetDate',
+					placeholder:''
+				}],
 
-		[{
-			type:'label',
-			col:3,
-			html:'过户办文编号'
-		},{
-			col:'3',
-			type:'text',
-			name:'ChangeOwnerProfileCode1',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'过户收文日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'ChangeOwnerProfileTime1',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'过户办文编号2'
-		},{
-			col:'3',
-			type:'text',
-			name:'ChangeOwnerProfileCode2',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'过户收文日期2'
-		},{
-			col:'3',
-			type:'date',
-			name:'ChangeOwnerProfileTime2',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'过户办文编号3'
-		},{
-			col:'3',
-			type:'text',
-			name:'ChangeOwnerProfileCode3',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'过户收文日期3'
-		},{
-			col:'3',
-			type:'date',
-			name:'ChangeOwnerProfileTime3',
-			placeholder:''
+				[{
+					type:'label',
+					col:3,
+					html:'过户办文编号'
+				},{
+					col:'3',
+					type:'text',
+					name:'ChangeOwnerProfileCode',
+					placeholder:''
+				},{
+					type:'label',
+					col:3,
+					html:'过户收文日期'
+				},{
+					col:'3',
+					type:'date',
+					name:'ChangeOwnerProfileTime',
+					placeholder:''
+				}]
+			]
 		}],
 
 		[{
@@ -1089,105 +1357,46 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 			placeholder:''
 		}],
 
-		[{
-			type:'label',
-			col:3,
-			html:'抵押回执编号'
-		},{
-			col:'9',
-			type:'text',
-			name:'MortgageFeedbackCode1',
-			placeholder:''
-		}],
 
 		[{
-			type:'label',
-			col:3,
-			html:'抵押收文日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgageOverTime1',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'预计完成日'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgagePredictTime1',
-			placeholder:''
-		}],
+			type:'group',
+			name:'Mortgage',
+			addText:'增加抵押信息',
+			groups:[
+				[{
+					type:'label',
+					col:3,
+					html:'抵押回执编号'
+				},{
+					col:'9',
+					type:'text',
+					group:'Mortgage',
+					name:'MortgageFeedbackCode',
+					placeholder:''
+				}],
 
-		[{
-			type:'label',
-			col:3,
-			html:'抵押回执编号2'
-		},{
-			col:'9',
-			type:'text',
-			name:'MortgageFeedbackCode2',
-			placeholder:''
-		}],
-		[{
-			type:'label',
-			col:3,
-			html:'抵押收文日期2'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgageOverTime2',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'预计完成日2'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgagePredictTime2',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'抵押回执编号3'
-		},{
-			col:'9',
-			type:'text',
-			name:'MortgageFeedbackCode3',
-			placeholder:''
-		}],
-		[{
-			type:'label',
-			col:3,
-			html:'抵押收文日期3'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgageOverTime3',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
-			html:'预计完成日3'
-		},{
-			col:'3',
-			type:'date',
-			name:'MortgagePredictTime3',
-			placeholder:''
-		}],
-		[{
-			type:'label',
-			col:3,
-			html:'抵押驻点人员'
-		},{
-			col:'3',
-			type:'text',
-			name:'MortgagePerson',
-			placeholder:''
+				[{
+					type:'label',
+					col:3,
+					html:'抵押收文日期'
+				},{
+					col:'3',
+					type:'date',
+					group:'Mortgage',
+					name:'MortgageOverTime',
+					placeholder:''
+				},{
+					type:'label',
+					col:3,
+					html:'预计完成日'
+				},{
+					col:'3',
+					type:'date',
+					group:'Mortgage',
+					name:'MortgagePredictTime',
+					placeholder:''
+				}]
+			]
 		}],
 
 		[{
@@ -1201,9 +1410,15 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 			placeholder:''
 		}],
 		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
 			type:'label',
 			col:3,
-			html:'解保日期'
+			html:'回款日期'
 		},{
 			col:'3',
 			type:'date',
@@ -1329,27 +1544,6 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			required:true,
-			html:'短期赎楼贷款银行'
-		},{
-			col:"3",
-			type:'select',
-			name:'ShortTermAssetRansomBank',
-			required:true,
-			options:'银行'
-		},{
-			type:'label',
-			col:3,
-			html:'支行'
-		},{
-			col:"3",
-			type:'text',
-			name:'ShortTermAssetRansomBranch',
-		}],
-
-		[{
-			type:'label',
-			col:3,
 			html:'担保金额'
 		},{
 			col:'3',
@@ -1398,19 +1592,6 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			type:'label',
 			col:3,
 			required:true,
-			html:'贷款放款金额'
-		},{
-			col:"3",
-			type:'number',
-			name:'LoanMoney',
-			required:true,
-			suffix:'万元'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			required:true,
 			html:'成交金额'
 		},{
 			col:"3",
@@ -1449,32 +1630,20 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'资金监管银行'
 		},{
 			col:"3",
-			type:'text',
+			type:'select',
 			name:'SupervisionBank',
+			options:'银行',
 			required:true
 		}],
 
 		[{
 			type:'label',
 			col:3,
-			required:true,
-			html:'用于赎楼的金额'
-		},{
-			col:"3",
-			type:'number',
-			name:'AssetRansomMoney',
-			required:true,
-			suffix:'万元'
-		},{
-			type:'label',
-			col:3,
-			required:true,
 			html:'客户预存款'
 		},{
 			col:"3",
 			type:'number',
 			name:'CustomerPredepositMoney',
-			required:true,
 			suffix:'万元'
 		}],
 
@@ -1491,9 +1660,10 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			required:true
 		},{
 			col:"3",
-			type:'text',
+			type:'select',
 			name:'CreditReceiverBank',
-			placeholder:'银行 - 支行',
+			remark:'银行 - 支行',
+			options:'银行',
 			required:true
 		},{
 			col:"3",
@@ -1501,17 +1671,6 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			name:'CreditReceiverAccount',
 			placeholder:'账号',
 			required:true
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'工行安心托管账户'
-		},{
-			col:9,
-			type:'text',
-			name:'TrusteeshipAccount',
-			placeholder:''
 		}]
 	];
 
@@ -1550,13 +1709,11 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			required:true,
 			html:'原贷款公积金中心'
 		},{
 			col:"3",
 			type:'select',
 			name:'OrignalFundCenter',
-			required:true,
 			options:'公积金中心'
 		},{
 			type:'label',
@@ -1571,22 +1728,31 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'是否提供供楼卡复印件'
+			html:'扣款账号'
 		},{
 			col:"3",
-			type:'select',
-			name:'SupplyCardCopy',
-			options:'是否'
+			type:'text',
+			name:'DeductMoneyCard'
 		},{
+			type:'label',
+			col:3,
+			html:'扣款户名'
+		},{
+			col:"3",
+			type:'text',
+			name:'DeductMoneyCardName'
+		}],
+
+		[{
 			type:'label',
 			col:'3',
 			required:true,
-			html:'原贷款本息'
+			html:'赎楼金额'
 		},{
 			col:'3',
 			type:'number',
 			required:true,
-			name:'OrignalCreditPI',
+			name:'RedemptionAmount',
 			placeholder:'',
 			suffix:'万元'
 		}],
@@ -1607,7 +1773,6 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'number',
-			required:true,
 			name:'OrignalCreditFundMoney',
 			placeholder:'',
 			prefix:'公积金',
@@ -1684,50 +1849,23 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 		},{
 			type:'label',
 			col:3,
-			required:true,
 			html:'预存时间'
 		},{
 			col:"3",
 			type:'number',
 			name:'PredictDays',
-			required:true,
 			suffix:'天'
 		}],
 
 		[{
 			type:'label',
 			col:3,
-			required:true,
 			html:'收费方式'
 		},{
 			col:"3",
 			type:'select',
-			required:true,
 			name:'ChargeType',
 			options:'收费方式'
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'申请支票数量及限额'
-		},{
-			col:'3',
-			type:'text',
-			required:true,
-			name:'CheckNumbersAndLimit',
-			placeholder:''
-		},{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'驻点人员'
-		},{
-			col:'3',
-			type:'text',
-			name:'Stagnationer',
-			placeholder:''
 		}]
 	];
 
@@ -1738,7 +1876,7 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.project","./setup.approval","./setup.charge","./setup.followup","./test-data"],function(require, exports, module){
+define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.guarantor","./setup.project","./setup.approval","./setup.charge","./setup.followup","./test-data"],function(require, exports, module){
 
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
@@ -1750,6 +1888,7 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 
 	var Customer = require('./setup.customer'),
 		Property = require('./setup.property'),
+		Guarantor = require('./setup.guarantor'),
 		Project = require('./setup.project'),
 		Approval = require('./setup.approval'),
 		Charge = require('./setup.charge'),
@@ -1791,6 +1930,9 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 						}else {
 							that.submit(mode);
 						}
+					},
+					Guarantor:function() {
+						console.log('Guarantor:::',Guarantor.getData());
 					}
 				});
 			//}
@@ -1807,6 +1949,7 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 		_initEvent:function() {
 			Customer.init();
 			Property.init();
+			Guarantor.init();
 			Project.init();
 			Approval.init();
 			Charge.init();
@@ -1832,7 +1975,8 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 					Buyers:dataCustomer.buyer,
 					Sellers:dataCustomer.seller,
 					Assets:Property.getData(),
-					Project:Project.getData()
+					Project:Project.getData(),
+					Guarantor:Guarantor.getData()
 				};
 			}
 
@@ -2055,6 +2199,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 //apply/src/setup.charge.tmpl.html
 //apply/src/setup.customer.tmpl.html
 //apply/src/setup.followup.tmpl.html
+//apply/src/setup.guarantor.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
 //apply/src/setup.tmpl.html
@@ -2122,9 +2267,9 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	var Former = require('risk/components/former/index'),
 		TplCharge = require('./tpl.charge');
-__p.push('<div class="step-pane" id="Charge">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>收费情况</h3>\n			</div>\n			<div class="content">\n				<div class="well">');
+__p.push('<div class="step-pane" id="Charge">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>收费情况</h3>\n			</div>\n			<div class="content">');
 _p(Former.make(TplCharge,{data:ChargeData,disabled:!ChargeCanEdit}));
-__p.push('				</div>\n			</div>\n		</div>');
+__p.push('			</div>\n		</div>');
 if (ChargeCanEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn btn-success" type="button" data-hook="charge-submit"><i class="fa fa-check"></i> 提交</button>\n			</div>\n		</div>');
 }__p.push('</div>');
 
@@ -2215,6 +2360,64 @@ if (FollowupCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-ce
 return __p.join("");
 },
 
+'SetupGuarantor': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var FormData = data.data || {};
+__p.push('<div class="step-pane" id="Guarantor">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>担保人 <!--');
+if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="guarantor-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
+}__p.push('--></h3>\n		</div>\n		<div class="content">\n			<div class="list-group tickets" id="GuarantorBase"></div>');
+if (data.canEdit) {__p.push('			<button type="button" class="btn btn-success" data-hook="guarantor-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加担保人&nbsp;&nbsp;</button>');
+}__p.push('		</div>\n	</div>');
+if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
+}__p.push('</div>');
+
+return __p.join("");
+},
+
+'GuarantorItem': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var Former = require('risk/components/former/index'),
+		TplCustomer = require('risk/page/customer/tpl.view');
+__p.push('\n	<div class="list-group-item">\n		<div class="j-guarantor-form">');
+_p(Former.make(TplCustomer,{
+				data:data,
+				disabled:!data.canEdit,
+				onlyRequired:true
+			}));
+__p.push('			<div class="form-group">\n				<div class="col-sm-2"><label class="control-label media-object">备注</label></div>\n				<div class="col-sm-10"><textarea name="GuarantorRemark" class="form-control"></textarea></div>\n			</div>\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2 j-guarantor-house">');
+_p(this.GuarantorPropertyItem({
+				canEdit:true
+			}));
+__p.push('\n		</div>\n		<div class="col-sm-offset-2">\n			<button class="btn btn-default" data-hook="guarantor-addhouse"><i class="fa fa-plus"></i>增加房产</button>\n		</div>');
+if (data.canEdit) {__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-1">\n			<button type="button" class="btn btn-danger" data-hook="guarantor-remove">移除该担保人</button>\n		</div>');
+}__p.push('	</div>');
+
+return __p.join("");
+},
+
+'GuarantorPropertyItem': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var Former = require('risk/components/former/index'),
+		TplProperty = require('risk/page/Property/tpl.view');
+__p.push('<div class="well well-sm j-houseitem">');
+_p(Former.make(TplProperty,{
+	data:data,
+	disabled:!data.canEdit,
+	onlyRequired:true
+}));
+__p.push('		');
+if (data.canEdit) {__p.push('		<div class="col-sm-offset-1">\n			<button type="button" class="btn btn-danger btn-xs" data-hook="guarantor-removehouse">移除该房产</button>\n		</div>');
+}__p.push('</div>');
+
+return __p.join("");
+},
+
 'SetupProject': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
@@ -2264,7 +2467,7 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('	<div class="list-group-item">\n		<div class="j-property-form">');
 _p(data.tpl(data.data,data.canEdit));
-__p.push('		</div>\n		<div class="form-group">');
+__p.push('			<div class="form-group">\n				<div class="col-sm-2"><label class="control-label media-object">备注</label></div>\n				<div class="col-sm-10"><textarea name="Remark" class="form-control"></textarea></div>\n			</div>\n		</div>\n		<div class="form-group">');
 
 				var Joint = data.data&&data.data.Joint || [],
 					JointLen = Joint.length;
@@ -2274,7 +2477,7 @@ if (data.canEdit) {__p.push('<button type="button" data-hook="joint-add" class="
 _p((JointLen||data.canEdit)?'(房产共权人、保证人、配偶、辅助联系人、第三方借款人)':'');
 __p.push('			</div>\n			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">\n				<table class="no-border no-strip j-property-joint" style="background-color:#E8E8E8;margin-top:10px; ');
 _p(JointLen?'':'display:none;');
-__p.push('">\n					<thead class="no-border">\n						<tr>\n							<th>姓名</th>\n							<th>电话</th>\n							<th>证件号</th>\n							<th>&nbsp;</th>\n						</tr>\n					</thead>\n					<tbody class="no-border-x no-border-y">');
+__p.push('">\n					<thead class="no-border">\n						<tr>\n							<th>&nbsp;</th>\n							<th>类型</th>\n							<th>姓名</th>\n							<th>电话</th>\n							<th>证件号</th>\n						</tr>\n					</thead>\n					<tbody class="no-border-x no-border-y">');
 
 							var i=0, l = JointLen;
 							for(; i < l; ++i) {
@@ -2299,7 +2502,37 @@ var __p=[],_p=function(s){__p.push(s)};
 __p.push('	');
 
 		var FormData = data.data || {};
-	__p.push('	<tr>\n		<td><input type="text" name="Name" value="');
+		var CreateOptions = function(opts) {
+				var dataName = opts.options,
+					value = opts.value;
+
+				var rs = [],
+					dictionary = require('risk/data-dictionary'),
+					da = (dictionary[dataName] || []).concat([]);//concat防止原始数据被修改
+
+				da.unshift({
+					name:(opts.required?'* ':'')+(opts.remark||'请选择'),
+					value:''
+				});
+
+				var i=0,cur;
+				for(;cur=da[i++];) {
+					rs.push('<option value="'+cur.value+'" '+((cur.value==value)?'selected':'')+'>'+cur.name+'</option>');
+				}
+				rs = rs.join('');
+				return rs;
+			};
+	__p.push('	<tr>\n		<td>');
+if (data.canEdit) {__p.push('<i class="pointer-item fa fa-times" data-hook="joint-remove"></i>');
+}__p.push('</td>\n		<td>\n			<select name="JointType" ');
+_p(data.canEdit?'':'disabled');
+__p.push('>');
+_p(CreateOptions({
+					options:'共权人类型',
+					value:FormData.JointType,
+					remark:'请选择类型'
+				}));
+__p.push('			</select>\n		</td>\n		<td><input type="text" name="Name" value="');
 _p(FormData.Name||'');
 __p.push('" placeholder="输入姓名" ');
 _p(data.canEdit?'':'disabled');
@@ -2311,9 +2544,7 @@ __p.push(' /></td>\n		<td><input type="text" name="IdentityCode" value="');
 _p(FormData.IdentityCode||'');
 __p.push('" placeholder="输入证件号" ');
 _p(data.canEdit?'':'disabled');
-__p.push(' /></td>\n		<td>');
-if (data.canEdit) {__p.push('<i class="pointer-item fa fa-times" data-hook="joint-remove"></i>');
-}__p.push('</td>\n	</tr>');
+__p.push(' /></td>\n	</tr>');
 
 return __p.join("");
 },
@@ -2323,42 +2554,40 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	//测试数据
-	/**
-	if (data.data) {
-	data.data["Approvals"]  = {
-			"CurrentWorkflow":{
-				"handler":"李振文"
-			}
-			,"Done":[{
-				"title":"之前的审批123",
-				"key":"ApprovalTest123",
-				"content":"我同意啊哈哈",
-				"handler":"李振文",
-				"time":1443670754853
-			}]
-			,"CurrentApproval":[{
-				"title":"审批标题啊",
-				"key":"ApprovalTest222"
-			},{
-				"title":"可以多个审批标题不",
-				"key":"ApprovalTest333"
-			}]
-		};
+	if (location.href.indexOf('testdata')!=-1) {
+		data.mode = 'view';
+		data.data = data.data || {};
+		if (data.data) {
+		data.data["Approvals"]  = {
+				"CurrentWorkflow":{
+					"handler":"李振文"
+				}
+				,"Done":[{
+					"title":"之前的审批123",
+					"key":"ApprovalTest123",
+					"content":"我同意啊哈哈",
+					"handler":"李振文",
+					"time":1443670754853
+				}]
+				,"CurrentApproval":[{
+					"title":"审批标题啊",
+					"key":"ApprovalTest222"
+				},{
+					"title":"可以多个审批标题不",
+					"key":"ApprovalTest333"
+				}]
+			};
 
-		data.data["ChargeCanEdit"]  = true;
-		data.data["Charge"]  = {"key":"value"};
+			data.data["DisplayCharge"]  = true;
+			data.data["Charge"]  = {"key":"value"};
 
-		data.data["FollowupCanEdit"]  = true;
-		data.data["Followup"]  = {"key":"value"};
+			data.data["DisplayTracking"]  = true;
+			data.data["Followup"]  = {"key":"value"};
+			data.data['FollowupCanEdit'] = true;
+
+			data.data["ChargeCanEdit"] = true;
+		}
 	}
-	**/
-
-	/**
-	if (data.data){
-		data.data["ChargeCanEdit"] = true;
-		data.data["FollowupCanEdit"] = true;
-	}
-	**/
 
 	var DataView = data.data || {},
 		Approvals = DataView.Approvals || {},	//审批信息
@@ -2368,9 +2597,9 @@ var __p=[],_p=function(s){__p.push(s)};
 	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),
 		ShowCharge = ShowApproval && DataView.DisplayCharge,
 		ShowFollow = ShowApproval && DataView.DisplayTracking;
-__p.push('\n<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
+__p.push('\n<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST" style="position:absolute;top:-80px;right:80px;">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
-}__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');
+}__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Guarantor">担保人<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');
 if (ShowApproval) {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');
 }if (ShowCharge) {__p.push('			<li data-target="Charge">收费情况<span class="chevron"></span></li>');
 }if (ShowFollow) {__p.push('			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
@@ -2378,6 +2607,8 @@ if (ShowApproval) {__p.push('				<li data-target="Approval">审批信息<span cl
 _p(this.SetupCustomer(data));
 __p.push('			');
 _p(this.SetupProperty(data));
+__p.push('			');
+_p(this.SetupGuarantor(data));
 __p.push('			');
 _p(this.SetupProject(data));
 if (ShowApproval) {__p.push('			');

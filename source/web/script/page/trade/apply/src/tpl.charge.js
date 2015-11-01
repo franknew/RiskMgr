@@ -112,6 +112,149 @@ define(function(require, exports, module){
 			name:'HasExpired',
 			placeholder:'',
 			suffix:'元'
+		}],
+
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'RefundMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'退款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'RefundDate'
+		}],
+
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'出款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'出款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'PaymentMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'出款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'PaymentDate'
+		}],
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'扣款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'DeductMoneyName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'DeductMoneyAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'DeductMoneyBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'扣款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'DeductMoneyMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'扣款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'DeductMoneyDate'
 		}]
 	];
 

@@ -46,6 +46,10 @@
 	<div class="list-group-item">
 		<div class="j-property-form">
 			<%=data.tpl(data.data,data.canEdit)%>
+			<div class="form-group">
+				<div class="col-sm-2"><label class="control-label media-object">备注</label></div>
+				<div class="col-sm-10"><textarea name="Remark" class="form-control"></textarea></div>
+			</div>
 		</div>
 		<div class="form-group">
 			<%
@@ -63,10 +67,11 @@
 				<table class="no-border no-strip j-property-joint" style="background-color:#E8E8E8;margin-top:10px; <%=JointLen?'':'display:none;'%>">
 					<thead class="no-border">
 						<tr>
+							<th>&nbsp;</th>
+							<th>类型</th>
 							<th>姓名</th>
 							<th>电话</th>
 							<th>证件号</th>
-							<th>&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody class="no-border-x no-border-y">
@@ -97,11 +102,40 @@
 <script type="text/html" id="PropertyJointItem">
 	<%
 		var FormData = data.data || {};
+		var CreateOptions = function(opts) {
+				var dataName = opts.options,
+					value = opts.value;
+
+				var rs = [],
+					dictionary = require('risk/data-dictionary'),
+					da = (dictionary[dataName] || []).concat([]);//concat防止原始数据被修改
+
+				da.unshift({
+					name:(opts.required?'* ':'')+(opts.remark||'请选择'),
+					value:''
+				});
+
+				var i=0,cur;
+				for(;cur=da[i++];) {
+					rs.push('<option value="'+cur.value+'" '+((cur.value==value)?'selected':'')+'>'+cur.name+'</option>');
+				}
+				rs = rs.join('');
+				return rs;
+			};
 	%>
 	<tr>
+		<td><%if (data.canEdit) {%><i class="pointer-item fa fa-times" data-hook="joint-remove"></i><%}%></td>
+		<td>
+			<select name="JointType" <%=data.canEdit?'':'disabled'%>>
+				<%=CreateOptions({
+					options:'共权人类型',
+					value:FormData.JointType,
+					remark:'请选择类型'
+				})%>
+			</select>
+		</td>
 		<td><input type="text" name="Name" value="<%=FormData.Name||''%>" placeholder="输入姓名" <%=data.canEdit?'':'disabled'%> /></td>
 		<td><input type="text" name="Phone" value="<%=FormData.Phone||''%>" placeholder="输入电话" <%=data.canEdit?'':'disabled'%> /></td>
 		<td><input type="text" name="IdentityCode" value="<%=FormData.IdentityCode||''%>" placeholder="输入证件号" <%=data.canEdit?'':'disabled'%> /></td>
-		<td><%if (data.canEdit) {%><i class="pointer-item fa fa-times" data-hook="joint-remove"></i><%}%></td>
 	</tr>
 </script>

@@ -3,7 +3,6 @@
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
-
 define(function(require, exports, module){
 
 	var $ = require('jquery'),

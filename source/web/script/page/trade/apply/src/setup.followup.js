@@ -9,6 +9,8 @@ define(function(require, exports, module){
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
+		var Serialize = require('risk/unit/serialize');
+
 	var Data = require('./data');
 
 	var MOD = {
