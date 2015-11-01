@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="BankAccount" type="RiskMgr.Model.BankAccount" />
+    <typeAlias alias="BankAccountQueryForm" type="RiskMgr.Form.BankAccountQueryForm" />
+    <typeAlias alias="BankAccountUpdateForm" type="RiskMgr.Form.BankAccountUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryBankAccount" resultClass="BankAccount" parameterClass="BankAccountQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `BankAccount`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankType">
+        `BankType`=#BankType#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="BankName">
+        `BankName`=#BankName#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="BankAccountCode">
+        `BankAccountCode`=#BankAccountCode#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddBankAccount" parameterClass="BankAccount">
+  INSERT INTO `BankAccount`
+  (
+    `ID`,
+    `BankType`,
+    `BankName`,
+    `BankAccountCode`,
+    `Creator`,
+    `CreateTime`,
+    `Name`,
+    `LastUpdater`,
+    `LastUpdateTime`
+  )
+  VALUES
+  (
+        #ID#,
+        #BankType#,
+        #BankName#,
+        #BankAccountCode#,
+        #Creator#,
+        #CreateTime#,
+        #Name#,
+        #LastUpdater#,
+        #LastUpdateTime#
+  )
+  </insert>
+  <update id="UpdateBankAccount" parameterClass="BankAccountUpdateForm">
+  UPDATE `BankAccount`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.BankType">
+        `BankType`=#Entity.BankType#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.BankName">
+        `BankName`=#Entity.BankName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.BankAccountCode">
+        `BankAccountCode`=#Entity.BankAccountCode#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdater">
+        `LastUpdater`=#Entity.LastUpdater#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="BankAccountQueryForm.ID">
+        `ID`=#BankAccountQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.BankType">
+        `BankType`=#BankAccountQueryForm.BankType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.BankName">
+        `BankName`=#BankAccountQueryForm.BankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.BankAccountCode">
+        `BankAccountCode`=#BankAccountQueryForm.BankAccountCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.Creator">
+        `Creator`=#BankAccountQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#BankAccountQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#BankAccountQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.Name">
+        `Name`=#BankAccountQueryForm.Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.LastUpdater">
+        `LastUpdater`=#BankAccountQueryForm.LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#BankAccountQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#BankAccountQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteBankAccount" parameterClass="BankAccountQueryForm">
+    DELETE FROM `BankAccount` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankType">
+        `BankType`=#BankType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankName">
+        `BankName`=#BankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountCode">
+        `BankAccountCode`=#BankAccountCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+  </delete>
+   <select id="QueryBankAccountLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `BankAccount`
+   </select>
+   <select id="QueryBankAccountRecordCount" resultClass="int" parameterClass="BankAccountQueryForm">
+   SELECT COUNT(*) FROM `BankAccount` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankType">
+        `BankType`=#BankType#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankName">
+        `BankName`=#BankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountCode">
+        `BankAccountCode`=#BankAccountCode#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdater">
+        `LastUpdater`=#LastUpdater#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

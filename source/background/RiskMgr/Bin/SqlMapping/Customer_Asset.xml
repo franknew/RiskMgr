@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Customer_Asset" type="RiskMgr.Model.Customer_Asset" />
+    <typeAlias alias="Customer_AssetQueryForm" type="RiskMgr.Form.Customer_AssetQueryForm" />
+    <typeAlias alias="Customer_AssetUpdateForm" type="RiskMgr.Form.Customer_AssetUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryCustomer_Asset" resultClass="Customer_Asset" parameterClass="Customer_AssetQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Customer_Asset`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerID">
+        `CustomerID`=#CustomerID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="CustomerIDs">
+        <iterate property="CustomerIDs" open="(" close=")" conjunction="OR">
+         `CustomerID`=#CustomerIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetID">
+        `AssetID`=#AssetID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="AssetIDs">
+        <iterate property="AssetIDs" open="(" close=")" conjunction="OR">
+         `AssetID`=#AssetIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddCustomer_Asset" parameterClass="Customer_Asset">
+  INSERT INTO `Customer_Asset`
+  (
+    `ID`,
+    `CustomerID`,
+    `AssetID`,
+    `Type`,
+    `ProjectID`
+  )
+  VALUES
+  (
+        #ID#,
+        #CustomerID#,
+        #AssetID#,
+        #Type#,
+        #ProjectID#
+  )
+  </insert>
+  <update id="UpdateCustomer_Asset" parameterClass="Customer_AssetUpdateForm">
+  UPDATE `Customer_Asset`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.CustomerID">
+        `CustomerID`=#Entity.CustomerID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.AssetID">
+        `AssetID`=#Entity.AssetID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Type">
+        `Type`=#Entity.Type#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ProjectID">
+        `ProjectID`=#Entity.ProjectID#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="Customer_AssetQueryForm.ID">
+        `ID`=#Customer_AssetQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Customer_AssetQueryForm.CustomerID">
+        `CustomerID`=#Customer_AssetQueryForm.CustomerID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Customer_AssetQueryForm.AssetID">
+        `AssetID`=#Customer_AssetQueryForm.AssetID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Customer_AssetQueryForm.Type">
+        `Type`=#Customer_AssetQueryForm.Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Customer_AssetQueryForm.ProjectID">
+        `ProjectID`=#Customer_AssetQueryForm.ProjectID#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteCustomer_Asset" parameterClass="Customer_AssetQueryForm">
+    DELETE FROM `Customer_Asset` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerID">
+        `CustomerID`=#CustomerID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="CustomerIDs">
+        <iterate property="CustomerIDs" open="(" close=")" conjunction="OR">
+         `CustomerID`=#CustomerIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetID">
+        `AssetID`=#AssetID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="AssetIDs">
+        <iterate property="AssetIDs" open="(" close=")" conjunction="OR">
+         `AssetID`=#AssetIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+  </delete>
+   <select id="QueryCustomer_AssetRecordCount" resultClass="int" parameterClass="Customer_AssetQueryForm">
+   SELECT COUNT(*) FROM `Customer_Asset` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerID">
+        `CustomerID`=#CustomerID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="CustomerIDs">
+        <iterate property="CustomerIDs" open="(" close=")" conjunction="OR">
+         `CustomerID`=#CustomerIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetID">
+        `AssetID`=#AssetID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="AssetIDs">
+        <iterate property="AssetIDs" open="(" close=")" conjunction="OR">
+         `AssetID`=#AssetIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

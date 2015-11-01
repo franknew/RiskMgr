@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Payment" type="RiskMgr.Model.Payment" />
+    <typeAlias alias="PaymentQueryForm" type="RiskMgr.Form.PaymentQueryForm" />
+    <typeAlias alias="PaymentUpdateForm" type="RiskMgr.Form.PaymentUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryPayment" resultClass="Payment" parameterClass="PaymentQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Payment`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountID">
+        `BankAccountID`=#BankAccountID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="BankAccountIDs">
+        <iterate property="BankAccountIDs" open="(" close=")" conjunction="OR">
+         `BankAccountID`=#BankAccountIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="Paid_Start">
+        `Paid`&gt;=#Paid_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Paid_End">
+        `Paid`&lt;=#Paid_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PayTime_Start">
+        `PayTime`&gt;=#PayTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PayTime_End">
+        `PayTime`&lt;=#PayTime_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    
+    </dynamic>
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddPayment" parameterClass="Payment">
+  INSERT INTO `Payment`
+  (
+    `ID`,
+    `BankAccountID`,
+    `Paid`,
+    `PayTime`,
+    `Type`
+  )
+  VALUES
+  (
+        #ID#,
+        #BankAccountID#,
+        #Paid#,
+        #PayTime#,
+        #Type#
+  )
+  </insert>
+  <update id="UpdatePayment" parameterClass="PaymentUpdateForm">
+  UPDATE `Payment`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.BankAccountID">
+        `BankAccountID`=#Entity.BankAccountID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Paid">
+        `Paid`=#Entity.Paid#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PayTime">
+        `PayTime`=#Entity.PayTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Type">
+        `Type`=#Entity.Type#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="PaymentQueryForm.ID">
+        `ID`=#PaymentQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentQueryForm.BankAccountID">
+        `BankAccountID`=#PaymentQueryForm.BankAccountID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentQueryForm.Paid_Start">
+        `Paid`&gt;=#PaymentQueryForm.Paid_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentQueryForm.Paid_End">
+        `Paid`&lt;=#PaymentQueryForm.Paid_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentQueryForm.PayTime_Start">
+        `PayTime`&gt;=#PaymentQueryForm.PayTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentQueryForm.PayTime_End">
+        `PayTime`&lt;=#PaymentQueryForm.PayTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentQueryForm.Type">
+        `Type`=#PaymentQueryForm.Type#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeletePayment" parameterClass="PaymentQueryForm">
+    DELETE FROM `Payment` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountID">
+        `BankAccountID`=#BankAccountID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="BankAccountIDs">
+        <iterate property="BankAccountIDs" open="(" close=")" conjunction="OR">
+         `BankAccountID`=#BankAccountIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="Paid_Start">
+        `Paid`&gt;=#Paid_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Paid_End">
+        `Paid`&lt;=#Paid_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PayTime_Start">
+        `PayTime`&gt;=#PayTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PayTime_End">
+        `PayTime`&lt;=#PayTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+  </delete>
+   <select id="QueryPaymentRecordCount" resultClass="int" parameterClass="PaymentQueryForm">
+   SELECT COUNT(*) FROM `Payment` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountID">
+        `BankAccountID`=#BankAccountID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="BankAccountIDs">
+        <iterate property="BankAccountIDs" open="(" close=")" conjunction="OR">
+         `BankAccountID`=#BankAccountIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="Paid_Start">
+        `Paid`&gt;=#Paid_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Paid_End">
+        `Paid`&lt;=#Paid_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PayTime_Start">
+        `PayTime`&gt;=#PayTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PayTime_End">
+        `PayTime`&lt;=#PayTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

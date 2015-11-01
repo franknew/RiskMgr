@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="QueryMyTaskServiceForm" type="RiskMgr.Form.QueryMyTaskServiceForm" />
+  </alias>
+  <statements>
+    <select id="QueryTaskByRelationship" resultClass="FullTask" parameterClass="QueryMyTaskServiceForm">
+      SELECT t.*,apply.CnName AS Applier, process.CnName AS Processor, wf.ProcessID AS `ProcessID` FROM Task AS t
+      LEFT JOIN Workflow wf ON t.WorkflowID=wf.ID
+      INNER JOIN UserInfo AS apply ON apply.ID=wf.Creator
+      INNER JOIN UserInfo AS process ON process.ID=t.UserID
+      <dynamic prepend="WHERE">
+      <isNotNull prepend="AND" property="ID">
+        t.`ID`=#ID#
+      </isNotNull>
+      <isNotNull prepend="AND" property="ActivityID">
+        t.`ActivityID`=#ActivityID#
+      </isNotNull>
+      <isNotNull prepend="AND" property="Name">
+        t.`Name`=#Name#
+      </isNotNull>
+      <isNotNull prepend="AND" property="Creator">
+        t.`Creator`=#Creator#
+      </isNotNull>
+      <isNotNull prepend="AND" property="CreateTime_Start">
+        t.`CreateTime`&gt;=#CreateTime_Start#
+      </isNotNull>
+      <isNotNull prepend="AND" property="CreateTime_End">
+        t.`CreateTime`&lt;=#CreateTime_End#
+      </isNotNull>
+      <isNotNull prepend="AND" property="Remark">
+        t.`Remark` LIKE '%$Remark$%'
+      </isNotNull>
+      <isNotNull prepend="AND" property="Status">
+        t.`Status`=#Status#
+      </isNotNull>
+      <isNotNull prepend="AND" property="ReadTime_Start">
+        t.`ReadTime`&gt;=#ReadTime_Start#
+      </isNotNull>
+      <isNotNull prepend="AND" property="ReadTime_End">
+        t.`ReadTime`&lt;=#ReadTime_End#
+      </isNotNull>
+      <isNotNull prepend="AND" property="ProcessTime_Start">
+        t.`ProcessTime`&gt;=#ProcessTime_Start#
+      </isNotNull>
+      <isNotNull prepend="AND" property="ProcessTime_End">
+        t.`ProcessTime`&lt;=#ProcessTime_End#
+      </isNotNull>
+      <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        t.`LastUpdateTime`&gt;=#LastUpdateTime_Start#
+      </isNotNull>
+      <isNotNull prepend="AND" property="LastUpdateTime_End">
+        t.`LastUpdateTime`&lt;=#LastUpdateTime_End#
+      </isNotNull>
+      <isNotNull prepend="AND" property="LastUpdator">
+        t.`LastUpdator`=#LastUpdator#
+      </isNotNull>
+      <isNotNull prepend="AND" property="UserID">
+        t.`UserID`=#UserID#
+      </isNotNull>
+      <isNotNull prepend="AND" property="Title">
+        t.`Title`=#Title#
+      </isNotNull>
+      <isNotNull prepend="AND" property="WorkflowID">
+        t.`WorkflowID`=#WorkflowID#
+      </isNotNull>
+        <isNotNull prepend="AND" property="ApplierName">
+          `apply.Name LIKE '$ApplierName$'
+        </isNotNull>
+      <isNotNull property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+          t.Id=#IDs[]#
+        </iterate>
+      </isNotNull>
+    </dynamic>
+    <isNotNull property="PageSize">
+      <isGreaterThan property="PageSize" compareValue="0">
+        LIMIT #StartIndex#, #PageSize#
+      </isGreaterThan>
+    </isNotNull>
+    </select>
+  </statements>
+</sqlMap>

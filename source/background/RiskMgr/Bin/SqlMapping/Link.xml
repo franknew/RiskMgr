@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Link" type="DreamWorkflow.Engine.Model.Link" />
+    <typeAlias alias="LinkQueryForm" type="DreamWorkflow.Engine.Form.LinkQueryForm" />
+    <typeAlias alias="LinkUpdateForm" type="DreamWorkflow.Engine.Form.LinkUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryLink" resultClass="Link" parameterClass="LinkQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Link`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionID">
+        `LinkDefinitionID`=#LinkDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FromActivityID">
+        `FromActivityID`=#FromActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ToAcivityID">
+        `ToAcivityID`=#ToAcivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Passed">
+        `Passed`=#Passed#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_Start">
+        `PassedTime`&gt;=#PassedTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_End">
+        `PassedTime`&lt;=#PassedTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddLink" parameterClass="Link">
+  INSERT INTO `Link`
+  (
+    `ID`,
+    `LinkDefinitionID`,
+    `FromActivityID`,
+    `ToAcivityID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Passed`,
+    `PassedTime`,
+    `WorkflowID`,
+    `LastUpdateTime`,
+    `LastUpdator`
+  )
+  VALUES
+  (
+        #ID#,
+        #LinkDefinitionID#,
+        #FromActivityID#,
+        #ToAcivityID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Passed#,
+        #PassedTime#,
+        #WorkflowID#,
+        #LastUpdateTime#,
+        #LastUpdator#
+  )
+  </insert>
+  <update id="UpdateLink" parameterClass="LinkUpdateForm">
+  UPDATE `Link`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.LinkDefinitionID">
+        `LinkDefinitionID`=#Entity.LinkDefinitionID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.FromActivityID">
+        `FromActivityID`=#Entity.FromActivityID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ToAcivityID">
+        `ToAcivityID`=#Entity.ToAcivityID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Passed">
+        `Passed`=#Entity.Passed#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PassedTime">
+        `PassedTime`=#Entity.PassedTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.WorkflowID">
+        `WorkflowID`=#Entity.WorkflowID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="LinkQueryForm.ID">
+        `ID`=#LinkQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.LinkDefinitionID">
+        `LinkDefinitionID`=#LinkQueryForm.LinkDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.FromActivityID">
+        `FromActivityID`=#LinkQueryForm.FromActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.ToAcivityID">
+        `ToAcivityID`=#LinkQueryForm.ToAcivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.Name">
+        `Name`=#LinkQueryForm.Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.Creator">
+        `Creator`=#LinkQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#LinkQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#LinkQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.Passed">
+        `Passed`=#LinkQueryForm.Passed#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.PassedTime_Start">
+        `PassedTime`&gt;=#LinkQueryForm.PassedTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.PassedTime_End">
+        `PassedTime`&lt;=#LinkQueryForm.PassedTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.WorkflowID">
+        `WorkflowID`=#LinkQueryForm.WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LinkQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LinkQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkQueryForm.LastUpdator">
+        `LastUpdator`=#LinkQueryForm.LastUpdator#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteLink" parameterClass="LinkQueryForm">
+    DELETE FROM `Link` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionID">
+        `LinkDefinitionID`=#LinkDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FromActivityID">
+        `FromActivityID`=#FromActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ToAcivityID">
+        `ToAcivityID`=#ToAcivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Passed">
+        `Passed`=#Passed#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_Start">
+        `PassedTime`&gt;=#PassedTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_End">
+        `PassedTime`&lt;=#PassedTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+  </delete>
+   <select id="QueryLinkLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Link`
+   </select>
+   <select id="QueryLinkRecordCount" resultClass="int" parameterClass="LinkQueryForm">
+   SELECT COUNT(*) FROM `Link` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionID">
+        `LinkDefinitionID`=#LinkDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FromActivityID">
+        `FromActivityID`=#FromActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ToAcivityID">
+        `ToAcivityID`=#ToAcivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Passed">
+        `Passed`=#Passed#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_Start">
+        `PassedTime`&gt;=#PassedTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PassedTime_End">
+        `PassedTime`&lt;=#PassedTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

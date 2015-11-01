@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="ActivityDefinition" type="DreamWorkflow.Engine.Model.ActivityDefinition" />
+    <typeAlias alias="ActivityDefinitionQueryForm" type="DreamWorkflow.Engine.Form.ActivityDefinitionQueryForm" />
+    <typeAlias alias="ActivityDefinitionUpdateForm" type="DreamWorkflow.Engine.Form.ActivityDefinitionUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryActivityDefinition" resultClass="ActivityDefinition" parameterClass="ActivityDefinitionQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `ActivityDefinition`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        `Page`=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Title">
+        `Title`=#Title#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddActivityDefinition" parameterClass="ActivityDefinition">
+  INSERT INTO `ActivityDefinition`
+  (
+    `ID`,
+    `WorkflowDefinitionID`,
+    `Page`,
+    `Name`,
+    `Enabled`,
+    `Type`,
+    `Creator`,
+    `CreateTime`,
+    `Remark`,
+    `LastUpdateTime`,
+    `LastUpdator`,
+    `Title`,
+    `IsDeleted`
+  )
+  VALUES
+  (
+        #ID#,
+        #WorkflowDefinitionID#,
+        #Page#,
+        #Name#,
+        #Enabled#,
+        #Type#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#,
+        #LastUpdateTime#,
+        #LastUpdator#,
+        #Title#,
+        #IsDeleted#
+  )
+  </insert>
+  <update id="UpdateActivityDefinition" parameterClass="ActivityDefinitionUpdateForm">
+  UPDATE `ActivityDefinition`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#Entity.WorkflowDefinitionID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Page">
+        `Page`=#Entity.Page#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Enabled">
+        `Enabled`=#Entity.Enabled#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Type">
+        `Type`=#Entity.Type#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Title">
+        `Title`=#Entity.Title#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IsDeleted">
+        `IsDeleted`=#Entity.IsDeleted#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.ID">
+        `ID`=#ActivityDefinitionQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#ActivityDefinitionQueryForm.WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Page">
+        `Page`=#ActivityDefinitionQueryForm.Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Name">
+        `Name`=#ActivityDefinitionQueryForm.Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Enabled">
+        `Enabled`=#ActivityDefinitionQueryForm.Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Type">
+        `Type`=#ActivityDefinitionQueryForm.Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Creator">
+        `Creator`=#ActivityDefinitionQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#ActivityDefinitionQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#ActivityDefinitionQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Remark">
+        `Remark` LIKE '%$ActivityDefinitionQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#ActivityDefinitionQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#ActivityDefinitionQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.LastUpdator">
+        `LastUpdator`=#ActivityDefinitionQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.Title">
+        `Title`=#ActivityDefinitionQueryForm.Title#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionQueryForm.IsDeleted">
+        `IsDeleted`=#ActivityDefinitionQueryForm.IsDeleted#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <update id="DeleteActivityDefinition" parameterClass="ActivityDefinitionQueryForm">
+    UPDATE `ActivityDefinition` SET IsDelete=1 WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        `Page`=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Title">
+        `Title`=#Title#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+  </update>
+   <select id="QueryActivityDefinitionLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `ActivityDefinition`
+   </select>
+   <select id="QueryActivityDefinitionRecordCount" resultClass="int" parameterClass="ActivityDefinitionQueryForm">
+   SELECT COUNT(*) FROM `ActivityDefinition` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        `Page`=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Enabled">
+        `Enabled`=#Enabled#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Title">
+        `Title`=#Title#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

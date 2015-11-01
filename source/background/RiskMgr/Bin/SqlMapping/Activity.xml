@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="Activity" type="DreamWorkflow.Engine.Model.Activity" />
+    <typeAlias alias="ActivityQueryForm" type="DreamWorkflow.Engine.Form.ActivityQueryForm" />
+    <typeAlias alias="ActivityUpdateForm" type="DreamWorkflow.Engine.Form.ActivityUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryActivity" resultClass="Activity" parameterClass="ActivityQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `Activity`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionID">
+        `ActivityDefinitionID`=#ActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        `Page`=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Status">
+        `Status`=#Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_Start">
+        `ReadTime`&gt;=#ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_End">
+        `ReadTime`&lt;=#ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_Start">
+        `ProcessTime`&gt;=#ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_End">
+        `ProcessTime`&lt;=#ProcessTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Title">
+        `Title`=#Title#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddActivity" parameterClass="Activity">
+  INSERT INTO `Activity`
+  (
+    `ID`,
+    `ActivityDefinitionID`,
+    `Name`,
+    `Page`,
+    `Creator`,
+    `CreateTime`,
+    `Type`,
+    `WorkflowID`,
+    `Status`,
+    `ReadTime`,
+    `ProcessTime`,
+    `LastUpdateTime`,
+    `LastUpdator`,
+    `Title`
+  )
+  VALUES
+  (
+        #ID#,
+        #ActivityDefinitionID#,
+        #Name#,
+        #Page#,
+        #Creator#,
+        #CreateTime#,
+        #Type#,
+        #WorkflowID#,
+        #Status#,
+        #ReadTime#,
+        #ProcessTime#,
+        #LastUpdateTime#,
+        #LastUpdator#,
+        #Title#
+  )
+  </insert>
+  <update id="UpdateActivity" parameterClass="ActivityUpdateForm">
+  UPDATE `Activity`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.ActivityDefinitionID">
+        `ActivityDefinitionID`=#Entity.ActivityDefinitionID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Page">
+        `Page`=#Entity.Page#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Type">
+        `Type`=#Entity.Type#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.WorkflowID">
+        `WorkflowID`=#Entity.WorkflowID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Status">
+        `Status`=#Entity.Status#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ReadTime">
+        `ReadTime`=#Entity.ReadTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ProcessTime">
+        `ProcessTime`=#Entity.ProcessTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Title">
+        `Title`=#Entity.Title#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ActivityQueryForm.ID">
+        `ID`=#ActivityQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ActivityDefinitionID">
+        `ActivityDefinitionID`=#ActivityQueryForm.ActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Name">
+        `Name`=#ActivityQueryForm.Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Page">
+        `Page`=#ActivityQueryForm.Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Creator">
+        `Creator`=#ActivityQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#ActivityQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#ActivityQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Type">
+        `Type`=#ActivityQueryForm.Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.WorkflowID">
+        `WorkflowID`=#ActivityQueryForm.WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Status">
+        `Status`=#ActivityQueryForm.Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ReadTime_Start">
+        `ReadTime`&gt;=#ActivityQueryForm.ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ReadTime_End">
+        `ReadTime`&lt;=#ActivityQueryForm.ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ProcessTime_Start">
+        `ProcessTime`&gt;=#ActivityQueryForm.ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.ProcessTime_End">
+        `ProcessTime`&lt;=#ActivityQueryForm.ProcessTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#ActivityQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#ActivityQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.LastUpdator">
+        `LastUpdator`=#ActivityQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityQueryForm.Title">
+        `Title`=#ActivityQueryForm.Title#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteActivity" parameterClass="ActivityQueryForm">
+    DELETE FROM `Activity` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionID">
+        `ActivityDefinitionID`=#ActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        `Page`=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Status">
+        `Status`=#Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_Start">
+        `ReadTime`&gt;=#ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_End">
+        `ReadTime`&lt;=#ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_Start">
+        `ProcessTime`&gt;=#ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_End">
+        `ProcessTime`&lt;=#ProcessTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Title">
+        `Title`=#Title#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+  </delete>
+   <select id="QueryActivityLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `Activity`
+   </select>
+   <select id="QueryActivityRecordCount" resultClass="int" parameterClass="ActivityQueryForm">
+   SELECT COUNT(*) FROM `Activity` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityDefinitionID">
+        `ActivityDefinitionID`=#ActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Page">
+        `Page`=#Page#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Status">
+        `Status`=#Status#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_Start">
+        `ReadTime`&gt;=#ReadTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReadTime_End">
+        `ReadTime`&lt;=#ReadTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_Start">
+        `ProcessTime`&gt;=#ProcessTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProcessTime_End">
+        `ProcessTime`&lt;=#ProcessTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Title">
+        `Title`=#Title#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="DataDictionaryGroupAndItem" type="DreamWorkflow.Engine.Model.DataDictionaryGroupAndItem" />
+  </alias>
+  <statements>
+    <select id="QueryDataDictionaryGroupAndItemByGroupName" resultClass="DataDictionaryGroupAndItem" parameterClass="List">
+      SELECT
+      dg.ID AS GroupID, dg.Name AS GroupName, d.ID AS DataDictionaryID, d.Name AS DataDictionaryName, d.Value AS DataDictionaryValue
+      FROM `DataDictionary` d INNER JOIN DataDictionaryGroup dg
+      ON d.DataDictionaryGroupID=dg.ID
+      <dynamic prepend="WHERE">
+        <iterate prepend="OR" conjunction="OR" open="" close="">
+          dg.Name=#[]#
+        </iterate>
+      </dynamic>
+    </select>
+  </statements>
+</sqlMap>

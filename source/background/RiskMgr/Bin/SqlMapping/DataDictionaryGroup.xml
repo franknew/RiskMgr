@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="DataDictionaryGroup" type="DreamWorkflow.Engine.Model.DataDictionaryGroup" />
+    <typeAlias alias="DataDictionaryGroupQueryForm" type="DreamWorkflow.Engine.Form.DataDictionaryGroupQueryForm" />
+    <typeAlias alias="DataDictionaryGroupUpdateForm" type="DreamWorkflow.Engine.Form.DataDictionaryGroupUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryDataDictionaryGroup" resultClass="DataDictionaryGroup" parameterClass="DataDictionaryGroupQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `DataDictionaryGroup`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddDataDictionaryGroup" parameterClass="DataDictionaryGroup">
+  INSERT INTO `DataDictionaryGroup`
+  (
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Remark`,
+    `LastUpdateTime`,
+    `LastUpdator`,
+    `IsDeleted`
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#,
+        #LastUpdateTime#,
+        #LastUpdator#,
+        #IsDeleted#
+  )
+  </insert>
+  <update id="UpdateDataDictionaryGroup" parameterClass="DataDictionaryGroupUpdateForm">
+  UPDATE `DataDictionaryGroup`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IsDeleted">
+        `IsDeleted`=#Entity.IsDeleted#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.ID">
+        `ID`=#DataDictionaryGroupQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.Name">
+        `Name`=#DataDictionaryGroupQueryForm.Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.Creator">
+        `Creator`=#DataDictionaryGroupQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#DataDictionaryGroupQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#DataDictionaryGroupQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.Remark">
+        `Remark` LIKE '%$DataDictionaryGroupQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#DataDictionaryGroupQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#DataDictionaryGroupQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.LastUpdator">
+        `LastUpdator`=#DataDictionaryGroupQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DataDictionaryGroupQueryForm.IsDeleted">
+        `IsDeleted`=#DataDictionaryGroupQueryForm.IsDeleted#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <update id="DeleteDataDictionaryGroup" parameterClass="DataDictionaryGroupQueryForm">
+    UPDATE `DataDictionaryGroup` SET IsDelete=1 WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+  </update>
+   <select id="QueryDataDictionaryGroupLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `DataDictionaryGroup`
+   </select>
+   <select id="QueryDataDictionaryGroupRecordCount" resultClass="int" parameterClass="DataDictionaryGroupQueryForm">
+   SELECT COUNT(*) FROM `DataDictionaryGroup` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

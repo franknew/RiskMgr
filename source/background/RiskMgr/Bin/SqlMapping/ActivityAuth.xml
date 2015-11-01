@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="ActivityAuth" type="DreamWorkflow.Engine.Model.ActivityAuth" />
+    <typeAlias alias="ActivityAuthQueryForm" type="DreamWorkflow.Engine.Form.ActivityAuthQueryForm" />
+    <typeAlias alias="ActivityAuthUpdateForm" type="DreamWorkflow.Engine.Form.ActivityAuthUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryActivityAuth" resultClass="ActivityAuth" parameterClass="ActivityAuthQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `ActivityAuth`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthDefinitionID">
+        `ActivityAuthDefinitionID`=#ActivityAuthDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Value">
+        `Value`=#Value#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityID">
+        `ActivityID`=#ActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddActivityAuth" parameterClass="ActivityAuth">
+  INSERT INTO `ActivityAuth`
+  (
+    `ID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `ActivityAuthDefinitionID`,
+    `Type`,
+    `Value`,
+    `ActivityID`,
+    `WorkflowID`,
+    `LastUpdateTime`,
+    `LastUpdator`
+  )
+  VALUES
+  (
+        #ID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #ActivityAuthDefinitionID#,
+        #Type#,
+        #Value#,
+        #ActivityID#,
+        #WorkflowID#,
+        #LastUpdateTime#,
+        #LastUpdator#
+  )
+  </insert>
+  <update id="UpdateActivityAuth" parameterClass="ActivityAuthUpdateForm">
+  UPDATE `ActivityAuth`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ActivityAuthDefinitionID">
+        `ActivityAuthDefinitionID`=#Entity.ActivityAuthDefinitionID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Type">
+        `Type`=#Entity.Type#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Value">
+        `Value`=#Entity.Value#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ActivityID">
+        `ActivityID`=#Entity.ActivityID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.WorkflowID">
+        `WorkflowID`=#Entity.WorkflowID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.ID">
+        `ID`=#ActivityAuthQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.Name">
+        `Name`=#ActivityAuthQueryForm.Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.Creator">
+        `Creator`=#ActivityAuthQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#ActivityAuthQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#ActivityAuthQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.ActivityAuthDefinitionID">
+        `ActivityAuthDefinitionID`=#ActivityAuthQueryForm.ActivityAuthDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.Type">
+        `Type`=#ActivityAuthQueryForm.Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.Value">
+        `Value`=#ActivityAuthQueryForm.Value#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.ActivityID">
+        `ActivityID`=#ActivityAuthQueryForm.ActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.WorkflowID">
+        `WorkflowID`=#ActivityAuthQueryForm.WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#ActivityAuthQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#ActivityAuthQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthQueryForm.LastUpdator">
+        `LastUpdator`=#ActivityAuthQueryForm.LastUpdator#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteActivityAuth" parameterClass="ActivityAuthQueryForm">
+    DELETE FROM `ActivityAuth` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthDefinitionID">
+        `ActivityAuthDefinitionID`=#ActivityAuthDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Value">
+        `Value`=#Value#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityID">
+        `ActivityID`=#ActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+  </delete>
+   <select id="QueryActivityAuthLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `ActivityAuth`
+   </select>
+   <select id="QueryActivityAuthRecordCount" resultClass="int" parameterClass="ActivityAuthQueryForm">
+   SELECT COUNT(*) FROM `ActivityAuth` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityAuthDefinitionID">
+        `ActivityAuthDefinitionID`=#ActivityAuthDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Type">
+        `Type`=#Type#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Value">
+        `Value`=#Value#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ActivityID">
+        `ActivityID`=#ActivityID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowID">
+        `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

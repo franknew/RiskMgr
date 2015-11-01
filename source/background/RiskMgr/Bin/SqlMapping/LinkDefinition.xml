@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="LinkDefinition" type="DreamWorkflow.Engine.Model.LinkDefinition" />
+    <typeAlias alias="LinkDefinitionQueryForm" type="DreamWorkflow.Engine.Form.LinkDefinitionQueryForm" />
+    <typeAlias alias="LinkDefinitionUpdateForm" type="DreamWorkflow.Engine.Form.LinkDefinitionUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryLinkDefinition" resultClass="LinkDefinition" parameterClass="LinkDefinitionQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `LinkDefinition`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FromActivityDefinitionID">
+        `FromActivityDefinitionID`=#FromActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ToActivityDefinitionID">
+        `ToActivityDefinitionID`=#ToActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+        ORDER BY LastUpdateTime DESC
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddLinkDefinition" parameterClass="LinkDefinition">
+  INSERT INTO `LinkDefinition`
+  (
+    `ID`,
+    `FromActivityDefinitionID`,
+    `ToActivityDefinitionID`,
+    `Name`,
+    `Creator`,
+    `CreateTime`,
+    `Remark`,
+    `WorkflowDefinitionID`,
+    `LastUpdateTime`,
+    `LastUpdator`,
+    `IsDeleted`
+  )
+  VALUES
+  (
+        #ID#,
+        #FromActivityDefinitionID#,
+        #ToActivityDefinitionID#,
+        #Name#,
+        #Creator#,
+        #CreateTime#,
+        #Remark#,
+        #WorkflowDefinitionID#,
+        #LastUpdateTime#,
+        #LastUpdator#,
+        #IsDeleted#
+  )
+  </insert>
+  <update id="UpdateLinkDefinition" parameterClass="LinkDefinitionUpdateForm">
+  UPDATE `LinkDefinition`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.FromActivityDefinitionID">
+        `FromActivityDefinitionID`=#Entity.FromActivityDefinitionID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ToActivityDefinitionID">
+        `ToActivityDefinitionID`=#Entity.ToActivityDefinitionID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Name">
+        `Name`=#Entity.Name#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Creator">
+        `Creator`=#Entity.Creator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreateTime">
+        `CreateTime`=#Entity.CreateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Remark">
+        `Remark`=#Entity.Remark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#Entity.WorkflowDefinitionID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdateTime">
+        `LastUpdateTime`=#Entity.LastUpdateTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.IsDeleted">
+        `IsDeleted`=#Entity.IsDeleted#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.ID">
+        `ID`=#LinkDefinitionQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.FromActivityDefinitionID">
+        `FromActivityDefinitionID`=#LinkDefinitionQueryForm.FromActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.ToActivityDefinitionID">
+        `ToActivityDefinitionID`=#LinkDefinitionQueryForm.ToActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.Name">
+        `Name`=#LinkDefinitionQueryForm.Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.Creator">
+        `Creator`=#LinkDefinitionQueryForm.Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.CreateTime_Start">
+        `CreateTime`&gt;=#LinkDefinitionQueryForm.CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.CreateTime_End">
+        `CreateTime`&lt;=#LinkDefinitionQueryForm.CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.Remark">
+        `Remark` LIKE '%$LinkDefinitionQueryForm.Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#LinkDefinitionQueryForm.WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LinkDefinitionQueryForm.LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LinkDefinitionQueryForm.LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.LastUpdator">
+        `LastUpdator`=#LinkDefinitionQueryForm.LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LinkDefinitionQueryForm.IsDeleted">
+        `IsDeleted`=#LinkDefinitionQueryForm.IsDeleted#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <update id="DeleteLinkDefinition" parameterClass="LinkDefinitionQueryForm">
+    UPDATE `LinkDefinition` SET IsDelete=1 WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FromActivityDefinitionID">
+        `FromActivityDefinitionID`=#FromActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ToActivityDefinitionID">
+        `ToActivityDefinitionID`=#ToActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark`=#Remark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+  </update>
+   <select id="QueryLinkDefinitionLastUpdateTime" resultClass="DateTime">
+        SELECT MAX(LastUpdateTime) AS LastUpdateTime FROM `LinkDefinition`
+   </select>
+   <select id="QueryLinkDefinitionRecordCount" resultClass="int" parameterClass="LinkDefinitionQueryForm">
+   SELECT COUNT(*) FROM `LinkDefinition` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FromActivityDefinitionID">
+        `FromActivityDefinitionID`=#FromActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ToActivityDefinitionID">
+        `ToActivityDefinitionID`=#ToActivityDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Name">
+        `Name`=#Name#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Creator">
+        `Creator`=#Creator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_Start">
+        `CreateTime`&gt;=#CreateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreateTime_End">
+        `CreateTime`&lt;=#CreateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Remark">
+        `Remark` LIKE '%$Remark$%'
+    </isNotNull>
+    <isNotNull prepend="AND" property="WorkflowDefinitionID">
+        `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_Start">
+        `LastUpdateTime`&gt;=#LastUpdateTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdateTime_End">
+        `LastUpdateTime`&lt;=#LastUpdateTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
+    </isNotNull>
+    <isNotNull prepend="AND" property="IsDeleted">
+        `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

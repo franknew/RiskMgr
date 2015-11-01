@@ -3,3 +3,7 @@
 *.exe
 source/web/script/page/apply-amount/src/property.js
 source/web/script/page/apply-amount/src/setup2.tmpl.html
+*.suo
+source/background/RiskMgr/.vs/RiskMgr/v14/.suo
+*.txt
+*.resources
