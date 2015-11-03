@@ -31,6 +31,11 @@ namespace RiskMgr.Form
         public List<Asset> Assets { get; set; }
 
         /// <summary>
+        /// 公权人
+        /// </summary>
+        public List<Guarantor> Guarantor { get; set; }
+
+        /// <summary>
         /// 调查报告
         /// </summary>
         public string Report { get; set; }

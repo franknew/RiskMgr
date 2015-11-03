@@ -364,6 +364,84 @@
         `IsDeleted`=#IsDeleted#
     </isNotNull>
     
+    <isNotNull prepend="AND" property="RefundName">
+        `RefundName`=#RefundName#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="RefundAccount">
+        `RefundAccount`=#RefundAccount#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="RefundBankName">
+        `RefundBankName`=#RefundBankName#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="RefundMoney_Start">
+        `RefundMoney`&gt;=#RefundMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundMoney_End">
+        `RefundMoney`&lt;=#RefundMoney_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="RefundDate_Start">
+        `RefundDate`&gt;=#RefundDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundDate_End">
+        `RefundDate`&lt;=#RefundDate_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PaymentName">
+        `PaymentName`=#PaymentName#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PaymentAccount">
+        `PaymentAccount`=#PaymentAccount#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PaymentBankName">
+        `PaymentBankName`=#PaymentBankName#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PaymentMoney_Start">
+        `PaymentMoney`&gt;=#PaymentMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentMoney_End">
+        `PaymentMoney`&lt;=#PaymentMoney_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PaymentDate_Start">
+        `PaymentDate`&gt;=#PaymentDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentDate_End">
+        `PaymentDate`&lt;=#PaymentDate_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="DeductMoneyName">
+        `DeductMoneyName`=#DeductMoneyName#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="DeductMoneyAccount">
+        `DeductMoneyAccount`=#DeductMoneyAccount#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="DeductMoneyBankName">
+        `DeductMoneyBankName`=#DeductMoneyBankName#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="DeductMoneyMoney_Start">
+        `DeductMoneyMoney`&gt;=#DeductMoneyMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyMoney_End">
+        `DeductMoneyMoney`&lt;=#DeductMoneyMoney_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="DeductMoneyDate_Start">
+        `DeductMoneyDate`&gt;=#DeductMoneyDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyDate_End">
+        `DeductMoneyDate`&lt;=#DeductMoneyDate_End#
+    </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -440,7 +518,22 @@
     `MortgagePerson`,
     `MortgageRemark`,
     `InsuranceFreeTime`,
-    `IsDeleted`
+    `IsDeleted`,
+    `RefundName`,
+    `RefundAccount`,
+    `RefundBankName`,
+    `RefundMoney`,
+    `RefundDate`,
+    `PaymentName`,
+    `PaymentAccount`,
+    `PaymentBankName`,
+    `PaymentMoney`,
+    `PaymentDate`,
+    `DeductMoneyName`,
+    `DeductMoneyAccount`,
+    `DeductMoneyBankName`,
+    `DeductMoneyMoney`,
+    `DeductMoneyDate`
   )
   VALUES
   (
@@ -509,7 +602,22 @@
         #MortgagePerson#,
         #MortgageRemark#,
         #InsuranceFreeTime#,
-        #IsDeleted#
+        #IsDeleted#,
+        #RefundName#,
+        #RefundAccount#,
+        #RefundBankName#,
+        #RefundMoney#,
+        #RefundDate#,
+        #PaymentName#,
+        #PaymentAccount#,
+        #PaymentBankName#,
+        #PaymentMoney#,
+        #PaymentDate#,
+        #DeductMoneyName#,
+        #DeductMoneyAccount#,
+        #DeductMoneyBankName#,
+        #DeductMoneyMoney#,
+        #DeductMoneyDate#
   )
   </insert>
   <update id="UpdateProject" parameterClass="ProjectUpdateForm">
@@ -709,6 +817,51 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.IsDeleted">
         `IsDeleted`=#Entity.IsDeleted#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.RefundName">
+        `RefundName`=#Entity.RefundName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.RefundAccount">
+        `RefundAccount`=#Entity.RefundAccount#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.RefundBankName">
+        `RefundBankName`=#Entity.RefundBankName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.RefundMoney">
+        `RefundMoney`=#Entity.RefundMoney#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.RefundDate">
+        `RefundDate`=#Entity.RefundDate#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PaymentName">
+        `PaymentName`=#Entity.PaymentName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PaymentAccount">
+        `PaymentAccount`=#Entity.PaymentAccount#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PaymentBankName">
+        `PaymentBankName`=#Entity.PaymentBankName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PaymentMoney">
+        `PaymentMoney`=#Entity.PaymentMoney#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PaymentDate">
+        `PaymentDate`=#Entity.PaymentDate#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.DeductMoneyName">
+        `DeductMoneyName`=#Entity.DeductMoneyName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.DeductMoneyAccount">
+        `DeductMoneyAccount`=#Entity.DeductMoneyAccount#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.DeductMoneyBankName">
+        `DeductMoneyBankName`=#Entity.DeductMoneyBankName#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.DeductMoneyMoney">
+        `DeductMoneyMoney`=#Entity.DeductMoneyMoney#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.DeductMoneyDate">
+        `DeductMoneyDate`=#Entity.DeductMoneyDate#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -987,6 +1140,69 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ProjectQueryForm.IsDeleted">
         `IsDeleted`=#ProjectQueryForm.IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RefundName">
+        `RefundName`=#ProjectQueryForm.RefundName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RefundAccount">
+        `RefundAccount`=#ProjectQueryForm.RefundAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RefundBankName">
+        `RefundBankName`=#ProjectQueryForm.RefundBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RefundMoney_Start">
+        `RefundMoney`&gt;=#ProjectQueryForm.RefundMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RefundMoney_End">
+        `RefundMoney`&lt;=#ProjectQueryForm.RefundMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RefundDate_Start">
+        `RefundDate`&gt;=#ProjectQueryForm.RefundDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RefundDate_End">
+        `RefundDate`&lt;=#ProjectQueryForm.RefundDate_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PaymentName">
+        `PaymentName`=#ProjectQueryForm.PaymentName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PaymentAccount">
+        `PaymentAccount`=#ProjectQueryForm.PaymentAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PaymentBankName">
+        `PaymentBankName`=#ProjectQueryForm.PaymentBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PaymentMoney_Start">
+        `PaymentMoney`&gt;=#ProjectQueryForm.PaymentMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PaymentMoney_End">
+        `PaymentMoney`&lt;=#ProjectQueryForm.PaymentMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PaymentDate_Start">
+        `PaymentDate`&gt;=#ProjectQueryForm.PaymentDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PaymentDate_End">
+        `PaymentDate`&lt;=#ProjectQueryForm.PaymentDate_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DeductMoneyName">
+        `DeductMoneyName`=#ProjectQueryForm.DeductMoneyName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DeductMoneyAccount">
+        `DeductMoneyAccount`=#ProjectQueryForm.DeductMoneyAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DeductMoneyBankName">
+        `DeductMoneyBankName`=#ProjectQueryForm.DeductMoneyBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DeductMoneyMoney_Start">
+        `DeductMoneyMoney`&gt;=#ProjectQueryForm.DeductMoneyMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DeductMoneyMoney_End">
+        `DeductMoneyMoney`&lt;=#ProjectQueryForm.DeductMoneyMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DeductMoneyDate_Start">
+        `DeductMoneyDate`&gt;=#ProjectQueryForm.DeductMoneyDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DeductMoneyDate_End">
+        `DeductMoneyDate`&lt;=#ProjectQueryForm.DeductMoneyDate_End#
     </isNotNull>
     </dynamic>
   </update>
@@ -1277,6 +1493,69 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundName">
+        `RefundName`=#RefundName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundAccount">
+        `RefundAccount`=#RefundAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundBankName">
+        `RefundBankName`=#RefundBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundMoney_Start">
+        `RefundMoney`&gt;=#RefundMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundMoney_End">
+        `RefundMoney`&lt;=#RefundMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundDate_Start">
+        `RefundDate`&gt;=#RefundDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundDate_End">
+        `RefundDate`&lt;=#RefundDate_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentName">
+        `PaymentName`=#PaymentName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentAccount">
+        `PaymentAccount`=#PaymentAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentBankName">
+        `PaymentBankName`=#PaymentBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentMoney_Start">
+        `PaymentMoney`&gt;=#PaymentMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentMoney_End">
+        `PaymentMoney`&lt;=#PaymentMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentDate_Start">
+        `PaymentDate`&gt;=#PaymentDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentDate_End">
+        `PaymentDate`&lt;=#PaymentDate_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyName">
+        `DeductMoneyName`=#DeductMoneyName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyAccount">
+        `DeductMoneyAccount`=#DeductMoneyAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyBankName">
+        `DeductMoneyBankName`=#DeductMoneyBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyMoney_Start">
+        `DeductMoneyMoney`&gt;=#DeductMoneyMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyMoney_End">
+        `DeductMoneyMoney`&lt;=#DeductMoneyMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyDate_Start">
+        `DeductMoneyDate`&gt;=#DeductMoneyDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyDate_End">
+        `DeductMoneyDate`&lt;=#DeductMoneyDate_End#
     </isNotNull>
   </update>
    <select id="QueryProjectLastUpdateTime" resultClass="DateTime">
@@ -1570,6 +1849,69 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundName">
+        `RefundName`=#RefundName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundAccount">
+        `RefundAccount`=#RefundAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundBankName">
+        `RefundBankName`=#RefundBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundMoney_Start">
+        `RefundMoney`&gt;=#RefundMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundMoney_End">
+        `RefundMoney`&lt;=#RefundMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundDate_Start">
+        `RefundDate`&gt;=#RefundDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RefundDate_End">
+        `RefundDate`&lt;=#RefundDate_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentName">
+        `PaymentName`=#PaymentName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentAccount">
+        `PaymentAccount`=#PaymentAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentBankName">
+        `PaymentBankName`=#PaymentBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentMoney_Start">
+        `PaymentMoney`&gt;=#PaymentMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentMoney_End">
+        `PaymentMoney`&lt;=#PaymentMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentDate_Start">
+        `PaymentDate`&gt;=#PaymentDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PaymentDate_End">
+        `PaymentDate`&lt;=#PaymentDate_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyName">
+        `DeductMoneyName`=#DeductMoneyName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyAccount">
+        `DeductMoneyAccount`=#DeductMoneyAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyBankName">
+        `DeductMoneyBankName`=#DeductMoneyBankName#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyMoney_Start">
+        `DeductMoneyMoney`&gt;=#DeductMoneyMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyMoney_End">
+        `DeductMoneyMoney`&lt;=#DeductMoneyMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyDate_Start">
+        `DeductMoneyDate`&gt;=#DeductMoneyDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DeductMoneyDate_End">
+        `DeductMoneyDate`&lt;=#DeductMoneyDate_End#
     </isNotNull>
     </dynamic>
    </select>

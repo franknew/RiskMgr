@@ -33,7 +33,15 @@ namespace RiskMgr.WinformTest
             //string dt1 = "{\"2010-01-01\"}";
             //jsonTest t = JsonHelper.Deserialize<jsonTest>(dt);
             //var t1 = JsonHelper.Deserialize<DateTime?>(dt1);
+            Workflow wf = new Workflow();
+            RoleBLL rolebll = new RoleBLL();
+            AssetBLL assetbll = new AssetBLL();
 
+            var list = rolebll.GetUserSubUserIDs("13");
+            var roles = assetbll.Query(new AssetQueryForm
+            {
+                Creators = list,
+            });
             LogonRequest request = new LogonRequest();
             request.form = new LogonServiceForm
             {

@@ -11,7 +11,7 @@ namespace RiskMgr.Form
         /// <summary>
         /// 过户信息
         /// </summary>
-        public List<TrackingChangeOwner> ChangeOwner { get; set; }
+        public List<TrackingChangeOwner> TransferInfo { get; set; }
 
         /// <summary>
         /// 借贷信息

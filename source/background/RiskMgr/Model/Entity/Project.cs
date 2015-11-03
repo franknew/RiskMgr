@@ -6,7 +6,7 @@ using SOAFramework.Library.DAL;
 
 namespace RiskMgr.Model
 {
-    public class Project : SimpleEntity
+    public partial class Project : SimpleEntity
     {
         /// <summary>
         /// 额度申请类型1.二手楼买卖 2.首期垫付 3.现金赎楼 4.红本抵押
@@ -307,6 +307,81 @@ namespace RiskMgr.Model
         /// 
         /// </summary>
         public int? IsDeleted { get; set; }
+        
+        /// <summary>
+        /// 退款户名
+        /// </summary>
+        public string RefundName { get; set; }
+        
+        /// <summary>
+        /// 退款账号
+        /// </summary>
+        public string RefundAccount { get; set; }
+        
+        /// <summary>
+        /// 退款开户行
+        /// </summary>
+        public string RefundBankName { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public decimal? RefundMoney { get; set; }
+        
+        /// <summary>
+        /// 退款日期
+        /// </summary>
+        public DateTime? RefundDate { get; set; }
+        
+        /// <summary>
+        /// 出款户名
+        /// </summary>
+        public string PaymentName { get; set; }
+        
+        /// <summary>
+        /// 出款账号
+        /// </summary>
+        public string PaymentAccount { get; set; }
+        
+        /// <summary>
+        /// 出款开户行
+        /// </summary>
+        public string PaymentBankName { get; set; }
+        
+        /// <summary>
+        /// 出款金额
+        /// </summary>
+        public decimal? PaymentMoney { get; set; }
+        
+        /// <summary>
+        /// 出款日期
+        /// </summary>
+        public DateTime? PaymentDate { get; set; }
+        
+        /// <summary>
+        /// 扣款户名
+        /// </summary>
+        public string DeductMoneyName { get; set; }
+        
+        /// <summary>
+        /// 扣款账号
+        /// </summary>
+        public string DeductMoneyAccount { get; set; }
+        
+        /// <summary>
+        /// 扣款开户行
+        /// </summary>
+        public string DeductMoneyBankName { get; set; }
+        
+        /// <summary>
+        /// 扣款金额
+        /// </summary>
+        public decimal? DeductMoneyMoney { get; set; }
+        
+        /// <summary>
+        /// 扣款日期
+        /// </summary>
+        public DateTime? DeductMoneyDate { get; set; }
         
     }
 }

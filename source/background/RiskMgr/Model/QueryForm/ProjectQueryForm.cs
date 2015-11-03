@@ -178,5 +178,47 @@ namespace RiskMgr.Form
         
         public UInt64? IsDeleted { get; set; }
         
+        public string RefundName { get; set; }
+        
+        public string RefundAccount { get; set; }
+        
+        public string RefundBankName { get; set; }
+        
+        public DateTime? RefundMoney_Start { get; set; }
+        
+        public DateTime? RefundMoney_End { get; set; }
+        
+        public DateTime? RefundDate_Start { get; set; }
+        
+        public DateTime? RefundDate_End { get; set; }
+        
+        public string PaymentName { get; set; }
+        
+        public string PaymentAccount { get; set; }
+        
+        public string PaymentBankName { get; set; }
+        
+        public DateTime? PaymentMoney_Start { get; set; }
+        
+        public DateTime? PaymentMoney_End { get; set; }
+        
+        public DateTime? PaymentDate_Start { get; set; }
+        
+        public DateTime? PaymentDate_End { get; set; }
+        
+        public string DeductMoneyName { get; set; }
+        
+        public string DeductMoneyAccount { get; set; }
+        
+        public string DeductMoneyBankName { get; set; }
+        
+        public DateTime? DeductMoneyMoney_Start { get; set; }
+        
+        public DateTime? DeductMoneyMoney_End { get; set; }
+        
+        public DateTime? DeductMoneyDate_Start { get; set; }
+        
+        public DateTime? DeductMoneyDate_End { get; set; }
+        
     }
 }

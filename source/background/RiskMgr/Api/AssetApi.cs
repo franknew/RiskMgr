@@ -20,6 +20,7 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="asset"></param>
         /// <returns></returns>
+        [EditAction]
         public string Add(Asset form)
         {
             UserBLL userbll = new UserBLL();
@@ -33,6 +34,7 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="asset"></param>
         /// <returns></returns>
+        [EditAction]
         public bool Update(Asset form)
         {
             UserBLL userbll = new UserBLL();
@@ -51,6 +53,7 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="assetid"></param>
         /// <returns></returns>
+        [DeleteAction]
         public bool Delete(Asset form)
         {
             AssetQueryForm deleteform = new AssetQueryForm

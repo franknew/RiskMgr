@@ -42,5 +42,47 @@ namespace RiskMgr.BLL
             CustomerDao dao = new CustomerDao();
             return dao.CheckIdentityCode(form);
         }
+
+        public Customer Save(Customer customer)
+        {
+            CustomerDao customerdao = new CustomerDao();
+            var c = customerdao.Query(new CustomerQueryForm { ID = customer.ID, IsDeleted = 0, Enabled = 1 }).FirstOrDefault();
+            if (c == null)
+            {
+                c = customerdao.Query(new CustomerQueryForm { IdentityCode = customer.IdentityCode, Enabled = 1 }).FirstOrDefault();
+                if (c != null)
+                {
+                    customerdao.Update(new CustomerUpdateForm
+                    {
+                        Entity = new Customer
+                        {
+                            Name = customer.Name,
+                            Phone = customer.Phone,
+                            IdentityCode = customer.IdentityCode,
+                        },
+                        CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
+                    });
+                }
+                else
+                {
+                    customerdao.Add(customer);
+                    c = customer;
+                }
+            }
+            else
+            {
+                customerdao.Update(new CustomerUpdateForm
+                {
+                    Entity = new Customer
+                    {
+                        Name = customer.Name,
+                        Phone = customer.Phone,
+                        IdentityCode = customer.IdentityCode,
+                    },
+                    CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
+                });
+            }
+            return customer;
+        }
     }
 }

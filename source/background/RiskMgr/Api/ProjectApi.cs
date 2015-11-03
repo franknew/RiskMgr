@@ -38,16 +38,17 @@ namespace RiskMgr.Api
             {
                 updateCustomers.AddRange(form.Sellers);
             }
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            string userid = user.User.ID;
 
-            var result = bll.Add(form.Project, form.Assets, customers, updateCustomers);
+            var result = bll.Add(form.Project, form.Assets, customers, updateCustomers, form.Guarantor, userid);
 
             //处理流程
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
-            UserBLL userbll = new UserBLL();
-            var user = userbll.GetCurrentUser();
             var workflow = wfdm.StartNew(user.User.ID, result, new WorkflowAuthority());
             //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
-            var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == user.User.ID);
+            var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
             if (task != null)
             {
                 workflow.ProcessActivity(workflow.CurrentActivity.Value.ID, new Approval

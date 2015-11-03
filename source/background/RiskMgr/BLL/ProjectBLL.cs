@@ -17,9 +17,10 @@ namespace RiskMgr.BLL
 {
     public class ProjectBLL
     {
-        public string Add(Project project, List<Asset> assets, List<Customer_Project> customers, List<Customer> updatecustomers)
+        public string Add(Project project, List<Asset> assets, List<Customer_Project> customers, List<Customer> updatecustomers,
+            List<Guarantor> Guarantor, string userid)
         {
-            #region 初始化变量 
+            #region 初始化变量
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao projectdao = new ProjectDao(mapper);
             AssetDao assetdao = new AssetDao(mapper);
@@ -27,6 +28,8 @@ namespace RiskMgr.BLL
             Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
             CustomerDao customerdao = new CustomerDao(mapper);
             Customer_AssetDao cadao = new Customer_AssetDao(mapper);
+            AssetBLL assetbll = new AssetBLL();
+            CustomerBLL customerbll = new CustomerBLL();
             #endregion
 
             #region 处理项目信息
@@ -39,7 +42,8 @@ namespace RiskMgr.BLL
             string code = DateTime.Now.ToString("yyMMdd") + (index + 1).ToString();
             project.Name = code;
             project.Index = index + 1;
-            project.Creator = project.LastUpdator = user.User.ID;
+            project.Creator = project.LastUpdator = userid;
+            project.IsDeleted = 0;
             projectdao.Add(project);
             #endregion
 
@@ -48,75 +52,19 @@ namespace RiskMgr.BLL
             {
                 foreach (var asset in assets)
                 {
-                    //处理房产，房产证相同就更新
-                    Asset a = assetdao.Query(new AssetQueryForm
-                    {
-                        Code = asset.Code,
-                    }).FirstOrDefault();
-                    if (a != null)
-                    {
-                        assetdao.Update(new AssetUpdateForm
-                        {
-                            Entity = new Asset
-                            {
-                                Usage = asset.Usage,
-                                Address = asset.Address,
-                                Area = asset.Area,
-                                RegPrice = asset.RegPrice,
-                            },
-                            AssetQueryForm = new AssetQueryForm { ID = a.ID, Enabled = 1 },
-                        });
-                    }
-                    else
-                    {
-                        asset.Enabled = 1;
-                        assetdao.Add(asset);
-                        a = asset;
-                    }
+                    asset.Creator = userid;
+                    asset.IsDeleted = 0;
+                    var a = assetbll.Save(asset);
                     //处理房产和公权人
                     foreach (var j in asset.Joint)
                     {
-                        var c = customerdao.Query(new CustomerQueryForm { ID = j.ID }).FirstOrDefault();
-                        if (c == null)
-                        {
-                            c = customerdao.Query(new CustomerQueryForm { IdentityCode = j.IdentityCode, Enabled = 1 }).FirstOrDefault();
-                            if (c != null)
-                            {
-                                customerdao.Update(new CustomerUpdateForm
-                                {
-                                    Entity = new Customer
-                                    {
-                                        Name = j.Name,
-                                        Phone = j.Phone,
-                                        IdentityCode = j.IdentityCode,
-                                    },
-                                    CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
-                                });
-                            }
-                            else
-                            {
-                                customerdao.Add(j);
-                                c = j;
-                            }
-                        }
-                        else
-                        {
-                            customerdao.Update(new CustomerUpdateForm
-                            {
-                                Entity = new Customer
-                                {
-                                    Name = j.Name,
-                                    Phone = j.Phone,
-                                    IdentityCode = j.IdentityCode,
-                                },
-                                CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
-                            });
-                        }
+                        var c = customerbll.Save(j);
                         Customer_Asset ca = new Customer_Asset
                         {
                             AssetID = a.ID,
                             CustomerID = c.ID,
                             ProjectID = project.ID,
+                            Type = (int)CustomerAssetType.Owner,
                         };
                         cadao.Add(ca);
                     }
@@ -136,6 +84,7 @@ namespace RiskMgr.BLL
             {
                 foreach (var customer in updatecustomers)
                 {
+                    customer.IsDeleted = 0;
                     var c = customerdao.Query(new CustomerQueryForm { ID = customer.ID }).FirstOrDefault();
                     if (c == null)
                     {
@@ -160,6 +109,7 @@ namespace RiskMgr.BLL
                         }
                         else
                         {
+                            customer.Creator = userid;
                             customerdao.Add(customer);
                         }
                     }
@@ -194,28 +144,46 @@ namespace RiskMgr.BLL
             }
             #endregion
 
+            #region 处理共权人信息
+            if (Guarantor != null)
+            {
+                foreach (Guarantor g in Guarantor)
+                {
+                    g.Creator = userid;
+                    g.IsDeleted = 0;
+                    var c = customerbll.Save(g);
+                    Customer_Project cp = new Customer_Project
+                    {
+                        CustomerID = c.ID,
+                        ProjectID = project.ID,
+                        Type = (int)CustomerType.Guarantor,
+                    };
+                    cpdao.Add(cp);
+                    foreach (var asset in g.Assets)
+                    {
+                        var a = assetbll.Save(asset);
+                        Customer_Asset ca = new Customer_Asset
+                        {
+                            AssetID = a.ID,
+                            CustomerID = c.ID,
+                            ProjectID = project.ID,
+                            Type = (int)CustomerAssetType.Guarantor,
+                        };
+                        cadao.Add(ca);
+                    }
+                }
+            }
+            #endregion
+
             projectid = project.ID;
             return projectid;
         }
 
-        //public List<InitApprovalResultForm> Query(QueryProjectServiceForm form)
-        //{
-        //    ISqlMapper mapper = Common.GetMapperFromSession();
-        //    ProjectDao dao = new ProjectDao(mapper);
-        //    var list = dao.QueryProjectByRelationship(form);
-        //    List<InitApprovalResultForm> result = new List<InitApprovalResultForm>();
-        //    foreach (var project in list)
-        //    {
-        //        var p = QueryDetail(project.ID);
-        //        result.Add(p);
-        //    }
-        //    return result;
-        //}
-
         private InitApprovalResultForm QueryDetail(Project project, List<Customer> customers,
             List<Asset> assets, List<Customer_Project> cps, List<Customer_Asset> cas, List<Asset_Project> aps,
             List<Workflow> workflows, List<Activity> activities, List<Approval> approvals, List<Task> tasks,
-            List<UserInfo> users, List<User_Role> userroles, string currentuserid)
+            List<UserInfo> users, List<User_Role> userroles, List<TrackingChangeOwner> tcolist,
+            List<TrackingMortgage> tmlist, string currentuserid)
         {
             InitApprovalResultForm result = new InitApprovalResultForm();
             var customerids = (from c in cps
@@ -224,12 +192,18 @@ namespace RiskMgr.BLL
             var assetids = (from a in aps
                             where a.ProjectID == project.ID
                             select a.AssetID).ToList();
+            //买家
             var buyerids = (from c in cps
                             where c.ProjectID == project.ID && c.Type == (int)CustomerType.Buyer
                             select c.CustomerID).ToList();
+            //卖家
             var sellerids = (from c in cps
                              where c.ProjectID == project.ID && c.Type == (int)CustomerType.Seller
                              select c.CustomerID).ToList();
+            //共权人
+            var guarantorids = (from g in cps
+                              where g.ProjectID == project.ID && g.Type == (int)CustomerType.Guarantor
+                              select g.CustomerID).ToList();
 
             result.Assets = (from a in assets
                              where assetids.Exists(t => t == a.ID)
@@ -240,6 +214,24 @@ namespace RiskMgr.BLL
             result.Sellers = (from c in customers
                               where sellerids.Exists(t => t == c.ID)
                               select c).ToList();
+            var guarantors = (from c in customers
+                               where guarantorids.Exists(t=>t==c.ID)
+                               select c).ToList();
+            List<Guarantor> guarantorlist = new List<Guarantor>();
+            foreach (var c in guarantors)
+            {
+                Guarantor guarantor = c as Guarantor;
+                var casids = (from a in cas
+                              where a.ProjectID == project.ID && a.CustomerID == c.ID
+                              select a.AssetID).ToList();
+                var assetlist = (from a in assets
+                                  where casids.Exists(t => t == a.ID)
+                                  select a).ToList();
+                guarantor.Assets = assetlist;
+                guarantorlist.Add(guarantor);
+            }
+
+            result.Guarantor = guarantorlist;
 
             foreach (var asset in result.Assets)
             {
@@ -304,7 +296,7 @@ namespace RiskMgr.BLL
             result.Operator = string.Join(",", usernamelist);
             
             string userid = currentuserid;
-            var task = tasks.Find(t => t.WorkflowID == project.ID && t.ActivityID == processingActivity.ID && t.UserID == userid);
+            var task = tasks.Find(t => t.WorkflowID == workflow.ID && t.ActivityID == processingActivity.ID && t.UserID == userid);
 
             if (task != null)
             {
@@ -319,6 +311,10 @@ namespace RiskMgr.BLL
                 }
             }
             #region 为财务和保后跟踪特别处理
+            //读取保后跟踪的信息
+            result.TransferInfo = tcolist.Find(t => t.ProjectID == project.ID);
+            result.Mortgage = tmlist.Find(t => t.ProjectID == project.ID);
+
             //为财务和保后跟踪特别处理
             var roles = userroles.FindAll(t => t.UserID == userid);
             if (roles.Exists(t => t.RoleID == "5"))//处理财务
@@ -359,7 +355,7 @@ namespace RiskMgr.BLL
         {
             #region init dao
             List<InitApprovalResultForm> result = new List<InitApprovalResultForm>();
-            if (projectids == null && projectids.Count ==0)
+            if (projectids == null && projectids.Count == 0)
             {
                 return result;
             }
@@ -375,6 +371,8 @@ namespace RiskMgr.BLL
             TaskDao taskdao = new TaskDao(mapper);
             UserInfoDao uidao = new UserInfoDao(mapper);
             User_RoleDao urdao = new User_RoleDao(mapper);
+            TrackingChangeOwnerDao tcodao = new TrackingChangeOwnerDao(mapper);
+            TrackingMortgageDao tmdao = new TrackingMortgageDao(mapper);
             #endregion
 
             #region 查询数据
@@ -384,6 +382,8 @@ namespace RiskMgr.BLL
             List<Activity> activities = new List<Activity>();
             List<Approval> approvals = new List<Approval>();
             List<Task> tasks = new List<Task>();
+            List<TrackingChangeOwner> tco = new List<TrackingChangeOwner>();
+            List<TrackingMortgage> tm = new List<TrackingMortgage>();
             var list = dao.Query(new ProjectQueryForm { IDs = projectids });
             var projectidlist = (from p in list
                                  select p.ID).ToList();
@@ -404,6 +404,8 @@ namespace RiskMgr.BLL
             }
             var users = uidao.Query(new UserInfoQueryForm { });
             var userroles = urdao.Query(new User_RoleQueryForm { });
+            tco = tcodao.Query(new TrackingChangeOwnerQueryForm { ProjectIDs = projectidlist });
+            tm = tmdao.Query(new TrackingMortgageQueryForm { ProjectIDs = projectidlist });
 
             //从缓存中取得
             var customers = TableCacheHelper.GetDataFromCache<Customer>(typeof(CustomerDao));
@@ -412,7 +414,8 @@ namespace RiskMgr.BLL
 
             foreach (Project project in list)
             {
-                result.Add(QueryDetail(project, customers, assets, cps, cas, aps, workflows, activities, approvals, tasks, users, userroles, currentuserid));
+                result.Add(QueryDetail(project, customers, assets, cps, cas, aps, workflows, activities, approvals, tasks, users, userroles,
+                    tco, tm, currentuserid));
             }
             return result;
         }
@@ -425,161 +428,6 @@ namespace RiskMgr.BLL
             };
             return Query(projectids, currentuserid).FirstOrDefault();
         }
-
-        //public InitApprovalResultForm QueryDetail(string projectid)
-        //{
-        //    #region 初始化变量
-        //    InitApprovalResultForm form = new InitApprovalResultForm();
-        //    var mapper = Common.GetMapperFromSession();
-        //    ProjectDao projectdao = new ProjectDao(mapper);
-        //    CustomerDao customerdao = new CustomerDao(mapper);
-        //    AssetDao assetdao = new AssetDao(mapper);
-        //    Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
-        //    Customer_AssetDao cadao = new Customer_AssetDao(mapper);
-        //    Asset_ProjectDao apdao = new Asset_ProjectDao(mapper);
-        //    WorkflowDao wfdao = new WorkflowDao(mapper);
-        //    ActivityDao acdao = new ActivityDao(mapper);
-        //    TaskDao taskdao = new TaskDao(mapper);
-        //    ApprovalDao appdao = new ApprovalDao(mapper);
-        //    User_RoleDao urdao = new User_RoleDao(mapper);
-        //    RoleDao roledao = new RoleDao(mapper);
-        //    UserInfoDao userdao = new UserInfoDao(mapper);
-        //    #endregion
-
-        //    form.Project = projectdao.Query(new ProjectQueryForm { ID = projectid }).FirstOrDefault();
-        //    if (form.Project == null)
-        //    {
-        //        return form;
-        //    }
-        //    var cps = cpdao.Query(new Customer_ProjectQueryForm { ProjectID = projectid });
-        //    var aps = apdao.Query(new Asset_ProjectQueryForm { ProjectID = projectid });
-        //    List<string> customerids = new List<string>();
-        //    List<string> assetids = new List<string>();
-        //    foreach (var cp in cps)
-        //    {
-        //        customerids.Add(cp.CustomerID);
-        //    }
-        //    foreach (var ap in aps)
-        //    {
-        //        assetids.Add(ap.AssetID);
-        //    }
-        //    //处理客户
-        //    var buyerids = (from a in cps.FindAll(t => t.Type == (int)CustomerType.Buyer)
-        //                    select a.CustomerID).ToList();
-        //    var sellerids = (from a in cps.FindAll(t => t.Type == (int)CustomerType.Seller)
-        //                     select a.CustomerID).ToList();
-        //    form.Buyers = customerdao.Query(new CustomerQueryForm { Ids = buyerids });
-        //    form.Sellers = customerdao.Query(new CustomerQueryForm { Ids = sellerids });
-        //    //处理房产和公权人
-        //    form.Assets = assetdao.Query(new AssetQueryForm { Ids = assetids });
-        //    if (form.Assets != null)
-        //    {
-        //        foreach (var a in form.Assets)
-        //        {
-        //            var jointids = (from t in cadao.Query(new Customer_AssetQueryForm { AssetID = a.ID, ProjectID = projectid })
-        //                            select t.CustomerID).ToList();
-        //            a.Joint = customerdao.Query(new CustomerQueryForm { Ids = jointids });
-        //        }
-        //    }
-
-        //    UserBLL userbll = new UserBLL();
-        //    var user = userbll.GetCurrentUser();
-        //    string userid = user.User.ID;
-        //    //string userid = "3";
-
-        //    #region 处理流程
-        //    //处理流程相关信息
-        //    var workflow = wfdao.Query(new WorkflowQueryForm { ProcessID = projectid }).FirstOrDefault();
-        //    if (workflow != null)
-        //    {
-        //        //查询所有审批人的信息
-        //        form.WorkflowID = workflow.ID;
-        //        var approvals = appdao.Query(new ApprovalQueryForm { WorkflowID = form.WorkflowID });
-        //        List<string> useridlist = (from a in approvals select a.Creator).ToList();
-        //        List<UserInfo> userlist = userdao.Query(new UserInfoQueryForm { Ids = useridlist });
-
-        //        var activities = acdao.Query(new ActivityQueryForm { WorkflowID = form.WorkflowID });
-        //        //查询历史审批意见
-        //        List<ApprovalInfo> approvalinfo = approvals.ToDataTable().ToList<ApprovalInfo>().ToList();
-        //        foreach (var a in approvalinfo)
-        //        {
-        //            var ac = activities.Find(t => t.ID == a.ActivityID);
-        //            if (ac != null)
-        //            {
-        //                a.ActivityName = ac.Name;
-        //            }
-        //            var userinfo = userlist.Find(t => t.ID == a.Creator);
-        //            if (userinfo != null)
-        //            {
-        //                a.Processor = userinfo.CnName;
-        //            }
-        //        }
-        //        form.Approvals = approvalinfo;
-        //        form.Action = ActionStatus.Queryable;
-        //        var activity = activities.Find(t => t.Status == (int)ActivityProcessStatus.Processing);
-        //        //处理财务和跟踪的显示问题
-        //        Activity financeActivity = activities.Find(t => t.Name.Contains("财务"));
-        //        if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
-        //        {
-        //            form.DisplayCharge = true;
-        //            form.DisplayTracking = true;
-        //        }
-        //        //获得流程相关的信息
-        //        if (activity != null)
-        //        {
-        //            //处理中流程的操作人
-        //            var activeTasks = taskdao.Query(new TaskQueryForm { ActivityID = activity.ID });
-        //            useridlist = (from a in activeTasks select a.UserID).ToList();
-        //            userlist = userdao.Query(new UserInfoQueryForm { Ids = useridlist });
-
-        //            form.Operator = string.Join(",", (from u in userlist select u.CnName).ToArray());
-
-        //            form.CurrentActivity = activity;
-
-        //            var task = taskdao.Query(new TaskQueryForm { ActivityID = activity.ID, UserID = userid }).FirstOrDefault();
-        //            if (task != null)
-        //            {
-        //                form.TaskID = task.ID;
-        //                if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid && workflow.Creator == task.UserID)
-        //                {
-        //                    form.Action = ActionStatus.Editable;
-        //                }
-        //                else if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid)
-        //                {
-        //                    form.Action = ActionStatus.Approvalable;
-        //                }
-        //            }
-        //            #region 为财务和保后跟踪特别处理
-        //            //为财务和保后跟踪特别处理
-        //            var roles = urdao.Query(new User_RoleQueryForm { UserID = userid });
-        //            if (roles.Exists(t => t.RoleID == "5"))//处理财务
-        //            {
-        //                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
-        //                {
-        //                    form.DisplayCharge = true;
-        //                    form.Action = ActionStatus.Editable;
-        //                }
-        //                else if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
-        //                {
-        //                    form.DisplayCharge = true;
-        //                    form.ChargeCanEdit = true;
-        //                }
-        //            }
-        //            else if (roles.Exists(t => t.RoleID == "6"))//处理跟踪
-        //            {
-        //                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
-        //                {
-        //                    form.FollowupCanEdit = true;
-        //                    form.Action = ActionStatus.Queryable;
-        //                }
-        //            }
-        //            #endregion
-        //        }
-        //    }
-        //    #endregion
-
-        //    return form;
-        //}
 
         public List<Project> QueryMyProject(WorkflowProcessStatus processStatus)
         {
@@ -626,21 +474,31 @@ namespace RiskMgr.BLL
 
         public bool UpdateFinance(Project project)
         {
+            if (project == null)
+            {
+                throw new Exception("project不能为null");
+            }
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao dao = new ProjectDao(mapper);
             dao.Update(new ProjectUpdateForm
             {
                 Entity = new Project
                 {
-                    InsuranceFee = project.InsuranceFee,
-                    InsuranceTime = project.InsuranceTime,
-                    ExportMoney = project.ExportMoney,
-                    ExportTime = project.ExportTime,
-                    ReturnBackMoney = project.ReturnBackMoney,
-                    ReturnBackTime = project.ReturnBackTime,
-                    DelayFee = project.DelayFee,
-                    DelayTime = project.DelayTime,
-                    HasExpired = project.HasExpired,
+                    RefundAccount = project.RefundAccount,
+                    RefundBankName = project.RefundBankName,
+                    RefundDate = project.RefundDate,
+                    RefundMoney = project.RefundMoney,
+                    RefundName = project.RefundName,
+                    PaymentName = project.PaymentName,
+                    PaymentAccount = project.PaymentAccount,
+                    PaymentBankName = project.PaymentBankName,
+                    PaymentDate = project.PaymentDate,
+                    PaymentMoney = project.PaymentMoney,
+                    DeductMoneyAccount = project.DeductMoneyAccount,
+                    DeductMoneyBankName = project.DeductMoneyBankName,
+                    DeductMoneyDate = project.DeductMoneyDate,
+                    DeductMoneyMoney = project.DeductMoneyMoney,
+                    DeductMoneyName = project.DeductMoneyName,
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
@@ -669,10 +527,10 @@ namespace RiskMgr.BLL
             });
             //过户信息处理
             tcodao.Delete(new TrackingChangeOwnerQueryForm { ProjectID = project.ID });
-            foreach (TrackingChangeOwner co in project.ChangeOwner)
+            foreach (TrackingChangeOwner co in project.TransferInfo)
             {
                 co.ProjectID = project.ID;
-                co.Creator = co.LastUpdater = user.User.ID;
+                co.Creator = co.LastUpdator = user.User.ID;
                 tcodao.Add(co);
             }
             //借贷信息处理
@@ -680,7 +538,7 @@ namespace RiskMgr.BLL
             foreach (TrackingMortgage m in project.Mortgage)
             {
                 m.ProjectID = project.ID;
-                m.Creator = m.LastUpdater = user.User.ID;
+                m.Creator = m.LastUpdator = user.User.ID;
                 tmdao.Add(m);
             }
             return true;

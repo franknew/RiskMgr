@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionAttribute.cs" />
+    <Compile Include="Entity\AccountPayment.cs" />
     <Compile Include="Entity\Action.cs" />
     <Compile Include="Entity\ApprovalInfo.cs" />
     <Compile Include="Entity\Asset.cs" />
@@ -56,10 +57,12 @@
     <Compile Include="Entity\Customer.cs" />
     <Compile Include="Entity\Customer_Asset.cs" />
     <Compile Include="Entity\Customer_Project.cs" />
+    <Compile Include="Entity\FinancePayment.cs" />
     <Compile Include="Entity\FullActivity.cs" />
     <Compile Include="Entity\FullTask.cs" />
     <Compile Include="Entity\FullUser.cs" />
     <Compile Include="Entity\Asset_ex.cs" />
+    <Compile Include="Entity\Guarantor.cs" />
     <Compile Include="Entity\LogonHistory.cs" />
     <Compile Include="Entity\Menu.cs" />
     <Compile Include="Entity\MenuCache.cs" />
