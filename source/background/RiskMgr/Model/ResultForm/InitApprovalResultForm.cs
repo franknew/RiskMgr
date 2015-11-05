@@ -53,11 +53,11 @@ namespace RiskMgr.Form
         /// <summary>
         /// 保后追踪，过户信息
         /// </summary>
-        public TrackingChangeOwner TransferInfo { get; set; }
+        public List<TrackingChangeOwner> TransferInfo { get; set; }
 
         /// <summary>
         /// 保后追踪，贷款信息
         /// </summary>
-        public TrackingMortgage Mortgage { get; set; }
+        public List<TrackingMortgage> Mortgage { get; set; }
     }
 }

@@ -144,6 +144,9 @@ namespace RiskMgr.Api
         [ApprovalAction]
         public bool UpdateCharge(FinaceApprovalServiceForm form)
         {
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            form.Project.LastUpdator = userid;
             return bll.UpdateFinance(form.WorkflowID, form.ActivityID, form.TaskID, form.Project);
         }
 
@@ -155,6 +158,9 @@ namespace RiskMgr.Api
         [EditAction]
         public bool UpdateFinance(FinaceApprovalServiceForm form)
         {
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            form.Project.LastUpdator = userid;
             return bll.UpdateFinance(form.Project);
         }
 
@@ -166,6 +172,9 @@ namespace RiskMgr.Api
         [EditAction]
         public bool UpdateTracking(UpdateTrackingServiceForm form)
         {
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            form.Project.LastUpdator = userid;
             return bll.UpdateTracking(form);
         }
     }

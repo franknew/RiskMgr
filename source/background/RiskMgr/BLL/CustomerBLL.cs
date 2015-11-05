@@ -59,12 +59,15 @@ namespace RiskMgr.BLL
                             Name = customer.Name,
                             Phone = customer.Phone,
                             IdentityCode = customer.IdentityCode,
+                            LastUpdator = customer.LastUpdator,
                         },
                         CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
                     });
                 }
                 else
                 {
+                    customer.IsDeleted = 0;
+                    customer.Enabled = 1;
                     customerdao.Add(customer);
                     c = customer;
                 }
@@ -82,7 +85,7 @@ namespace RiskMgr.BLL
                     CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
                 });
             }
-            return customer;
+            return c;
         }
     }
 }

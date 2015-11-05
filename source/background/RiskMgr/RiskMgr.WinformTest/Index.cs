@@ -209,8 +209,8 @@ namespace RiskMgr.WinformTest
 
         private void button15_Click(object sender, EventArgs e)
         {
-            ProjectApi api = new ProjectApi();
-            api.InitApproval(new ProjectQueryForm { ID = textBox1.Text });
+            ProjectBLL bll = new ProjectBLL();
+            bll.QueryDetail(textBox1.Text, "7");
         }
 
         private void button16_Click(object sender, EventArgs e)

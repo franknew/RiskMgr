@@ -53,11 +53,11 @@ namespace RiskMgr.BLL
                 foreach (var asset in assets)
                 {
                     asset.Creator = userid;
-                    asset.IsDeleted = 0;
                     var a = assetbll.Save(asset);
                     //处理房产和公权人
                     foreach (var j in asset.Joint)
                     {
+                        j.Creator = userid;
                         var c = customerbll.Save(j);
                         Customer_Asset ca = new Customer_Asset
                         {
@@ -150,7 +150,6 @@ namespace RiskMgr.BLL
                 foreach (Guarantor g in Guarantor)
                 {
                     g.Creator = userid;
-                    g.IsDeleted = 0;
                     var c = customerbll.Save(g);
                     Customer_Project cp = new Customer_Project
                     {
@@ -161,6 +160,7 @@ namespace RiskMgr.BLL
                     cpdao.Add(cp);
                     foreach (var asset in g.Assets)
                     {
+                        asset.Creator = userid;
                         var a = assetbll.Save(asset);
                         Customer_Asset ca = new Customer_Asset
                         {
@@ -220,9 +220,9 @@ namespace RiskMgr.BLL
             List<Guarantor> guarantorlist = new List<Guarantor>();
             foreach (var c in guarantors)
             {
-                Guarantor guarantor = c as Guarantor;
+                Guarantor guarantor = c.ConvertTo<Guarantor>();
                 var casids = (from a in cas
-                              where a.ProjectID == project.ID && a.CustomerID == c.ID
+                              where a.ProjectID == project.ID && a.CustomerID == c.ID && a.Type == (int)CustomerAssetType.Guarantor
                               select a.AssetID).ToList();
                 var assetlist = (from a in assets
                                   where casids.Exists(t => t == a.ID)
@@ -312,8 +312,8 @@ namespace RiskMgr.BLL
             }
             #region 为财务和保后跟踪特别处理
             //读取保后跟踪的信息
-            result.TransferInfo = tcolist.Find(t => t.ProjectID == project.ID);
-            result.Mortgage = tmlist.Find(t => t.ProjectID == project.ID);
+            result.TransferInfo = tcolist.FindAll(t => t.ProjectID == project.ID);
+            result.Mortgage = tmlist.FindAll(t => t.ProjectID == project.ID);
 
             //为财务和保后跟踪特别处理
             var roles = userroles.FindAll(t => t.UserID == userid);

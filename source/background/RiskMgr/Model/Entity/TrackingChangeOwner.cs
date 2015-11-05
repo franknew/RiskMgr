@@ -6,17 +6,12 @@ using SOAFramework.Library.DAL;
 
 namespace RiskMgr.Model
 {
-    public class TrackingChangeOwner : SimpleEntity
+    public partial class TrackingChangeOwner : SimpleEntity
     {
         /// <summary>
         /// 
         /// </summary>
         public string ProjectID { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public string LastUpdater { get; set; }
         
         /// <summary>
         /// 过户办文编号

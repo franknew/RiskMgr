@@ -60,6 +60,7 @@ namespace RiskMgr.BLL
             else
             {
                 asset.Enabled = 1;
+                asset.IsDeleted = 0;
                 dao.Add(asset);
                 a = asset;
             }

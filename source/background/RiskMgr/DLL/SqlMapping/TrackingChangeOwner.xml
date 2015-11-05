@@ -46,8 +46,8 @@
         `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
     
-    <isNotNull prepend="AND" property="LastUpdater">
-        `LastUpdater`=#LastUpdater#
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
     </isNotNull>
     
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
@@ -91,7 +91,7 @@
     `ProjectID`,
     `Creator`,
     `CreateTime`,
-    `LastUpdater`,
+    `LastUpdator`,
     `LastUpdateTime`,
     `ChangeOwnerCode`,
     `ChangeOwnerTime`,
@@ -104,7 +104,7 @@
         #ProjectID#,
         #Creator#,
         #CreateTime#,
-        #LastUpdater#,
+        #LastUpdator#,
         #LastUpdateTime#,
         #ChangeOwnerCode#,
         #ChangeOwnerTime#,
@@ -124,8 +124,8 @@
         <isNotNull prepend="," property="Entity.CreateTime">
         `CreateTime`=#Entity.CreateTime#
         </isNotNull>
-        <isNotNull prepend="," property="Entity.LastUpdater">
-        `LastUpdater`=#Entity.LastUpdater#
+        <isNotNull prepend="," property="Entity.LastUpdator">
+        `LastUpdator`=#Entity.LastUpdator#
         </isNotNull>
         <isNotNull prepend="," property="Entity.LastUpdateTime">
         `LastUpdateTime`=#Entity.LastUpdateTime#
@@ -159,8 +159,8 @@
     <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.CreateTime_End">
         `CreateTime`&lt;=#TrackingChangeOwnerQueryForm.CreateTime_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.LastUpdater">
-        `LastUpdater`=#TrackingChangeOwnerQueryForm.LastUpdater#
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.LastUpdator">
+        `LastUpdator`=#TrackingChangeOwnerQueryForm.LastUpdator#
     </isNotNull>
     <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#TrackingChangeOwnerQueryForm.LastUpdateTime_Start#
@@ -217,8 +217,8 @@
     <isNotNull prepend="AND" property="CreateTime_End">
         `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="LastUpdater">
-        `LastUpdater`=#LastUpdater#
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
@@ -278,8 +278,8 @@
     <isNotNull prepend="AND" property="CreateTime_End">
         `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="LastUpdater">
-        `LastUpdater`=#LastUpdater#
+    <isNotNull prepend="AND" property="LastUpdator">
+        `LastUpdator`=#LastUpdator#
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#

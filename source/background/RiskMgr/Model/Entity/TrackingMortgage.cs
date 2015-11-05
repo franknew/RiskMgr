@@ -6,17 +6,12 @@ using SOAFramework.Library.DAL;
 
 namespace RiskMgr.Model
 {
-    public class TrackingMortgage : SimpleEntity
+    public partial class TrackingMortgage : SimpleEntity
     {
         /// <summary>
         /// 
         /// </summary>
         public string ProjectID { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public string LastUpdater { get; set; }
         
         /// <summary>
         /// 抵押回执编号
