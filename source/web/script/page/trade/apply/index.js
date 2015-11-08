@@ -282,9 +282,11 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./view","./data"],fu
 			});
 
 			require('./data').get().done(function(data) {
+				var id = data&&data.Project&&data.Project.Name;
+				console.log('ddd',data.Project);
 				Views.init({
 					mode:params.action,
-					head:head+'<small>('+data.id+')</small>',
+					head:head+'<small>('+id+')</small>',
 					data:data
 				});
 			});
@@ -554,7 +556,7 @@ define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","ris
  * @date    2015-08-09 14:53:02
  */
 
-define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/former/index","risk/components/msg/index","risk/unit/serialize","risk/page/customer/index","./tmpl"],function(require, exports, module){
+define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/former/index","risk/components/msg/index","risk/unit/serialize","risk/page/Property/index","risk/page/customer/index","./tmpl"],function(require, exports, module){
 	require.get = require;
 
 	var $ = require('jquery'),
@@ -562,6 +564,7 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 		former = require('risk/components/former/index'),
 		msg = require('risk/components/msg/index'),
 		Serialize = require('risk/unit/serialize'),
+		Property = require('risk/page/Property/index'),
 		Customer = require('risk/page/customer/index'),
 		CustomerFormTpl = require.get('risk/page/customer/tpl.view');
 
@@ -596,6 +599,18 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 				Customer.selector({
 					success:function(data) {
 						MOD.add(box,data);
+					}
+				});
+
+			}).on('click','guarantor-import-house',function(ev) {	//导入现有房产
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.parent().siblings('div.j-guarantor-house');
+
+				Property.selector({
+					success:function(data) {
+						delete data.ID;	//移除id，后台要根据姓名、身份证号来更新已存在客户信息
+						MOD.addHouse(box,data);
 					}
 				});
 
@@ -653,9 +668,8 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 		},
 		addHouse:function(box,data) {
 			box = $(box);
-			console.log('bb',box);
 			var html = Tmpl.GuarantorPropertyItem({
-					data:data,
+					data:[data],
 					canEdit:true
 				});
 			html = $(html);
@@ -1870,7 +1884,8 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 	];
 
 	return MOD;
-});/**
+});
+/**
  * 申请额度表单视图
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
@@ -1930,9 +1945,6 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 						}else {
 							that.submit(mode);
 						}
-					},
-					Guarantor:function() {
-						console.log('Guarantor:::',Guarantor.getData());
 					}
 				});
 			//}
@@ -2351,7 +2363,6 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	var Former = require('risk/components/former/index'),
 		TplFollowup = require('./tpl.followup');
-		console.log('FollowupCanEdit',FollowupCanEdit);
 __p.push('<div class="step-pane" id="Followup">\n	<div class="block-transparent">\n		<div class="header"><h3>保后跟踪</h3></div>\n		<div class="content">');
 _p(Former.make(TplFollowup,{
 			data:FollowupData,
@@ -2370,9 +2381,9 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	var FormData = data.data || {};
-__p.push('<div class="step-pane" id="Guarantor">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>担保人 <!--');
+__p.push('<div class="step-pane" id="Guarantor">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>担保人 ');
 if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="guarantor-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
-}__p.push('--></h3>\n		</div>\n		<div class="content">\n			<div class="list-group tickets" id="GuarantorBase">');
+}__p.push('</h3>\n		</div>\n		<div class="content">\n			<div class="list-group tickets" id="GuarantorBase">');
 _p(this.GuarantorItemsBox(data));
 __p.push('			</div>');
 if (data.canEdit) {__p.push('			<button type="button" class="btn btn-success" data-hook="guarantor-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加担保人&nbsp;&nbsp;</button>');
@@ -2388,7 +2399,8 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	var FormData = data.data || {},
-		Guarantors = FormData.Guarantor;
+		Guarantors = FormData.Guarantor,
+		CanEdit = data.canEdit;
 
 if (Guarantors&&Guarantors.length>0) {
 	var i=0,cur;
@@ -2400,6 +2412,9 @@ _p(this.GuarantorItem({
 	}));
 
 	}
+}else if(!CanEdit) {
+__p.push('	<div class="alert alert-info">\n		无担保人信息\n	</div>');
+
 }
 __p.push('');
 
@@ -2440,7 +2455,7 @@ _p(this.GuarantorPropertyItem({
 				data:(GuarantorData&&GuarantorData.Assets)
 			}));
 __p.push('\n		</div>');
-if (data.canEdit) {__p.push('		<div class="col-sm-offset-2">\n			<button class="btn btn-default" data-hook="guarantor-addhouse"><i class="fa fa-plus"></i>增加房产</button>\n		</div>');
+if (data.canEdit) {__p.push('		<div class="col-sm-offset-2">\n			<button class="btn btn-default" data-hook="guarantor-addhouse"><i class="fa fa-plus"></i>增加房产</button>\n			<button type="button" class="btn btn-default" data-hook="guarantor-import-house"><i class="fa fa-sign-in"></i> 导入现有房产</button>\n		</div>');
 }if (data.canEdit) {__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-1">\n			<button type="button" class="btn btn-danger" data-hook="guarantor-remove">移除该担保人</button>\n		</div>');
 }__p.push('	</div>');
 

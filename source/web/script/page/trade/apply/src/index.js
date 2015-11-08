@@ -65,9 +65,11 @@ define(function(require, exports, module){
 			});
 
 			require('./data').get().done(function(data) {
+				var id = data&&data.Project&&data.Project.Name;
+				console.log('ddd',data.Project);
 				Views.init({
 					mode:params.action,
-					head:head+'<small>('+data.id+')</small>',
+					head:head+'<small>('+id+')</small>',
 					data:data
 				});
 			});

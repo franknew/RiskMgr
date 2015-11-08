@@ -90,7 +90,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 			//有数据时，以数据为模板循环生成多个group
 			//没数据时，默认生成一个group
-			if (groupData) {
+			if (groupData && groupData.length>0) {
 				rs = [];
 				var i=0,len=groupData.length,
 					curData,curRS,
@@ -158,7 +158,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 			var i=0,cur,item;
 			for(;cur=formItems[i++];) {
-				if (conf.onlyRequired && !cur.required) {
+				if (conf.onlyRequired && !cur.required && cur.type!='hidden') {	//onlyRequired仅仅是展示上的需求，而hidden的一般都是ID类型，所以hidden需要输出
 					continue;
 				}
 

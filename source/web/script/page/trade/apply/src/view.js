@@ -1,3 +1,4 @@
+
 /**
  * 申请额度表单视图
  * @authors viktorli (i@lizhenwen.com)
@@ -58,9 +59,6 @@ define(function(require, exports, module){
 						}else {
 							that.submit(mode);
 						}
-					},
-					Guarantor:function() {
-						console.log('Guarantor:::',Guarantor.getData());
 					}
 				});
 			//}

@@ -12,6 +12,7 @@ define(function(require, exports, module){
 		former = require('risk/components/former/index'),
 		msg = require('risk/components/msg/index'),
 		Serialize = require('risk/unit/serialize'),
+		Property = require('risk/page/Property/index'),
 		Customer = require('risk/page/customer/index'),
 		CustomerFormTpl = require.get('risk/page/customer/tpl.view');
 
@@ -46,6 +47,18 @@ define(function(require, exports, module){
 				Customer.selector({
 					success:function(data) {
 						MOD.add(box,data);
+					}
+				});
+
+			}).on('click','guarantor-import-house',function(ev) {	//导入现有房产
+				ev.preventDefault();
+				var btn = $(ev.currentTarget),
+					box = btn.parent().siblings('div.j-guarantor-house');
+
+				Property.selector({
+					success:function(data) {
+						delete data.ID;	//移除id，后台要根据姓名、身份证号来更新已存在客户信息
+						MOD.addHouse(box,data);
 					}
 				});
 
@@ -103,9 +116,8 @@ define(function(require, exports, module){
 		},
 		addHouse:function(box,data) {
 			box = $(box);
-			console.log('bb',box);
 			var html = Tmpl.GuarantorPropertyItem({
-					data:data,
+					data:[data],
 					canEdit:true
 				});
 			html = $(html);

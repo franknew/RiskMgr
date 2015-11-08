@@ -5,7 +5,7 @@
 <div class="step-pane" id="Guarantor">
 	<div class="block-transparent">
 		<div class="header">
-			<h3>担保人 <!--<%if (data.canEdit) {%><button type="button" class="btn btn-default" data-hook="guarantor-import"><i class="fa fa-sign-in"></i> 导入现有客户</button><%}%>--></h3>
+			<h3>担保人 <%if (data.canEdit) {%><button type="button" class="btn btn-default" data-hook="guarantor-import"><i class="fa fa-sign-in"></i> 导入现有客户</button><%}%></h3>
 		</div>
 		<div class="content">
 			<div class="list-group tickets" id="GuarantorBase">
@@ -32,7 +32,8 @@
 <script type="text/html" id="GuarantorItemsBox">
 <%
 	var FormData = data.data || {},
-		Guarantors = FormData.Guarantor;
+		Guarantors = FormData.Guarantor,
+		CanEdit = data.canEdit;
 %>
 
 <%
@@ -46,6 +47,12 @@ if (Guarantors&&Guarantors.length>0) {
 	})%>
 <%
 	}
+}else if(!CanEdit) {
+%>
+	<div class="alert alert-info">
+		无担保人信息
+	</div>
+<%
 }
 %>
 
@@ -96,6 +103,7 @@ if (Guarantors&&Guarantors.length>0) {
 		<%if (data.canEdit) {%>
 		<div class="col-sm-offset-2">
 			<button class="btn btn-default" data-hook="guarantor-addhouse"><i class="fa fa-plus"></i>增加房产</button>
+			<button type="button" class="btn btn-default" data-hook="guarantor-import-house"><i class="fa fa-sign-in"></i> 导入现有房产</button>
 		</div>
 		<%}%>
 
