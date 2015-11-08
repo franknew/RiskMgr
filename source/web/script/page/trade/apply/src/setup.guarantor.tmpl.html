@@ -8,7 +8,9 @@
 			<h3>担保人 <!--<%if (data.canEdit) {%><button type="button" class="btn btn-default" data-hook="guarantor-import"><i class="fa fa-sign-in"></i> 导入现有客户</button><%}%>--></h3>
 		</div>
 		<div class="content">
-			<div class="list-group tickets" id="GuarantorBase"></div>
+			<div class="list-group tickets" id="GuarantorBase">
+				<%=this.GuarantorItemsBox(data)%>
+			</div>
 			<%if (data.canEdit) {%>
 			<button type="button" class="btn btn-success" data-hook="guarantor-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加担保人&nbsp;&nbsp;</button>
 			<%}%>
@@ -27,35 +29,75 @@
 </div>
 </script>
 
+<script type="text/html" id="GuarantorItemsBox">
+<%
+	var FormData = data.data || {},
+		Guarantors = FormData.Guarantor;
+%>
+
+<%
+if (Guarantors&&Guarantors.length>0) {
+	var i=0,cur;
+	for(;cur=Guarantors[i++];) {
+%>
+	<%=this.GuarantorItem({
+		canEdit:data.canEdit,
+		data:cur
+	})%>
+<%
+	}
+}
+%>
+
+</script>
+
 <script type="text/html" id="GuarantorItem">
 <%
 	var Former = require('risk/components/former/index'),
 		TplCustomer = require('risk/page/customer/tpl.view');
+	var CanEdit = data.canEdit,
+		GuarantorData = data&&data.data;
 %>
 
 	<div class="list-group-item">
 		<div class="j-guarantor-form">
 			<%=Former.make(TplCustomer,{
-				data:data,
-				disabled:!data.canEdit,
+				data:GuarantorData,
+				disabled:!CanEdit,
 				onlyRequired:true
 			})%>
-			<div class="form-group">
-				<div class="col-sm-2"><label class="control-label media-object">备注</label></div>
-				<div class="col-sm-10"><textarea name="GuarantorRemark" class="form-control"></textarea></div>
-			</div>
+
+			<%/**手动增加一个备注表单**/%>
+			<%=Former.make([[{
+				type:'label',
+				col:2,
+				html:'备注'
+			},{
+				col:'10',
+				type:'textarea',
+				name:'GuarantorRemark',
+				placeholder:''
+			}]],{
+				data:GuarantorData,
+				disabled:!CanEdit
+			})%>
+
 		</div>
 		<hr style="border-bottom:1px dashed #dadada"/>
 		<div class="col-sm-offset-2 j-guarantor-house">
 
 			<%=this.GuarantorPropertyItem({
-				canEdit:true
+				canEdit:CanEdit,
+				data:(GuarantorData&&GuarantorData.Assets)
 			})%>
 
 		</div>
+
+		<%if (data.canEdit) {%>
 		<div class="col-sm-offset-2">
 			<button class="btn btn-default" data-hook="guarantor-addhouse"><i class="fa fa-plus"></i>增加房产</button>
 		</div>
+		<%}%>
 
 		<%if (data.canEdit) {%>
 		<hr style="border-bottom:1px dashed #dadada"/>
@@ -69,17 +111,26 @@
 <%
 	var Former = require('risk/components/former/index'),
 		TplProperty = require('risk/page/Property/tpl.view');
+	var CanEdit = data.canEdit,
+		PropertyList = data&&data.data || (CanEdit?[1]:[]);//可编辑状态，默认空白一个item
 %>
-<div class="well well-sm j-houseitem">
-<%=Former.make(TplProperty,{
-	data:data,
-	disabled:!data.canEdit,
-	onlyRequired:true
-})%>
-		<%if (data.canEdit) {%>
+<%
+	var i=0,cur;
+	for(;cur=PropertyList[i++];) {
+%>
+	<div class="well well-sm j-houseitem">
+		<%=Former.make(TplProperty,{
+			data:cur,
+			disabled:!CanEdit,
+			onlyRequired:true
+		})%>
+		<%if (CanEdit) {%>
 		<div class="col-sm-offset-1">
 			<button type="button" class="btn btn-danger btn-xs" data-hook="guarantor-removehouse">移除该房产</button>
 		</div>
 		<%}%>
-</div>
+	</div>
+<%
+	}
+%>
 </script>

@@ -2351,8 +2351,13 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	var Former = require('risk/components/former/index'),
 		TplFollowup = require('./tpl.followup');
+		console.log('FollowupCanEdit',FollowupCanEdit);
 __p.push('<div class="step-pane" id="Followup">\n	<div class="block-transparent">\n		<div class="header"><h3>保后跟踪</h3></div>\n		<div class="content">');
-_p(Former.make(TplFollowup,{data:FollowupData,disabled:!FollowupCanEdit}));
+_p(Former.make(TplFollowup,{
+			data:FollowupData,
+			disabled:!FollowupCanEdit,
+			groupCanAdd:FollowupCanEdit
+		}));
 __p.push('		</div>\n	</div>');
 if (FollowupCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn btn-success" type="button" data-hook="followup-submit"><i class="fa fa-check"></i> 提交</button>\n		</div>\n	</div>');
 }__p.push('</div>');
@@ -2367,11 +2372,36 @@ var __p=[],_p=function(s){__p.push(s)};
 	var FormData = data.data || {};
 __p.push('<div class="step-pane" id="Guarantor">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>担保人 <!--');
 if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="guarantor-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
-}__p.push('--></h3>\n		</div>\n		<div class="content">\n			<div class="list-group tickets" id="GuarantorBase"></div>');
+}__p.push('--></h3>\n		</div>\n		<div class="content">\n			<div class="list-group tickets" id="GuarantorBase">');
+_p(this.GuarantorItemsBox(data));
+__p.push('			</div>');
 if (data.canEdit) {__p.push('			<button type="button" class="btn btn-success" data-hook="guarantor-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加担保人&nbsp;&nbsp;</button>');
 }__p.push('		</div>\n	</div>');
 if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
 }__p.push('</div>');
+
+return __p.join("");
+},
+
+'GuarantorItemsBox': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var FormData = data.data || {},
+		Guarantors = FormData.Guarantor;
+
+if (Guarantors&&Guarantors.length>0) {
+	var i=0,cur;
+	for(;cur=Guarantors[i++];) {
+__p.push('	');
+_p(this.GuarantorItem({
+		canEdit:data.canEdit,
+		data:cur
+	}));
+
+	}
+}
+__p.push('');
 
 return __p.join("");
 },
@@ -2382,18 +2412,36 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	var Former = require('risk/components/former/index'),
 		TplCustomer = require('risk/page/customer/tpl.view');
+	var CanEdit = data.canEdit,
+		GuarantorData = data&&data.data;
 __p.push('\n	<div class="list-group-item">\n		<div class="j-guarantor-form">');
 _p(Former.make(TplCustomer,{
-				data:data,
-				disabled:!data.canEdit,
+				data:GuarantorData,
+				disabled:!CanEdit,
 				onlyRequired:true
 			}));
-__p.push('			<div class="form-group">\n				<div class="col-sm-2"><label class="control-label media-object">备注</label></div>\n				<div class="col-sm-10"><textarea name="GuarantorRemark" class="form-control"></textarea></div>\n			</div>\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2 j-guarantor-house">');
-_p(this.GuarantorPropertyItem({
-				canEdit:true
+/**手动增加一个备注表单**/__p.push('			');
+_p(Former.make([[{
+				type:'label',
+				col:2,
+				html:'备注'
+			},{
+				col:'10',
+				type:'textarea',
+				name:'GuarantorRemark',
+				placeholder:''
+			}]],{
+				data:GuarantorData,
+				disabled:!CanEdit
 			}));
-__p.push('\n		</div>\n		<div class="col-sm-offset-2">\n			<button class="btn btn-default" data-hook="guarantor-addhouse"><i class="fa fa-plus"></i>增加房产</button>\n		</div>');
-if (data.canEdit) {__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-1">\n			<button type="button" class="btn btn-danger" data-hook="guarantor-remove">移除该担保人</button>\n		</div>');
+__p.push('\n		</div>\n		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-2 j-guarantor-house">');
+_p(this.GuarantorPropertyItem({
+				canEdit:CanEdit,
+				data:(GuarantorData&&GuarantorData.Assets)
+			}));
+__p.push('\n		</div>');
+if (data.canEdit) {__p.push('		<div class="col-sm-offset-2">\n			<button class="btn btn-default" data-hook="guarantor-addhouse"><i class="fa fa-plus"></i>增加房产</button>\n		</div>');
+}if (data.canEdit) {__p.push('		<hr style="border-bottom:1px dashed #dadada"/>\n		<div class="col-sm-offset-1">\n			<button type="button" class="btn btn-danger" data-hook="guarantor-remove">移除该担保人</button>\n		</div>');
 }__p.push('	</div>');
 
 return __p.join("");
@@ -2405,15 +2453,23 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	var Former = require('risk/components/former/index'),
 		TplProperty = require('risk/page/Property/tpl.view');
-__p.push('<div class="well well-sm j-houseitem">');
+	var CanEdit = data.canEdit,
+		PropertyList = data&&data.data || (CanEdit?[1]:[]);//可编辑状态，默认空白一个item
+
+	var i=0,cur;
+	for(;cur=PropertyList[i++];) {
+__p.push('	<div class="well well-sm j-houseitem">');
 _p(Former.make(TplProperty,{
-	data:data,
-	disabled:!data.canEdit,
-	onlyRequired:true
-}));
+			data:cur,
+			disabled:!CanEdit,
+			onlyRequired:true
+		}));
 __p.push('		');
-if (data.canEdit) {__p.push('		<div class="col-sm-offset-1">\n			<button type="button" class="btn btn-danger btn-xs" data-hook="guarantor-removehouse">移除该房产</button>\n		</div>');
-}__p.push('</div>');
+if (CanEdit) {__p.push('		<div class="col-sm-offset-1">\n			<button type="button" class="btn btn-danger btn-xs" data-hook="guarantor-removehouse">移除该房产</button>\n		</div>');
+}__p.push('	</div>');
+
+	}
+__p.push('');
 
 return __p.join("");
 },
@@ -2465,9 +2521,25 @@ return __p.join("");
 'PropertyItem': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
+
+	var Former = require('risk/components/former/index');
 __p.push('	<div class="list-group-item">\n		<div class="j-property-form">');
 _p(data.tpl(data.data,data.canEdit));
-__p.push('			<div class="form-group">\n				<div class="col-sm-2"><label class="control-label media-object">备注</label></div>\n				<div class="col-sm-10"><textarea name="Remark" class="form-control"></textarea></div>\n			</div>\n		</div>\n		<div class="form-group">');
+/**手动增加一个备注表单**/__p.push('			');
+_p(Former.make([[{
+				type:'label',
+				col:2,
+				html:'备注'
+			},{
+				col:'10',
+				type:'textarea',
+				name:'Remark',
+				placeholder:''
+			}]],{
+				data:data.data,
+				disabled:!data.canEdit
+			}));
+__p.push('\n		</div>\n		<div class="form-group">');
 
 				var Joint = data.data&&data.data.Joint || [],
 					JointLen = Joint.length;

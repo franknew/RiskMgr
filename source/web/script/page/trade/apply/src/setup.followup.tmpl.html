@@ -6,12 +6,17 @@
 
 	var Former = require('risk/components/former/index'),
 		TplFollowup = require('./tpl.followup');
+		console.log('FollowupCanEdit',FollowupCanEdit);
 %>
 <div class="step-pane" id="Followup">
 	<div class="block-transparent">
 		<div class="header"><h3>保后跟踪</h3></div>
 		<div class="content">
-		<%=Former.make(TplFollowup,{data:FollowupData,disabled:!FollowupCanEdit})%>
+		<%=Former.make(TplFollowup,{
+			data:FollowupData,
+			disabled:!FollowupCanEdit,
+			groupCanAdd:FollowupCanEdit
+		})%>
 		</div>
 	</div>
 	<%if (FollowupCanEdit) {%>

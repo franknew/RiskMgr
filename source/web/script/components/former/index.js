@@ -50,22 +50,27 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 	var GROUP_CACHE = {};
 
 	var MOD = {
+		_CONFIG:{
+			groupCanAdd:true,
+			onlyRequired:false
+		},
 		/**
 		 * @param tpl 表单模板
 		 * @param conf 配置项：
 		 *     data: 表单的数据
 		 *     disabled: 是否全局禁用表单
 		 *     [onlyRequired=false] 只输出必填项
+		 *     [groupCanAdd=true] group类型是否显示添加按钮
 		 */
 		make:function(tpl,conf) {
-			conf = conf || {};
+			conf = $.extend({},MOD._CONFIG,conf);
 
 			var rs = ['<div class="form-horizontal">','','</div>'],
 				group = [];
 
 			var i=0,cur,cont='';
 			for(;cur=tpl[i++];) {
-				cont = this._group(cur,conf);
+				cont = this._makeForm(cur,conf);
 				if (cont) {	//因为onlyRequired功能，防止生成空div
 					cont = '<div class="form-group">'+cont+'</div>';
 					group.push(cont);
@@ -77,8 +82,44 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 			return rs;
 		},
-		//生产group的容器
-		_makeGroupWrap:function(groupList,groupInfo,conf) {
+		//生成group整体
+		_makeGroup:function(groupList,groupInfo,conf) {
+			var rs = '';
+			var groupName = groupInfo.name,
+				groupData = conf&&conf.data&&conf.data[groupName];
+
+			//有数据时，以数据为模板循环生成多个group
+			//没数据时，默认生成一个group
+			if (groupData) {
+				rs = [];
+				var i=0,len=groupData.length,
+					curData,curRS,
+					transConf = $.extend({},conf);
+
+				for(;curData=groupData[i++];) {
+					transConf.data = curData;
+
+					if (conf.groupCanAdd) {
+						if (i>=len) {
+							transConf.groupCanAdd = true;
+						}else{
+							transConf.groupCanAdd = false;
+						}
+					}
+
+					curRS = this._makeGroupItem(groupList,groupInfo,transConf);
+					rs.push(curRS);
+				}
+
+				rs = rs.join('');
+			}else{
+				rs = this._makeGroupItem(groupList,groupInfo,conf);
+			}
+
+			return rs;
+		},
+		//生产单组group
+		_makeGroupItem:function(groupList,groupInfo,conf) {
 			groupInfo = groupInfo || {};
 			conf = conf || {};
 
@@ -91,7 +132,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 			var i=0,cur,cont='';
 			for(;cur=groupList[i++];) {
-				cont = this._group(cur,conf,groupName);
+				cont = this._makeForm(cur,conf,groupName);
 				if (cont) {	//因为onlyRequired功能，防止生成空div
 					cont = '<div class="col-sm-12" style="padding:5px 0;">'+cont+'</div>';
 					group.push(cont);
@@ -100,7 +141,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 			rs[1] = (group.join(''));
 
-			if (groupInfo.addText && !conf.noButton) {
+			if (groupInfo.addText && conf.groupCanAdd) {
 				rs.push('<div class="col-sm-12 text-center"><button class="btn btn-default btn-sm" style="padding:4px 35px;" data-hook="former-group-add" data-group-name="'+groupName+'"><i class="fa fa-plus"></i>'+groupInfo.addText+'</button></div>');
 			}
 			rs = rs.join('');
@@ -110,25 +151,24 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 		/**
 		 * @param groupName 传了的话就表示是一个group
 		 */
-		_group:function(groups,conf,groupName) {
+		_makeForm:function(formItems,conf,groupName) {
 			var items = [],
 				data = conf.data,
 				disabled = conf.disabled;
 
 			var i=0,cur,item;
-			for(;cur=groups[i++];) {
+			for(;cur=formItems[i++];) {
 				if (conf.onlyRequired && !cur.required) {
 					continue;
 				}
 
 				if (cur.type=='group') {
-					items.push(this._makeGroupWrap(cur.groups,cur,conf));
+					items.push(this._makeGroup(cur.groups,cur,conf));
 
 					this._initGroupEvent();
 					continue;
 				}
 
-				//全局disabled
 				item = '<div class="col-sm-'+(cur.col||12)+' '+(cur.colClass||'')+'">';
 				item += this._item(cur,data && data[cur.name],conf,groupName);
 				item += '</div>';
@@ -141,6 +181,9 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 			return items;
 		},
 		_item:function(item,defaultValue,conf,groupName) {
+			if (groupName) {
+				//console.log('ddddd',JSON.stringify(conf));
+			}
 			var rs = '',
 				type = item.type,
 				disabled = type=='hidden'?false:(('disabled' in item)?item.disabled:conf.disabled),
@@ -339,7 +382,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 					alert('没有找到对应的分组缓存，请联系开发人员');
 					return ;
 				}
-				var html = MOD._makeGroupWrap(data.groups,data,{noButton:true});
+				var html = MOD._makeGroupItem(data.groups,data,{groupCanAdd:false});
 
 				elem.parent().before(html);
 			});
