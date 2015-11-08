@@ -174,7 +174,7 @@ namespace RiskMgr.Api
         {
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            form.Project.LastUpdator = userid;
+            form.LastUpdator = userid;
             return bll.UpdateTracking(form);
         }
     }

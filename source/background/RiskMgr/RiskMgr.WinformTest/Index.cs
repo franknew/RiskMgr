@@ -99,12 +99,12 @@ namespace RiskMgr.WinformTest
         {
             QueryDataDictionaryRequest request = new QueryDataDictionaryRequest();
             request.form = new QueryDataDictionaryByGroupNamesServiceForm
-             {
-                 NameList = new List<string>
+            {
+                NameList = new List<string>
                 {
                 "性别", "证件类型"
                 }
-             };
+            };
             var response = SDKFactory.Client.Execute(request);
             MessageBox.Show(response.ResponseBody);
         }
@@ -210,7 +210,7 @@ namespace RiskMgr.WinformTest
         private void button15_Click(object sender, EventArgs e)
         {
             ProjectBLL bll = new ProjectBLL();
-            bll.QueryDetail(textBox1.Text, "7");
+            bll.QueryDetail(textBox1.Text, "1");
         }
 
         private void button16_Click(object sender, EventArgs e)
@@ -226,6 +226,47 @@ namespace RiskMgr.WinformTest
             paggingList.Record = list;
             paggingList.PageCount = form.PageCount;
             paggingList.RecordCount = form.RecordCount;
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            Workflow workflow = new Workflow();
+            ProjectBLL bll = new ProjectBLL();
+            bll.UpdateTracking(new UpdateTrackingServiceForm
+            {
+                LastUpdator = "13",
+                NewAssetCode = "11",
+                ChangeOwnerManualCode = "22",
+                MortgagePerson = "33",
+                MortgageRemark = "44",
+                InsuranceFreeTime = DateTime.Now,
+                ID = textBox1.Text,
+            });
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            Workflow workflow = new Workflow();
+            ProjectBLL bll = new ProjectBLL();
+            bll.UpdateFinance(new Project
+            {
+                RefundAccount = "1",
+                RefundBankName = "11",
+                RefundDate = DateTime.Now,
+                RefundMoney = 1,
+                RefundName = "111",
+                PaymentName = "2",
+                PaymentAccount = "22",
+                PaymentBankName = "222",
+                PaymentDate = DateTime.Now,
+                PaymentMoney = 2,
+                DeductMoneyAccount = "3",
+                DeductMoneyBankName = "33",
+                DeductMoneyDate = DateTime.Now,
+                DeductMoneyMoney = 3,
+                DeductMoneyName = "333",
+                ID = textBox1.Text,
+            });
         }
     }
 

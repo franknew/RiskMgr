@@ -7,3 +7,4 @@ source/web/script/page/apply-amount/src/setup2.tmpl.html
 source/background/RiskMgr/.vs/RiskMgr/v14/.suo
 *.txt
 *.resources
+*.cache

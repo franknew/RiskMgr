@@ -242,7 +242,7 @@ namespace RiskMgr.BLL
                                where jointids.Exists(t => t == c.ID)
                                select c).ToList();
             }
-            result.Project = project;
+            result.Project = project.ConvertTo<FullProject>();
 
             //处理流程
             var workflow = workflows.Find(t => t.ProcessID == project.ID);
@@ -312,8 +312,8 @@ namespace RiskMgr.BLL
             }
             #region 为财务和保后跟踪特别处理
             //读取保后跟踪的信息
-            result.TransferInfo = tcolist.FindAll(t => t.ProjectID == project.ID);
-            result.Mortgage = tmlist.FindAll(t => t.ProjectID == project.ID);
+            result.Project.TransferInfo = tcolist.FindAll(t => t.ProjectID == project.ID);
+            result.Project.Mortgage = tmlist.FindAll(t => t.ProjectID == project.ID);
 
             //为财务和保后跟踪特别处理
             var roles = userroles.FindAll(t => t.UserID == userid);
@@ -499,6 +499,15 @@ namespace RiskMgr.BLL
                     DeductMoneyDate = project.DeductMoneyDate,
                     DeductMoneyMoney = project.DeductMoneyMoney,
                     DeductMoneyName = project.DeductMoneyName,
+                    DelayFee = project.DelayFee,
+                    DelayTime = project.DelayTime,
+                    InsuranceFee = project.InsuranceFee,
+                    InsuranceTime = project.InsuranceTime,
+                    ExportMoney = project.ExportMoney,
+                    ExportTime = project.ExportTime,
+                    ReturnBackTime = project.ReturnBackTime,
+                    ReturnBackMoney = project.ReturnBackMoney,
+                    HasExpired = project.HasExpired,
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
@@ -511,8 +520,6 @@ namespace RiskMgr.BLL
             ProjectDao dao = new ProjectDao(mapper);
             TrackingMortgageDao tmdao = new TrackingMortgageDao(mapper);
             TrackingChangeOwnerDao tcodao = new TrackingChangeOwnerDao(mapper);
-            UserBLL userbll = new UserBLL();
-            var user = userbll.GetCurrentUser();
             dao.Update(new ProjectUpdateForm
             {
                 Entity = new Project
@@ -527,19 +534,25 @@ namespace RiskMgr.BLL
             });
             //过户信息处理
             tcodao.Delete(new TrackingChangeOwnerQueryForm { ProjectID = project.ID });
-            foreach (TrackingChangeOwner co in project.TransferInfo)
+            if (project.TransferInfo != null)
             {
-                co.ProjectID = project.ID;
-                co.Creator = co.LastUpdator = user.User.ID;
-                tcodao.Add(co);
+                foreach (TrackingChangeOwner co in project.TransferInfo)
+                {
+                    co.ProjectID = project.ID;
+                    co.Creator = co.LastUpdator = project.LastUpdator;
+                    tcodao.Add(co);
+                }
             }
             //借贷信息处理
             tmdao.Delete(new TrackingMortgageQueryForm { ProjectID = project.ID });
-            foreach (TrackingMortgage m in project.Mortgage)
+            if (project.Mortgage != null)
             {
-                m.ProjectID = project.ID;
-                m.Creator = m.LastUpdator = user.User.ID;
-                tmdao.Add(m);
+                foreach (TrackingMortgage m in project.Mortgage)
+                {
+                    m.ProjectID = project.ID;
+                    m.Creator = m.LastUpdator = project.LastUpdator;
+                    tmdao.Add(m);
+                }
             }
             return true;
         }

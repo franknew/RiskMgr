@@ -13,7 +13,7 @@ namespace RiskMgr.Form
         /// <summary>
         /// 项目信息
         /// </summary>
-        public Project Project { get; set; }
+        public FullProject Project { get; set; }
 
         /// <summary>
         /// 买家ID
