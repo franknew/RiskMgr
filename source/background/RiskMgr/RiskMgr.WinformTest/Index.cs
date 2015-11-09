@@ -235,9 +235,7 @@ namespace RiskMgr.WinformTest
             bll.UpdateTracking(new UpdateTrackingServiceForm
             {
                 LastUpdator = "13",
-                NewAssetCode = "11",
-                ChangeOwnerManualCode = "22",
-                MortgagePerson = "33",
+                ChangeOwnerRemark = "123456",
                 MortgageRemark = "44",
                 InsuranceFreeTime = DateTime.Now,
                 ID = textBox1.Text,

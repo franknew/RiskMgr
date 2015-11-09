@@ -524,11 +524,9 @@ namespace RiskMgr.BLL
             {
                 Entity = new Project
                 {
-                    NewAssetCode = project.NewAssetCode,
-                    ChangeOwnerManualCode = project.ChangeOwnerManualCode,
-                    MortgagePerson = project.MortgagePerson,
                     MortgageRemark = project.MortgageRemark,
                     InsuranceFreeTime = project.InsuranceFreeTime,
+                    ChangeOwnerRemark = project.ChangeOwnerRemark,
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });

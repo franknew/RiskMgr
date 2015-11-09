@@ -57,15 +57,15 @@
         `LastUpdateTime`&lt;=#LastUpdateTime_End#
     </isNotNull>
     
-    <isNotNull prepend="AND" property="ChangeOwnerCode">
-        `ChangeOwnerCode`=#ChangeOwnerCode#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode">
+        `ChangeOwnerProfileCode`=#ChangeOwnerProfileCode#
     </isNotNull>
     
-    <isNotNull prepend="AND" property="ChangeOwnerTime_Start">
-        `ChangeOwnerTime`&gt;=#ChangeOwnerTime_Start#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime_Start">
+        `ChangeOwnerProfileTime`&gt;=#ChangeOwnerProfileTime_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="ChangeOwnerTime_End">
-        `ChangeOwnerTime`&lt;=#ChangeOwnerTime_End#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime_End">
+        `ChangeOwnerProfileTime`&lt;=#ChangeOwnerProfileTime_End#
     </isNotNull>
     
     <isNotNull prepend="AND" property="NewAssetCode">
@@ -74,6 +74,13 @@
     
     <isNotNull prepend="AND" property="ChangeOwnerRemark">
         `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="NewAssetDate_Start">
+        `NewAssetDate`&gt;=#NewAssetDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetDate_End">
+        `NewAssetDate`&lt;=#NewAssetDate_End#
     </isNotNull>
     
     </dynamic>
@@ -93,10 +100,11 @@
     `CreateTime`,
     `LastUpdator`,
     `LastUpdateTime`,
-    `ChangeOwnerCode`,
-    `ChangeOwnerTime`,
+    `ChangeOwnerProfileCode`,
+    `ChangeOwnerProfileTime`,
     `NewAssetCode`,
-    `ChangeOwnerRemark`
+    `ChangeOwnerRemark`,
+    `NewAssetDate`
   )
   VALUES
   (
@@ -106,10 +114,11 @@
         #CreateTime#,
         #LastUpdator#,
         #LastUpdateTime#,
-        #ChangeOwnerCode#,
-        #ChangeOwnerTime#,
+        #ChangeOwnerProfileCode#,
+        #ChangeOwnerProfileTime#,
         #NewAssetCode#,
-        #ChangeOwnerRemark#
+        #ChangeOwnerRemark#,
+        #NewAssetDate#
   )
   </insert>
   <update id="UpdateTrackingChangeOwner" parameterClass="TrackingChangeOwnerUpdateForm">
@@ -130,17 +139,20 @@
         <isNotNull prepend="," property="Entity.LastUpdateTime">
         `LastUpdateTime`=#Entity.LastUpdateTime#
         </isNotNull>
-        <isNotNull prepend="," property="Entity.ChangeOwnerCode">
-        `ChangeOwnerCode`=#Entity.ChangeOwnerCode#
+        <isNotNull prepend="," property="Entity.ChangeOwnerProfileCode">
+        `ChangeOwnerProfileCode`=#Entity.ChangeOwnerProfileCode#
         </isNotNull>
-        <isNotNull prepend="," property="Entity.ChangeOwnerTime">
-        `ChangeOwnerTime`=#Entity.ChangeOwnerTime#
+        <isNotNull prepend="," property="Entity.ChangeOwnerProfileTime">
+        `ChangeOwnerProfileTime`=#Entity.ChangeOwnerProfileTime#
         </isNotNull>
         <isNotNull prepend="," property="Entity.NewAssetCode">
         `NewAssetCode`=#Entity.NewAssetCode#
         </isNotNull>
         <isNotNull prepend="," property="Entity.ChangeOwnerRemark">
         `ChangeOwnerRemark`=#Entity.ChangeOwnerRemark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.NewAssetDate">
+        `NewAssetDate`=#Entity.NewAssetDate#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -168,20 +180,26 @@
     <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.LastUpdateTime_End">
         `LastUpdateTime`&lt;=#TrackingChangeOwnerQueryForm.LastUpdateTime_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerCode">
-        `ChangeOwnerCode`=#TrackingChangeOwnerQueryForm.ChangeOwnerCode#
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerProfileCode">
+        `ChangeOwnerProfileCode`=#TrackingChangeOwnerQueryForm.ChangeOwnerProfileCode#
     </isNotNull>
-    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerTime_Start">
-        `ChangeOwnerTime`&gt;=#TrackingChangeOwnerQueryForm.ChangeOwnerTime_Start#
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerProfileTime_Start">
+        `ChangeOwnerProfileTime`&gt;=#TrackingChangeOwnerQueryForm.ChangeOwnerProfileTime_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerTime_End">
-        `ChangeOwnerTime`&lt;=#TrackingChangeOwnerQueryForm.ChangeOwnerTime_End#
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerProfileTime_End">
+        `ChangeOwnerProfileTime`&lt;=#TrackingChangeOwnerQueryForm.ChangeOwnerProfileTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.NewAssetCode">
         `NewAssetCode`=#TrackingChangeOwnerQueryForm.NewAssetCode#
     </isNotNull>
     <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.ChangeOwnerRemark">
         `ChangeOwnerRemark`=#TrackingChangeOwnerQueryForm.ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.NewAssetDate_Start">
+        `NewAssetDate`&gt;=#TrackingChangeOwnerQueryForm.NewAssetDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="TrackingChangeOwnerQueryForm.NewAssetDate_End">
+        `NewAssetDate`&lt;=#TrackingChangeOwnerQueryForm.NewAssetDate_End#
     </isNotNull>
     </dynamic>
   </update>
@@ -226,20 +244,26 @@
     <isNotNull prepend="AND" property="LastUpdateTime_End">
         `LastUpdateTime`&lt;=#LastUpdateTime_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="ChangeOwnerCode">
-        `ChangeOwnerCode`=#ChangeOwnerCode#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode">
+        `ChangeOwnerProfileCode`=#ChangeOwnerProfileCode#
     </isNotNull>
-    <isNotNull prepend="AND" property="ChangeOwnerTime_Start">
-        `ChangeOwnerTime`&gt;=#ChangeOwnerTime_Start#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime_Start">
+        `ChangeOwnerProfileTime`&gt;=#ChangeOwnerProfileTime_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="ChangeOwnerTime_End">
-        `ChangeOwnerTime`&lt;=#ChangeOwnerTime_End#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime_End">
+        `ChangeOwnerProfileTime`&lt;=#ChangeOwnerProfileTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="NewAssetCode">
         `NewAssetCode`=#NewAssetCode#
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerRemark">
         `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetDate_Start">
+        `NewAssetDate`&gt;=#NewAssetDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetDate_End">
+        `NewAssetDate`&lt;=#NewAssetDate_End#
     </isNotNull>
   </delete>
    <select id="QueryTrackingChangeOwnerLastUpdateTime" resultClass="DateTime">
@@ -287,20 +311,26 @@
     <isNotNull prepend="AND" property="LastUpdateTime_End">
         `LastUpdateTime`&lt;=#LastUpdateTime_End#
     </isNotNull>
-    <isNotNull prepend="AND" property="ChangeOwnerCode">
-        `ChangeOwnerCode`=#ChangeOwnerCode#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileCode">
+        `ChangeOwnerProfileCode`=#ChangeOwnerProfileCode#
     </isNotNull>
-    <isNotNull prepend="AND" property="ChangeOwnerTime_Start">
-        `ChangeOwnerTime`&gt;=#ChangeOwnerTime_Start#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime_Start">
+        `ChangeOwnerProfileTime`&gt;=#ChangeOwnerProfileTime_Start#
     </isNotNull>
-    <isNotNull prepend="AND" property="ChangeOwnerTime_End">
-        `ChangeOwnerTime`&lt;=#ChangeOwnerTime_End#
+    <isNotNull prepend="AND" property="ChangeOwnerProfileTime_End">
+        `ChangeOwnerProfileTime`&lt;=#ChangeOwnerProfileTime_End#
     </isNotNull>
     <isNotNull prepend="AND" property="NewAssetCode">
         `NewAssetCode`=#NewAssetCode#
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerRemark">
         `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetDate_Start">
+        `NewAssetDate`&gt;=#NewAssetDate_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="NewAssetDate_End">
+        `NewAssetDate`&lt;=#NewAssetDate_End#
     </isNotNull>
     </dynamic>
    </select>

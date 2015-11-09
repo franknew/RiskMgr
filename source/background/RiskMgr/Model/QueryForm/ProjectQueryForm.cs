@@ -220,5 +220,7 @@ namespace RiskMgr.Form
         
         public DateTime? DeductMoneyDate_End { get; set; }
         
+        public string ChangeOwnerRemark { get; set; }
+        
     }
 }

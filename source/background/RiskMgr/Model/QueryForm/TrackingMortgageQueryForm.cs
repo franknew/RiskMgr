@@ -13,17 +13,15 @@ namespace RiskMgr.Form
         
         public List<String> ProjectIDs { get; set;}
         public List<String> Creators { get; set;}
-        public string LastUpdater { get; set; }
-        
         public string MortgageFeedbackCode { get; set; }
         
-        public DateTime? MortgageFeedbackTime_Start { get; set; }
+        public DateTime? MortgagePredictTime_Start { get; set; }
         
-        public DateTime? MortgageFeedbackTime_End { get; set; }
+        public DateTime? MortgagePredictTime_End { get; set; }
         
-        public DateTime? MortgagePredictCompleteTime_Start { get; set; }
+        public DateTime? MortgageOverTime_Start { get; set; }
         
-        public DateTime? MortgagePredictCompleteTime_End { get; set; }
+        public DateTime? MortgageOverTime_End { get; set; }
         
     }
 }

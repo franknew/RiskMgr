@@ -21,12 +21,12 @@ namespace RiskMgr.Model
         /// <summary>
         /// 抵押收文日期
         /// </summary>
-        public DateTime? MortgageFeedbackTime { get; set; }
+        public DateTime? MortgagePredictTime { get; set; }
         
         /// <summary>
         /// 预计完成日解保日期
         /// </summary>
-        public DateTime? MortgagePredictCompleteTime { get; set; }
+        public DateTime? MortgageOverTime { get; set; }
         
     }
 }

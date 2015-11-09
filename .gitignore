@@ -8,3 +8,6 @@ source/background/RiskMgr/.vs/RiskMgr/v14/.suo
 *.txt
 *.resources
 *.cache
+*.suo
+source/background/RiskMgr/.vs/RiskMgr/v14/.suo
+*.cache

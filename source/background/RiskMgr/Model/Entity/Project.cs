@@ -383,5 +383,10 @@ namespace RiskMgr.Model
         /// </summary>
         public DateTime? DeductMoneyDate { get; set; }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ChangeOwnerRemark { get; set; }
+        
     }
 }

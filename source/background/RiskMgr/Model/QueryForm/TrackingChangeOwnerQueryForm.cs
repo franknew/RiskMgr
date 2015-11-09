@@ -13,17 +13,19 @@ namespace RiskMgr.Form
         
         public List<String> ProjectIDs { get; set;}
         public List<String> Creators { get; set;}
-        public string LastUpdater { get; set; }
+        public string ChangeOwnerProfileCode { get; set; }
         
-        public string ChangeOwnerCode { get; set; }
+        public DateTime? ChangeOwnerProfileTime_Start { get; set; }
         
-        public DateTime? ChangeOwnerTime_Start { get; set; }
-        
-        public DateTime? ChangeOwnerTime_End { get; set; }
+        public DateTime? ChangeOwnerProfileTime_End { get; set; }
         
         public string NewAssetCode { get; set; }
         
         public string ChangeOwnerRemark { get; set; }
+        
+        public DateTime? NewAssetDate_Start { get; set; }
+        
+        public DateTime? NewAssetDate_End { get; set; }
         
     }
 }

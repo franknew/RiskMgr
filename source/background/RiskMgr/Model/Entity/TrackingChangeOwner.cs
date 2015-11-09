@@ -16,12 +16,12 @@ namespace RiskMgr.Model
         /// <summary>
         /// 过户办文编号
         /// </summary>
-        public string ChangeOwnerCode { get; set; }
+        public string ChangeOwnerProfileCode { get; set; }
         
         /// <summary>
         /// 过户收文日期
         /// </summary>
-        public DateTime? ChangeOwnerTime { get; set; }
+        public DateTime? ChangeOwnerProfileTime { get; set; }
         
         /// <summary>
         /// 新房产证号
@@ -32,6 +32,11 @@ namespace RiskMgr.Model
         /// 取房产证日期过户说明
         /// </summary>
         public string ChangeOwnerRemark { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? NewAssetDate { get; set; }
         
     }
 }
