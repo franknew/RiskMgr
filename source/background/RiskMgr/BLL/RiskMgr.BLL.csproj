@@ -84,7 +84,14 @@
     <Compile Include="RoleBLL.cs" />
     <Compile Include="TaskBLL.cs" />
     <Compile Include="UserBLL.cs" />
-    <Compile Include="WorkflowAuthority.cs" />
+    <Compile Include="WorkflowAuthority\CreatorLeaderWorkflowAuthorityHandler.cs" />
+    <Compile Include="WorkflowAuthority\IWorkflowAuthorityHandler.cs" />
+    <Compile Include="WorkflowAuthority\LeaderInRoleWorkflowAuthorityHandler.cs" />
+    <Compile Include="WorkflowAuthority\RoleWorkflowAuthorityHandler.cs" />
+    <Compile Include="WorkflowAuthority\CurrentLeaderWorkflowAuthorityHandler.cs" />
+    <Compile Include="WorkflowAuthority\UserleaderWorkflowAuthorityHandler.cs" />
+    <Compile Include="WorkflowAuthority\UserWorkflowAuthorityHandler.cs" />
+    <Compile Include="WorkflowAuthority\WorkflowAuthority.cs" />
     <Compile Include="WorkflowBLL.cs" />
   </ItemGroup>
   <ItemGroup>

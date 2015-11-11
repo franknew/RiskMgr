@@ -38,7 +38,10 @@ namespace RiskMgr.Api
             {
                 throw new Exception("没有TaskID");
             }
-            return bll.Approval(form.WorkflowID, form.ActivityID, form.TaskID, form.Approval);
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            string userid = user.User.ID;
+            return bll.Approval(form.WorkflowID, form.ActivityID, form.TaskID, userid, form.Approval);
         }
 
         /// <summary>
@@ -102,7 +105,10 @@ namespace RiskMgr.Api
         [ApprovalAction]
         public bool StopWorkflow(Task form)
         {
-            return bll.StopWorkflow(form.WorkflowID, form.ID);
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            string userid = user.User.ID;
+            return bll.StopWorkflow(form.WorkflowID, form.ID, userid);
         }
     }
 }

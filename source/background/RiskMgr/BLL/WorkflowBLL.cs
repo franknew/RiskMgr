@@ -14,22 +14,17 @@ namespace RiskMgr.BLL
         private ICache cache = CacheFactory.Create();
 
         
-        public bool Approval(string workflowid, string activityid, string taskid, Approval approval)
+        public bool Approval(string workflowid, string activityid, string taskid, string userid, Approval approval)
         {
             WorkflowModel workflow = WorkflowModel.Load(workflowid);
-            UserBLL userbll = new UserBLL();
-            var user = userbll.GetCurrentUser();
-            string userid = user.User.ID;
             workflow.ProcessActivity(activityid, approval, taskid, userid, new WorkflowAuthority());
             return true;
         }
 
-        public bool StopWorkflow(string workflowid, string taskid)
+        public bool StopWorkflow(string workflowid, string taskid, string userid)
         {
             WorkflowModel workflow = WorkflowModel.Load(workflowid);
-            UserBLL userbll = new UserBLL();
-            var user = userbll.GetCurrentUser();
-            workflow.Stop(taskid, user.User.ID);
+            workflow.Stop(taskid, userid);
             return true;
         }
     }

@@ -146,10 +146,19 @@ namespace RiskMgr.WinformTest
 
         private void button10_Click(object sender, EventArgs e)
         {
-            string userid = "13";
+            Workflow wf = new Workflow();
+            string userid = "9";
+            //ProjectBLL bll = new ProjectBLL();
+            //bll.Add(new Project
+            //{
+            //    Creator = "9",
+            //    Name = "test",
+            //}, new List<Asset>(), new List<Customer_Project>(), new List<Customer>(), new List<Guarantor>(), "9"
+
+            //);
             //处理流程
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
-            var workflow = wfdm.StartNew(userid, "03785300e113489ebba9ec85dd1450ed", new WorkflowAuthority());
+            var workflow = wfdm.StartNew(userid, "", new WorkflowAuthority());
             //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
             var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
             if (task != null)
@@ -193,17 +202,11 @@ namespace RiskMgr.WinformTest
 
         private void button14_Click(object sender, EventArgs e)
         {
-            WorkflowApi api = new WorkflowApi();
-            api.Approval(new ApprovalServiceForm
+            WorkflowBLL bll = new WorkflowBLL();
+            bll.Approval("2248e03d180a4340b42a04751e9fdf7f", "dbfebe4d21994550979c8d45b9f43a26", "d13c67f75a3e44ccb1a0da0ad9cb4cf7", "7", new Approval
             {
-                ActivityID = "653064cd7bc84692ab301092240f603d",
-                WorkflowID = "d48dc827001e4af5a1265d5fd3268657",
-                TaskID = "2b11644fabd840cb847613e1ab4ff18d",
-                Approval = new Approval
-                {
-                    Status = 1,
-                    Remark = "test agree",
-                }
+                Status = 1,
+                Remark = "test",
             });
         }
 
@@ -265,6 +268,24 @@ namespace RiskMgr.WinformTest
                 DeductMoneyName = "333",
                 ID = textBox1.Text,
             });
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            WorkflowAuthority wf = new WorkflowAuthority();
+
+            var au = new ActivityAuth
+            {
+                Type = "role",
+                Value = "7,14",
+            };
+            var list = wf.GetUserIDList(new List<ActivityAuth>
+            {
+                au
+            });
+
+            LeaderInRoleWorkflowAuthorityHandler handler = new LeaderInRoleWorkflowAuthorityHandler();
+            list = handler.Handle(au);
         }
     }
 

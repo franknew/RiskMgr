@@ -33,8 +33,6 @@ namespace RiskMgr.BLL
             #endregion
 
             #region 处理项目信息
-            UserBLL userbll = new UserBLL();
-            var user = userbll.GetCurrentUser();
             string projectid = null;
             DateTime createstart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             DateTime createend = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);

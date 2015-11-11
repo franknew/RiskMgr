@@ -64,7 +64,7 @@ namespace RiskMgr.BLL
                 dao.Add(asset);
                 a = asset;
             }
-            return asset;
+            return a;
         }
     }
 }
