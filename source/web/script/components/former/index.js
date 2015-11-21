@@ -181,20 +181,23 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 			return items;
 		},
 		_item:function(item,defaultValue,conf,groupName) {
-			if (groupName) {
-				//console.log('ddddd',JSON.stringify(conf));
-			}
 			var rs = '',
 				type = item.type,
 				disabled = type=='hidden'?false:(('disabled' in item)?item.disabled:conf.disabled),
-				attr = {
+				attr = $.extend({},item,{
+					col:undefined,	//过滤
+					html:undefined,
+					suffix:undefined,
+					prefix:undefined,
+					attr:undefined
+				},{	//合并自定义属性
 					name:item.name,
 					placeholder:item.placeholder,
 					required:item.required,
 					disabled:disabled,
 					class:item.class || 'form-control',
 					'data-group':groupName
-				},
+				}),
 				itemState = {
 					attr:attr,
 					html:item.html,

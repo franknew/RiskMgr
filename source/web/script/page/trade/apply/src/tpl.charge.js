@@ -38,7 +38,7 @@ define(function(require, exports, module){
 			html:'放款金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'ExportMoney',
 			placeholder:'',
@@ -112,54 +112,17 @@ define(function(require, exports, module){
 			name:'HasExpired',
 			placeholder:'',
 			suffix:'元'
-		}],
-
-
-		[{
-			col:'12',
-			type:'label',
-			html:'<hr/>'
-		}],
-
-		[{
+		},{
 			type:'label',
 			col:3,
-			html:'退款信息'
-		},{
-			col:'3',
-			type:'text',
-			name:'RefundName',
-			placeholder:'户名'
-		},{
-			col:'3',
-			type:'text',
-			name:'RefundAccount',
-			placeholder:'账号'
-		},{
-			col:'3',
-			type:'text',
-			name:'RefundBankName',
-			placeholder:'开户行'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'退款金额'
+			html:'担保期限'
 		},{
 			col:'3',
 			type:'number',
-			name:'RefundMoney',
+			required:true,
+			name:'GuaranteeMonth',
 			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'退款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'RefundDate'
+			suffix:'月'
 		}],
 
 
@@ -255,6 +218,54 @@ define(function(require, exports, module){
 			col:'3',
 			type:'date',
 			name:'DeductMoneyDate'
+		}],
+
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'RefundMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'退款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'RefundDate'
 		}]
 	];
 

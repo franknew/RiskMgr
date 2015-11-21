@@ -99,6 +99,9 @@ define(function(require, exports, module){
 		},{
 			value:"17",
 			name:"招商银行"
+		},{
+			value:"18",
+			name:"农村商业银行"
 		}],
 
 		"地区":[{

@@ -532,7 +532,7 @@ define.pack("./tpl.view",["risk/page/customer/index","risk/page/customer/src/tpl
 			html:'建筑面积'
 		},{
 			col:'4',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'Area',
 			placeholder:'',
@@ -544,7 +544,7 @@ define.pack("./tpl.view",["risk/page/customer/index","risk/page/customer/src/tpl
 			html:'登记价'
 		},{
 			col:'4',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'RegPrice',
 			placeholder:'',

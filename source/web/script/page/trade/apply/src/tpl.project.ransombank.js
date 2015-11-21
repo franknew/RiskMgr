@@ -73,7 +73,7 @@ define(function(require, exports, module){
 			html:'赎楼金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'RedemptionAmount',
 			placeholder:'',
@@ -87,7 +87,7 @@ define(function(require, exports, module){
 			html:'原贷款金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'OrignalCreditCommerceMoney',
 			placeholder:'',
@@ -95,7 +95,7 @@ define(function(require, exports, module){
 			suffix:'万元'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			name:'OrignalCreditFundMoney',
 			placeholder:'',
 			prefix:'公积金',

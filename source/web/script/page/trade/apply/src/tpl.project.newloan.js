@@ -35,7 +35,7 @@ define(function(require, exports, module){
 			html:'担保金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'GuaranteeMoney',
 			placeholder:'',
@@ -61,7 +61,7 @@ define(function(require, exports, module){
 			html:'买方贷款金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'BuyerCreditCommerceMoney',
 			placeholder:'',
@@ -69,7 +69,7 @@ define(function(require, exports, module){
 			suffix:'万元'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			name:'BuyerCreditFundMoney',
 			placeholder:'',
 			prefix:'公积金',
@@ -83,7 +83,7 @@ define(function(require, exports, module){
 			html:'成交金额'
 		},{
 			col:"3",
-			type:'number',
+			type:'decimal',
 			name:'DealMoney',
 			required:true,
 			suffix:'万元'
@@ -94,7 +94,7 @@ define(function(require, exports, module){
 			html:'交易定金'
 		},{
 			col:"3",
-			type:'number',
+			type:'decimal',
 			name:'EarnestMoney',
 			required:true,
 			suffix:'万元'
@@ -107,7 +107,7 @@ define(function(require, exports, module){
 			html:'资金监管'
 		},{
 			col:"3",
-			type:'number',
+			type:'decimal',
 			name:'SupervisionMoney',
 			required:true,
 			suffix:'万元'
@@ -130,7 +130,7 @@ define(function(require, exports, module){
 			html:'客户预存款'
 		},{
 			col:"3",
-			type:'number',
+			type:'decimal',
 			name:'CustomerPredepositMoney',
 			suffix:'万元'
 		}],

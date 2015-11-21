@@ -248,12 +248,14 @@ __p.push('" data-activityid="');
 _p(Cur.CurrentActivity.ID);
 __p.push('" data-taskid="');
 _p(Cur.TaskID);
-__p.push('">\n		<td>SN00001</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip">');
+__p.push('">\n		<td>');
+_p(Cur.Project.Name);
+__p.push('</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip">');
 
 			var bi=0,CurBuyer,
 				Buyers = Cur.Buyers||[];
 			for(;CurBuyer=Buyers[bi++];) {
-			__p.push('			<tr>\n				<td>');
+			__p.push('			<tr>\n				<td><small class="text-success">[买]</small> ');
 _p(CurBuyer.Name);
 __p.push('</td>\n				<td>');
 _p(CurBuyer.IdentityCode);
@@ -264,7 +266,7 @@ __p.push('</td>\n			</tr>');
 			var bi=0,CurSeller,
 				Sellers = Cur.Sellers||[];
 			for(;CurSeller=Sellers[bi++];) {
-			__p.push('			<tr>\n				<td>');
+			__p.push('			<tr>\n				<td><small class="text-danger">[卖]</small> ');
 _p(CurSeller.Name);
 __p.push('</td>\n				<td>');
 _p(CurSeller.IdentityCode);

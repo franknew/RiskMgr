@@ -102,7 +102,8 @@ define(function(require, exports, module){
 					Sellers:dataCustomer.seller,
 					Assets:Property.getData(),
 					Project:Project.getData(),
-					Guarantor:Guarantor.getData()
+					Guarantor:Guarantor.getData(),
+					Report:$('#Report textarea[name=Report]').val()
 				};
 			}
 
@@ -111,6 +112,7 @@ define(function(require, exports, module){
 				data:data,
 				success:function(data, textStatus, jqXHR) {
 					msg.success('申请成功');
+					route.load('page=trade/list');
 				}
 			});
 		},

@@ -59,6 +59,7 @@
 			<li data-target="Assets">房产信息<span class="chevron"></span></li>
 			<li data-target="Guarantor">担保人<span class="chevron"></span></li>
 			<li data-target="Project">项目信息<span class="chevron"></span></li>
+			<li data-target="Report">调查报告<span class="chevron"></span></li>
 
 			<%if (ShowApproval) {%>
 				<li data-target="Approval">审批信息<span class="chevron"></span></li>
@@ -78,6 +79,7 @@
 			<%=this.SetupProperty(data)%>
 			<%=this.SetupGuarantor(data)%>
 			<%=this.SetupProject(data)%>
+			<%=this.SetupReport(data)%>
 
 			<%if (ShowApproval) {%>
 			<%=this.SetupApproval(data)%>

@@ -1,0 +1,36 @@
+<script type="text/html" id="SetupReport">
+<%
+	var Former = require('risk/components/former/index');
+	var FormData = data.data||{};
+%>
+<div class="step-pane" id="Report">
+	<div class="block-transparent">
+		<div class="header">
+			<h3>调查报告</h3>
+		</div>
+		<div class="content">
+			<%/**手动增加一个textarea表单**/%>
+			<%=Former.make([[{
+				col:'10',
+				type:'textarea',
+				name:'Report',
+				placeholder:'',
+				required:true,
+				rows:5
+			}]],{
+				data:data.data,
+				disabled:!data.canEdit
+			})%>
+		</div>
+	</div>
+	<%if (data.canEdit) {%>
+	<div class="form-group">
+		<div class="text-center col-sm-12">
+			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>
+			&nbsp;&nbsp;
+			<button class="btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>
+		</div>
+	</div>
+	<%}%>
+</div>
+</script>

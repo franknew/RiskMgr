@@ -58,6 +58,7 @@ define.pack = function(){
 //apply/src/setup.guarantor.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
+//apply/src/setup.report.tmpl.html
 //apply/src/setup.tmpl.html
 
 //js file list:
@@ -1084,7 +1085,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			html:'放款金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'ExportMoney',
 			placeholder:'',
@@ -1158,54 +1159,17 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			name:'HasExpired',
 			placeholder:'',
 			suffix:'元'
-		}],
-
-
-		[{
-			col:'12',
-			type:'label',
-			html:'<hr/>'
-		}],
-
-		[{
+		},{
 			type:'label',
 			col:3,
-			html:'退款信息'
-		},{
-			col:'3',
-			type:'text',
-			name:'RefundName',
-			placeholder:'户名'
-		},{
-			col:'3',
-			type:'text',
-			name:'RefundAccount',
-			placeholder:'账号'
-		},{
-			col:'3',
-			type:'text',
-			name:'RefundBankName',
-			placeholder:'开户行'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'退款金额'
+			html:'担保期限'
 		},{
 			col:'3',
 			type:'number',
-			name:'RefundMoney',
+			required:true,
+			name:'GuaranteeMonth',
 			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'退款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'RefundDate'
+			suffix:'月'
 		}],
 
 
@@ -1301,6 +1265,54 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'date',
 			name:'DeductMoneyDate'
+		}],
+
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'RefundMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'退款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'RefundDate'
 		}]
 	];
 
@@ -1561,7 +1573,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'担保金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'GuaranteeMoney',
 			placeholder:'',
@@ -1587,7 +1599,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'买方贷款金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'BuyerCreditCommerceMoney',
 			placeholder:'',
@@ -1595,7 +1607,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			suffix:'万元'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			name:'BuyerCreditFundMoney',
 			placeholder:'',
 			prefix:'公积金',
@@ -1609,7 +1621,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'成交金额'
 		},{
 			col:"3",
-			type:'number',
+			type:'decimal',
 			name:'DealMoney',
 			required:true,
 			suffix:'万元'
@@ -1620,7 +1632,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'交易定金'
 		},{
 			col:"3",
-			type:'number',
+			type:'decimal',
 			name:'EarnestMoney',
 			required:true,
 			suffix:'万元'
@@ -1633,7 +1645,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'资金监管'
 		},{
 			col:"3",
-			type:'number',
+			type:'decimal',
 			name:'SupervisionMoney',
 			required:true,
 			suffix:'万元'
@@ -1656,7 +1668,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'客户预存款'
 		},{
 			col:"3",
-			type:'number',
+			type:'decimal',
 			name:'CustomerPredepositMoney',
 			suffix:'万元'
 		}],
@@ -1764,7 +1776,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			html:'赎楼金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'RedemptionAmount',
 			placeholder:'',
@@ -1778,7 +1790,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			html:'原贷款金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'OrignalCreditCommerceMoney',
 			placeholder:'',
@@ -1786,7 +1798,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			suffix:'万元'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			name:'OrignalCreditFundMoney',
 			placeholder:'',
 			prefix:'公积金',
@@ -1832,7 +1844,7 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 			html:'预计总赎楼金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'AssetRansomPredictMoney',
 			placeholder:'',
@@ -1988,7 +2000,8 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 					Sellers:dataCustomer.seller,
 					Assets:Property.getData(),
 					Project:Project.getData(),
-					Guarantor:Guarantor.getData()
+					Guarantor:Guarantor.getData(),
+					Report:$('#Report textarea[name=Report]').val()
 				};
 			}
 
@@ -1997,6 +2010,7 @@ define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","ri
 				data:data,
 				success:function(data, textStatus, jqXHR) {
 					msg.success('申请成功');
+					route.load('page=trade/list');
 				}
 			});
 		},
@@ -2214,6 +2228,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 //apply/src/setup.guarantor.tmpl.html
 //apply/src/setup.project.tmpl.html
 //apply/src/setup.property.tmpl.html
+//apply/src/setup.report.tmpl.html
 //apply/src/setup.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
@@ -2497,7 +2512,7 @@ var __p=[],_p=function(s){__p.push(s)};
 __p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>项目信息</h3>\n		</div>\n		<div class="content">');
 _p(data.projectTpl(FormData.Project,data.canEdit));
 __p.push('		</div>\n	</div>');
-if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
+if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
 }__p.push('</div>');
 
 return __p.join("");
@@ -2636,6 +2651,32 @@ __p.push(' /></td>\n	</tr>');
 return __p.join("");
 },
 
+'SetupReport': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var Former = require('risk/components/former/index');
+	var FormData = data.data||{};
+__p.push('<div class="step-pane" id="Report">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>调查报告</h3>\n		</div>\n		<div class="content">');
+/**手动增加一个textarea表单**/__p.push('			');
+_p(Former.make([[{
+				col:'10',
+				type:'textarea',
+				name:'Report',
+				placeholder:'',
+				required:true,
+				rows:5
+			}]],{
+				data:data.data,
+				disabled:!data.canEdit
+			}));
+__p.push('		</div>\n	</div>');
+if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
+}__p.push('</div>');
+
+return __p.join("");
+},
+
 'Setup': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
@@ -2686,7 +2727,7 @@ var __p=[],_p=function(s){__p.push(s)};
 		ShowFollow = ShowApproval && DataView.DisplayTracking;
 __p.push('\n<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST" style="position:absolute;top:-80px;right:80px;">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
-}__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Guarantor">担保人<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>');
+}__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Guarantor">担保人<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n			<li data-target="Report">调查报告<span class="chevron"></span></li>');
 if (ShowApproval) {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');
 }if (ShowCharge) {__p.push('			<li data-target="Charge">收费情况<span class="chevron"></span></li>');
 }if (ShowFollow) {__p.push('			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
@@ -2698,6 +2739,8 @@ __p.push('			');
 _p(this.SetupGuarantor(data));
 __p.push('			');
 _p(this.SetupProject(data));
+__p.push('			');
+_p(this.SetupReport(data));
 if (ShowApproval) {__p.push('			');
 _p(this.SetupApproval(data));
 __p.push('			');
