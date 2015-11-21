@@ -235,14 +235,14 @@ namespace RiskMgr.WinformTest
         {
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
-            bll.UpdateTracking(new UpdateTrackingServiceForm
-            {
-                LastUpdator = "13",
-                ChangeOwnerRemark = "123456",
-                MortgageRemark = "44",
-                InsuranceFreeTime = DateTime.Now,
-                ID = textBox1.Text,
-            });
+            //bll.UpdateTracking(new UpdateTrackingServiceForm
+            //{
+            //    LastUpdator = "13",
+            //    ChangeOwnerRemark = "123456",
+            //    MortgageRemark = "44",
+            //    InsuranceFreeTime = DateTime.Now,
+            //    ID = textBox1.Text,
+            //});
         }
 
         private void button18_Click(object sender, EventArgs e)

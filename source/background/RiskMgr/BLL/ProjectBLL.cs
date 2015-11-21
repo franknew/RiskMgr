@@ -200,8 +200,8 @@ namespace RiskMgr.BLL
                              select c.CustomerID).ToList();
             //共权人
             var guarantorids = (from g in cps
-                              where g.ProjectID == project.ID && g.Type == (int)CustomerType.Guarantor
-                              select g.CustomerID).ToList();
+                                where g.ProjectID == project.ID && g.Type == (int)CustomerType.Guarantor
+                                select g.CustomerID).ToList();
 
             result.Assets = (from a in assets
                              where assetids.Exists(t => t == a.ID)
@@ -213,8 +213,8 @@ namespace RiskMgr.BLL
                               where sellerids.Exists(t => t == c.ID)
                               select c).ToList();
             var guarantors = (from c in customers
-                               where guarantorids.Exists(t=>t==c.ID)
-                               select c).ToList();
+                              where guarantorids.Exists(t => t == c.ID)
+                              select c).ToList();
             List<Guarantor> guarantorlist = new List<Guarantor>();
             foreach (var c in guarantors)
             {
@@ -223,8 +223,8 @@ namespace RiskMgr.BLL
                               where a.ProjectID == project.ID && a.CustomerID == c.ID && a.Type == (int)CustomerAssetType.Guarantor
                               select a.AssetID).ToList();
                 var assetlist = (from a in assets
-                                  where casids.Exists(t => t == a.ID)
-                                  select a).ToList();
+                                 where casids.Exists(t => t == a.ID)
+                                 select a).ToList();
                 guarantor.Assets = assetlist;
                 guarantorlist.Add(guarantor);
             }
@@ -282,6 +282,7 @@ namespace RiskMgr.BLL
             {
                 result.DisplayCharge = true;
                 result.DisplayTracking = true;
+                result.DisplayConfirm = true;
             }
             var currenttasks = tasks.FindAll(t => t.WorkflowID == workflow.ID && t.ActivityID == processingActivity.ID);
             //处理中流程的操作人
@@ -292,7 +293,7 @@ namespace RiskMgr.BLL
                                 select u.CnName).ToList();
 
             result.Operator = string.Join(",", usernamelist);
-            
+
             string userid = currentuserid;
             var task = tasks.Find(t => t.WorkflowID == workflow.ID && t.ActivityID == processingActivity.ID && t.UserID == userid);
 
@@ -512,7 +513,7 @@ namespace RiskMgr.BLL
             return true;
         }
 
-        public bool UpdateTracking(UpdateTrackingServiceForm project)
+        public bool UpdateTracking(UpdateTrackingServiceForm project, string workflowid, string activityid, string taskid, string userid)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao dao = new ProjectDao(mapper);
@@ -550,6 +551,51 @@ namespace RiskMgr.BLL
                     tmdao.Add(m);
                 }
             }
+            
+            WorkflowModel model = WorkflowModel.Load(workflowid);
+            model.ProcessActivity(activityid, new Approval { Status = (int)ApprovalStatus.None }, taskid, userid, new WorkflowAuthority());
+            return true;
+        }
+
+        public bool FinanceConfirm(string workflowid, string activityid, string taskid, string projectid, string userid)
+        {
+            //处理项目
+            ISqlMapper mapper = Common.GetMapperFromSession();
+            ProjectDao projectdao = new ProjectDao(mapper);
+            Project project = projectdao.Query(new ProjectQueryForm { ID = projectid, IsDeleted = 0 }).FirstOrDefault();
+            if (project == null)
+            {
+                throw new Exception("项目ID：" + projectid + "不存在");
+            }
+            projectdao.Update(new ProjectUpdateForm
+            {
+                Entity = new Project
+                {
+                    FinanceConfirm = 1,
+                    LastUpdator = userid,
+                },
+                ProjectQueryForm = new ProjectQueryForm
+                {
+                    ID = projectid,
+                }
+            });
+            //处理流程
+            WorkflowModel model = WorkflowModel.Load(workflowid);
+            model.ProcessActivity(activityid, new Approval { Status = (int)ApprovalStatus.None }, taskid, userid, new WorkflowAuthority());
+            TaskDao taskdao = new TaskDao(mapper);
+            taskdao.Update(new TaskUpdateForm
+            {
+                Entity = new Task
+                {
+                    Status = (int)TaskProcessStatus.Processed,
+                    LastUpdator = userid,
+                },
+                TaskQueryForm = new TaskQueryForm
+                {
+                    WorkflowID = workflowid,
+                    Status = (int)TaskProcessStatus.Started,
+                }
+            });
             return true;
         }
     }

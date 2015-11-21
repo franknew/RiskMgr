@@ -17,5 +17,11 @@ namespace RiskMgr.Form
         /// 借贷信息
         /// </summary>
         public List<TrackingMortgage> Mortgage { get; set; }
+
+        public string WorkflowID { get; set; }
+
+        public string ActivityID { get; set; }
+
+        public string TaskID { get; set; }
     }
 }

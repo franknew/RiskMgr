@@ -222,5 +222,9 @@ namespace RiskMgr.Form
         
         public string ChangeOwnerRemark { get; set; }
         
+        public Int32? InsurancePeriod { get; set; }
+        
+        public UInt64? FinanceConfirm { get; set; }
+        
     }
 }

@@ -175,7 +175,13 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
             form.LastUpdator = userid;
-            return bll.UpdateTracking(form);
+            return bll.UpdateTracking(form, form.WorkflowID, form.ActivityID, form.TaskID, userid);
+        }
+
+        [ApprovalAction]
+        public bool FinanceConfirm()
+        {
+            return true;
         }
     }
 }

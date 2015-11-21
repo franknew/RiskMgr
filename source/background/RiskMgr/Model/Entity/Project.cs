@@ -388,5 +388,15 @@ namespace RiskMgr.Model
         /// </summary>
         public string ChangeOwnerRemark { get; set; }
         
+        /// <summary>
+        /// 担保期限
+        /// </summary>
+        public int? InsurancePeriod { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? FinanceConfirm { get; set; }
+        
     }
 }

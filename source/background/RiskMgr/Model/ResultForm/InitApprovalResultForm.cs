@@ -49,5 +49,10 @@ namespace RiskMgr.Form
         /// 是否显示跟踪信息
         /// </summary>
         public bool DisplayTracking { get; set; }
+
+        /// <summary>
+        /// 是否显示回款确认
+        /// </summary>
+        public bool DisplayConfirm { get; set; }
     }
 }

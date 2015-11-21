@@ -446,6 +446,14 @@
         `ChangeOwnerRemark`=#ChangeOwnerRemark#
     </isNotNull>
     
+    <isNotNull prepend="AND" property="InsurancePeriod">
+        `InsurancePeriod`=#InsurancePeriod#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="FinanceConfirm">
+        `FinanceConfirm`=#FinanceConfirm#
+    </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -538,7 +546,9 @@
     `DeductMoneyBankName`,
     `DeductMoneyMoney`,
     `DeductMoneyDate`,
-    `ChangeOwnerRemark`
+    `ChangeOwnerRemark`,
+    `InsurancePeriod`,
+    `FinanceConfirm`
   )
   VALUES
   (
@@ -623,7 +633,9 @@
         #DeductMoneyBankName#,
         #DeductMoneyMoney#,
         #DeductMoneyDate#,
-        #ChangeOwnerRemark#
+        #ChangeOwnerRemark#,
+        #InsurancePeriod#,
+        #FinanceConfirm#
   )
   </insert>
   <update id="UpdateProject" parameterClass="ProjectUpdateForm">
@@ -871,6 +883,12 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.ChangeOwnerRemark">
         `ChangeOwnerRemark`=#Entity.ChangeOwnerRemark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.InsurancePeriod">
+        `InsurancePeriod`=#Entity.InsurancePeriod#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.FinanceConfirm">
+        `FinanceConfirm`=#Entity.FinanceConfirm#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -1215,6 +1233,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerRemark">
         `ChangeOwnerRemark`=#ProjectQueryForm.ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.InsurancePeriod">
+        `InsurancePeriod`=#ProjectQueryForm.InsurancePeriod#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.FinanceConfirm">
+        `FinanceConfirm`=#ProjectQueryForm.FinanceConfirm#
     </isNotNull>
     </dynamic>
   </update>
@@ -1571,6 +1595,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerRemark">
         `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsurancePeriod">
+        `InsurancePeriod`=#InsurancePeriod#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FinanceConfirm">
+        `FinanceConfirm`=#FinanceConfirm#
     </isNotNull>
   </update>
    <select id="QueryProjectLastUpdateTime" resultClass="DateTime">
@@ -1930,6 +1960,12 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ChangeOwnerRemark">
         `ChangeOwnerRemark`=#ChangeOwnerRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="InsurancePeriod">
+        `InsurancePeriod`=#InsurancePeriod#
+    </isNotNull>
+    <isNotNull prepend="AND" property="FinanceConfirm">
+        `FinanceConfirm`=#FinanceConfirm#
     </isNotNull>
     </dynamic>
    </select>
