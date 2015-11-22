@@ -37,8 +37,10 @@ define.pack = function(){
 //apply/src/setup.approval.js
 //apply/src/setup.charge.js
 //apply/src/setup.customer.js
+//apply/src/setup.finance.js
 //apply/src/setup.followup.js
 //apply/src/setup.guarantor.js
+//apply/src/setup.js
 //apply/src/setup.project.js
 //apply/src/setup.property.js
 //apply/src/test-data.js
@@ -48,12 +50,12 @@ define.pack = function(){
 //apply/src/tpl.project.newloan.js
 //apply/src/tpl.project.ransombank.js
 //apply/src/tpl.project.ransomway.js
-//apply/src/view.js
 //apply/src/wizzard.js
 //apply/src/choose.tmpl.html
 //apply/src/setup.approval.tmpl.html
 //apply/src/setup.charge.tmpl.html
 //apply/src/setup.customer.tmpl.html
+//apply/src/setup.finance.tmpl.html
 //apply/src/setup.followup.tmpl.html
 //apply/src/setup.guarantor.tmpl.html
 //apply/src/setup.project.tmpl.html
@@ -68,8 +70,10 @@ define.pack = function(){
 //apply/src/setup.approval.js
 //apply/src/setup.charge.js
 //apply/src/setup.customer.js
+//apply/src/setup.finance.js
 //apply/src/setup.followup.js
 //apply/src/setup.guarantor.js
+//apply/src/setup.js
 //apply/src/setup.project.js
 //apply/src/setup.property.js
 //apply/src/test-data.js
@@ -79,7 +83,6 @@ define.pack = function(){
 //apply/src/tpl.project.newloan.js
 //apply/src/tpl.project.ransombank.js
 //apply/src/tpl.project.ransomway.js
-//apply/src/view.js
 //apply/src/wizzard.js
 /**
  * 用户输入关键字段时，查找已知数据，自动补齐
@@ -221,12 +224,12 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
-define.pack("./index",["jquery","risk/unit/route","./tmpl","./view","./data"],function(require, exports, module){
+define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./data"],function(require, exports, module){
 
 	var $ = require('jquery'),
 		Route = require('risk/unit/route'),
 		Tmpl = require('./tmpl'),
-		Views = require('./view');
+		Views = require('./setup');
 
 	var MOD = {
 		initPage:function(params) {
@@ -284,7 +287,6 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./view","./data"],fu
 
 			require('./data').get().done(function(data) {
 				var id = data&&data.Project&&data.Project.Name;
-				console.log('ddd',data.Project);
 				Views.init({
 					mode:params.action,
 					head:head+'<small>('+id+')</small>',
@@ -512,6 +514,48 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 
 	return MOD;
 });/**
+ * 回款确认
+ * @authors viktorli (i@lizhenwen.com)
+ */
+
+define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./data"],function(require, exports, module){
+	var $ = require('jquery'),
+		Ajax = require('risk/unit/ajax'),
+		Route = require('risk/unit/route'),
+		Msg = require('risk/components/msg/index');
+
+	var Data = require('./data');
+
+	var MOD = {
+		init:function() {
+			Route.on('click','finance-submit',function(ev) {//提交回款确认
+				ev.preventDefault();
+
+				if (!confirm('回款成功后单据将不可再修改，是否确认？')) {
+					return ;
+				}
+
+				Data.get().done(function(da) {
+					Ajax.post({
+						url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
+						data:{
+							ID:da.Project.ID,
+							WorkflowID:da.WorkflowID,
+							ActivityID:da.CurrentActivity.ID,
+							TaskID:da.TaskID
+						},
+						success:function(da) {
+							Msg.success('已成功确认回款.');
+							Route.reload();
+						}
+					});
+				});
+			});
+		}
+	};
+
+	return MOD;
+});/**
  * 保后跟踪
  * @authors viktorli (i@lizhenwen.com)
  */
@@ -676,6 +720,133 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 			html = $(html);
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {});
+		}
+	};
+
+	return MOD;
+});
+/**
+ * 申请额度表单视图
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-15 21:41:52
+ */
+
+define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.guarantor","./setup.project","./setup.approval","./setup.charge","./setup.followup","./setup.finance","./test-data"],function(require, exports, module){
+
+	var $ = require('jquery'),
+		route = require('risk/unit/route'),
+		msg = require('risk/components/msg/index'),
+		Modal = require('risk/components/modal/index'),
+		Ajax = require('risk/unit/ajax'),
+		Tmpl = require('./tmpl'),
+		Wizzard = require('./wizzard');
+
+	var Customer = require('./setup.customer'),
+		Property = require('./setup.property'),
+		Guarantor = require('./setup.guarantor'),
+		Project = require('./setup.project'),
+		Approval = require('./setup.approval'),
+		Charge = require('./setup.charge'),
+		Followup = require('./setup.followup'),
+		Finance = require('./setup.finance');
+
+	var MOD = {
+		/**
+		 * @param opts {Object} 配置项：
+			mode:模式，可选有add、edit、view
+			head:标题文本
+			data:表单数据
+		 */
+		init:function(opts) {
+			var mode = opts.mode,
+				data = opts.data,
+				head = opts.head;
+
+			var that = this,
+				canEdit = !!~$.inArray(mode, ['add','edit']);
+			var html = Tmpl.Setup({
+				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
+				propertyTpl:Property.getTpl,
+				projectTpl:Project.getTpl,
+				data:data,
+				mode:mode,
+				canEdit:canEdit
+			});
+			route.show({
+				head:head,
+				content:html
+			});
+
+			//if (canEdit) {
+				Wizzard.init({
+					container:'#J_Wizzard',
+					success:function() {
+						if (mode=='approval') {
+							that.approval(mode);
+						}else {
+							that.submit(mode);
+						}
+					}
+				});
+			//}
+
+			this._initEvent();
+
+
+			$('#TEST').click(function(ev) {
+				ev.preventDefault();
+				var data = require('./test-data');
+				MOD.submit(mode,data);
+			});
+		},
+		_initEvent:function() {
+			Customer.init();
+			Property.init();
+			Guarantor.init();
+			Project.init();
+			Approval.init();
+			Charge.init();
+			Followup.init();
+			Finance.init();
+
+			route.on('click','cancel',function(ev) {//取消按钮
+				ev.preventDefault();
+				Modal.show({
+					content:'您填写的表单将不会被保存，是否要取消？',
+					okValue:'确认取消',
+					ok:function() {
+						route.load('page=apply-amount');
+					},
+					cancelValue:'不取消'
+				});
+			});
+		},
+		//提交表单
+		submit:function(mode,data) {
+			if (!data) {
+				var dataCustomer = Customer.getData();
+				data = {
+					Buyers:dataCustomer.buyer,
+					Sellers:dataCustomer.seller,
+					Assets:Property.getData(),
+					Project:Project.getData(),
+					Guarantor:Guarantor.getData(),
+					Report:$('#Report textarea[name=Report]').val()
+				};
+			}
+
+			Ajax.post({
+				url:'RiskMgr.Api.ProjectApi/Add',
+				data:data,
+				success:function(data, textStatus, jqXHR) {
+					msg.success('申请成功');
+					route.load('page=trade/list');
+				}
+			});
+		},
+		//提交审批
+		approval:function() {
+			alert('审批拉')
 		}
 	};
 
@@ -1896,131 +2067,6 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 	];
 
 	return MOD;
-});
-/**
- * 申请额度表单视图
- * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-15 21:41:52
- */
-
-define.pack("./view",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.guarantor","./setup.project","./setup.approval","./setup.charge","./setup.followup","./test-data"],function(require, exports, module){
-
-	var $ = require('jquery'),
-		route = require('risk/unit/route'),
-		msg = require('risk/components/msg/index'),
-		Modal = require('risk/components/modal/index'),
-		Ajax = require('risk/unit/ajax'),
-		Tmpl = require('./tmpl'),
-		Wizzard = require('./wizzard');
-
-	var Customer = require('./setup.customer'),
-		Property = require('./setup.property'),
-		Guarantor = require('./setup.guarantor'),
-		Project = require('./setup.project'),
-		Approval = require('./setup.approval'),
-		Charge = require('./setup.charge'),
-		Followup = require('./setup.followup');
-
-	var MOD = {
-		/**
-		 * @param opts {Object} 配置项：
-			mode:模式，可选有add、edit、view
-			head:标题文本
-			data:表单数据
-		 */
-		init:function(opts) {
-			var mode = opts.mode,
-				data = opts.data,
-				head = opts.head;
-
-			var that = this,
-				canEdit = !!~$.inArray(mode, ['add','edit']);
-			var html = Tmpl.Setup({
-				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
-				propertyTpl:Property.getTpl,
-				projectTpl:Project.getTpl,
-				data:data,
-				mode:mode,
-				canEdit:canEdit
-			});
-			route.show({
-				head:head,
-				content:html
-			});
-
-			//if (canEdit) {
-				Wizzard.init({
-					container:'#J_Wizzard',
-					success:function() {
-						if (mode=='approval') {
-							that.approval(mode);
-						}else {
-							that.submit(mode);
-						}
-					}
-				});
-			//}
-
-			this._initEvent();
-
-
-			$('#TEST').click(function(ev) {
-				ev.preventDefault();
-				var data = require('./test-data');
-				MOD.submit(mode,data);
-			});
-		},
-		_initEvent:function() {
-			Customer.init();
-			Property.init();
-			Guarantor.init();
-			Project.init();
-			Approval.init();
-			Charge.init();
-			Followup.init();
-
-			route.on('click','cancel',function(ev) {//取消按钮
-				ev.preventDefault();
-				Modal.show({
-					content:'您填写的表单将不会被保存，是否要取消？',
-					okValue:'确认取消',
-					ok:function() {
-						route.load('page=apply-amount');
-					},
-					cancelValue:'不取消'
-				});
-			});
-		},
-		//提交表单
-		submit:function(mode,data) {
-			if (!data) {
-				var dataCustomer = Customer.getData();
-				data = {
-					Buyers:dataCustomer.buyer,
-					Sellers:dataCustomer.seller,
-					Assets:Property.getData(),
-					Project:Project.getData(),
-					Guarantor:Guarantor.getData(),
-					Report:$('#Report textarea[name=Report]').val()
-				};
-			}
-
-			Ajax.post({
-				url:'RiskMgr.Api.ProjectApi/Add',
-				data:data,
-				success:function(data, textStatus, jqXHR) {
-					msg.success('申请成功');
-					route.load('page=trade/list');
-				}
-			});
-		},
-		//提交审批
-		approval:function() {
-			alert('审批拉')
-		}
-	};
-
-	return MOD;
 });/**
  * 向导类表单
  * @authors viktorli (i@lizhenwen.com)
@@ -2224,6 +2270,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 //apply/src/setup.approval.tmpl.html
 //apply/src/setup.charge.tmpl.html
 //apply/src/setup.customer.tmpl.html
+//apply/src/setup.finance.tmpl.html
 //apply/src/setup.followup.tmpl.html
 //apply/src/setup.guarantor.tmpl.html
 //apply/src/setup.project.tmpl.html
@@ -2364,6 +2411,17 @@ __p.push('		');
 
 			}
 		__p.push('	</div>');
+
+return __p.join("");
+},
+
+'SetupFinanceConfirm': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var Former = require('risk/components/former/index');
+	var FormData = data.data||{};
+__p.push('<div class="step-pane" id="FinanceConfirm">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>回款确认</h3>\n		</div>\n		<div class="content">\n			<button type="button" class="btn btn-primary btn-lg" data-hook="finance-submit">确认已回款</button>\n		</div>\n	</div>\n</div>');
 
 return __p.join("");
 },
@@ -2722,15 +2780,17 @@ var __p=[],_p=function(s){__p.push(s)};
 		Charge = DataView.Charge,	//财务信息
 		Followup = DataView.Followup;	//保后跟踪
 
-	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),
-		ShowCharge = ShowApproval && DataView.DisplayCharge,
-		ShowFollow = ShowApproval && DataView.DisplayTracking;
+	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),	//审批
+		ShowCharge = ShowApproval && DataView.DisplayCharge,	//收费情况
+		ShowFollow = ShowApproval && DataView.DisplayTracking,	//保后
+		ShowFinanceConfirm = !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
 __p.push('\n<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST" style="position:absolute;top:-80px;right:80px;">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Guarantor">担保人<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n			<li data-target="Report">调查报告<span class="chevron"></span></li>');
 if (ShowApproval) {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');
 }if (ShowCharge) {__p.push('			<li data-target="Charge">收费情况<span class="chevron"></span></li>');
 }if (ShowFollow) {__p.push('			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>');
+}if (ShowFinanceConfirm) {__p.push('			<li data-target="FinanceConfirm">回款确认<span class="chevron"></span></li>');
 }__p.push('\n		</ul>\n		<div class="step-content">');
 _p(this.SetupCustomer(data));
 __p.push('			');
@@ -2749,6 +2809,9 @@ _p(this.SetupCharge(data));
 __p.push('			');
 }if (ShowFollow) {__p.push('			');
 _p(this.SetupFollowup(data));
+__p.push('			');
+}if (ShowFinanceConfirm) {__p.push('			');
+_p(this.SetupFinanceConfirm(data));
 __p.push('			');
 }__p.push('		</div>\n	</form>\n</div>');
 

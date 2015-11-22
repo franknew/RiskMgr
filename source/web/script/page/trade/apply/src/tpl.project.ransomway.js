@@ -13,7 +13,7 @@ define(function(require, exports, module){
 			html:'预计总赎楼金额'
 		},{
 			col:'3',
-			type:'number',
+			type:'decimal',
 			required:true,
 			name:'AssetRansomPredictMoney',
 			placeholder:'',

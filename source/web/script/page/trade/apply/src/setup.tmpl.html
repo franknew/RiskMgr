@@ -43,9 +43,10 @@
 		Charge = DataView.Charge,	//财务信息
 		Followup = DataView.Followup;	//保后跟踪
 
-	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),
-		ShowCharge = ShowApproval && DataView.DisplayCharge,
-		ShowFollow = ShowApproval && DataView.DisplayTracking;
+	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),	//审批
+		ShowCharge = ShowApproval && DataView.DisplayCharge,	//收费情况
+		ShowFollow = ShowApproval && DataView.DisplayTracking,	//保后
+		ShowFinanceConfirm = !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
 %>
 
 <div class="col-md-12">
@@ -73,6 +74,10 @@
 			<li data-target="Followup">保后跟踪<span class="chevron"></span></li>
 			<%}%>
 
+			<%if (ShowFinanceConfirm) {%>
+			<li data-target="FinanceConfirm">回款确认<span class="chevron"></span></li>
+			<%}%>
+
 		</ul>
 		<div class="step-content">
 			<%=this.SetupCustomer(data)%>
@@ -91,6 +96,10 @@
 
 			<%if (ShowFollow) {%>
 			<%=this.SetupFollowup(data)%>
+			<%}%>
+
+			<%if (ShowFinanceConfirm) {%>
+			<%=this.SetupFinanceConfirm(data)%>
 			<%}%>
 		</div>
 	</form>

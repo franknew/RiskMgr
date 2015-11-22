@@ -8,7 +8,7 @@ define(function(require, exports, module){
 	var $ = require('jquery'),
 		Route = require('risk/unit/route'),
 		Tmpl = require('./tmpl'),
-		Views = require('./view');
+		Views = require('./setup');
 
 	var MOD = {
 		initPage:function(params) {
@@ -66,7 +66,6 @@ define(function(require, exports, module){
 
 			require('./data').get().done(function(data) {
 				var id = data&&data.Project&&data.Project.Name;
-				console.log('ddd',data.Project);
 				Views.init({
 					mode:params.action,
 					head:head+'<small>('+id+')</small>',

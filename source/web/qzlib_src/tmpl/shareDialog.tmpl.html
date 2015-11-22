@@ -1,0 +1,44 @@
+<script type="text/html" id="shareDialogMobile" nowith="yes">
+	<div class="dialog dialog-m" id="J_share_dialog" style="top:<%=data.height%>">
+		<div class="dl_inner">
+			<div class="hd">
+                <img src="<%=data.info.pic%>" class="cover">
+                <div class="txt">
+                    <h3 class="title"><%=data.util.encodeHtml(data.info.title)%></h3>
+                    <p class="sub-title"><%=data.util.encodeHtml(data.info.summary)%></p>
+                </div>
+			</div>
+			<div class="bd">
+                <!--<input type="text" class="txt-input" value="评论一番吧" />-->
+                <!--<textarea class="txt-input" value="评论一番吧">评论一番吧</textarea>-->
+                <!--<a class="ico-emoji" style="background-color: #333;"></a>-->
+			</div>
+            <div class="ft">
+                <a class="btn btn-cancel" id="J_share_cancel">取消</a>
+                <a class="btn btn-ok" id="J_share_ok">确定</a>
+            </div>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="shareDialogPc" nowith="yes">
+    <div class="dialog dialog-share" id="J_share_dialog" style="top:<%=data.height%>">
+        <div class="dl_inner">
+            <div class="hd">
+                <a class="i-close">×</a>
+                <h3>分享活动</h3>
+            </div>
+            <div class="bd">
+                <img src="<%=data.info.pic%>" class="cover">
+                <div class="txt">
+                    <h3 class="title"><%=data.util.encodeHtml(data.info.title)%></h3>
+                    <p class="sub-title"><%=data.util.encodeHtml(data.info.summary)%></p>
+                </div>
+            </div>
+            <div class="ft">
+                <a class="btn btn-cancel" id="J_share_cancel">取消</a>
+                <a class="btn btn-ok" id="J_share_ok">确定</a>
+            </div>
+        </div>
+    </div>
+</script>

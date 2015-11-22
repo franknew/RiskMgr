@@ -239,7 +239,6 @@ var __p=[],_p=function(s){__p.push(s)};
 	if (List.length>0) {
 
 		for(;Cur=List[i++];) {
-			console.log('ccc',Cur);
 __p.push('	<tr data-hook="view" class="pointer-item" data-id="');
 _p(Cur.Project.ID);
 __p.push('" data-workflowid="');
@@ -250,12 +249,14 @@ __p.push('" data-taskid="');
 _p(Cur.TaskID);
 __p.push('">\n		<td>');
 _p(Cur.Project.Name);
-__p.push('</td>\n		<td>ye wu yuan</td>\n		<td colspan="2">\n			<table class="no-strip">');
+__p.push('</td>\n		<td>');
+_p(Cur.Processor||'&nbsp;');
+__p.push('</td>\n		<td colspan="2">\n			<table class="no-strip">');
 
 			var bi=0,CurBuyer,
 				Buyers = Cur.Buyers||[];
 			for(;CurBuyer=Buyers[bi++];) {
-			__p.push('			<tr>\n				<td><small class="text-success">[买]</small> ');
+			__p.push('			<tr>\n				<td class="col-sm-4"><small class="text-success">[买]</small> ');
 _p(CurBuyer.Name);
 __p.push('</td>\n				<td>');
 _p(CurBuyer.IdentityCode);
@@ -266,7 +267,7 @@ __p.push('</td>\n			</tr>');
 			var bi=0,CurSeller,
 				Sellers = Cur.Sellers||[];
 			for(;CurSeller=Sellers[bi++];) {
-			__p.push('			<tr>\n				<td><small class="text-danger">[卖]</small> ');
+			__p.push('			<tr>\n				<td class="col-sm-4"><small class="text-danger">[卖]</small> ');
 _p(CurSeller.Name);
 __p.push('</td>\n				<td>');
 _p(CurSeller.IdentityCode);

@@ -85,11 +85,10 @@
 	if (List.length>0) {
 
 		for(;Cur=List[i++];) {
-			console.log('ccc',Cur);
 %>
 	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.Project.ID%>" data-workflowid="<%=Cur.WorkflowID%>" data-activityid="<%=Cur.CurrentActivity.ID%>" data-taskid="<%=Cur.TaskID%>">
 		<td><%=Cur.Project.Name%></td>
-		<td>ye wu yuan</td>
+		<td><%=Cur.Processor||'&nbsp;'%></td>
 		<td colspan="2">
 			<table class="no-strip">
 
@@ -99,7 +98,7 @@
 			for(;CurBuyer=Buyers[bi++];) {
 			%>
 			<tr>
-				<td><small class="text-success">[买]</small> <%=CurBuyer.Name%></td>
+				<td class="col-sm-4"><small class="text-success">[买]</small> <%=CurBuyer.Name%></td>
 				<td><%=CurBuyer.IdentityCode%></td>
 			</tr>
 			<%
@@ -112,7 +111,7 @@
 			for(;CurSeller=Sellers[bi++];) {
 			%>
 			<tr>
-				<td><small class="text-danger">[卖]</small> <%=CurSeller.Name%></td>
+				<td class="col-sm-4"><small class="text-danger">[卖]</small> <%=CurSeller.Name%></td>
 				<td><%=CurSeller.IdentityCode%></td>
 			</tr>
 			<%

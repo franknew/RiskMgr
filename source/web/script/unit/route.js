@@ -85,6 +85,11 @@ define(function(require, exports, module) {
 				this._load(modinfo);
 			}
 		},
+		//刷新该页面
+		reload:function() {
+			var mod = this._getMod(location.href);
+			this._load(mod);
+		},
 		/** 获取当前展示的模块url id
 		 * @param
 		 */
