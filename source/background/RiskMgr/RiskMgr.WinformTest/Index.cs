@@ -213,7 +213,7 @@ namespace RiskMgr.WinformTest
         private void button15_Click(object sender, EventArgs e)
         {
             ProjectBLL bll = new ProjectBLL();
-            bll.QueryDetail(textBox1.Text, "1");
+            var a = bll.QueryDetail(textBox1.Text, "9");
         }
 
         private void button16_Click(object sender, EventArgs e)
@@ -286,6 +286,13 @@ namespace RiskMgr.WinformTest
 
             LeaderInRoleWorkflowAuthorityHandler handler = new LeaderInRoleWorkflowAuthorityHandler();
             list = handler.Handle(au);
+        }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            Workflow workflow = new Workflow();
+            ProjectBLL bll = new ProjectBLL();
+            //bll.FinanceConfirm();
         }
     }
 

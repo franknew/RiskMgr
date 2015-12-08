@@ -54,5 +54,12 @@ namespace RiskMgr.Form
         /// 是否显示回款确认
         /// </summary>
         public bool DisplayConfirm { get; set; }
+
+        public bool ConfirmCanEdit { get; set; }
+
+        /// <summary>
+        /// 流程是否结束
+        /// </summary>
+        public bool WorkflowComplete { get; set; }
     }
 }

@@ -398,5 +398,40 @@ namespace RiskMgr.Model
         /// </summary>
         public int? FinanceConfirm { get; set; }
         
+        /// <summary>
+        /// 调查报告
+        /// </summary>
+        public string Report { get; set; }
+        
+        /// <summary>
+        /// 预计回款日期
+        /// </summary>
+        public DateTime? PredictReturnBackMoneyTime { get; set; }
+        
+        /// <summary>
+        /// 取证日期
+        /// </summary>
+        public DateTime? PickNumberTime { get; set; }
+        
+        /// <summary>
+        /// 注销日期
+        /// </summary>
+        public DateTime? LogoutAssetTime { get; set; }
+        
+        /// <summary>
+        /// 过户收文日期
+        /// </summary>
+        public DateTime? ChangeOwnerReceiptTime { get; set; }
+        
+        /// <summary>
+        /// 过户办文编号
+        /// </summary>
+        public DateTime? ChangeOwnerHandleTime { get; set; }
+        
+        /// <summary>
+        /// 取新证日期
+        /// </summary>
+        public DateTime? PickNewAssetCodeTime { get; set; }
+        
     }
 }

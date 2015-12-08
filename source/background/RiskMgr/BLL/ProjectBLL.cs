@@ -241,12 +241,17 @@ namespace RiskMgr.BLL
                                select c).ToList();
             }
             result.Project = project.ConvertTo<FullProject>();
+            result.Report = project.Report;
 
             //处理流程
             var workflow = workflows.Find(t => t.ProcessID == project.ID);
             if (workflow == null)
             {
                 return result;
+            }
+            if (workflow.Status == (int)WorkflowProcessStatus.Processed)
+            {
+                result.WorkflowComplete = true;
             }
             result.WorkflowID = workflow.ID;
             var currentactivities = activities.FindAll(t => t.WorkflowID == workflow.ID);
@@ -270,10 +275,6 @@ namespace RiskMgr.BLL
 
             //查询当前流程的当前正在处理节点
             var processingActivity = currentactivities.Find(t => t.Status == (int)ActivityProcessStatus.Processing);
-            if (processingActivity == null)
-            {
-                return result;
-            }
             result.CurrentActivity = processingActivity;
             result.Action = ActionStatus.Queryable;
             //处理财务和保后跟踪
@@ -282,19 +283,30 @@ namespace RiskMgr.BLL
             {
                 result.DisplayCharge = true;
                 result.DisplayTracking = true;
-                result.DisplayConfirm = true;
             }
-            var currenttasks = tasks.FindAll(t => t.WorkflowID == workflow.ID && t.ActivityID == processingActivity.ID);
-            //处理中流程的操作人
+            if (project.FinanceConfirm == 1)
+            {
+                result.DisplayCharge = true;
+                result.DisplayConfirm = true;
+                result.DisplayTracking = true;
+                return result;
+            }
 
-            var useridlist = (from a in currenttasks select a.UserID).ToList();
-            var usernamelist = (from u in users
-                                where useridlist.Exists(t => t == u.ID)
-                                select u.CnName).ToList();
+            if (processingActivity != null)
+            {
+                var currenttasks = tasks.FindAll(t => t.WorkflowID == workflow.ID && t.ActivityID == processingActivity.ID);
+                //处理中流程的操作人
 
-            result.Operator = string.Join(",", usernamelist);
+                var useridlist = (from a in currenttasks select a.UserID).ToList();
+                var usernamelist = (from u in users
+                                    where useridlist.Exists(t => t == u.ID)
+                                    select u.CnName).ToList();
+
+                result.Operator = string.Join(",", usernamelist);
+            }
 
             string userid = currentuserid;
+
             var task = tasks.Find(t => t.WorkflowID == workflow.ID && t.ActivityID == processingActivity.ID && t.UserID == userid);
 
             if (task != null)
@@ -316,6 +328,16 @@ namespace RiskMgr.BLL
 
             //为财务和保后跟踪特别处理
             var roles = userroles.FindAll(t => t.UserID == userid);
+
+            Activity trackingActivity = currentactivities.Find(t => t.Name.Contains("保后跟踪"));
+            if (trackingActivity != null && trackingActivity.Status == (int)ActivityProcessStatus.Processed)
+            {
+                result.DisplayConfirm = true;
+                if (roles.Exists(t => t.RoleID == "5"))//处理财务
+                {
+                    result.ConfirmCanEdit = true;
+                }
+            }
             if (roles.Exists(t => t.RoleID == "5"))//处理财务
             {
                 if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
@@ -504,9 +526,8 @@ namespace RiskMgr.BLL
                     InsuranceTime = project.InsuranceTime,
                     ExportMoney = project.ExportMoney,
                     ExportTime = project.ExportTime,
-                    ReturnBackTime = project.ReturnBackTime,
-                    ReturnBackMoney = project.ReturnBackMoney,
                     HasExpired = project.HasExpired,
+                    PredictReturnBackMoneyTime = project.PredictReturnBackMoneyTime,
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
@@ -526,6 +547,12 @@ namespace RiskMgr.BLL
                     MortgageRemark = project.MortgageRemark,
                     InsuranceFreeTime = project.InsuranceFreeTime,
                     ChangeOwnerRemark = project.ChangeOwnerRemark,
+                    PickNumberTime = project.PickNumberTime,
+                    LogoutAssetTime = project.LogoutAssetTime,
+                    ChangeOwnerReceiptTime = project.ChangeOwnerReceiptTime,
+                    ChangeOwnerHandleTime = project.ChangeOwnerHandleTime,
+                    PickNewAssetCodeTime = project.PickNewAssetCodeTime,
+                    NewAssetCode = project.NewAssetCode,
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
@@ -557,7 +584,8 @@ namespace RiskMgr.BLL
             return true;
         }
 
-        public bool FinanceConfirm(string workflowid, string activityid, string taskid, string projectid, string userid)
+        public bool FinanceConfirm(string workflowid, string activityid, string taskid, string projectid, string userid, DateTime? returnBackTime,
+            decimal? returnBackMoney)
         {
             //处理项目
             ISqlMapper mapper = Common.GetMapperFromSession();
@@ -571,6 +599,8 @@ namespace RiskMgr.BLL
             {
                 Entity = new Project
                 {
+                    ReturnBackTime = returnBackTime,
+                    ReturnBackMoney = returnBackMoney,
                     FinanceConfirm = 1,
                     LastUpdator = userid,
                 },

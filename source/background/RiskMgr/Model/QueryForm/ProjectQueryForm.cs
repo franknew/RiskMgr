@@ -226,5 +226,31 @@ namespace RiskMgr.Form
         
         public UInt64? FinanceConfirm { get; set; }
         
+        public string Report { get; set; }
+        
+        public DateTime? PredictReturnBackMoneyTime_Start { get; set; }
+        
+        public DateTime? PredictReturnBackMoneyTime_End { get; set; }
+        
+        public DateTime? PickNumberTime_Start { get; set; }
+        
+        public DateTime? PickNumberTime_End { get; set; }
+        
+        public DateTime? LogoutAssetTime_Start { get; set; }
+        
+        public DateTime? LogoutAssetTime_End { get; set; }
+        
+        public DateTime? ChangeOwnerReceiptTime_Start { get; set; }
+        
+        public DateTime? ChangeOwnerReceiptTime_End { get; set; }
+        
+        public DateTime? ChangeOwnerHandleTime_Start { get; set; }
+        
+        public DateTime? ChangeOwnerHandleTime_End { get; set; }
+        
+        public DateTime? PickNewAssetCodeTime_Start { get; set; }
+        
+        public DateTime? PickNewAssetCodeTime_End { get; set; }
+        
     }
 }

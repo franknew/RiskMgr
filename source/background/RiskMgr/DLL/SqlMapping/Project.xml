@@ -454,6 +454,52 @@
         `FinanceConfirm`=#FinanceConfirm#
     </isNotNull>
     
+    <isNotNull prepend="AND" property="Report">
+        `Report`=#Report#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PredictReturnBackMoneyTime_Start">
+        `PredictReturnBackMoneyTime`&gt;=#PredictReturnBackMoneyTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PredictReturnBackMoneyTime_End">
+        `PredictReturnBackMoneyTime`&lt;=#PredictReturnBackMoneyTime_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PickNumberTime_Start">
+        `PickNumberTime`&gt;=#PickNumberTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNumberTime_End">
+        `PickNumberTime`&lt;=#PickNumberTime_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="LogoutAssetTime_Start">
+        `LogoutAssetTime`&gt;=#LogoutAssetTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogoutAssetTime_End">
+        `LogoutAssetTime`&lt;=#LogoutAssetTime_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="ChangeOwnerReceiptTime_Start">
+        `ChangeOwnerReceiptTime`&gt;=#ChangeOwnerReceiptTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerReceiptTime_End">
+        `ChangeOwnerReceiptTime`&lt;=#ChangeOwnerReceiptTime_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="ChangeOwnerHandleTime_Start">
+        `ChangeOwnerHandleTime`&gt;=#ChangeOwnerHandleTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerHandleTime_End">
+        `ChangeOwnerHandleTime`&lt;=#ChangeOwnerHandleTime_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="PickNewAssetCodeTime_Start">
+        `PickNewAssetCodeTime`&gt;=#PickNewAssetCodeTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNewAssetCodeTime_End">
+        `PickNewAssetCodeTime`&lt;=#PickNewAssetCodeTime_End#
+    </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -548,7 +594,14 @@
     `DeductMoneyDate`,
     `ChangeOwnerRemark`,
     `InsurancePeriod`,
-    `FinanceConfirm`
+    `FinanceConfirm`,
+    `Report`,
+    `PredictReturnBackMoneyTime`,
+    `PickNumberTime`,
+    `LogoutAssetTime`,
+    `ChangeOwnerReceiptTime`,
+    `ChangeOwnerHandleTime`,
+    `PickNewAssetCodeTime`
   )
   VALUES
   (
@@ -635,7 +688,14 @@
         #DeductMoneyDate#,
         #ChangeOwnerRemark#,
         #InsurancePeriod#,
-        #FinanceConfirm#
+        #FinanceConfirm#,
+        #Report#,
+        #PredictReturnBackMoneyTime#,
+        #PickNumberTime#,
+        #LogoutAssetTime#,
+        #ChangeOwnerReceiptTime#,
+        #ChangeOwnerHandleTime#,
+        #PickNewAssetCodeTime#
   )
   </insert>
   <update id="UpdateProject" parameterClass="ProjectUpdateForm">
@@ -889,6 +949,27 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.FinanceConfirm">
         `FinanceConfirm`=#Entity.FinanceConfirm#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.Report">
+        `Report`=#Entity.Report#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PredictReturnBackMoneyTime">
+        `PredictReturnBackMoneyTime`=#Entity.PredictReturnBackMoneyTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PickNumberTime">
+        `PickNumberTime`=#Entity.PickNumberTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.LogoutAssetTime">
+        `LogoutAssetTime`=#Entity.LogoutAssetTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerReceiptTime">
+        `ChangeOwnerReceiptTime`=#Entity.ChangeOwnerReceiptTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ChangeOwnerHandleTime">
+        `ChangeOwnerHandleTime`=#Entity.ChangeOwnerHandleTime#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.PickNewAssetCodeTime">
+        `PickNewAssetCodeTime`=#Entity.PickNewAssetCodeTime#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -1239,6 +1320,45 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ProjectQueryForm.FinanceConfirm">
         `FinanceConfirm`=#ProjectQueryForm.FinanceConfirm#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.Report">
+        `Report`=#ProjectQueryForm.Report#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PredictReturnBackMoneyTime_Start">
+        `PredictReturnBackMoneyTime`&gt;=#ProjectQueryForm.PredictReturnBackMoneyTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PredictReturnBackMoneyTime_End">
+        `PredictReturnBackMoneyTime`&lt;=#ProjectQueryForm.PredictReturnBackMoneyTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PickNumberTime_Start">
+        `PickNumberTime`&gt;=#ProjectQueryForm.PickNumberTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PickNumberTime_End">
+        `PickNumberTime`&lt;=#ProjectQueryForm.PickNumberTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.LogoutAssetTime_Start">
+        `LogoutAssetTime`&gt;=#ProjectQueryForm.LogoutAssetTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.LogoutAssetTime_End">
+        `LogoutAssetTime`&lt;=#ProjectQueryForm.LogoutAssetTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerReceiptTime_Start">
+        `ChangeOwnerReceiptTime`&gt;=#ProjectQueryForm.ChangeOwnerReceiptTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerReceiptTime_End">
+        `ChangeOwnerReceiptTime`&lt;=#ProjectQueryForm.ChangeOwnerReceiptTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerHandleTime_Start">
+        `ChangeOwnerHandleTime`&gt;=#ProjectQueryForm.ChangeOwnerHandleTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.ChangeOwnerHandleTime_End">
+        `ChangeOwnerHandleTime`&lt;=#ProjectQueryForm.ChangeOwnerHandleTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PickNewAssetCodeTime_Start">
+        `PickNewAssetCodeTime`&gt;=#ProjectQueryForm.PickNewAssetCodeTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.PickNewAssetCodeTime_End">
+        `PickNewAssetCodeTime`&lt;=#ProjectQueryForm.PickNewAssetCodeTime_End#
     </isNotNull>
     </dynamic>
   </update>
@@ -1601,6 +1721,45 @@
     </isNotNull>
     <isNotNull prepend="AND" property="FinanceConfirm">
         `FinanceConfirm`=#FinanceConfirm#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Report">
+        `Report`=#Report#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PredictReturnBackMoneyTime_Start">
+        `PredictReturnBackMoneyTime`&gt;=#PredictReturnBackMoneyTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PredictReturnBackMoneyTime_End">
+        `PredictReturnBackMoneyTime`&lt;=#PredictReturnBackMoneyTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNumberTime_Start">
+        `PickNumberTime`&gt;=#PickNumberTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNumberTime_End">
+        `PickNumberTime`&lt;=#PickNumberTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogoutAssetTime_Start">
+        `LogoutAssetTime`&gt;=#LogoutAssetTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogoutAssetTime_End">
+        `LogoutAssetTime`&lt;=#LogoutAssetTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerReceiptTime_Start">
+        `ChangeOwnerReceiptTime`&gt;=#ChangeOwnerReceiptTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerReceiptTime_End">
+        `ChangeOwnerReceiptTime`&lt;=#ChangeOwnerReceiptTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerHandleTime_Start">
+        `ChangeOwnerHandleTime`&gt;=#ChangeOwnerHandleTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerHandleTime_End">
+        `ChangeOwnerHandleTime`&lt;=#ChangeOwnerHandleTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNewAssetCodeTime_Start">
+        `PickNewAssetCodeTime`&gt;=#PickNewAssetCodeTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNewAssetCodeTime_End">
+        `PickNewAssetCodeTime`&lt;=#PickNewAssetCodeTime_End#
     </isNotNull>
   </update>
    <select id="QueryProjectLastUpdateTime" resultClass="DateTime">
@@ -1966,6 +2125,45 @@
     </isNotNull>
     <isNotNull prepend="AND" property="FinanceConfirm">
         `FinanceConfirm`=#FinanceConfirm#
+    </isNotNull>
+    <isNotNull prepend="AND" property="Report">
+        `Report`=#Report#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PredictReturnBackMoneyTime_Start">
+        `PredictReturnBackMoneyTime`&gt;=#PredictReturnBackMoneyTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PredictReturnBackMoneyTime_End">
+        `PredictReturnBackMoneyTime`&lt;=#PredictReturnBackMoneyTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNumberTime_Start">
+        `PickNumberTime`&gt;=#PickNumberTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNumberTime_End">
+        `PickNumberTime`&lt;=#PickNumberTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogoutAssetTime_Start">
+        `LogoutAssetTime`&gt;=#LogoutAssetTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="LogoutAssetTime_End">
+        `LogoutAssetTime`&lt;=#LogoutAssetTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerReceiptTime_Start">
+        `ChangeOwnerReceiptTime`&gt;=#ChangeOwnerReceiptTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerReceiptTime_End">
+        `ChangeOwnerReceiptTime`&lt;=#ChangeOwnerReceiptTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerHandleTime_Start">
+        `ChangeOwnerHandleTime`&gt;=#ChangeOwnerHandleTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ChangeOwnerHandleTime_End">
+        `ChangeOwnerHandleTime`&lt;=#ChangeOwnerHandleTime_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNewAssetCodeTime_Start">
+        `PickNewAssetCodeTime`&gt;=#PickNewAssetCodeTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="PickNewAssetCodeTime_End">
+        `PickNewAssetCodeTime`&lt;=#PickNewAssetCodeTime_End#
     </isNotNull>
     </dynamic>
    </select>

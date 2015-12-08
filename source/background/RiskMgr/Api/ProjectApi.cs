@@ -41,7 +41,7 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
-
+            form.Project.Report = form.Report;
             var result = bll.Add(form.Project, form.Assets, customers, updateCustomers, form.Guarantor, userid);
 
             //处理流程
@@ -179,9 +179,11 @@ namespace RiskMgr.Api
         }
 
         [ApprovalAction]
-        public bool FinanceConfirm()
+        public bool FinanceConfirm(FinanceConfirmServiceForm form)
         {
-            return true;
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            return bll.FinanceConfirm(form.WorkflowID, form.ActivityID, form.TaskID, form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney);
         }
     }
 }
