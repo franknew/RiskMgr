@@ -106,7 +106,7 @@ define(function(require, exports, module){
 				};
 			}
 
-			console.log('submit::',data);
+			//console.log('submit::',data);
 			//return ;
 
 			Ajax.post({

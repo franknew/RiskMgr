@@ -867,7 +867,7 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				};
 			}
 
-			console.log('submit::',data);
+			//console.log('submit::',data);
 			//return ;
 
 			Ajax.post({
