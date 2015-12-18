@@ -38,7 +38,7 @@ define(function(require, exports, module){
 						url:'RiskMgr.Api.LogonApi/Logon',
 						form:this.form,
 						success:function(data, oriData, jqXHR) {
-							//坑爹的后台居然连cookie都不能写，弱鸡
+							//坑爹的，cookie得前台写
 							var skey = data&&data.token;
 							if (skey) {
 								cookie.set(SKEY_NAME,skey);

@@ -4,7 +4,7 @@
 */
 
 ;(function  () {
-	var CDN = '//'+location.host+location.pathname.replace(/\/.*\..*/,'/');
+	var CDN = location.protocol+'//'+location.host+location.pathname.replace(/\/.*\..*/,'/');
 
 	var jq = '2.1.4',	//高版本jquery
 		jqLower = '1.11.3';	//低版本jquery，兼容<=ie8
@@ -35,7 +35,6 @@
 	});
 
 	seajs.use(['jquery','bootstrap','risk/unit/route','risk/components/user/index','risk/page/frame/index'],function() {
-
 	});
 
 })();

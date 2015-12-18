@@ -20,16 +20,22 @@ define(function(require, exports, module){
 				path = opts.path,	//生效的路径,/path
 				domain = opts.domain;	//设置的域名，qq.com
 
-			if (expire*1<=0) {
+			if (expire*1<=0) {//设置过期
 				expire = 'Mon, 26 Jul 1997 05:00:00 GMT';
 			} else{
-				expire = new Date(expire).toGMTString();
+				expire = expire?new Date(expire).toGMTString():undefined;
 			}
-			
-			document.cookie = (key + '=' + val + '; ') + 
-							(expire ? ('expires=' + expire + '; ') : '') + 
-							('path=' + (path || '/') + '; ') + 
+
+			var cookie = (key + '=' + val + '; ') +
+							(expire ? ('expires=' + expire + '; ') : '') +
+							('path=' + (path || '/') + '; ') +
 							(domain?'domain=' + domain + ';' : '');
+
+			alert('cookie::::\n'+cookie)
+			document.cookie = cookie;
+
+			alert('document.cookie::::\n'+cookie)
+
 
 		},
 		del: function(key, opts) {

@@ -29,11 +29,12 @@ define(function(require, exports, module){
 				return this;
 			}
 
-			var elemOri = ev.currentTarget,
-				elem = $(elemOri),
-				elemTag = (elemOri.tagName||'').toLowerCase(),
+			var elemOri = ev.currentTarget;
+
+			var elem = $(elemOri),
+				elemTag = (elemOri&&elemOri.tagName||'').toLowerCase(),
 				box,
-				isGlobal = !!(!elemOri.nodeType || $.inArray(elemOri.nodeType, [1,9]) || $.inArray(elemTag, ['script','html','body']) !== -1);
+				isGlobal = elemOri?!!(!elemOri.nodeType || $.inArray(elemOri.nodeType, [1,9]) || $.inArray(elemTag, ['script','html','body']) !== -1) : true;
 
 			var offset,
 				width,

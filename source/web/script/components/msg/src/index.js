@@ -40,7 +40,7 @@ define(function(require, exports, module){
 			//删除
 			setTimeout(function() {
 				html.fadeOut(function() {
-					this.remove();
+					$(this).remove();
 				});
 				html = null;
 			}, delay);
