@@ -31,12 +31,7 @@ define(function(require, exports, module){
 							('path=' + (path || '/') + '; ') +
 							(domain?'domain=' + domain + ';' : '');
 
-			alert('cookie::::\n'+cookie)
 			document.cookie = cookie;
-
-			alert('document.cookie::::\n'+cookie)
-
-
 		},
 		del: function(key, opts) {
 			this.set(key,'',{
