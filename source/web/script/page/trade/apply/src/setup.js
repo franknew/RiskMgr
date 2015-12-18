@@ -36,8 +36,9 @@ define(function(require, exports, module){
 				data = opts.data,
 				head = opts.head;
 
+
 			var that = this,
-				canEdit = !!~$.inArray(mode, ['add','edit']);
+				canEdit = !! (~$.inArray(mode, ['add','edit']) || data&&data.Action==2);
 			var html = Tmpl.Setup({
 				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
 				propertyTpl:Property.getTpl,
@@ -51,27 +52,23 @@ define(function(require, exports, module){
 				content:html
 			});
 
-			//if (canEdit) {
-				Wizzard.init({
-					container:'#J_Wizzard',
-					success:function() {
-						if (mode=='approval') {
-							that.approval(mode);
-						}else {
-							that.submit(mode);
-						}
-					}
-				});
-			//}
+			Wizzard.init({
+				container:'#J_Wizzard',
+				success:function() {
+					that.submit(mode);
+				}
+			});
 
 			this._initEvent();
 
-
+			/*
+			<button class="btn btn btn-danger" id="TEST" style="position:absolute;top:-80px;right:80px;">直接提交测试数据</button>
 			$('#TEST').click(function(ev) {
 				ev.preventDefault();
 				var data = require('./test-data');
 				MOD.submit(mode,data);
 			});
+			*/
 		},
 		_initEvent:function() {
 			Customer.init();
@@ -109,6 +106,9 @@ define(function(require, exports, module){
 				};
 			}
 
+			console.log('submit::',data);
+			//return ;
+
 			Ajax.post({
 				url:'RiskMgr.Api.ProjectApi/Add',
 				data:data,
@@ -117,10 +117,6 @@ define(function(require, exports, module){
 					route.load('page=trade/list');
 				}
 			});
-		},
-		//提交审批
-		approval:function() {
-			alert('审批拉')
 		}
 	};
 

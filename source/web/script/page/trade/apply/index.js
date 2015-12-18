@@ -32,6 +32,7 @@ define.pack = function(){
 })();
 //all file list:
 //apply/src/autoComplete.js
+//apply/src/config.type.js
 //apply/src/data.js
 //apply/src/index.js
 //apply/src/setup.approval.js
@@ -45,6 +46,7 @@ define.pack = function(){
 //apply/src/setup.property.js
 //apply/src/test-data.js
 //apply/src/tpl.charge.js
+//apply/src/tpl.finance.js
 //apply/src/tpl.followup.js
 //apply/src/tpl.project.base.js
 //apply/src/tpl.project.newloan.js
@@ -65,6 +67,7 @@ define.pack = function(){
 
 //js file list:
 //apply/src/autoComplete.js
+//apply/src/config.type.js
 //apply/src/data.js
 //apply/src/index.js
 //apply/src/setup.approval.js
@@ -78,6 +81,7 @@ define.pack = function(){
 //apply/src/setup.property.js
 //apply/src/test-data.js
 //apply/src/tpl.charge.js
+//apply/src/tpl.finance.js
 //apply/src/tpl.followup.js
 //apply/src/tpl.project.base.js
 //apply/src/tpl.project.newloan.js
@@ -165,6 +169,31 @@ define.pack("./autoComplete",["jquery","risk/unit/ajax"],function(require, expor
 
 	return autoComplete;
 });/**
+ * 交易类型对应关系
+ * @authors viktorli (i@lizhenwen.com)
+ */
+
+define.pack("./config.type",[],function(require, exports, module){
+
+	var MOD = {
+		data:{
+			'1':'二手楼买卖交易',
+			'2':'首期款垫付',
+			'3':'现金赎楼',
+			'4':'贷前垫资'
+		},
+		get:function(typeID) {
+			typeID = typeID+'';
+			var types = MOD.data;
+
+			var rs = types[typeID] || types['1'];
+
+			return rs;
+		}
+	};
+
+	return MOD;
+});/**
  * 获取数据
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-08-29 16:07:24
@@ -224,12 +253,13 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
-define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./data"],function(require, exports, module){
+define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./config.type","./data"],function(require, exports, module){
 
 	var $ = require('jquery'),
 		Route = require('risk/unit/route'),
 		Tmpl = require('./tmpl'),
-		Views = require('./setup');
+		Setup = require('./setup'),
+		Types = require('./config.type');
 
 	var MOD = {
 		initPage:function(params) {
@@ -245,17 +275,16 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./data"],f
 			Route.on('click','choose-type',function(ev) {
 				var elem = $(ev.currentTarget),
 					type = elem.data('type'),
-					subHead = {
-						'1':'二手楼买卖交易',
-						'2':'首期款垫付',
-						'3':'现金赎楼',
-						'4':'红本抵押'
-					}[type],
+					subHead = Types.get(type),
 					head = '申请额度 <small>'+subHead+'</small>';
-
-				Views.init({
+				Setup.init({
 					mode:'add',
-					head:head
+					head:head,
+					data:{
+						Project:{
+							Type:type
+						}
+					}
 				});
 			});
 		},
@@ -286,10 +315,15 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./data"],f
 			});
 
 			require('./data').get().done(function(data) {
-				var id = data&&data.Project&&data.Project.Name;
-				Views.init({
+				var id = data&&data.Project&&data.Project.Name,
+					type = data&&data.Project&&data.Project.Type,
+					typeName = Types.get(type);
+
+				var complete = data&&data.WorkflowComplete ? '<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>':'';
+
+				Setup.init({
 					mode:params.action,
-					head:head+'<small>('+id+')</small>',
+					head:head+' <small>'+typeName+'('+id+') '+complete+'</small>',
 					data:data
 				});
 			});
@@ -541,9 +575,10 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 						data:{
 							ID:da.Project.ID,
 							WorkflowID:da.WorkflowID,
-							ActivityID:da.CurrentActivity.ID,
+							ActivityID:da.CurrentActivity&&da.CurrentActivity.ID,
 							TaskID:da.TaskID
 						},
+						form:$('#FinanceConfirm'),
 						success:function(da) {
 							Msg.success('已成功确认回款.');
 							Route.reload();
@@ -731,7 +766,7 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.guarantor","./setup.project","./setup.approval","./setup.charge","./setup.followup","./setup.finance","./test-data"],function(require, exports, module){
+define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/unit/ajax","./tmpl","./wizzard","./setup.customer","./setup.property","./setup.guarantor","./setup.project","./setup.approval","./setup.charge","./setup.followup","./setup.finance"],function(require, exports, module){
 
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
@@ -762,8 +797,9 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				data = opts.data,
 				head = opts.head;
 
+
 			var that = this,
-				canEdit = !!~$.inArray(mode, ['add','edit']);
+				canEdit = !! (~$.inArray(mode, ['add','edit']) || data&&data.Action==2);
 			var html = Tmpl.Setup({
 				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
 				propertyTpl:Property.getTpl,
@@ -777,27 +813,23 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				content:html
 			});
 
-			//if (canEdit) {
-				Wizzard.init({
-					container:'#J_Wizzard',
-					success:function() {
-						if (mode=='approval') {
-							that.approval(mode);
-						}else {
-							that.submit(mode);
-						}
-					}
-				});
-			//}
+			Wizzard.init({
+				container:'#J_Wizzard',
+				success:function() {
+					that.submit(mode);
+				}
+			});
 
 			this._initEvent();
 
-
+			/*
+			<button class="btn btn btn-danger" id="TEST" style="position:absolute;top:-80px;right:80px;">直接提交测试数据</button>
 			$('#TEST').click(function(ev) {
 				ev.preventDefault();
 				var data = require('./test-data');
 				MOD.submit(mode,data);
 			});
+			*/
 		},
 		_initEvent:function() {
 			Customer.init();
@@ -835,6 +867,9 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				};
 			}
 
+			console.log('submit::',data);
+			//return ;
+
 			Ajax.post({
 				url:'RiskMgr.Api.ProjectApi/Add',
 				data:data,
@@ -843,10 +878,6 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 					route.load('page=trade/list');
 				}
 			});
-		},
-		//提交审批
-		approval:function() {
-			alert('审批拉')
 		}
 	};
 
@@ -1276,23 +1307,12 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'回款金额'
-		},{
-			col:'3',
-			type:'number',
-			required:true,
-			name:'ReturnBackMoney',
-			placeholder:'',
-			suffix:'万元'
-		},{
-			type:'label',
-			col:3,
-			html:'回款时间'
+			html:'预计回款时间'
 		},{
 			col:'3',
 			type:'date',
 			required:true,
-			name:'ReturnBackTime',
+			name:'PredictReturnBackMoneyTime',
 			placeholder:''
 		}],
 
@@ -1340,7 +1360,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			required:true,
 			name:'GuaranteeMonth',
 			placeholder:'',
-			suffix:'月'
+			suffix:'天'
 		}],
 
 
@@ -1489,6 +1509,43 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 
 	return MOD;
 });/**
+ * 回款确认表单
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-21 21:00:52
+ */
+
+define.pack("./tpl.finance",[],function(require, exports, module){
+	var MOD = [
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'回款金额'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'ReturnBackMoney',
+			placeholder:'',
+			suffix:'万元'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			required:true,
+			html:'回款时间'
+		},{
+			col:'3',
+			type:'date',
+			required:true,
+			name:'ReturnBackTime',
+			placeholder:''
+		}]
+	];
+
+	return MOD;
+});/**
  * 项目信息form表单：收费情况
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-21 21:00:52
@@ -1556,6 +1613,66 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 
 
 		[{
+			type:'label',
+			col:3,
+			html:'取证日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'PickNumberTime ',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'注销日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'LogoutAssetTime ',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'过户收文日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'ChangeOwnerReceiptTime  ',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'过户办文编号'
+		},{
+			col:'3',
+			type:'date',
+			name:'ChangeOwnerHandleTime  ',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'取新证日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'PickNewAssetCodeTime   ',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'新房产证号'
+		},{
+			col:'3',
+			type:'date',
+			name:'NewAssetCode  ',
+			placeholder:''
+		}],
+
+		[{
 			type:'group',
 			name:'Mortgage',
 			addText:'增加抵押信息',
@@ -1605,23 +1722,8 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 			type:'textarea',
 			name:'MortgageRemark',
 			placeholder:''
-		}],
-		[{
-			col:'12',
-			type:'label',
-			html:'<hr/>'
-		}],
+		}]
 
-		[{
-			type:'label',
-			col:3,
-			html:'回款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'InsuranceFreeTime',
-			placeholder:''
-		}],
 
 	];
 
@@ -1634,6 +1736,14 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 
 define.pack("./tpl.project.base",[],function(require, exports, module){
 	var MOD = [
+		[{
+			type:'hidden',
+			name:'Type'
+		},{
+			type:'hidden',
+			name:'ID'
+		}],
+
 		[{
 			type:'label',
 			col:3,
@@ -1648,13 +1758,11 @@ define.pack("./tpl.project.base",[],function(require, exports, module){
 		},{
 			type:'label',
 			col:3,
-			required:true,
 			html:'中介名称'
 		},{
 			col:"3",
 			type:'text',
-			name:'AgentName',
-			required:true
+			name:'AgentName'
 		}],
 
 		[{
@@ -1745,7 +1853,6 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'decimal',
-			required:true,
 			name:'GuaranteeMoney',
 			placeholder:'',
 			suffix:'万元'
@@ -1760,7 +1867,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			required:true,
 			name:'GuaranteeMonth',
 			placeholder:'',
-			suffix:'月'
+			suffix:'天'
 		}],
 
 		[{
@@ -1979,23 +2086,19 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			required:true,
 			html:'赎楼银行客户经理'
 		},{
 			col:"3",
 			type:'text',
 			name:'AssetRansomCustomerManager',
-			required:true
 		},{
 			type:'label',
 			col:3,
-			required:true,
 			html:'联系电话'
 		},{
 			col:"3",
 			type:'tel',
 			name:'AssetRansomContactPhone',
-			required:true
 		}]
 	];
 
@@ -2024,18 +2127,6 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 			type:'label',
 			col:3,
 			required:true,
-			html:'赎楼员'
-		},{
-			col:"3",
-			type:'text',
-			name:'AssetRansomer',
-			required:true
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			required:true,
 			html:'赎楼方式'
 		},{
 			col:"3",
@@ -2043,7 +2134,9 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 			name:'AssetRansomType',
 			required:true,
 			options:'赎楼方式'
-		},{
+		}],
+
+		[{
 			type:'label',
 			col:3,
 			html:'预存时间'
@@ -2052,9 +2145,7 @@ define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 			type:'number',
 			name:'PredictDays',
 			suffix:'天'
-		}],
-
-		[{
+		},{
 			type:'label',
 			col:3,
 			html:'收费方式'
@@ -2087,7 +2178,8 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 				,nav:'.wizard-steps'	//导航
 				,navHook:'data-target'	//导航的data属性
 				,setup:'.step-pane'	//每一个setup的选择器
-				,btnNext:'.wizard-next'	//下一步按钮的选择器
+				,btnNext:'.wizard-next'	//下一步按钮的选择器，如果没有下一步tab了，则会执行submit
+				,btnSubmit:'.wizard-submit'	//提交按钮
 				,btnPrev:'.wizard-previous'	//上一步按钮的选择器
 				,validate:true	//进入下一步时，是否要校验表单
 				//,success:function() {}	//最后一步完成时执行
@@ -2112,6 +2204,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 
 			return this;
 		},
+		//提交表单
 		_success:function() {
 			var conf = this._config(),
 				setups = (function(nav,hook) {
@@ -2167,17 +2260,21 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 			var that = this;
 			var conf = this._config(),
 				btnNext = conf.btnNext,
-				btnPrev = conf.btnPrev;
+				btnPrev = conf.btnPrev,
+				btnSubmit = conf.btnSubmit;
 
 			this.container.on('click',btnNext,function(ev) {
 				ev.preventDefault();
 				var btn = $(ev.currentTarget);
 				that._showByButton(btn,'next');
-			});
-			this.container.on('click',btnPrev,function(ev) {
+			}).on('click',btnPrev,function(ev) {
 				ev.preventDefault();
 				var btn = $(ev.currentTarget);
 				that._showByButton(btn,'prev');
+			}).on('click',btnSubmit,function(ev) {
+				ev.preventDefault();
+				var btn = $(ev.currentTarget);
+				that._success();
 			});
 
 			this.nav.on('click','['+conf.navHook+']',function(ev) {
@@ -2282,7 +2379,25 @@ var tmpl = {
 'choose': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="block-flat">\n	<h3 class="hthin">请选择业务类型</h3>\n	<div class="spacer spacer-bottom">\n		<button type="button" data-hook="choose-type" data-type="1" class="btn btn-success btn-lg">二手楼买卖交易</button>\n		<!--\n		<button type="button" data-hook="choose-type" data-type="2" class="btn btn-primary btn-lg">首期款垫付</button>\n		<button type="button" data-hook="choose-type" data-type="3" class="btn btn-info btn-lg">现金赎楼</button>\n		<button type="button" data-hook="choose-type" data-type="4" class="btn btn-danger btn-lg">红本抵押</button>\n		</div>\n		-->\n</div>');
+
+	var Types = require('./config.type'),
+		List = Types.data,
+		Colors = ['primary','success','info','warning','danger'];
+__p.push('<div class="block-flat">\n	<h3 class="hthin">请选择业务类型</h3>\n	<div class="spacer spacer-bottom">');
+
+		for(var key in List) {
+			if(List.hasOwnProperty(key)) {
+		__p.push('			<button type="button" data-hook="choose-type" data-type="');
+_p(key);
+__p.push('" class="btn btn-');
+_p(Colors.shift()||'default');
+__p.push(' btn-lg">');
+_p(List[key]);
+__p.push('</button>');
+
+			}
+		}
+		__p.push('	</div>\n</div>');
 
 return __p.join("");
 },
@@ -2301,13 +2416,16 @@ __p.push('\n<div class="step-pane" id="Approval">');
 	 __p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content" style="margin:0 auto;max-width:500px;width:100%;">\n				<div class="form-group">\n					<label class="col-sm-12">');
 _p(CurrentActivity.Name);
 __p.push('</label>\n					<div class="col-sm-12">\n						<textarea class="form-control" name="Remark" rows="5"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="text-center col-sm-12">\n						<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n						&nbsp;&nbsp;\n						<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n					</div>\n				</div>\n			</div>\n		</div>');
-}else {__p.push('		<div class="alert alert-info" role="alert">\n			当前审批流程到了<strong>');
+}else {__p.push('		<div class="alert alert-info" role="alert">');
+if (DataView.WorkflowComplete) { __p.push('				<i class="fa fa-check-circle"></i> 审批流程已结束');
+}else {__p.push('			当前审批流程到了<strong>');
 _p(CurrentActivity.Name);
 __p.push('</strong>，审批人：<strong>');
 _p(DataView.Operator||'?');
 __p.push('</strong>，到达时间：<strong>');
 _p(RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm:ss"));
-__p.push('</strong>\n		</div>');
+__p.push('</strong>');
+}__p.push('		</div>');
 }if (Approvals.length>0) {__p.push('		<div class="block-transparent">\n			<div class="content">\n				<ul class="list-group tickets">');
 
 					var i=0,cur;
@@ -2355,8 +2473,13 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('	');
 
-		var FormData = data.data || {};
-	__p.push('	<div class="step-pane" id="Customer">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>买家 ');
+		var FormData = data.data || {},
+			TradeType = FormData.Type;
+		var OnlyOne = !!($.inArray(TradeType,[3,4]) != -1),	//只有一种客户的交易类型
+			BuyerText = OnlyOne?'客户':'买家';
+	__p.push('	<div class="step-pane" id="Customer">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>');
+_p(BuyerText);
+__p.push(' ');
 if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
 }__p.push('</h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="BuyerList">');
 
@@ -2373,8 +2496,13 @@ __p.push('					');
 
 						}
 					__p.push('				</div>');
-if (data.canEdit) {__p.push('					<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加买家&nbsp;&nbsp;</button>');
-}__p.push('			</div>\n		</div>\n\n		<div class="block-transparent">\n			<div class="header">\n				<h3>卖家 ');
+if (data.canEdit) {__p.push('					<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加');
+_p(BuyerText);
+__p.push('&nbsp;&nbsp;</button>');
+}__p.push('			</div>\n		</div>');
+
+		if (!OnlyOne) {	//判断交易类型才显示卖家
+		__p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>卖家 ');
 if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
 }__p.push('</h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="SellerList">');
 
@@ -2393,7 +2521,7 @@ __p.push('					');
 					__p.push('				</div>');
 if (data.canEdit) {__p.push('				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加卖家&nbsp;&nbsp;</button>');
 }__p.push('			</div>\n		</div>');
-if (data.canEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>\n				&nbsp;&nbsp;\n				<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n			</div>\n		</div>');
+}if (data.canEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>\n				&nbsp;&nbsp;\n				<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n			</div>\n		</div>');
 }__p.push('	</div>');
 
 return __p.join("");
@@ -2419,9 +2547,17 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 
-	var Former = require('risk/components/former/index');
-	var FormData = data.data||{};
-__p.push('<div class="step-pane" id="FinanceConfirm">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>回款确认</h3>\n		</div>\n		<div class="content">\n			<button type="button" class="btn btn-primary btn-lg" data-hook="finance-submit">确认已回款</button>\n		</div>\n	</div>\n</div>');
+	var Former = require('risk/components/former/index'),
+		TplFinance = require('./tpl.finance');
+	var FormData = data.data||{},
+		FinanceData = FormData.Project;
+
+	var ConfirmCanEdit = FormData.ConfirmCanEdit;
+__p.push('<div class="step-pane" id="FinanceConfirm">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>回款确认</h3>\n		</div>\n		<div class="content">');
+_p(Former.make(TplFinance,{data:FinanceData,disabled:!ConfirmCanEdit}));
+__p.push('		</div>\n	</div>');
+if (ConfirmCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button type="button" class="btn btn-primary btn-lg" data-hook="finance-submit">确认已回款</button>\n		</div>\n	</div>');
+}__p.push('</div>');
 
 return __p.join("");
 },
@@ -2729,7 +2865,7 @@ _p(Former.make([[{
 				disabled:!data.canEdit
 			}));
 __p.push('		</div>\n	</div>');
-if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-success wizard-next">提交 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
+if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-success wizard-submit">提交 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
 }__p.push('</div>');
 
 return __p.join("");
@@ -2772,6 +2908,9 @@ var __p=[],_p=function(s){__p.push(s)};
 			data.data['FollowupCanEdit'] = true;
 
 			data.data["ChargeCanEdit"] = true;
+
+			data.data["DisplayConfirm"]  = true;
+			data.data["ConfirmCanEdit"]  = true;
 		}
 	}
 
@@ -2780,11 +2919,15 @@ var __p=[],_p=function(s){__p.push(s)};
 		Charge = DataView.Charge,	//财务信息
 		Followup = DataView.Followup;	//保后跟踪
 
+	//把业务类型放到一级，方便判断
+	DataView.Type = DataView.Type || DataView.Project&&DataView.Project.Type || 1;
+
 	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),	//审批
 		ShowCharge = ShowApproval && DataView.DisplayCharge,	//收费情况
 		ShowFollow = ShowApproval && DataView.DisplayTracking,	//保后
-		ShowFinanceConfirm = !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
-__p.push('\n<div class="col-md-12">\n<button class="btn btn btn-danger" id="TEST" style="position:absolute;top:-80px;right:80px;">直接提交测试数据</button>\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
+		ShowFinanceConfirm = DataView.DisplayConfirm;	//显示回款确认
+		//  !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
+__p.push('\n<div class="col-md-12">\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Guarantor">担保人<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n			<li data-target="Report">调查报告<span class="chevron"></span></li>');
 if (ShowApproval) {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');

@@ -7,6 +7,14 @@
 define(function(require, exports, module){
 	var MOD = [
 		[{
+			type:'hidden',
+			name:'Type'
+		},{
+			type:'hidden',
+			name:'ID'
+		}],
+
+		[{
 			type:'label',
 			col:3,
 			required:true,
@@ -20,13 +28,11 @@ define(function(require, exports, module){
 		},{
 			type:'label',
 			col:3,
-			required:true,
 			html:'中介名称'
 		},{
 			col:"3",
 			type:'text',
-			name:'AgentName',
-			required:true
+			name:'AgentName'
 		}],
 
 		[{

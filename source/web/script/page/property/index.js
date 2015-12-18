@@ -507,6 +507,19 @@ define.pack("./tpl.view",["risk/page/customer/index","risk/page/customer/src/tpl
 		}],
 
 		[{
+			type:'label',
+			col:'2',
+			required:true,
+			html:'不动产产权证号'
+		},{
+			col:'4',
+			type:'text',
+			required:true,
+			name:'AssetRightCode',
+			placeholder:''
+		}],
+
+		[{
 			col:2,
 			type:'label',
 			html:'房产地址',

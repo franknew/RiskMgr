@@ -66,6 +66,66 @@ define(function(require, exports, module){
 
 
 		[{
+			type:'label',
+			col:3,
+			html:'取证日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'PickNumberTime ',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'注销日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'LogoutAssetTime ',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'过户收文日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'ChangeOwnerReceiptTime  ',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'过户办文编号'
+		},{
+			col:'3',
+			type:'date',
+			name:'ChangeOwnerHandleTime  ',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'取新证日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'PickNewAssetCodeTime   ',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'新房产证号'
+		},{
+			col:'3',
+			type:'date',
+			name:'NewAssetCode  ',
+			placeholder:''
+		}],
+
+		[{
 			type:'group',
 			name:'Mortgage',
 			addText:'增加抵押信息',
@@ -115,23 +175,8 @@ define(function(require, exports, module){
 			type:'textarea',
 			name:'MortgageRemark',
 			placeholder:''
-		}],
-		[{
-			col:'12',
-			type:'label',
-			html:'<hr/>'
-		}],
+		}]
 
-		[{
-			type:'label',
-			col:3,
-			html:'回款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'InsuranceFreeTime',
-			placeholder:''
-		}],
 
 	];
 

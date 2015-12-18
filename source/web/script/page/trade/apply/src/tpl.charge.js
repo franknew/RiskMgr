@@ -58,23 +58,12 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'回款金额'
-		},{
-			col:'3',
-			type:'number',
-			required:true,
-			name:'ReturnBackMoney',
-			placeholder:'',
-			suffix:'万元'
-		},{
-			type:'label',
-			col:3,
-			html:'回款时间'
+			html:'预计回款时间'
 		},{
 			col:'3',
 			type:'date',
 			required:true,
-			name:'ReturnBackTime',
+			name:'PredictReturnBackMoneyTime',
 			placeholder:''
 		}],
 
@@ -122,7 +111,7 @@ define(function(require, exports, module){
 			required:true,
 			name:'GuaranteeMonth',
 			placeholder:'',
-			suffix:'月'
+			suffix:'天'
 		}],
 
 

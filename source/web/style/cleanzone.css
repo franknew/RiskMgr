@@ -5850,4 +5850,9 @@ table.no-border tr.pointer-item:hover {
   display: table;
   content: " ";
 }
+
+.form-control[disabled] {
+  border-color: #E8E8E8;
+  /*background-color: transparent;*/
+}
 /* risk自定义样式 END  */

@@ -88,7 +88,7 @@ define(function(require, exports, module){
 							dialog.close();
 							//添加完毕，刷新客户列表页
 							if (!success || !success()) {	//如果回调返回false则默认跳转
-								route.load('page=customer');
+								route.load('page=employee');
 							}
 						}
 					});

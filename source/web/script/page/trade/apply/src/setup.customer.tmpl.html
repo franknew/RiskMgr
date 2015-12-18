@@ -1,11 +1,14 @@
 <script type="text/html" id="SetupCustomer">
 	<%
-		var FormData = data.data || {};
+		var FormData = data.data || {},
+			TradeType = FormData.Type;
+		var OnlyOne = !!($.inArray(TradeType,[3,4]) != -1),	//只有一种客户的交易类型
+			BuyerText = OnlyOne?'客户':'买家';
 	%>
 	<div class="step-pane" id="Customer">
 		<div class="block-transparent">
 			<div class="header">
-				<h3>买家 <%if (data.canEdit) {%><button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button><%}%></h3>
+				<h3><%=BuyerText%> <%if (data.canEdit) {%><button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button><%}%></h3>
 			</div>
 			<div class="content">
 				<div class="list-group tickets" id="BuyerList">
@@ -25,11 +28,14 @@
 				</div>
 
 				<%if (data.canEdit) {%>
-					<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加买家&nbsp;&nbsp;</button>
+					<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加<%=BuyerText%>&nbsp;&nbsp;</button>
 				<%}%>
 			</div>
 		</div>
 
+		<%
+		if (!OnlyOne) {	//判断交易类型才显示卖家
+		%>
 		<div class="block-transparent">
 			<div class="header">
 				<h3>卖家 <%if (data.canEdit) {%><button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button><%}%></h3>
@@ -56,6 +62,8 @@
 				<%}%>
 			</div>
 		</div>
+		<%}%>
+
 		<%if (data.canEdit) {%>
 		<div class="form-group">
 			<div class="text-center col-sm-12">

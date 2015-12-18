@@ -8,7 +8,8 @@ define(function(require, exports, module){
 	var $ = require('jquery'),
 		Route = require('risk/unit/route'),
 		Tmpl = require('./tmpl'),
-		Views = require('./setup');
+		Setup = require('./setup'),
+		Types = require('./config.type');
 
 	var MOD = {
 		initPage:function(params) {
@@ -24,17 +25,16 @@ define(function(require, exports, module){
 			Route.on('click','choose-type',function(ev) {
 				var elem = $(ev.currentTarget),
 					type = elem.data('type'),
-					subHead = {
-						'1':'二手楼买卖交易',
-						'2':'首期款垫付',
-						'3':'现金赎楼',
-						'4':'红本抵押'
-					}[type],
+					subHead = Types.get(type),
 					head = '申请额度 <small>'+subHead+'</small>';
-
-				Views.init({
+				Setup.init({
 					mode:'add',
-					head:head
+					head:head,
+					data:{
+						Project:{
+							Type:type
+						}
+					}
 				});
 			});
 		},
@@ -65,10 +65,15 @@ define(function(require, exports, module){
 			});
 
 			require('./data').get().done(function(data) {
-				var id = data&&data.Project&&data.Project.Name;
-				Views.init({
+				var id = data&&data.Project&&data.Project.Name,
+					type = data&&data.Project&&data.Project.Type,
+					typeName = Types.get(type);
+
+				var complete = data&&data.WorkflowComplete ? '<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>':'';
+
+				Setup.init({
 					mode:params.action,
-					head:head+'<small>('+id+')</small>',
+					head:head+' <small>'+typeName+'('+id+') '+complete+'</small>',
 					data:data
 				});
 			});

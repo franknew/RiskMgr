@@ -1,13 +1,22 @@
 <script type="text/html" id="choose">
+<%
+	var Types = require('./config.type'),
+		List = Types.data,
+		Colors = ['primary','success','info','warning','danger'];
+%>
 <div class="block-flat">
 	<h3 class="hthin">请选择业务类型</h3>
 	<div class="spacer spacer-bottom">
-		<button type="button" data-hook="choose-type" data-type="1" class="btn btn-success btn-lg">二手楼买卖交易</button>
-		<!--
-		<button type="button" data-hook="choose-type" data-type="2" class="btn btn-primary btn-lg">首期款垫付</button>
-		<button type="button" data-hook="choose-type" data-type="3" class="btn btn-info btn-lg">现金赎楼</button>
-		<button type="button" data-hook="choose-type" data-type="4" class="btn btn-danger btn-lg">红本抵押</button>
-		</div>
-		-->
+
+		<%
+		for(var key in List) {
+			if(List.hasOwnProperty(key)) {
+		%>
+			<button type="button" data-hook="choose-type" data-type="<%=key%>" class="btn btn-<%=Colors.shift()||'default'%> btn-lg"><%=List[key]%></button>
+		<%
+			}
+		}
+		%>
+	</div>
 </div>
 </script>

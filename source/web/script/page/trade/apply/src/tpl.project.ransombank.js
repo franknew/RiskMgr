@@ -105,23 +105,19 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			required:true,
 			html:'赎楼银行客户经理'
 		},{
 			col:"3",
 			type:'text',
 			name:'AssetRansomCustomerManager',
-			required:true
 		},{
 			type:'label',
 			col:3,
-			required:true,
 			html:'联系电话'
 		},{
 			col:"3",
 			type:'tel',
 			name:'AssetRansomContactPhone',
-			required:true
 		}]
 	];
 

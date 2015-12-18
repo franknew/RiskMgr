@@ -22,18 +22,6 @@ define(function(require, exports, module){
 			type:'label',
 			col:3,
 			required:true,
-			html:'赎楼员'
-		},{
-			col:"3",
-			type:'text',
-			name:'AssetRansomer',
-			required:true
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			required:true,
 			html:'赎楼方式'
 		},{
 			col:"3",
@@ -41,7 +29,9 @@ define(function(require, exports, module){
 			name:'AssetRansomType',
 			required:true,
 			options:'赎楼方式'
-		},{
+		}],
+
+		[{
 			type:'label',
 			col:3,
 			html:'预存时间'
@@ -50,9 +40,7 @@ define(function(require, exports, module){
 			type:'number',
 			name:'PredictDays',
 			suffix:'天'
-		}],
-
-		[{
+		},{
 			type:'label',
 			col:3,
 			html:'收费方式'

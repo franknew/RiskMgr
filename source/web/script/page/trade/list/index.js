@@ -244,13 +244,13 @@ _p(Cur.Project.ID);
 __p.push('" data-workflowid="');
 _p(Cur.WorkflowID);
 __p.push('" data-activityid="');
-_p(Cur.CurrentActivity.ID);
+_p(Cur.CurrentActivity&&Cur.CurrentActivity.ID);
 __p.push('" data-taskid="');
 _p(Cur.TaskID);
 __p.push('">\n		<td>');
 _p(Cur.Project.Name);
 __p.push('</td>\n		<td>');
-_p(Cur.Processor||'&nbsp;');
+_p(Cur.Creator||'&nbsp;');
 __p.push('</td>\n		<td colspan="2">\n			<table class="no-strip">');
 
 			var bi=0,CurBuyer,

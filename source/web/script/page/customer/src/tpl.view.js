@@ -19,7 +19,7 @@ define(function(require, exports, module){
 			type:'text',
 			required:true,
 			name:'Name',
-			placeholder:'张三'
+			placeholder:''
 		},{
 			col:2,
 			type:'select',
@@ -45,7 +45,7 @@ define(function(require, exports, module){
 			type:'tel',
 			name:'Phone',
 			required:true,
-			placeholder:'13888888888'
+			placeholder:''
 		},{
 			col:3,
 			type:'select',

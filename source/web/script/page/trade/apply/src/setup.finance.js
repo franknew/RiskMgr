@@ -26,9 +26,10 @@ define(function(require, exports, module){
 						data:{
 							ID:da.Project.ID,
 							WorkflowID:da.WorkflowID,
-							ActivityID:da.CurrentActivity.ID,
+							ActivityID:da.CurrentActivity&&da.CurrentActivity.ID,
 							TaskID:da.TaskID
 						},
+						form:$('#FinanceConfirm'),
 						success:function(da) {
 							Msg.success('已成功确认回款.');
 							Route.reload();

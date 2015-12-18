@@ -36,7 +36,6 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'decimal',
-			required:true,
 			name:'GuaranteeMoney',
 			placeholder:'',
 			suffix:'万元'
@@ -51,7 +50,7 @@ define(function(require, exports, module){
 			required:true,
 			name:'GuaranteeMonth',
 			placeholder:'',
-			suffix:'月'
+			suffix:'天'
 		}],
 
 		[{

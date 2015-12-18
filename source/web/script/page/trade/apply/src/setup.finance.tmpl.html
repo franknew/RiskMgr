@@ -1,7 +1,11 @@
 <script type="text/html" id="SetupFinanceConfirm">
 <%
-	var Former = require('risk/components/former/index');
-	var FormData = data.data||{};
+	var Former = require('risk/components/former/index'),
+		TplFinance = require('./tpl.finance');
+	var FormData = data.data||{},
+		FinanceData = FormData.Project;
+
+	var ConfirmCanEdit = FormData.ConfirmCanEdit;
 %>
 <div class="step-pane" id="FinanceConfirm">
 	<div class="block-transparent">
@@ -9,8 +13,15 @@
 			<h3>回款确认</h3>
 		</div>
 		<div class="content">
+			<%=Former.make(TplFinance,{data:FinanceData,disabled:!ConfirmCanEdit})%>
+		</div>
+	</div>
+	<%if (ConfirmCanEdit) {%>
+	<div class="form-group">
+		<div class="text-center col-sm-12">
 			<button type="button" class="btn btn-primary btn-lg" data-hook="finance-submit">确认已回款</button>
 		</div>
 	</div>
+	<%}%>
 </div>
 </script>

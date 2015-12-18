@@ -149,7 +149,13 @@ define(function(require, exports, module){
 			name:"中介"
 		},{
 			value:"2",
-			name:"2222"
+			name:"银行"
+		},{
+			value:"3",
+			name:"同行"
+		},{
+			value:"4",
+			name:"其它"
 		}],
 
 		"是否":[{

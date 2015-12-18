@@ -33,6 +33,9 @@
 			data.data['FollowupCanEdit'] = true;
 
 			data.data["ChargeCanEdit"] = true;
+
+			data.data["DisplayConfirm"]  = true;
+			data.data["ConfirmCanEdit"]  = true;
 		}
 	}
 %>
@@ -43,14 +46,17 @@
 		Charge = DataView.Charge,	//财务信息
 		Followup = DataView.Followup;	//保后跟踪
 
+	//把业务类型放到一级，方便判断
+	DataView.Type = DataView.Type || DataView.Project&&DataView.Project.Type || 1;
+
 	var ShowApproval = !!(data.mode!=='add' && data.mode!=='edit'),	//审批
 		ShowCharge = ShowApproval && DataView.DisplayCharge,	//收费情况
 		ShowFollow = ShowApproval && DataView.DisplayTracking,	//保后
-		ShowFinanceConfirm = !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
+		ShowFinanceConfirm = DataView.DisplayConfirm;	//显示回款确认
+		//  !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
 %>
 
 <div class="col-md-12">
-<button class="btn btn btn-danger" id="TEST" style="position:absolute;top:-80px;right:80px;">直接提交测试数据</button>
 	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">
 		<ul class="wizard-steps">
 			<%if (data.mode=='add') {%>

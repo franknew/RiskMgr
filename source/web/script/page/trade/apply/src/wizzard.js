@@ -18,7 +18,8 @@ define(function(require, exports, module){
 				,nav:'.wizard-steps'	//导航
 				,navHook:'data-target'	//导航的data属性
 				,setup:'.step-pane'	//每一个setup的选择器
-				,btnNext:'.wizard-next'	//下一步按钮的选择器
+				,btnNext:'.wizard-next'	//下一步按钮的选择器，如果没有下一步tab了，则会执行submit
+				,btnSubmit:'.wizard-submit'	//提交按钮
 				,btnPrev:'.wizard-previous'	//上一步按钮的选择器
 				,validate:true	//进入下一步时，是否要校验表单
 				//,success:function() {}	//最后一步完成时执行
@@ -43,6 +44,7 @@ define(function(require, exports, module){
 
 			return this;
 		},
+		//提交表单
 		_success:function() {
 			var conf = this._config(),
 				setups = (function(nav,hook) {
@@ -98,17 +100,21 @@ define(function(require, exports, module){
 			var that = this;
 			var conf = this._config(),
 				btnNext = conf.btnNext,
-				btnPrev = conf.btnPrev;
+				btnPrev = conf.btnPrev,
+				btnSubmit = conf.btnSubmit;
 
 			this.container.on('click',btnNext,function(ev) {
 				ev.preventDefault();
 				var btn = $(ev.currentTarget);
 				that._showByButton(btn,'next');
-			});
-			this.container.on('click',btnPrev,function(ev) {
+			}).on('click',btnPrev,function(ev) {
 				ev.preventDefault();
 				var btn = $(ev.currentTarget);
 				that._showByButton(btn,'prev');
+			}).on('click',btnSubmit,function(ev) {
+				ev.preventDefault();
+				var btn = $(ev.currentTarget);
+				that._success();
 			});
 
 			this.nav.on('click','['+conf.navHook+']',function(ev) {
