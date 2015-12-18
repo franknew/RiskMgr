@@ -1,0 +1,86 @@
+<!--
+包含list页所需所有tmpl
+-->
+<script type="text/html" id="list">
+<div class="spacer spacer-bottom">
+	<button type="button" class="btn btn-primary" data-hook="add">新增职位</button>
+</div>
+
+<div class="block-flat">
+	<%=this.ListContainer()%>
+</div>
+</script>
+
+<script type="text/html" id="ListContainer">
+	<div id="ListContainer">
+		<div class="loading">Loading...</div>
+	</div>
+</script>
+
+<script type="text/html" id="ListBox">
+	<table class="no-border">
+		<thead class="no-border">
+			<tr>
+				<th>职位</th>
+				<th>下级职位</th>
+			</tr>
+		</thead>
+		<tbody class="no-border-x no-border-y" id="J_ListBox">
+			<%=this.ListItem(data)%>
+		</tbody>
+	</table>
+
+	<div class="j-pager"></div>
+
+</script>
+
+<script type="text/html" id="ListItem">
+<%
+	var List = data||[];
+	var ShowInfos = ['CnName','Name'];
+
+	var i=0,Cur;
+	if (List.length>0) {
+
+		for(;Cur=List[i++];) {
+%>
+	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+		<%
+			var ii=0,CurII;
+			for(;CurII=ShowInfos[ii++];) {
+		%>
+			<td><%=Cur[CurII]||'-'%></td>
+		<%
+			}
+		%>
+	</tr>
+<%
+		}
+	}else{
+%>
+	<tr>
+	<td colspan="<%=ShowInfos.length%>">
+		<div class="alert alert-info" role="alert">没有职位信息</div>
+	</td>
+	</tr>
+<%
+	}
+%>
+</script>
+
+<script type="text/html" id="bak">
+
+	<!--
+	<div class="list-group tickets" id="J_ListBox">
+		<%=this.ListItem(data)%>
+	</div>
+	-->
+	<!--
+	<div data-hook="view" class="list-group-item pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+		<span class="label label-default pull-right"><%=Cur.Role%></span>
+		<h4 class="name"><strong><%=Cur.Name%></strong></h4>
+		<p><%=Cur.Phone||'&nbsp;'%></p>
+		<p><%=Cur.Address||'&nbsp;'%></p>
+	</div>
+	-->
+</script>
