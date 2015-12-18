@@ -141,7 +141,28 @@ define(function(require, exports, module){
 			name:"住宅"
 		},{
 			value:"2",
+			name:"商住两用"
+		},{
+			value:"3",
+			name:"单身公寓"
+		},{
+			value:"4",
 			name:"商用"
+		},{
+			value:"5",
+			name:"写字楼"
+		},{
+			value:"6",
+			name:"商铺"
+		},{
+			value:"7",
+			name:"别墅"
+		},{
+			value:"8",
+			name:"厂房"
+		},{
+			value:"9",
+			name:"其他"
 		}],
 
 		"项目来源":[{
@@ -181,6 +202,9 @@ define(function(require, exports, module){
 		},{
 			value:"3",
 			name:"刷卡"
+		},{
+			value:"4",
+			name:"后付同步计息"
 		}],
 
 		"公积金中心":[{

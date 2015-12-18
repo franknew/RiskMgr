@@ -179,7 +179,7 @@ define.pack("./config.type",[],function(require, exports, module){
 		data:{
 			'1':'二手楼买卖交易',
 			'2':'首期款垫付',
-			'3':'现金赎楼',
+			'3':'同名转按',
 			'4':'贷前垫资'
 		},
 		get:function(typeID) {
@@ -847,7 +847,7 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 					content:'您填写的表单将不会被保存，是否要取消？',
 					okValue:'确认取消',
 					ok:function() {
-						route.load('page=apply-amount');
+						route.reload();
 					},
 					cancelValue:'不取消'
 				});
@@ -1314,6 +1314,85 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			required:true,
 			name:'PredictReturnBackMoneyTime',
 			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'担保期限'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'GuaranteeMonth',
+			placeholder:'',
+			suffix:'天'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'展期费用'
+		},{
+			col:'3',
+			type:'number',
+			required:true,
+			name:'HasExpired',
+			placeholder:'',
+			suffix:'元'
+		}],
+
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'出款账户'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'PaymentBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'实际出款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'PaymentMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'出款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'PaymentDate'
+		}],
+
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
 		}],
 
 		[{
@@ -1337,127 +1416,42 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			required:true,
 			name:'DelayTime',
 			placeholder:''
-		}],
+		}]
+	];
 
+	return MOD;
+});/**
+ * 回款确认表单
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-21 21:00:52
+ */
+
+define.pack("./tpl.finance",[],function(require, exports, module){
+	var MOD = [
 		[{
 			type:'label',
 			col:3,
-			html:'展期费用'
+			required:true,
+			html:'回款金额'
 		},{
 			col:'3',
 			type:'number',
 			required:true,
-			name:'HasExpired',
+			name:'ReturnBackMoney',
 			placeholder:'',
-			suffix:'元'
+			suffix:'万元'
 		},{
 			type:'label',
 			col:3,
-			html:'担保期限'
-		},{
-			col:'3',
-			type:'number',
 			required:true,
-			name:'GuaranteeMonth',
-			placeholder:'',
-			suffix:'天'
-		}],
-
-
-		[{
-			col:'12',
-			type:'label',
-			html:'<hr/>'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'出款信息'
-		},{
-			col:'3',
-			type:'text',
-			name:'PaymentName',
-			placeholder:'户名'
-		},{
-			col:'3',
-			type:'text',
-			name:'PaymentAccount',
-			placeholder:'账号'
-		},{
-			col:'3',
-			type:'text',
-			name:'PaymentBankName',
-			placeholder:'开户行'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'出款金额'
-		},{
-			col:'3',
-			type:'number',
-			name:'PaymentMoney',
-			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'出款日期'
+			html:'回款时间'
 		},{
 			col:'3',
 			type:'date',
-			name:'PaymentDate'
+			required:true,
+			name:'ReturnBackTime',
+			placeholder:''
 		}],
-
-		[{
-			col:'12',
-			type:'label',
-			html:'<hr/>'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'扣款信息'
-		},{
-			col:'3',
-			type:'text',
-			name:'DeductMoneyName',
-			placeholder:'户名'
-		},{
-			col:'3',
-			type:'text',
-			name:'DeductMoneyAccount',
-			placeholder:'账号'
-		},{
-			col:'3',
-			type:'text',
-			name:'DeductMoneyBankName',
-			placeholder:'开户行'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'扣款金额'
-		},{
-			col:'3',
-			type:'number',
-			name:'DeductMoneyMoney',
-			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'扣款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'DeductMoneyDate'
-		}],
-
 
 		[{
 			col:'12',
@@ -1509,50 +1503,129 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 
 	return MOD;
 });/**
- * 回款确认表单
- * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-21 21:00:52
- */
-
-define.pack("./tpl.finance",[],function(require, exports, module){
-	var MOD = [
-		[{
-			type:'label',
-			col:3,
-			required:true,
-			html:'回款金额'
-		},{
-			col:'3',
-			type:'number',
-			required:true,
-			name:'ReturnBackMoney',
-			placeholder:'',
-			suffix:'万元'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			required:true,
-			html:'回款时间'
-		},{
-			col:'3',
-			type:'date',
-			required:true,
-			name:'ReturnBackTime',
-			placeholder:''
-		}]
-	];
-
-	return MOD;
-});/**
  * 项目信息form表单：收费情况
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-21 21:00:52
  */
 
 define.pack("./tpl.followup",[],function(require, exports, module){
+
+	//取证日期、注销日期、过户收文日期、过户办文编号、取新政日期、过户说明、新房产证号(不动产权号)、抵押日期、抵押回执编号、预计完成日、抵押备注说明
 	var MOD = [
+		[{
+			type:'label',
+			col:3,
+			html:'取证日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'NewAssetDate',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'注销日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'LogoutAssetTime',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'过户收文日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'ChangeOwnerProfileTime',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'过户办文编号'
+		},{
+			col:'3',
+			type:'text',
+			name:'ChangeOwnerProfileCode',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'取新证日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'PickNewAssetCodeTime',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'新房产证号(不动产权号)'
+		},{
+			col:'3',
+			type:'text',
+			name:'NewAssetCode',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'过户说明'
+		},{
+			col:'9',
+			type:'textarea',
+			name:'ChangeOwnerRemark',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'抵押日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'MortgageOverTime',
+			placeholder:''
+		},{
+			type:'label',
+			col:3,
+			html:'抵押回执编号'
+		},{
+			col:'3',
+			type:'date',
+			name:'MortgageFeedbackCode',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'预计完成日'
+		},{
+			col:'3',
+			type:'date',
+			name:'MortgagePredictTime',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'抵押备注说明'
+		},{
+			col:'9',
+			type:'textarea',
+			name:'MortgageRemark',
+			placeholder:''
+		}]
+
+		/*
 		[{
 			type:'group',
 			name:'TransferInfo',
@@ -1723,7 +1796,7 @@ define.pack("./tpl.followup",[],function(require, exports, module){
 			name:'MortgageRemark',
 			placeholder:''
 		}]
-
+		*/
 
 	];
 
@@ -1848,30 +1921,6 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 
 		[{
 			type:'label',
-			col:3,
-			html:'担保金额'
-		},{
-			col:'3',
-			type:'decimal',
-			name:'GuaranteeMoney',
-			placeholder:'',
-			suffix:'万元'
-		},{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'担保期限'
-		},{
-			col:'3',
-			type:'number',
-			required:true,
-			name:'GuaranteeMonth',
-			placeholder:'',
-			suffix:'天'
-		}],
-
-		[{
-			type:'label',
 			col:'3',
 			required:true,
 			html:'买方贷款金额'
@@ -1943,7 +1992,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'客户预存款'
+			html:'客户出资款'
 		},{
 			col:"3",
 			type:'decimal',
@@ -1966,7 +2015,7 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			col:"3",
 			type:'select',
 			name:'CreditReceiverBank',
-			remark:'银行 - 支行',
+			remark:'银行',
 			options:'银行',
 			required:true
 		},{
@@ -2016,9 +2065,8 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			html:'原贷款公积金中心'
 		},{
 			col:"3",
-			type:'select',
-			name:'OrignalFundCenter',
-			options:'公积金中心'
+			type:'text',
+			name:'OrignalFundCenter'
 		},{
 			type:'label',
 			col:3,
@@ -2027,24 +2075,6 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			col:"3",
 			type:'text',
 			name:'OrignalFundBranch',
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'扣款账号'
-		},{
-			col:"3",
-			type:'text',
-			name:'DeductMoneyCard'
-		},{
-			type:'label',
-			col:3,
-			html:'扣款户名'
-		},{
-			col:"3",
-			type:'text',
-			name:'DeductMoneyCardName'
 		}],
 
 		[{
@@ -2059,6 +2089,18 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			name:'RedemptionAmount',
 			placeholder:'',
 			suffix:'万元'
+		},{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'赎楼期限'
+		},{
+			col:'3',
+			type:'decimal',
+			required:true,
+			name:'GuaranteeMonth',
+			placeholder:'',
+			suffix:'天'
 		}],
 
 		[{
@@ -2112,18 +2154,6 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 define.pack("./tpl.project.ransomway",[],function(require, exports, module){
 	var MOD = [
 		[{
-			type:'label',
-			col:3,
-			required:true,
-			html:'预计总赎楼金额'
-		},{
-			col:'3',
-			type:'decimal',
-			required:true,
-			name:'AssetRansomPredictMoney',
-			placeholder:'',
-			suffix:'万元'
-		},{
 			type:'label',
 			col:3,
 			required:true,

@@ -35,9 +35,8 @@ define(function(require, exports, module){
 			html:'原贷款公积金中心'
 		},{
 			col:"3",
-			type:'select',
-			name:'OrignalFundCenter',
-			options:'公积金中心'
+			type:'text',
+			name:'OrignalFundCenter'
 		},{
 			type:'label',
 			col:3,
@@ -46,24 +45,6 @@ define(function(require, exports, module){
 			col:"3",
 			type:'text',
 			name:'OrignalFundBranch',
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'扣款账号'
-		},{
-			col:"3",
-			type:'text',
-			name:'DeductMoneyCard'
-		},{
-			type:'label',
-			col:3,
-			html:'扣款户名'
-		},{
-			col:"3",
-			type:'text',
-			name:'DeductMoneyCardName'
 		}],
 
 		[{
@@ -78,6 +59,18 @@ define(function(require, exports, module){
 			name:'RedemptionAmount',
 			placeholder:'',
 			suffix:'万元'
+		},{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'赎楼期限'
+		},{
+			col:'3',
+			type:'decimal',
+			required:true,
+			name:'GuaranteeMonth',
+			placeholder:'',
+			suffix:'天'
 		}],
 
 		[{

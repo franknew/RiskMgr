@@ -86,7 +86,7 @@ define(function(require, exports, module){
 					content:'您填写的表单将不会被保存，是否要取消？',
 					okValue:'确认取消',
 					ok:function() {
-						route.load('page=apply-amount');
+						route.reload();
 					},
 					cancelValue:'不取消'
 				});

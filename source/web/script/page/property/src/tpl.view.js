@@ -15,7 +15,7 @@ define(function(require, exports, module){
 			type:'label',
 			col:'2',
 			required:true,
-			html:'房产证号'
+			html:'不动产登记证明或房地产证'
 		},{
 			col:'4',
 			type:'text',
@@ -33,19 +33,6 @@ define(function(require, exports, module){
 			name:'Usage',
 			required:true,
 			options:'房产用途'
-		}],
-
-		[{
-			type:'label',
-			col:'2',
-			required:true,
-			html:'不动产产权证号'
-		},{
-			col:'4',
-			type:'text',
-			required:true,
-			name:'AssetRightCode',
-			placeholder:''
 		}],
 
 		[{

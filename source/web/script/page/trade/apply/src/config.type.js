@@ -9,7 +9,7 @@ define(function(require, exports, module){
 		data:{
 			'1':'二手楼买卖交易',
 			'2':'首期款垫付',
-			'3':'现金赎楼',
+			'3':'同名转按',
 			'4':'贷前垫资'
 		},
 		get:function(typeID) {

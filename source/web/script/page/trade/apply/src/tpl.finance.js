@@ -18,9 +18,7 @@ define(function(require, exports, module){
 			name:'ReturnBackMoney',
 			placeholder:'',
 			suffix:'万元'
-		}],
-
-		[{
+		},{
 			type:'label',
 			col:3,
 			required:true,
@@ -31,6 +29,53 @@ define(function(require, exports, module){
 			required:true,
 			name:'ReturnBackTime',
 			placeholder:''
+		}],
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款信息'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundName',
+			placeholder:'户名'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundAccount',
+			placeholder:'账号'
+		},{
+			col:'3',
+			type:'text',
+			name:'RefundBankName',
+			placeholder:'开户行'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'RefundMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'退款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'RefundDate'
 		}]
 	];
 

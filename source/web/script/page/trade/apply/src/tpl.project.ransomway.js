@@ -10,18 +10,6 @@ define(function(require, exports, module){
 			type:'label',
 			col:3,
 			required:true,
-			html:'预计总赎楼金额'
-		},{
-			col:'3',
-			type:'decimal',
-			required:true,
-			name:'AssetRansomPredictMoney',
-			placeholder:'',
-			suffix:'万元'
-		},{
-			type:'label',
-			col:3,
-			required:true,
 			html:'赎楼方式'
 		},{
 			col:"3",

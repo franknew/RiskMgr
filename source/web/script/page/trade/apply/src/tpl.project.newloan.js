@@ -31,30 +31,6 @@ define(function(require, exports, module){
 
 		[{
 			type:'label',
-			col:3,
-			html:'担保金额'
-		},{
-			col:'3',
-			type:'decimal',
-			name:'GuaranteeMoney',
-			placeholder:'',
-			suffix:'万元'
-		},{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'担保期限'
-		},{
-			col:'3',
-			type:'number',
-			required:true,
-			name:'GuaranteeMonth',
-			placeholder:'',
-			suffix:'天'
-		}],
-
-		[{
-			type:'label',
 			col:'3',
 			required:true,
 			html:'买方贷款金额'
@@ -126,7 +102,7 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'客户预存款'
+			html:'客户出资款'
 		},{
 			col:"3",
 			type:'decimal',
@@ -149,7 +125,7 @@ define(function(require, exports, module){
 			col:"3",
 			type:'select',
 			name:'CreditReceiverBank',
-			remark:'银行 - 支行',
+			remark:'银行',
 			options:'银行',
 			required:true
 		},{

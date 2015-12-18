@@ -486,7 +486,7 @@ define.pack("./tpl.view",["risk/page/customer/index","risk/page/customer/src/tpl
 			type:'label',
 			col:'2',
 			required:true,
-			html:'房产证号'
+			html:'不动产登记证明或房地产证'
 		},{
 			col:'4',
 			type:'text',
@@ -504,19 +504,6 @@ define.pack("./tpl.view",["risk/page/customer/index","risk/page/customer/src/tpl
 			name:'Usage',
 			required:true,
 			options:'房产用途'
-		}],
-
-		[{
-			type:'label',
-			col:'2',
-			required:true,
-			html:'不动产产权证号'
-		},{
-			col:'4',
-			type:'text',
-			required:true,
-			name:'AssetRightCode',
-			placeholder:''
 		}],
 
 		[{
