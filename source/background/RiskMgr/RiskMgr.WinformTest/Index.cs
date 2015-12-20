@@ -203,7 +203,7 @@ namespace RiskMgr.WinformTest
         private void button14_Click(object sender, EventArgs e)
         {
             WorkflowBLL bll = new WorkflowBLL();
-            bll.Approval("2248e03d180a4340b42a04751e9fdf7f", "dbfebe4d21994550979c8d45b9f43a26", "d13c67f75a3e44ccb1a0da0ad9cb4cf7", "7", new Approval
+            bll.Approval("62d03c59b62148248a49806c158e8f9b", "7fd284a5ef6649fe9c4f27fe868a15ca", "8ad46cd03d0144abbd6a698f5e8741fd", "7", new Approval
             {
                 Status = 1,
                 Remark = "test",
@@ -213,7 +213,7 @@ namespace RiskMgr.WinformTest
         private void button15_Click(object sender, EventArgs e)
         {
             ProjectBLL bll = new ProjectBLL();
-            var a = bll.QueryDetail(textBox1.Text, "9");
+            var a = bll.QueryDetail(textBox1.Text, "", "14");
         }
 
         private void button16_Click(object sender, EventArgs e)
@@ -249,7 +249,8 @@ namespace RiskMgr.WinformTest
         {
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
-            bll.UpdateFinance(new Project
+            bll.UpdateFinance("a074c5e65c96481db5af54dfd4f75f86", "ce21b4201ee540c8b4ab99862186d336", 
+                "", new Project
             {
                 RefundAccount = "1",
                 RefundBankName = "11",
@@ -267,7 +268,7 @@ namespace RiskMgr.WinformTest
                 DeductMoneyMoney = 3,
                 DeductMoneyName = "333",
                 ID = textBox1.Text,
-            });
+            }, "14");
         }
 
         private void button19_Click(object sender, EventArgs e)

@@ -5,11 +5,8 @@ using System.Text;
 
 namespace RiskMgr.Form
 {
-    public class InitApprovalServiceForm
+    public class InitApprovalServiceForm : ProjectQueryForm
     {
-        /// <summary>
-        /// 流程编号
-        /// </summary>
-        public string WorkflowID { get; set; }
+        public string TaskID { get; set; }
     }
 }

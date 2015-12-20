@@ -1363,7 +1363,7 @@
     </dynamic>
   </update>
   <update id="DeleteProject" parameterClass="ProjectQueryForm">
-    UPDATE `Project` SET IsDelete=1 WHERE 1=1
+    UPDATE `Project` SET IsDeleted=1 WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>

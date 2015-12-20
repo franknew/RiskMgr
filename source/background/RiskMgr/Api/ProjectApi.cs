@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DreamWorkflow.Engine.DAL;
+using IBatisNet.DataMapper;
+using DreamWorkflow.Engine.Form;
 
 namespace RiskMgr.Api
 {
@@ -25,8 +28,10 @@ namespace RiskMgr.Api
         [EditAction]
         public string Add(AddProjectServiceForm form)
         {
+            ISqlMapper mapper = Common.GetMapperFromSession();
             List<Customer_Project> customers = new List<Customer_Project>();
             List<Customer> updateCustomers = new List<Customer>();
+            WorkflowDao workflowdao = new WorkflowDao(mapper);
 
             customers.AddRange(GetRelationship(form.Buyers, (int)CustomerType.Buyer));
             customers.AddRange(GetRelationship(form.Sellers, (int)CustomerType.Seller));
@@ -46,7 +51,16 @@ namespace RiskMgr.Api
 
             //处理流程
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
-            var workflow = wfdm.StartNew(user.User.ID, result, new WorkflowAuthority());
+            Workflow wf = workflowdao.Query(new WorkflowQueryForm { ProcessID = result }).FirstOrDefault();
+            WorkflowModel workflow = null;
+            if (wf == null)
+            {
+                workflow = wfdm.StartNew(user.User.ID, result, new WorkflowAuthority());
+            }
+            else
+            {
+                workflow = WorkflowModel.Load(wf.ID);
+            }
             //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
             var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
             if (task != null)
@@ -81,7 +95,7 @@ namespace RiskMgr.Api
             var projectids = (from p in list select p.ID).ToList();
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.Query(projectids, userid);
+            return bll.Query(projectids, null, userid);
         }
 
         private List<Customer_Project> GetRelationship(List<Customer> customers, int type)
@@ -91,6 +105,10 @@ namespace RiskMgr.Api
             {
                 foreach (var customer in customers)
                 {
+                    if (string.IsNullOrEmpty(customer.ID))
+                    {
+                        customer.ID = Guid.NewGuid().ToString().Replace("-", "");
+                    }
                     result.Add(new Customer_Project { CustomerID = customer.ID, Type = type });
                 }
             }
@@ -103,15 +121,15 @@ namespace RiskMgr.Api
         /// <param name="form"></param>
         /// <returns></returns>
         [QueryAction]
-        public InitApprovalResultForm InitApproval(ProjectQueryForm form)
+        public InitApprovalResultForm InitApproval(InitApprovalServiceForm form)
         {
-            if (string.IsNullOrEmpty(form.ID))
+            if (string.IsNullOrEmpty(form.ID) && string.IsNullOrEmpty(form.TaskID))
             {
-                throw new Exception("没有项目ID");
+                throw new Exception("没有项目ID和任务ID");
             }
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.QueryDetail(form.ID, userid);
+            return bll.QueryDetail(form.ID, form.TaskID, userid);
         }
 
         /// <summary>
@@ -147,7 +165,7 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
             form.Project.LastUpdator = userid;
-            return bll.UpdateFinance(form.WorkflowID, form.ActivityID, form.TaskID, form.Project);
+            return bll.UpdateFinance(form.WorkflowID, form.ActivityID, form.TaskID, form.Project, userid);
         }
 
         /// <summary>
@@ -161,7 +179,7 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
             form.Project.LastUpdator = userid;
-            return bll.UpdateFinance(form.Project);
+            return bll.UpdateFinance(form.WorkflowID, form.ActivityID, form.TaskID, form.Project, userid);
         }
 
         /// <summary>
@@ -183,7 +201,8 @@ namespace RiskMgr.Api
         {
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.FinanceConfirm(form.WorkflowID, form.ActivityID, form.TaskID, form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney);
+            return bll.FinanceConfirm(form.WorkflowID, form.ActivityID, form.TaskID, form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney,
+                form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate);
         }
     }
 }

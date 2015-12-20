@@ -61,5 +61,7 @@ namespace RiskMgr.Form
         /// 流程是否结束
         /// </summary>
         public bool WorkflowComplete { get; set; }
+
+        public string Creator { get; set; }
     }
 }

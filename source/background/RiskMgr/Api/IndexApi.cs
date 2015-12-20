@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using DreamWorkflow.Engine.DAL;
 using DreamWorkflow.Engine.Form;
+using DreamWorkflow.Engine;
 
 namespace RiskMgr.Api
 {
@@ -29,7 +30,7 @@ namespace RiskMgr.Api
             TaskBLL taskbll = new TaskBLL();
             form.Menu = menubll.GetCurrentUserMenu();
             form.User = userbll.GetCurrentUser();
-            var task = taskbll.Query(new QueryMyTaskServiceForm { UserID = form.User.UserInfo.ID });
+            var task = taskbll.Query(new QueryMyTaskServiceForm { UserID = form.User.User.ID, Status = (int)TaskProcessStatus.Started });
             task.Sort((l, r) =>
             {
                 if (l.CreateTime > r.CreateTime)
@@ -41,6 +42,7 @@ namespace RiskMgr.Api
                     return 1;
                 }
             });
+            form.ProcessingTask = task;
             return form;
         }
     }

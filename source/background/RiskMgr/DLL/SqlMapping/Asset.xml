@@ -113,6 +113,10 @@
         `IsDeleted`=#IsDeleted#
     </isNotNull>
     
+    <isNotNull prepend="AND" property="AssetRightCode">
+        `AssetRightCode`=#AssetRightCode#
+    </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -142,7 +146,8 @@
     `IsTraded`,
     `Enabled`,
     `ChangeOwnerPrice`,
-    `IsDeleted`
+    `IsDeleted`,
+    `AssetRightCode`
   )
   VALUES
   (
@@ -164,7 +169,8 @@
         #IsTraded#,
         #Enabled#,
         #ChangeOwnerPrice#,
-        #IsDeleted#
+        #IsDeleted#,
+        #AssetRightCode#
   )
   </insert>
   <update id="UpdateAsset" parameterClass="AssetUpdateForm">
@@ -223,6 +229,9 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.IsDeleted">
         `IsDeleted`=#Entity.IsDeleted#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.AssetRightCode">
+        `AssetRightCode`=#Entity.AssetRightCode#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -298,10 +307,13 @@
     <isNotNull prepend="AND" property="AssetQueryForm.IsDeleted">
         `IsDeleted`=#AssetQueryForm.IsDeleted#
     </isNotNull>
+    <isNotNull prepend="AND" property="AssetQueryForm.AssetRightCode">
+        `AssetRightCode`=#AssetQueryForm.AssetRightCode#
+    </isNotNull>
     </dynamic>
   </update>
   <update id="DeleteAsset" parameterClass="AssetQueryForm">
-    UPDATE `Asset` SET IsDelete=1 WHERE 1=1
+    UPDATE `Asset` SET IsDeleted=1 WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
@@ -383,6 +395,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetRightCode">
+        `AssetRightCode`=#AssetRightCode#
     </isNotNull>
   </update>
    <select id="QueryAssetLastUpdateTime" resultClass="DateTime">
@@ -472,6 +487,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="AssetRightCode">
+        `AssetRightCode`=#AssetRightCode#
     </isNotNull>
     </dynamic>
    </select>

@@ -11,12 +11,12 @@ namespace RiskMgr.Form
         /// <summary>
         /// 过户信息
         /// </summary>
-        public List<TrackingChangeOwner> TransferInfo { get; set; }
+        public TrackingChangeOwner TransferInfo { get; set; }
 
         /// <summary>
         /// 借贷信息
         /// </summary>
-        public List<TrackingMortgage> Mortgage { get; set; }
+        public TrackingMortgage Mortgage { get; set; }
 
         public string WorkflowID { get; set; }
 

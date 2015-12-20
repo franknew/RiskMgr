@@ -73,5 +73,10 @@ namespace RiskMgr.Model
         /// </summary>
         public int? IsDeleted { get; set; }
         
+        /// <summary>
+        /// 不动产产权证号
+        /// </summary>
+        public string AssetRightCode { get; set; }
+        
     }
 }

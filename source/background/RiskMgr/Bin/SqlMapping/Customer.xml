@@ -295,7 +295,7 @@
     </dynamic>
   </update>
   <update id="DeleteCustomer" parameterClass="CustomerQueryForm">
-    UPDATE `Customer` SET IsDelete=1 WHERE 1=1
+    UPDATE `Customer` SET IsDeleted=1 WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
