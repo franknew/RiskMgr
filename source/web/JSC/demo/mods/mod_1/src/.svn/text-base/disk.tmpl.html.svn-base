@@ -1,0 +1,9 @@
+<!--
+网盘主体模板
+@author jameszuo
+-->
+<script id="body" type="text/html" nowith="yes">
+    <div id="_disk_body" class="disk-view ui-view" data-label-for-aria="文件列表内容区域">
+        <!-- 文件列表 -->
+    </div>
+</script>

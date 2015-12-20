@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/isd/isd_qzonefront_rep/!svn/ver/93074/jsc_proj/trunk/setup
+END
+install.inf
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/isd/isd_qzonefront_rep/!svn/ver/93074/jsc_proj/trunk/setup/install.inf
+END
+install.cmd
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/isd/isd_qzonefront_rep/!svn/ver/73962/jsc_proj/trunk/setup/install.cmd
+END
+readme.txt
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/isd/isd_qzonefront_rep/!svn/ver/73962/jsc_proj/trunk/setup/readme.txt
+END
+uninstall.cmd
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/isd/isd_qzonefront_rep/!svn/ver/73962/jsc_proj/trunk/setup/uninstall.cmd
+END

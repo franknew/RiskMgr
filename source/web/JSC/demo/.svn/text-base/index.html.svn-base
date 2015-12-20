@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    var alias = {
+        '@mod_1@': 'mod_1.r140401.js',
+        '@mod_1_js@': 'mod_1_js.r201403011649848.js'
+    };
+
+    seajs.config({
+        // ...
+
+        alias: {
+            mod_1: alias['@mod_1@'],
+            mod_1_js: alias['@mod_1_js@']
+        }
+
+        // ...
+    });
+
+
+    // 匹配 xxx.r201309131924.js 的请求，给加上max_age参数进行长缓存
+    seajs.on('fetch', function (req) {
+        var uri = req.requestUri || req.uri;
+        if (uri) {
+            if (/\.r\d+\.js/.test(uri)) {
+                uri += (req.uri.indexOf('?') === -1 ? '?' : '&') + 'max_age=31104000';
+            }
+            req.requestUri = uri;
+        }
+    });
+
+</script>
+</body>
+</html>

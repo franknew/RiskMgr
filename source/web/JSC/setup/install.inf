@@ -1,0 +1,25 @@
+[Version]
+Signature="$CHICAGO$"
+Provider=superzheng@tencent.com, 2013
+
+[DefaultInstall]
+AddReg=Install_AddReg
+
+[DefaultUnInstall]
+DelReg=Uninstall_DelReg
+
+[Uninstall_DelReg]
+hkcr,"Directory\shell\JSC"
+hkcr,"Directory\Background\shell\JSC"
+hkcr,"Directory\shell\ALL"
+hkcr,"Directory\Background\shell\ALL"
+
+[Install_AddReg]
+hkcr,"Directory\shell\JSC",,,"JSC"
+hkcr,"Directory\shell\JSC\command",,,"cmd.exe /s /k ""%01%\..\bin\jsc.cmd"""
+hkcr,"Directory\Background\shell\JSC",,,"JSC"
+hkcr,"Directory\Background\shell\JSC\command",,,"cmd.exe /s /k ""%01%\..\bin\jsc.cmd"""
+hkcr,"Directory\shell\ALL",,,"JSC ALL"
+hkcr,"Directory\shell\ALL\command",,,"cmd.exe /s /k ""%01%\..\bin\all.cmd"""
+hkcr,"Directory\Background\shell\ALL",,,"JSC ALL"
+hkcr,"Directory\Background\shell\ALL\command",,,"cmd.exe /s /k ""%01%\..\bin\all.cmd"""
