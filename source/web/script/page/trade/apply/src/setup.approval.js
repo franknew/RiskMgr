@@ -9,7 +9,8 @@ define(function(require, exports, module){
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data');
+	var Data = require('./data'),
+		Params = Data.params();
 
 	var MOD = {
 		init:function() {
@@ -33,12 +34,14 @@ define(function(require, exports, module){
 				return false;
 			}
 			Data.get().done(function(da) {
+
 				Ajax.post({
 					url:'RiskMgr.Api.WorkflowApi/Approval',
 					data:{
-						WorkflowID:da.WorkflowID,
-						ActivityID:da.CurrentActivity.ID,
-						TaskID:da.TaskID,
+						//审批不用  ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID || da.TaskID,
 						Approval:{
 							Remark:remark,
 							Status:result?1:2

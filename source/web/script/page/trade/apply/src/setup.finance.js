@@ -9,7 +9,8 @@ define(function(require, exports, module){
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data');
+	var Data = require('./data'),
+		Params = Data.params();
 
 	var MOD = {
 		init:function() {
@@ -24,10 +25,10 @@ define(function(require, exports, module){
 					Ajax.post({
 						url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
 						data:{
-							ID:da.Project.ID,
-							WorkflowID:da.WorkflowID,
-							ActivityID:da.CurrentActivity&&da.CurrentActivity.ID,
-							TaskID:da.TaskID
+							ID:Params.ID,
+							WorkflowID:Params.WorkflowID,
+							ActivityID:Params.ActivityID,
+							TaskID:Params.TaskID
 						},
 						form:$('#FinanceConfirm'),
 						success:function(da) {

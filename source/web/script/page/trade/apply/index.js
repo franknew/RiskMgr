@@ -244,6 +244,18 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
 		clearCache:function() {
 			_CACHE = null;
 			_DEFER = null;
+		},
+		//获取url上面的参数
+		params:function() {
+			var data = Uri('http://www.qq.com/?'+location.hash.substr(1)).params;
+			var rs = {
+				ID:data.ID,
+				WorkflowID:data.WorkflowID,
+				ActivityID:data.ActivityID,
+				TaskID:data.TaskID
+			};
+
+			return rs;
 		}
 	};
 
@@ -342,7 +354,8 @@ define.pack("./setup.approval",["jquery","risk/unit/ajax","risk/unit/route","ris
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data');
+	var Data = require('./data'),
+		Params = Data.params();
 
 	var MOD = {
 		init:function() {
@@ -366,12 +379,14 @@ define.pack("./setup.approval",["jquery","risk/unit/ajax","risk/unit/route","ris
 				return false;
 			}
 			Data.get().done(function(da) {
+
 				Ajax.post({
 					url:'RiskMgr.Api.WorkflowApi/Approval',
 					data:{
-						WorkflowID:da.WorkflowID,
-						ActivityID:da.CurrentActivity.ID,
-						TaskID:da.TaskID,
+						//审批不用  ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID || da.TaskID,
 						Approval:{
 							Remark:remark,
 							Status:result?1:2
@@ -400,7 +415,8 @@ define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","r
 		route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data');
+	var Data = require('./data'),
+		Params = Data.params();
 
 	var MOD = {
 		init:function() {
@@ -415,10 +431,10 @@ define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","r
 					Ajax.post({
 						url: url,
 						data:{
-							ID:da.Project.ID,
-							WorkflowID:da.WorkflowID,
-							ActivityID:da.CurrentActivity.ID,
-							TaskID:da.TaskID,
+							ID:Params.ID,
+							WorkflowID:Params.WorkflowID,
+							ActivityID:Params.ActivityID,
+							TaskID:Params.TaskID,
 							Project:Serialize($('#Charge'))
 						},
 						success:function(da) {
@@ -558,7 +574,8 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data');
+	var Data = require('./data'),
+		Params = Data.params();
 
 	var MOD = {
 		init:function() {
@@ -573,10 +590,10 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 					Ajax.post({
 						url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
 						data:{
-							ID:da.Project.ID,
-							WorkflowID:da.WorkflowID,
-							ActivityID:da.CurrentActivity&&da.CurrentActivity.ID,
-							TaskID:da.TaskID
+							ID:Params.ID,
+							WorkflowID:Params.WorkflowID,
+							ActivityID:Params.ActivityID,
+							TaskID:Params.TaskID
 						},
 						form:$('#FinanceConfirm'),
 						success:function(da) {
@@ -601,9 +618,10 @@ define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","ris
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-		var Serialize = require('risk/unit/serialize');
+	var Serialize = require('risk/unit/serialize');
 
-	var Data = require('./data');
+	var Data = require('./data'),
+		Params = Data.params();
 
 	var MOD = {
 		init:function() {
@@ -614,10 +632,10 @@ define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","ris
 					Ajax.post({
 						url:'RiskMgr.Api.ProjectApi/UpdateTracking',
 						data:{
-							ID:da.Project.ID,
-							WorkflowID:da.WorkflowID,
-							ActivityID:da.CurrentActivity.ID,
-							TaskID:da.TaskID
+							ID:Params.ID,
+							WorkflowID:Params.WorkflowID,
+							ActivityID:Params.ActivityID,
+							TaskID:Params.TaskID,
 						},
 						form:$('#Followup'),
 						success:function(da) {

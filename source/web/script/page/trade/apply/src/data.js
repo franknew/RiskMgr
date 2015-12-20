@@ -49,6 +49,18 @@ define(function(require, exports, module){
 		clearCache:function() {
 			_CACHE = null;
 			_DEFER = null;
+		},
+		//获取url上面的参数
+		params:function() {
+			var data = Uri('http://www.qq.com/?'+location.hash.substr(1)).params;
+			var rs = {
+				ID:data.ID,
+				WorkflowID:data.WorkflowID,
+				ActivityID:data.ActivityID,
+				TaskID:data.TaskID
+			};
+
+			return rs;
 		}
 	};
 

@@ -10,7 +10,8 @@ define(function(require, exports, module){
 		route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data');
+	var Data = require('./data'),
+		Params = Data.params();
 
 	var MOD = {
 		init:function() {
@@ -25,10 +26,10 @@ define(function(require, exports, module){
 					Ajax.post({
 						url: url,
 						data:{
-							ID:da.Project.ID,
-							WorkflowID:da.WorkflowID,
-							ActivityID:da.CurrentActivity.ID,
-							TaskID:da.TaskID,
+							ID:Params.ID,
+							WorkflowID:Params.WorkflowID,
+							ActivityID:Params.ActivityID,
+							TaskID:Params.TaskID,
 							Project:Serialize($('#Charge'))
 						},
 						success:function(da) {
