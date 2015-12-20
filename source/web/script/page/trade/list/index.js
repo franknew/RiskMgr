@@ -221,7 +221,7 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th rowspan="2">编号</th>\n				<th rowspan="2">业务员</th>\n				<th colspan="2" class="text-center">客户信息</th>\n				<th colspan="2" class="text-center">房产信息</th>\n				<th rowspan="2">申请时间</th>\n				<!--\n				<th rowspan="2">收费状态</th>\n				<th rowspan="2">返佣状态</th>\n				<th rowspan="2">尾款状态</th>\n				<th rowspan="2">当前进度</th>\n				-->\n			</tr>\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>房产证号</th>\n				<th>地址</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>编号</th>\n				<th>业务员</th>\n				<th>客户名称</th>\n				<th>房产地址</th>\n				<th>申请时间</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -251,15 +251,13 @@ __p.push('">\n		<td>');
 _p(Cur.Project.Name);
 __p.push('</td>\n		<td>');
 _p(Cur.Creator||'&nbsp;');
-__p.push('</td>\n		<td colspan="2">\n			<table class="no-strip">');
+__p.push('</td>\n		<td>\n			<table class="no-strip">');
 
 			var bi=0,CurBuyer,
 				Buyers = Cur.Buyers||[];
 			for(;CurBuyer=Buyers[bi++];) {
 			__p.push('			<tr>\n				<td class="col-sm-4"><small class="text-success">[买]</small> ');
 _p(CurBuyer.Name);
-__p.push('</td>\n				<td>');
-_p(CurBuyer.IdentityCode);
 __p.push('</td>\n			</tr>');
 
 			}
@@ -269,26 +267,22 @@ __p.push('</td>\n			</tr>');
 			for(;CurSeller=Sellers[bi++];) {
 			__p.push('			<tr>\n				<td class="col-sm-4"><small class="text-danger">[卖]</small> ');
 _p(CurSeller.Name);
-__p.push('</td>\n				<td>');
-_p(CurSeller.IdentityCode);
 __p.push('</td>\n			</tr>');
 
 			}
-			__p.push('\n			</table>\n		</td>\n		<td colspan="2">\n			<table class="no-strip">');
+			__p.push('\n			</table>\n		</td>\n		<td>\n			<table class="no-strip">');
 
 			var bi=0,CurAssets,
 				Assets = Cur.Assets||[];
 			for(;CurAssets=Assets[bi++];) {
 			__p.push('			<tr>\n				<td>');
-_p(CurAssets.Code);
-__p.push('</td>\n				<td>');
 _p(CurAssets.Address);
 __p.push('</td>\n			</tr>');
 
 			}
 			__p.push('			</table>\n		</td>\n		<td>');
 _p(RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm:ss'));
-__p.push('</td>\n		<!--\n		<td>-</td>\n		<td>-</td>\n		<td>-</td>\n		<td>-</td>\n		-->\n	</tr>');
+__p.push('</td>\n	</tr>');
 
 		}
 	}else{

@@ -244,7 +244,9 @@ define(function(require, exports, module){
 		},{
 			value:"4",
 			name:"辅助联系人"
-		}]
+		}],
+
+		"职位":[]	//全部都从后台拉取的
 	};
 
 	return MOD;

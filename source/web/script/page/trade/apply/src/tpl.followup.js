@@ -94,7 +94,7 @@ define(function(require, exports, module){
 			html:'抵押回执编号'
 		},{
 			col:'3',
-			type:'date',
+			type:'text',
 			name:'MortgageFeedbackCode',
 			placeholder:''
 		}],

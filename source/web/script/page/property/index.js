@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/components/pager/index","risk/unit/class","risk/page/customer/index","risk/page/customer/src/tpl.view"],function(require,exports,module){
+define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/components/pager/index","risk/data-dictionary","risk/unit/class","risk/page/customer/index","risk/page/customer/src/tpl.view"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -228,13 +228,15 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./dialog","./selecto
  * @date    2015-07-15 21:41:52
  */
 
-define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/components/pager/index","./tmpl","./dialog"],function(require, exports, module){
+define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/components/pager/index","./tmpl","./dialog","risk/data-dictionary"],function(require, exports, module){
 	var $ = require('jquery'),
 		ajax = require('risk/unit/ajax'),
 		route = require('risk/unit/route'),
 		pager = require('risk/components/pager/index'),
 		tmpl = require('./tmpl'),
 		dialog = require('./dialog');
+
+	var SelectData = require('risk/data-dictionary');
 
 	var MOD = {
 		initPage:function(params) {
@@ -591,7 +593,7 @@ return __p.join("");
 'ListBox': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('\n	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>房产证号</th>\n				<th colspan="2">房产地址</th>\n				<th>用途</th>\n				<th>面积(㎡)</th>\n				<th>登记价(元)</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
+__p.push('\n	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>房产证号</th>\n				<th colspan="2">房产地址</th>\n				<th>面积(㎡)</th>\n				<th>登记价(元)</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -602,8 +604,20 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 
+	var SelectData = require('risk/data-dictionary'),
+		PositionObj = (function(areas) {
+			var rs = {};
+			var i=0,cur;
+			for(;cur=areas[i++];) {
+				rs[cur.value] = cur.name;
+			}
+
+			return rs;
+		})(SelectData['地区']);
+
+
 	var List = data||[];
-	var ShowInfos = ['Code','Position','Address','Usage','Area','RegPrice'];
+	var ShowInfos = ['Code','Position','Address','Area','RegPrice'];
 
 	var i=0,Cur;
 	if (List.length>0) {
@@ -615,10 +629,15 @@ __p.push('" data-data=\'');
 _p(JSON.stringify(Cur));
 __p.push('\'>');
 
-			var ii=0,CurII;
+			var ii=0,CurII,
+				TabValue;
 			for(;CurII=ShowInfos[ii++];) {
+				TabValue = Cur[CurII];
+				if (CurII=='Position') {
+					TabValue = PositionObj[TabValue];
+				}
 		__p.push('			<td>');
-_p(Cur[CurII]);
+_p(TabValue);
 __p.push('</td>');
 
 			}

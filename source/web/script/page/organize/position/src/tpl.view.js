@@ -13,7 +13,7 @@ define(function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'帐号'
+			html:'职位名称'
 		},{
 			col:'7',
 			type:'text',
@@ -26,84 +26,13 @@ define(function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'密码'
+			html:'上级职位'
 		},{
 			col:'7',
-			type:'text',
-			required:true,
-			name:'Password',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'职位'
-		},{
-			col:7,
 			type:'select',
-			name:'Role',
 			required:true,
-			options:"职位"
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'姓名'
-		},{
-			col:'7',
-			type:'text',
-			name:'CnName',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:'身份证号'
-		},{
-			col:'7',
-			type:'text',
-			name:'Identity',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:'手机'
-		},{
-			col:'7',
-			type:'tel',
-			name:'Mobile',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:'地址'
-		},{
-			col:'7',
-			type:'text',
-			name:'Address',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:' '
-		},{
-			col:'7',
-			type:'checkbox',
-			name:'Enabled',
-			checked:true,
-			value:1,
-			placeholder:'启用该帐号'
+			name:'',
+			options:'职位'
 		}]
 	];
 

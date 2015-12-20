@@ -48,23 +48,11 @@
 	<table class="no-border">
 		<thead class="no-border">
 			<tr>
-				<th rowspan="2">编号</th>
-				<th rowspan="2">业务员</th>
-				<th colspan="2" class="text-center">客户信息</th>
-				<th colspan="2" class="text-center">房产信息</th>
-				<th rowspan="2">申请时间</th>
-				<!--
-				<th rowspan="2">收费状态</th>
-				<th rowspan="2">返佣状态</th>
-				<th rowspan="2">尾款状态</th>
-				<th rowspan="2">当前进度</th>
-				-->
-			</tr>
-			<tr>
-				<th>姓名</th>
-				<th>证件号</th>
-				<th>房产证号</th>
-				<th>地址</th>
+				<th>编号</th>
+				<th>业务员</th>
+				<th>客户名称</th>
+				<th>房产地址</th>
+				<th>申请时间</th>
 			</tr>
 		</thead>
 		<tbody class="no-border-x no-border-y" id="J_Lister">
@@ -89,7 +77,7 @@
 	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.Project.ID%>" data-workflowid="<%=Cur.WorkflowID%>" data-activityid="<%=Cur.CurrentActivity&&Cur.CurrentActivity.ID%>" data-taskid="<%=Cur.TaskID%>">
 		<td><%=Cur.Project.Name%></td>
 		<td><%=Cur.Creator||'&nbsp;'%></td>
-		<td colspan="2">
+		<td>
 			<table class="no-strip">
 
 			<%
@@ -99,7 +87,6 @@
 			%>
 			<tr>
 				<td class="col-sm-4"><small class="text-success">[买]</small> <%=CurBuyer.Name%></td>
-				<td><%=CurBuyer.IdentityCode%></td>
 			</tr>
 			<%
 			}
@@ -112,7 +99,6 @@
 			%>
 			<tr>
 				<td class="col-sm-4"><small class="text-danger">[卖]</small> <%=CurSeller.Name%></td>
-				<td><%=CurSeller.IdentityCode%></td>
 			</tr>
 			<%
 			}
@@ -120,7 +106,7 @@
 
 			</table>
 		</td>
-		<td colspan="2">
+		<td>
 			<table class="no-strip">
 			<%
 			var bi=0,CurAssets,
@@ -128,7 +114,6 @@
 			for(;CurAssets=Assets[bi++];) {
 			%>
 			<tr>
-				<td><%=CurAssets.Code%></td>
 				<td><%=CurAssets.Address%></td>
 			</tr>
 			<%
@@ -137,12 +122,6 @@
 			</table>
 		</td>
 		<td><%=RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm:ss')%></td>
-		<!--
-		<td>-</td>
-		<td>-</td>
-		<td>-</td>
-		<td>-</td>
-		-->
 	</tr>
 <%
 		}

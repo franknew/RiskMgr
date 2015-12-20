@@ -1,7 +1,5 @@
 /**
- * 客户通用dialog弹窗
- * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-18 12:22:58
+ * 职位通用弹窗
  */
 
 define(function(require, exports, module){
@@ -13,15 +11,18 @@ define(function(require, exports, module){
 		former = require('risk/components/former/index'),
 		viewTpl = require('./tpl.view');
 
+	var SelectData = require('risk/data-dictionary');
+
 	var MOD = {
 		view:function(id,oriBox) {
+			var that = this;
 			this._getData(id,function(data) {
-				modal.show({
-					title:'员工详情',
-					content:former.make(viewTpl,{
+				that._showDialog({
+					title:'职位详情',
+					former:{
 						data:data,
 						disabled:true
-					}),
+					},
 					validate:false,
 					okValue: '编辑',
 					cancelValue: '关闭',
@@ -32,7 +33,7 @@ define(function(require, exports, module){
 						value:'删除',
 						style:'danger',
 						callback:function() {
-							if (!confirm('确认删除员工“'+data.CnName+'('+data.Name+')”？')) {
+							if (!confirm('确认删除职位“'+data.CnName+'('+data.Name+')”？')) {
 								return ;
 							}
 							var dialog = this;
@@ -55,11 +56,11 @@ define(function(require, exports, module){
 		},
 		edit:function(id) {
 			this._getData(id,function(data) {
-				modal.show({
-					title:'编辑员工',
-					content:former.make(viewTpl,{
+				this._showDialog({
+					title:'编辑职位',
+					former:{
 						data:data
-					}),
+					},
 					ok: function() {
 						var dialog = this;
 						ajax.post({
@@ -75,9 +76,8 @@ define(function(require, exports, module){
 			});
 		},
 		add:function(success) {
-			modal.show({
-				title:'新增员工',
-				content:former.make(viewTpl),
+			this._showDialog({
+				title:'新增职位',
 				ok: function() {
 					var dialog = this;
 					ajax.post({
@@ -86,9 +86,9 @@ define(function(require, exports, module){
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');
 							dialog.close();
-							//添加完毕，刷新客户列表页
+							//添加完毕，刷新
 							if (!success || !success()) {	//如果回调返回false则默认跳转
-								route.load('page=organize/employee');
+								route.load('page=organize/position');
 							}
 						}
 					});
@@ -116,6 +116,62 @@ define(function(require, exports, module){
 					}
 				});
 			}
+		},
+		//获取职位列表
+		_getOptions:function() {
+			var defer = $.Deferred();
+
+			ajax.post({
+				url:'RiskMgr.Api.UserApi/QueryUser',
+				data:{
+					PageSize:10,
+					CurrentIndex:1
+				},
+				formDropEmpty:true,
+				success:function(da) {
+					var rs = da&&da.Record;
+
+					if (rs) {
+						rs = (function(obj) {
+							var i=0, l = obj.length;
+							var rs = [];
+							for(; i < l; ++i) {
+								rs.push({
+									name:obj[i].CnName,
+									value:obj[i].Name
+								});
+							}
+							return rs;
+						})(rs);
+
+						defer.resolve(rs);
+					}else{
+						defer.reject(da);
+					}
+				},
+				error:function() {
+					defer.reject();
+				}
+			});
+
+			return defer;
+		},
+		//在显示dialog之前，把职位list拉好并拼接进数据字典
+		_showDialog:function(args) {
+			args = args || {};
+
+			this._getOptions().done(function(list) {
+
+				SelectData['职位'] = list;	//重写数据字典
+
+				if (!args.content) {
+					args.content = former.make(viewTpl,args.former);
+				}
+
+				modal.show(args);
+			}).fail(function() {
+				msg.error('拉取职位列表出错，请重试。');
+			});
 		}
 	};
 

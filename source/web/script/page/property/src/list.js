@@ -12,6 +12,8 @@ define(function(require, exports, module){
 		tmpl = require('./tmpl'),
 		dialog = require('./dialog');
 
+	var SelectData = require('risk/data-dictionary');
+
 	var MOD = {
 		initPage:function(params) {
 			params = params || {};

@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/components/pager/index","risk/unit/class"],function(require,exports,module){
+define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/data-dictionary","./selector","risk/components/pager/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -34,24 +34,19 @@ define.pack = function(){
 //position/src/dialog.js
 //position/src/index.js
 //position/src/list.js
-//position/src/selector.js
 //position/src/tpl.view.js
 //position/src/list.tmpl.html
-//position/src/selector.tmpl.html
 
 //js file list:
 //position/src/dialog.js
 //position/src/index.js
 //position/src/list.js
-//position/src/selector.js
 //position/src/tpl.view.js
 /**
- * 客户通用dialog弹窗
- * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-18 12:22:58
+ * 职位通用弹窗
  */
 
-define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","./tpl.view"],function(require, exports, module){
+define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","./tpl.view","risk/data-dictionary"],function(require, exports, module){
 	var $ = require('jquery'),
 		ajax = require('risk/unit/ajax'),
 		route = require('risk/unit/route'),
@@ -60,15 +55,18 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 		former = require('risk/components/former/index'),
 		viewTpl = require('./tpl.view');
 
+	var SelectData = require('risk/data-dictionary');
+
 	var MOD = {
 		view:function(id,oriBox) {
+			var that = this;
 			this._getData(id,function(data) {
-				modal.show({
-					title:'员工详情',
-					content:former.make(viewTpl,{
+				that._showDialog({
+					title:'职位详情',
+					former:{
 						data:data,
 						disabled:true
-					}),
+					},
 					validate:false,
 					okValue: '编辑',
 					cancelValue: '关闭',
@@ -79,7 +77,7 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 						value:'删除',
 						style:'danger',
 						callback:function() {
-							if (!confirm('确认删除员工“'+data.CnName+'('+data.Name+')”？')) {
+							if (!confirm('确认删除职位“'+data.CnName+'('+data.Name+')”？')) {
 								return ;
 							}
 							var dialog = this;
@@ -102,11 +100,11 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 		},
 		edit:function(id) {
 			this._getData(id,function(data) {
-				modal.show({
-					title:'编辑员工',
-					content:former.make(viewTpl,{
+				this._showDialog({
+					title:'编辑职位',
+					former:{
 						data:data
-					}),
+					},
 					ok: function() {
 						var dialog = this;
 						ajax.post({
@@ -122,9 +120,8 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 			});
 		},
 		add:function(success) {
-			modal.show({
-				title:'新增员工',
-				content:former.make(viewTpl),
+			this._showDialog({
+				title:'新增职位',
 				ok: function() {
 					var dialog = this;
 					ajax.post({
@@ -133,9 +130,9 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');
 							dialog.close();
-							//添加完毕，刷新客户列表页
+							//添加完毕，刷新
 							if (!success || !success()) {	//如果回调返回false则默认跳转
-								route.load('page=organize/employee');
+								route.load('page=organize/position');
 							}
 						}
 					});
@@ -163,6 +160,62 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 					}
 				});
 			}
+		},
+		//获取职位列表
+		_getOptions:function() {
+			var defer = $.Deferred();
+
+			ajax.post({
+				url:'RiskMgr.Api.UserApi/QueryUser',
+				data:{
+					PageSize:10,
+					CurrentIndex:1
+				},
+				formDropEmpty:true,
+				success:function(da) {
+					var rs = da&&da.Record;
+
+					if (rs) {
+						rs = (function(obj) {
+							var i=0, l = obj.length;
+							var rs = [];
+							for(; i < l; ++i) {
+								rs.push({
+									name:obj[i].CnName,
+									value:obj[i].Name
+								});
+							}
+							return rs;
+						})(rs);
+
+						defer.resolve(rs);
+					}else{
+						defer.reject(da);
+					}
+				},
+				error:function() {
+					defer.reject();
+				}
+			});
+
+			return defer;
+		},
+		//在显示dialog之前，把职位list拉好并拼接进数据字典
+		_showDialog:function(args) {
+			args = args || {};
+
+			this._getOptions().done(function(list) {
+
+				SelectData['职位'] = list;	//重写数据字典
+
+				if (!args.content) {
+					args.content = former.make(viewTpl,args.former);
+				}
+
+				modal.show(args);
+			}).fail(function() {
+				msg.error('拉取职位列表出错，请重试。');
+			});
 		}
 	};
 
@@ -230,7 +283,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 
 			var html = tmpl.list();
 			route.show({
-				head:'职位管理',
+				head:'职位管理（开发中，勿使用）',
 				content:html
 			});
 
@@ -345,129 +398,6 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 
 	return MOD;
 });/**
- * 客户选择器
- * @authors viktorli (i@lizhenwen.com)
- * @date    2015-07-29 20:19:12
- */
-
-define.pack("./selector",["jquery","risk/unit/class","risk/components/msg/index","risk/components/modal/index","risk/components/pager/index","./list","./tmpl"],function(require, exports, module){
-	var $ = require('jquery'),
-    	Clone = require('risk/unit/class').clone,
-		msg = require('risk/components/msg/index'),
-		modal = require('risk/components/modal/index'),
-		pager = require('risk/components/pager/index'),
-		List = require('./list'),
-		Tmpl = require('./tmpl');
-
-	var MOD = {
-		_DEFAULT_CONFIG:{
-			configKey:'___CONFIG___',	//存储配置的key
-			setting:{	//默认配置
-				title:'温馨提示'
-				,content:''	//内容，支持html
-				//,width:'630px'	//宽度，必须设定单位
-				,padding:'20px'	//内容区域的padding
-				,skin:''	//主容器的className
-				,ok:function () {}	//确定按钮的回调
-				,okValue:'确定'	//确定按钮文本
-				,cancel:function(){}		//取消按钮的回调
-				,cancelValue:'取消'	//取消按钮文本
-				,onclose:function () {}	 //关闭浮层时的回调
-				,onshow:function(){}	//打开浮层时的回调
-				,id:''	//浮层主容器的ID
-				,validate:true	//是否校验表单
-				,form:true	//是否自动生成外包form
-				//,button:[]	//增加按钮
-			}
-		},
-		show:function(setting) {
-			setting = setting ||{};
-			var initKey = this._DEFAULT_CONFIG.configKey,
-				obj=this;
-			if(!this[initKey]) {
-				obj = Clone(MOD);
-				obj[initKey] = true;
-				return obj.show.apply(obj,arguments);
-			}
-
-			this._initConfig(setting);
-
-			var that = this;
-
-			this.modal = modal.show({
-				title:'选择客户',
-				content:Tmpl.ListContainer(),
-				form:false,
-				onshow:function() {
-					var content = this.content.find('#ListContainer');
-					List.fill({
-						container:content,
-						size:5,
-						success:function() {
-							that._initEvent(content);
-						}
-					});
-				},
-				ok:false
-			});
-
-			return this;
-		},
-		close:function() {
-			this.modal.close();
-		},
-		_initEvent:function(container) {
-			var that = this;
-
-			container.off('click','[data-hook="view"]');
-			container.on('click','[data-hook="view"]',function(ev) {
-				ev.preventDefault();
-				var elem = $(ev.currentTarget),
-					data = elem.data('data');
-
-				that._exeCallback('success',data);
-				that.close();
-			});
-		},
-		/** 执行回调 */
-		_exeCallback:function (name,data) {
-			var conf = this._config(),
-				fn = conf[name];
-			if($.isFunction(fn)) {
-				return fn.call(this,data);
-			}
-		},
-		/** 初始化配置 */
-		_initConfig:function (setting) {
-			var def = this._DEFAULT_CONFIG.setting,
-				key = this._DEFAULT_CONFIG.configKey,
-				conf;
-			conf = this[key] = $.extend({},def,setting);
-
-			return this[key];
-		},
-		/** 读、写配置
-		 * @param
-		 */
-		_config:function (key,value) {
-			var ckey = this._DEFAULT_CONFIG.configKey;
-			var rs;
-			var store = this[ckey],
-				argLen = arguments.length;
-			if(argLen>=2) {	//set
-				store[key] = value;
-				rs = store;
-			}else if(argLen==1) {	//get
-				rs = store[key];
-			}else {	//不传参返回全部
-				rs = store;
-			}
-			return rs;
-		}
-	};
-
-	return MOD;
-});/**
  * 员工信息的基本form表单
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-21 21:00:52
@@ -482,7 +412,7 @@ define.pack("./tpl.view",[],function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'帐号'
+			html:'职位名称'
 		},{
 			col:'7',
 			type:'text',
@@ -495,84 +425,13 @@ define.pack("./tpl.view",[],function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'密码'
+			html:'上级职位'
 		},{
 			col:'7',
-			type:'text',
-			required:true,
-			name:'Password',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'职位'
-		},{
-			col:7,
 			type:'select',
-			name:'Role',
 			required:true,
-			options:"职位"
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			required:true,
-			html:'姓名'
-		},{
-			col:'7',
-			type:'text',
-			name:'CnName',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:'身份证号'
-		},{
-			col:'7',
-			type:'text',
-			name:'Identity',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:'手机'
-		},{
-			col:'7',
-			type:'tel',
-			name:'Mobile',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:'地址'
-		},{
-			col:'7',
-			type:'text',
-			name:'Address',
-			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:' '
-		},{
-			col:'7',
-			type:'checkbox',
-			name:'Enabled',
-			checked:true,
-			value:1,
-			placeholder:'启用该帐号'
+			name:'',
+			options:'职位'
 		}]
 	];
 
@@ -580,7 +439,6 @@ define.pack("./tpl.view",[],function(require, exports, module){
 });
 //tmpl file list:
 //position/src/list.tmpl.html
-//position/src/selector.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'list': function(data){
@@ -604,7 +462,7 @@ return __p.join("");
 'ListBox': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>职位</th>\n				<th>下级职位</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>职位名称</th>\n				<th>上级职位</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -667,52 +525,6 @@ _p(Cur.Phone||'&nbsp;');
 __p.push('</p>\n		<p>');
 _p(Cur.Address||'&nbsp;');
 __p.push('</p>\n	</div>\n	-->');
-
-return __p.join("");
-},
-
-'Selector': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-__p.push('\n	<form class="form-inline">\n		<div class="form-group">\n			<label>姓名</label>\n			<input type="text" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat">查找</button>\n	</form>\n	<hr style="margin:10px 0;border-top-style: dashed;"/>\n\n	<div id="J_SelectorBody">');
-_p(this.SelectorList(data));
-__p.push('	</div>\n\n	<div class="j-pager"></div>\n');
-
-return __p.join("");
-},
-
-'SelectorList': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border hover">\n		<thead class="no-border">\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>电话</th>\n				<th>&nbsp;</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-y">');
-_p(this.SelectorItem(data));
-__p.push('		</tbody>\n	</table>');
-
-return __p.join("");
-},
-
-'SelectorItem': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-
-
-	var List = data;
-	var i=0,Cur;
-	for(;Cur=List[i++];) {
-__p.push('	<tr class="pointer-item" data-id="');
-_p(Cur.ID);
-__p.push('" data-data=\'');
-_p(JSON.stringify(Cur));
-__p.push('\' data-hook="choose">\n		<td>');
-_p(Cur.Name);
-__p.push('</td>\n		<td>');
-_p(Cur.IdentityCode||'&nbsp;');
-__p.push('</td>\n		<td>');
-_p(Cur.Phone||'&nbsp;');
-__p.push('</td>\n		<td><i class="fa fa-square-o"></i> 选择</td>\n	</tr>');
-
-	}
-__p.push('');
 
 return __p.join("");
 }

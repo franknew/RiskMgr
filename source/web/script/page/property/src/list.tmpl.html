@@ -32,7 +32,6 @@
 			<tr>
 				<th>房产证号</th>
 				<th colspan="2">房产地址</th>
-				<th>用途</th>
 				<th>面积(㎡)</th>
 				<th>登记价(元)</th>
 			</tr>
@@ -48,8 +47,20 @@
 
 <script type="text/html" id="ListItem">
 <%
+	var SelectData = require('risk/data-dictionary'),
+		PositionObj = (function(areas) {
+			var rs = {};
+			var i=0,cur;
+			for(;cur=areas[i++];) {
+				rs[cur.value] = cur.name;
+			}
+
+			return rs;
+		})(SelectData['地区']);
+
+
 	var List = data||[];
-	var ShowInfos = ['Code','Position','Address','Usage','Area','RegPrice'];
+	var ShowInfos = ['Code','Position','Address','Area','RegPrice'];
 
 	var i=0,Cur;
 	if (List.length>0) {
@@ -58,10 +69,15 @@
 %>
 	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
 		<%
-			var ii=0,CurII;
+			var ii=0,CurII,
+				TabValue;
 			for(;CurII=ShowInfos[ii++];) {
+				TabValue = Cur[CurII];
+				if (CurII=='Position') {
+					TabValue = PositionObj[TabValue];
+				}
 		%>
-			<td><%=Cur[CurII]%></td>
+			<td><%=TabValue%></td>
 		<%
 			}
 		%>
