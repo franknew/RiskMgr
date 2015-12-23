@@ -102,6 +102,42 @@ define(function(require, exports, module){
 		},{
 			value:"18",
 			name:"农村商业银行"
+		},{
+			value:"19",
+			name:"渣打银行"
+		},{
+			value:"20",
+			name:"华夏银行"
+		},{
+			value:"21",
+			name:"浦东发展银行"
+		},{
+			value:"22",
+			name:"广东发展银行"
+		},{
+			value:"23",
+			name:"深圳发展银行"
+		},{
+			value:"24",
+			name:"星展银行"
+		},{
+			value:"25",
+			name:"花旗银行"
+		},{
+			value:"26",
+			name:"东亚银行"
+		},{
+			value:"27",
+			name:"汇丰银行"
+		},{
+			value:"28",
+			name:"恒生银行"
+		},{
+			value:"29",
+			name:"永亨银行"
+		},{
+			value:"30",
+			name:"商业银行"
 		}],
 
 		"地区":[{
