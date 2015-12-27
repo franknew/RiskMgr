@@ -76,12 +76,14 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
+			required:true,
 			html:'手机'
 		},{
 			col:'7',
 			type:'tel',
 			name:'Mobile',
-			placeholder:''
+			required:true,
+			placeholder:'请填写真实手机号，绑定微信需要验证'
 		}],
 
 		[{
