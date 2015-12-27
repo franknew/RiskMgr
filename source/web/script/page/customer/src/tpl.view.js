@@ -110,9 +110,8 @@ define(function(require, exports, module){
 			html:'开户行'
 		},{
 			col:4,
-			type:'select',
-			name:'BankType',
-			options:"银行"
+			type:'text',
+			name:'BankType'
 		}],
 
 		[{

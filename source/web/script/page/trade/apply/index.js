@@ -1921,10 +1921,9 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'新贷款银行'
 		},{
 			col:"3",
-			type:'select',
+			type:'text',
 			name:'NewCreditBank',
 			required:true,
-			options:'银行'
 		},{
 			type:'label',
 			col:3,
@@ -2001,9 +2000,8 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			html:'资金监管银行'
 		},{
 			col:"3",
-			type:'select',
+			type:'text',
 			name:'SupervisionBank',
-			options:'银行',
 			required:true
 		}],
 
@@ -2031,10 +2029,9 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			required:true
 		},{
 			col:"3",
-			type:'select',
+			type:'text',
 			name:'CreditReceiverBank',
-			remark:'银行',
-			options:'银行',
+			placeholder:'开户行',
 			required:true
 		},{
 			col:"3",
@@ -2061,10 +2058,9 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			html:'原按揭银行'
 		},{
 			col:"3",
-			type:'select',
+			type:'text',
 			name:'OrignalMortgageBank',
-			required:true,
-			options:'银行'
+			required:true
 		},{
 			type:'label',
 			col:3,

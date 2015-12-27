@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","risk/unit/ajax"],function(require,exports,module){
+define(["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","risk/unit/ajax","risk/unit/browser"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -33,18 +33,20 @@ define.pack = function(){
 //all file list:
 //frame/src/index.js
 //frame/src/userinfo.js
+//frame/src/wx.js
 //frame/src/frame.tmpl.html
 
 //js file list:
 //frame/src/index.js
 //frame/src/userinfo.js
+//frame/src/wx.js
 /**
  * 主框架初始化
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-10 21:05:28
  */
 
-define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","./tmpl","./userinfo"],function(require, exports, module){
+define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","./tmpl","./userinfo","./wx.js"],function(require, exports, module){
 	require('bootstrap');
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
@@ -52,6 +54,8 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 		User = require('risk/components/user/index'),
 		Tmpl = require('./tmpl'),
 		Userinfo = require('./userinfo');
+
+	require('./wx.js');
 
 	//登录态处理
 	if (!User.isLogin()) {
@@ -175,6 +179,26 @@ define.pack("./userinfo",["jquery","risk/components/user/index","risk/unit/ajax"
 	};
 
 	return MOD;
+});/**
+ * 微信相关
+ */
+
+define.pack("./wx",["jquery","risk/unit/browser"],function(require, exports, module){
+	var $ = require('jquery'),
+		browser = require('risk/unit/browser');
+
+	var corp_id = 'wx4fff07646e8c3d22',
+		redirect_uri = 'http://203.195.163.209/wx.html',
+		state = '123123123aadsf',
+		url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+corp_id+'&redirect_uri='+encodeURIComponent(redirect_uri)+'&response_type=code&scope=snsapi_base&state='+state+'&connect_redirect=1#wechat_redirect';
+
+	//url = ('https://qy.weixin.qq.com/cgi-bin/loginpage?corp_id='+corp_id+'&redirect_uri='+redirect_uri+'&state=123123');
+
+	if (browser.client == 'wx') {
+		alert('jump wx:'+location.href);
+
+		location.href = url;
+	}
 });
 //tmpl file list:
 //frame/src/frame.tmpl.html

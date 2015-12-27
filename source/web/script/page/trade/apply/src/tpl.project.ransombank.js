@@ -13,10 +13,9 @@ define(function(require, exports, module){
 			html:'原按揭银行'
 		},{
 			col:"3",
-			type:'select',
+			type:'text',
 			name:'OrignalMortgageBank',
-			required:true,
-			options:'银行'
+			required:true
 		},{
 			type:'label',
 			col:3,
