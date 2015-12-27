@@ -821,7 +821,6 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 			var html = Tmpl.Setup({
 				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
 				propertyTpl:Property.getTpl,
-				projectTpl:Project.getTpl,
 				data:data,
 				mode:mode,
 				canEdit:canEdit
@@ -906,39 +905,14 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
  * @date    2015-08-09 14:54:00
  */
 
-define.pack("./setup.project",["risk/unit/serialize","risk/components/former/index","./tpl.project.base","./tpl.project.ransombank","./tpl.project.newloan","./tpl.project.ransomway"],function(require, exports, module){
+define.pack("./setup.project",["risk/unit/serialize","risk/components/former/index"],function(require, exports, module){
 	require.get = require;
 
 	var Serialize = require('risk/unit/serialize'),
 		former = require('risk/components/former/index');
 
-	var FormList = [{	//项目信息的list
-			name:'基本情况',
-			tpl:require('./tpl.project.base')
-		},{
-			name:'赎楼行',
-			tpl:require('./tpl.project.ransombank')
-		},{
-			name:'新贷款资料',
-			tpl:require('./tpl.project.newloan')
-		},{
-			name:'赎楼方式',
-			tpl:require('./tpl.project.ransomway')
-		}];
 
 	var MOD = {
-		getTpl:function(data,canEdit) {
-			var list = FormList,
-				html = [];
-			var i=0,cur,curHtml;
-			for(;cur=list[i++];) {
-				curHtml = '<div class="well"><div class="header"><h4>'+cur.name+'</h4></div>'+former.make(cur.tpl,{data:data,disabled:!canEdit})+'</div>';
-				html.push(curHtml);
-			}
-
-			html = html.join('');
-			return html;
-		},
 		getData:function() {
 			var data = Serialize($('#Project'))
 
@@ -2746,10 +2720,48 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 
-	var FormData = data.data||{};
-__p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>项目信息</h3>\n		</div>\n		<div class="content">');
-_p(data.projectTpl(FormData.Project,data.canEdit));
-__p.push('		</div>\n	</div>');
+	var Former = require('risk/components/former/index'),
+		FormData = data.data||{},
+		CanEdit = data.canEdit;
+__p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>项目信息</h3>\n		</div>\n		<div class="content">\n			<div class="well">\n				<div class="header">\n				<h4>基本情况</h4>\n				</div>');
+_p(Former.make(require('./tpl.project.base'),{
+					data:FormData.Project,
+					disabled:!CanEdit
+				}));
+__p.push('			</div>\n			<div class="well">\n				<div class="header">\n				<h4>赎楼行</h4>\n				</div>');
+_p(Former.make(require('./tpl.project.ransombank'),{
+					data:FormData.Project,
+					disabled:!CanEdit
+				}));
+__p.push('			</div>\n			<div class="well">\n				<div class="header">\n				<h4>新贷款资料</h4>\n				</div>');
+_p(Former.make(require('./tpl.project.newloan'),{
+					data:FormData.Project,
+					disabled:!CanEdit,
+					tplFilter:function(tpl) {
+						var rs = tpl;
+							name = tpl.name || (tpl.type=='label' && tpl.html),
+							type = FormData.Type*1,
+							specKeys = ['买方贷款金额','BuyerCreditCommerceMoney','BuyerCreditFundMoney','成交金额','DealMoney','交易定金','EarnestMoney','资金监管','SupervisionMoney','资金监管银行','SupervisionBank'];	//同名转按没有这些，贷前垫资这些改为非必填
+						if ($.inArray(name, specKeys) != -1) {
+							switch(type) {
+								case 3: //同名转按
+									rs = false;
+									break;
+								case 4: //贷前垫资
+									rs.required = false;
+									break;
+							}
+						}
+
+						return rs;
+					}
+				}));
+__p.push('			</div>\n			<div class="well">\n				<div class="header">\n				<h4>赎楼方式</h4>\n				</div>');
+_p(Former.make(require('./tpl.project.ransomway'),{
+					data:FormData.Project,
+					disabled:!CanEdit
+				}));
+__p.push('			</div>\n		</div>\n	</div>');
 if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
 }__p.push('</div>');
 

@@ -24,6 +24,7 @@ define(function(require, exports, module){
 		 *     disabled: 是否全局禁用表单
 		 *     [onlyRequired=false] 只输出必填项
 		 *     [groupCanAdd=true] group类型是否显示添加按钮
+		 *     [tplFilter] {Function} 重新修饰模板数据，必须要返回新的模板数据，返回false的话就不渲染这条
 		 */
 		make:function(tpl,conf) {
 			conf = $.extend({},MOD._CONFIG,conf);
@@ -119,8 +120,18 @@ define(function(require, exports, module){
 				data = conf.data,
 				disabled = conf.disabled;
 
+			var tplFilter = conf&&conf.tplFilter;
 			var i=0,cur,item;
 			for(;cur=formItems[i++];) {
+				if (tplFilter) {
+					cur = tplFilter($.extend({},cur));
+					if (cur==false) {
+						continue;
+					}else if (!cur) {
+						throw "tplFilter返回错误信息："+cur;
+					}
+				}
+
 				if (conf.onlyRequired && !cur.required && cur.type!='hidden') {	//onlyRequired仅仅是展示上的需求，而hidden的一般都是ID类型，所以hidden需要输出
 					continue;
 				}

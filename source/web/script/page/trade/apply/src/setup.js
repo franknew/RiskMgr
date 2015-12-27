@@ -42,7 +42,6 @@ define(function(require, exports, module){
 			var html = Tmpl.Setup({
 				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
 				propertyTpl:Property.getTpl,
-				projectTpl:Project.getTpl,
 				data:data,
 				mode:mode,
 				canEdit:canEdit

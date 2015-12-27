@@ -1,6 +1,8 @@
 <script type="text/html" id="SetupProject">
 <%
-	var FormData = data.data||{};
+	var Former = require('risk/components/former/index'),
+		FormData = data.data||{},
+		CanEdit = data.canEdit;
 %>
 <div class="step-pane" id="Project">
 	<div class="block-transparent">
@@ -8,7 +10,60 @@
 			<h3>项目信息</h3>
 		</div>
 		<div class="content">
-			<%=data.projectTpl(FormData.Project,data.canEdit)%>
+			<div class="well">
+				<div class="header">
+				<h4>基本情况</h4>
+				</div>
+				<%=Former.make(require('./tpl.project.base'),{
+					data:FormData.Project,
+					disabled:!CanEdit
+				})%>
+			</div>
+			<div class="well">
+				<div class="header">
+				<h4>赎楼行</h4>
+				</div>
+				<%=Former.make(require('./tpl.project.ransombank'),{
+					data:FormData.Project,
+					disabled:!CanEdit
+				})%>
+			</div>
+			<div class="well">
+				<div class="header">
+				<h4>新贷款资料</h4>
+				</div>
+				<%=Former.make(require('./tpl.project.newloan'),{
+					data:FormData.Project,
+					disabled:!CanEdit,
+					tplFilter:function(tpl) {
+						var rs = tpl;
+							name = tpl.name || (tpl.type=='label' && tpl.html),
+							type = FormData.Type*1,
+							specKeys = ['买方贷款金额','BuyerCreditCommerceMoney','BuyerCreditFundMoney','成交金额','DealMoney','交易定金','EarnestMoney','资金监管','SupervisionMoney','资金监管银行','SupervisionBank'];	//同名转按没有这些，贷前垫资这些改为非必填
+						if ($.inArray(name, specKeys) != -1) {
+							switch(type) {
+								case 3: //同名转按
+									rs = false;
+									break;
+								case 4: //贷前垫资
+									rs.required = false;
+									break;
+							}
+						}
+
+						return rs;
+					}
+				})%>
+			</div>
+			<div class="well">
+				<div class="header">
+				<h4>赎楼方式</h4>
+				</div>
+				<%=Former.make(require('./tpl.project.ransomway'),{
+					data:FormData.Project,
+					disabled:!CanEdit
+				})%>
+			</div>
 		</div>
 	</div>
 	<%if (data.canEdit) {%>
