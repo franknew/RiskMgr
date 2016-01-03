@@ -2,7 +2,7 @@
 * @fileOverview 模拟弹窗
 */
 define(function (require, exports, module) {
-	require('./component.css');
+	//require('./component.css');
     var $ = require('jquery'),
     	parsley = require('risk/components/parsley/index'),
     	myclass = require('risk/unit/class'),
@@ -49,10 +49,11 @@ define(function (require, exports, module) {
 
 			var conf = this._initConfig(setting);
 
-			this._showMask();
+			//this._showMask();
 			var html = TMPL.modal(conf),
 				 elem = $(html);
-			$('body').append(elem);
+
+			elem.appendTo('body').show();
 
 			this.dialog = elem;
 			this.content = elem.find('div.modal-body');

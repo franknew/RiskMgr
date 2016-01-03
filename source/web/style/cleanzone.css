@@ -4716,111 +4716,31 @@ button::-moz-focus-inner {
 }
 /*Modals*/
 .modal {
-  overflow: auto;
+  background: rgba(0,0,0,0.55);
 }
-.modal-content {
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border: 0;
-}
-.custom-width {
-  width: 40%;
-  max-width: none;
+.modal-dialog {
+  /* transform: translateY(50%); */
+  width:600px\9;
 }
 .modal-content > .close {
   margin-right: 10px;
   margin-top: 10px;
 }
-
+.modal-content {
+  border: none;
+}
 .modal-content .modal-header {
   border-bottom: 0;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
 }
-.colored-header .modal-header {
+.modal-content .modal-header {
   padding: 20px;
   border-bottom: 1px solid #1080de !important;
   background-color: #2494f2;
   color: #fff;
 }
-.colored-header.success .modal-header {
-  padding: 20px;
-  border-bottom: 1px solid #4cac4c !important;
-  background-color: #60c060;
-  color: #fff;
-}
-.colored-header.info .modal-header {
-  padding: 20px;
-  border-bottom: 1px solid #47acca !important;
-  background-color: #5bc0de;
-  color: #fff;
-}
-.colored-header.warning .modal-header {
-  padding: 20px;
-  border-bottom: 1px solid #eb8500 !important;
-  background-color: #ff9900;
-  color: #fff;
-}
-.colored-header.danger .modal-header {
-  padding: 20px;
-  border-bottom: 1px solid #cb371f !important;
-  background-color: #df4b33;
-  color: #fff;
-}
-.md-dark .modal-header {
-  background-color: #2494f2;
-  color: #fff;
-}
-.md-dark .modal-header {
-  background-color: #2494f2;
-  color: #fff;
-}
-.md-dark .md-content {
-  background-color: #23262B;
-  color: #BBBEC3;
-}
-.md-dark .md-content input {
-  background-color: transparent;
-  color: #b2b2b2;
-}
-.md-dark .modal-content .modal-footer {
-  border: 0;
-  background-color: transparent;
-}
-.md-dark .md-content .modal-footer {
-  border: 0;
-  background-color: transparent;
-}
-.md-dark .md-content .modal-footer .btn {
-  margin-bottom: 0 !important;
-}
-.modal-content h4,
-.modal-content h4 {
-  font-weight: 400;
-}
-.modal-content h3,
-.modal-content h3 {
-  font-weight: 300;
-  margin-top: 0;
-}
-.modal-content h2 {
-  margin: 0;
-}
-.modal-content .modal-footer {
-  background: #FBFBFB;
-  border-radius: 0 0 5px 5px;
-  -webkit-border-radius: 0 0 5px 5px;
-}
-@media (min-width: 768px) and (max-width: 979px) {
-  .custom-width {
-    width: 60%;
-    max-width: none;
-  }
-}
-@media (max-width: 767px) {
-  .custom-width {
-    width: 90%;
-    max-width: none;
-  }
-}
+
 /*Circle*/
 .i-circle {
   border: 5px solid #F1F1F1;

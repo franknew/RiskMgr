@@ -58,6 +58,7 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 	//登录态处理
 	if (!User.isLogin()) {
 		$('body>div').remove(); //隐藏所有界面
+
 		User.login({
 			success:function() {
 				location.reload();

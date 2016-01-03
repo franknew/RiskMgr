@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["./component.css","jquery","risk/components/parsley/index","risk/unit/class"],function(require,exports,module){
+define(["jquery","risk/components/parsley/index","risk/unit/class"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -39,8 +39,8 @@ define.pack = function(){
 /**
 * @fileOverview 模拟弹窗
 */
-define.pack("./index",["./component.css","jquery","risk/components/parsley/index","risk/unit/class","./tmpl"],function (require, exports, module) {
-	require('./component.css');
+define.pack("./index",["jquery","risk/components/parsley/index","risk/unit/class","./tmpl"],function (require, exports, module) {
+	//require('./component.css');
     var $ = require('jquery'),
     	parsley = require('risk/components/parsley/index'),
     	myclass = require('risk/unit/class'),
@@ -87,10 +87,11 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 
 			var conf = this._initConfig(setting);
 
-			this._showMask();
+			//this._showMask();
 			var html = TMPL.modal(conf),
 				 elem = $(html);
-			$('body').append(elem);
+
+			elem.appendTo('body').show();
 
 			this.dialog = elem;
 			this.content = elem.find('div.modal-body');
@@ -239,6 +240,50 @@ define.pack("./index",["./component.css","jquery","risk/components/parsley/index
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'modal': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('<div class="modal" tabindex="-1" role="dialog" ');
+_p(data.id?'id="'+data.id+'"':'');
+__p.push('>');
+if (data.form) {__p.push('<form data-parsley-validate>');
+}__p.push('	<div class="modal-dialog">\n		<div class="modal-content">\n			<div class="modal-header">\n				<button type="button" class="close j-op-close"><span aria-hidden="true">&times;</span></button>\n				<h4 class="modal-title">');
+_p(data.title);
+__p.push('</h4>\n			</div>\n			<div class="modal-body">');
+_p(data.content);
+__p.push('			</div>');
+
+				if (!('footer' in data && !data.footer)) {
+			__p.push('			<div class="modal-footer">');
+
+					var Buttons = data.button || [];
+					var i=0, l = Buttons.length;
+					for(; i < l; ++i) {
+				__p.push('					<button type="button" class="btn btn-');
+_p((Buttons[i].style || 'default'));
+__p.push(' btn-flat j-op-btns" data-sn="');
+_p(i);
+__p.push('">');
+_p(Buttons[i].value);
+__p.push('</button>');
+
+					}
+				__p.push('				');
+if (data.cancel!=false) {__p.push('				<button type="button" class="btn btn-default btn-flat j-op-cancel">');
+_p(data.cancelValue);
+__p.push('</button>');
+}__p.push('				');
+if (data.ok!=false) {__p.push('				<button type="submit" class="btn btn-primary btn-flat j-op-ok">');
+_p(data.okValue);
+__p.push('</button>');
+}__p.push('			</div>');
+ } __p.push('\n		</div>\n	</div>');
+if (data.form) {__p.push('</form>');
+}__p.push('</div>');
+
+return __p.join("");
+},
+
+'modal_bak': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
 __p.push('<div class="md-modal colored-header custom-width md-effect-9" ');
