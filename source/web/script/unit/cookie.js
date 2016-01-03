@@ -8,7 +8,7 @@ define(function(require, exports, module){
 
 	var MOD = {
 		get:function(key) {
-			var r = new RegExp('\\bskey=([^\\;]*)\\b'),
+			var r = new RegExp('\\b'+key+'=([^\\;]*)\\b'),
 				m = document.cookie.match(r);
 			return m && m[1] || '';
 		},

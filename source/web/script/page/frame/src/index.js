@@ -13,8 +13,6 @@ define(function(require, exports, module){
 		Tmpl = require('./tmpl'),
 		Userinfo = require('./userinfo');
 
-	require('./wx.js');
-
 	//登录态处理
 	if (!User.isLogin()) {
 		$('body>div').remove(); //隐藏所有界面

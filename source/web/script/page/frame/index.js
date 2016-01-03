@@ -46,7 +46,7 @@ define.pack = function(){
  * @date    2015-07-10 21:05:28
  */
 
-define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","./tmpl","./userinfo","./wx.js"],function(require, exports, module){
+define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","./tmpl","./userinfo"],function(require, exports, module){
 	require('bootstrap');
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
@@ -54,8 +54,6 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 		User = require('risk/components/user/index'),
 		Tmpl = require('./tmpl'),
 		Userinfo = require('./userinfo');
-
-	require('./wx.js');
 
 	//登录态处理
 	if (!User.isLogin()) {

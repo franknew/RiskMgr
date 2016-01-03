@@ -10,7 +10,7 @@ define(function(require, exports, module){
 
 	var MOD = {
 		show:function(type,message,delay) {
-			delay = delay || '3000';
+			delay = delay===false?false:(delay || '3000');
 
 			var typeMap = {
 				'error':'alert-danger',
@@ -38,12 +38,14 @@ define(function(require, exports, module){
 			}).appendTo(document.body);
 
 			//删除
-			setTimeout(function() {
-				html.fadeOut(function() {
-					$(this).remove();
-				});
-				html = null;
-			}, delay);
+			if (delay!==false) {
+				setTimeout(function() {
+					html.fadeOut(function() {
+						$(this).remove();
+					});
+					html = null;
+				}, delay);
+			}
 		},
 		success:function(message,delay) {
 			return this.show('success',message,delay);

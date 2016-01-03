@@ -10,7 +10,11 @@ define(function(require, exports, module){
 		$ = require('jquery'),
 		tmpl = require('./tmpl'),
 		msg = require('risk/components/msg/index'),
-		cookie = require('risk/unit/cookie');
+		uri = require('risk/unit/uri'),
+		cookie = require('risk/unit/cookie'),
+		browser = require('risk/unit/browser');
+
+	var WX = require('./wx');
 
 	var SKEY_NAME = 'skey';
 
@@ -22,38 +26,40 @@ define(function(require, exports, module){
 				error = opts.error,
 				message = opts.message;
 
-			modal.show({
-				width:'430px',
-				'title':'登录',
-				content:tmpl.login({
-					message:message
-				}),
-				cancel:false,
-				onshow:function() {
-					this.dialog.find('input[name="username"]').get(0).focus();
-				},
-				ok:function() {
-					var that = this;
-					Ajax.post({
-						url:'RiskMgr.Api.LogonApi/Logon',
-						form:this.form,
-						success:function(data, oriData, jqXHR) {
-							//坑爹的，cookie得前台写
-							var skey = data&&data.token;
-							if (skey) {
-								cookie.set(SKEY_NAME,skey);
-								msg.success('登录成功');
-								success && success();
-								that.close();
-							}else {
-								msg.error('未知后台错误，导致无法登录');
-								error && error();
+			if (!WX.login()) {
+				modal.show({
+					width:'430px',
+					'title':'登录',
+					content:tmpl.login({
+						message:message
+					}),
+					cancel:false,
+					onshow:function() {
+						this.dialog.find('input[name="username"]').get(0).focus();
+					},
+					ok:function() {
+						var that = this;
+						Ajax.post({
+							url:'RiskMgr.Api.LogonApi/Logon',
+							form:this.form,
+							success:function(data, oriData, jqXHR) {
+								//坑爹的，cookie得前台写
+								var skey = data&&data.token;
+								if (skey) {
+									cookie.set(SKEY_NAME,skey);
+									msg.success('登录成功');
+									success && success();
+									that.close();
+								}else {
+									msg.error('未知后台错误，导致无法登录');
+									error && error();
+								}
 							}
-						}
-					});
-					return true;
-				}
-			});
+						});
+						return true;
+					}
+				});
+			}
 		},
 		logout:function() {
 			cookie.del(SKEY_NAME);
