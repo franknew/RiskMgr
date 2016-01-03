@@ -1,4 +1,12 @@
 <script type="text/html" id="home">
+<%
+	var RString = require('risk/unit/string');
+	var Task = data || [],
+		StatusText = {
+			'1':'审批中',
+			'3':'审批完成'
+		};
+%>
 <div class="row dash-cols">
 	<div class="col-sm-6 col-md-6">
 
@@ -8,15 +16,24 @@
 			</div>
 			<div class="content">
 				<div class="list-group">
-					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>
-					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>
-					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>
-					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>
-					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>
-				</div>						
+					<%if (Task && Task.length>0) {%>
+						<%
+						var i=0,Cur;
+						for(;Cur=Task[i++];) {
+						%>
+						<a href="#page=trade/apply&action=approval&ID=<%=Cur.ProcessID%>&WorkflowID=<%=Cur.WorkflowID%>&ActivityID=<%=Cur.ActivityID%>&TaskID=<%=Cur.TaskID%>" class="list-group-item">[<%=Cur.Name%>] <%=Cur.Title%>&nbsp;&nbsp;<%=RString.date(Cur.LastUpdateTime,'MM-dd HH:mm')%> <span class="badge"><%=(StatusText[Cur.Status] || Cur.Status)%></span></a>
+						<%
+						}
+						%>
+					<%}else{%>
+					暂无
+					<%}%>
+				</div>
 			</div>
 		</div>
-	</div>	
+	</div>
+
+	<% /*
 	<div class="col-sm-6 col-md-6">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#home" data-toggle="tab">待办事</a></li>
@@ -34,6 +51,7 @@
 			第三个slk艾山街道非
 			</div>
 		</div>
-	</div>		
+	</div>
+	*/ %>
 </div>
 </script>

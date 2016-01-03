@@ -246,9 +246,13 @@ __p.push('<div class="modal" tabindex="-1" role="dialog" ');
 _p(data.id?'id="'+data.id+'"':'');
 __p.push('>');
 if (data.form) {__p.push('<form data-parsley-validate>');
-}__p.push('	<div class="modal-dialog">\n		<div class="modal-content">\n			<div class="modal-header">\n				<button type="button" class="close j-op-close"><span aria-hidden="true">&times;</span></button>\n				<h4 class="modal-title">');
+}__p.push('	<div class="modal-dialog">\n		<div class="modal-content">');
+
+				if (!('header' in data && !data.header)) {
+			__p.push('			<div class="modal-header">\n				<button type="button" class="close j-op-close"><span aria-hidden="true">&times;</span></button>\n				<h4 class="modal-title">');
 _p(data.title);
-__p.push('</h4>\n			</div>\n			<div class="modal-body">');
+__p.push('</h4>\n			</div>');
+ } __p.push('\n			<div class="modal-body">');
 _p(data.content);
 __p.push('			</div>');
 

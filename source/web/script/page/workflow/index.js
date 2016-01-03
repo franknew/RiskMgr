@@ -224,7 +224,11 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	var RString = require('risk/unit/string');
-	var List = data||[];
+	var List = data||[],
+		StatusText = {
+			'1':'审批中',
+			'3':'审批完成'
+		};
 
 	var i=0,Cur;
 	if (List.length>0) {
@@ -247,7 +251,7 @@ _p(Cur.Applier);
 __p.push('</td>\n		<td>');
 _p(RString.date(Cur.LastUpdateTime,'yyyy-MM-dd HH:mm:ss'));
 __p.push('</td>\n		<td>');
-_p(Cur.Status);
+_p((StatusText[Cur.Status] || Cur.Status));
 __p.push('</td>\n	</tr>');
 
 		}

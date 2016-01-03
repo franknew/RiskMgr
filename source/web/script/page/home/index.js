@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/route"],function(require,exports,module){
+define(["jquery","risk/unit/route","risk/unit/ajax"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -43,18 +43,28 @@ define.pack = function(){
  * @version $Id$
  */
 
-define.pack("./index",["jquery","risk/unit/route","./tmpl"],function(require, exports, module){
+define.pack("./index",["jquery","risk/unit/route","risk/unit/ajax","./tmpl"],function(require, exports, module){
 	var $ = require('jquery');
 	var route = require('risk/unit/route'),
+		Ajax = require('risk/unit/ajax'),
 		tmpl = require('./tmpl');
- 
+
 	var MOD = {
 		initPage:function() {
-			var html = tmpl.home();
-			route.show(html);
+			Ajax.post({
+				url:'RiskMgr.Api.IndexApi/InitPage',
+				success:function(da) {
+					var task = da.ProcessingTask;
+					var html = tmpl.home(task);
+					route.show(html);
+				},
+				error:function(jqXHR,message) {
+					DEFER.reject(message);
+				}
+			});
 
 		}
-	}; 
+	};
 	return MOD;
 });
 //tmpl file list:
@@ -64,7 +74,60 @@ var tmpl = {
 'home': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="row dash-cols">\n	<div class="col-sm-6 col-md-6">\n\n		<div class="block-flat">\n			<div class="header">\n				<h3>待办事项</h3>\n			</div>\n			<div class="content">\n				<div class="list-group">\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n					<a href="#" class="list-group-item">奥特曼 <span class="badge">审核中</span></a>\n				</div>						\n			</div>\n		</div>\n	</div>	\n	<div class="col-sm-6 col-md-6">\n		<ul class="nav nav-tabs">\n			<li class="active"><a href="#home" data-toggle="tab">待办事</a></li>\n			<li><a href="#profile" data-toggle="tab">进行中</a></li>\n			<li><a href="#messages" data-toggle="tab">最近完成</a></li>\n		</ul>\n		<div class="tab-content">\n			<div class="tab-pane active cont" id="home">\n			homeeeee\n			</div>\n			<div class="tab-pane cont" id="profile">\n			hahahahahah\n			</div>\n			<div class="tab-pane" id="messages">\n			第三个slk艾山街道非\n			</div>\n		</div>\n	</div>		\n</div>');
+
+	var RString = require('risk/unit/string');
+	var Task = data || [],
+		StatusText = {
+			'1':'审批中',
+			'3':'审批完成'
+		};
+__p.push('<div class="row dash-cols">\n	<div class="col-sm-6 col-md-6">\n\n		<div class="block-flat">\n			<div class="header">\n				<h3>待办事项</h3>\n			</div>\n			<div class="content">\n				<div class="list-group">');
+if (Task && Task.length>0) {__p.push('						');
+
+						var i=0,Cur;
+						for(;Cur=Task[i++];) {
+						__p.push('						<a href="#page=trade/apply&action=approval&ID=');
+_p(Cur.ProcessID);
+__p.push('&WorkflowID=');
+_p(Cur.WorkflowID);
+__p.push('&ActivityID=');
+_p(Cur.ActivityID);
+__p.push('&TaskID=');
+_p(Cur.TaskID);
+__p.push('" class="list-group-item">[');
+_p(Cur.Name);
+__p.push('] ');
+_p(Cur.Title);
+__p.push('&nbsp;&nbsp;');
+_p(RString.date(Cur.LastUpdateTime,'MM-dd HH:mm'));
+__p.push(' <span class="badge">');
+_p((StatusText[Cur.Status] || Cur.Status));
+__p.push('</span></a>');
+
+						}
+						__p.push('					');
+}else{__p.push('					暂无');
+}__p.push('				</div>\n			</div>\n		</div>\n	</div>');
+ /*
+	<div class="col-sm-6 col-md-6">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#home" data-toggle="tab">待办事</a></li>
+			<li><a href="#profile" data-toggle="tab">进行中</a></li>
+			<li><a href="#messages" data-toggle="tab">最近完成</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active cont" id="home">
+			homeeeee
+			</div>
+			<div class="tab-pane cont" id="profile">
+			hahahahahah
+			</div>
+			<div class="tab-pane" id="messages">
+			第三个slk艾山街道非
+			</div>
+		</div>
+	</div>
+	*/ __p.push('</div>');
 
 return __p.join("");
 }

@@ -3,10 +3,16 @@
 	<%if (data.form) {%><form data-parsley-validate><%}%>
 	<div class="modal-dialog">
 		<div class="modal-content">
+
+			<%
+				if (!('header' in data && !data.header)) {
+			%>
 			<div class="modal-header">
 				<button type="button" class="close j-op-close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title"><%=data.title%></h4>
 			</div>
+			<% } %>
+
 			<div class="modal-body">
 				<%=data.content%>
 			</div>

@@ -28,6 +28,35 @@ define(function(require, exports, module){
 		return val;
 	}
 
+	function setValue(elem,storeObject,dropEmpty) {
+			var $elem = $(elem);
+			var val = gainValue(elem),
+				eleName = $elem.attr('name'),
+				tag = elem.tagName.toLowerCase(),
+				type = tag=='input'?elem.type:tag;
+
+			if ((dropEmpty && !val) || !name) {
+				return false;
+			}
+
+			switch(type) {
+				case 'checkbox':
+				case 'raido':
+					if ($elem.is(":checked")) {
+						var mul = storeObject[eleName]?storeObject[eleName].split(','):[];
+						mul.push(val);
+
+						storeObject = storeObject || {};
+						storeObject[eleName] = mul.join(',');
+					}
+					break;
+				default:
+					storeObject[eleName] = val;
+			}
+
+			return storeObject;
+	}
+
 	var MOD = function(container,dropEmpty) {
 		container = $(container);
 		var list = {},
@@ -44,15 +73,7 @@ define(function(require, exports, module){
 				rs,
 				data;	//不预设值，因为dropEmpty参数要实现
 			items.map(function() {
-				var elem = $(this),
-					val = gainValue(elem),
-					eleName = elem.attr('name');
-
-				if ((dropEmpty && !val) || !name) {
-					return ;
-				}
-				data = data || {};
-				data[eleName] = val;
+				data = setValue(this,data,dropEmpty);
 			});
 
 			if (!data) {
@@ -64,31 +85,10 @@ define(function(require, exports, module){
 		});
 
 		otherElems.map(function(i,elem) {
-			var val = gainValue(elem);
-
-			if ( !(dropEmpty && !val) ) {
-				list[elem.name] = val;
-			}
+			setValue(elem,list,dropEmpty);
 		});
 
 		return list;
 	};
-/**
-
-
-			var elem = $(this),
-				val = gainValue(elem),
-				name = elem.attr('name'),
-				item;
-			if (dropEmpty && !val) {
-				return ;
-			}
-
-			if (!list[name]) {
-				item = list[name] = [];
-			}
-			item
-
- */
 	return MOD;
 });

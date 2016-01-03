@@ -81,7 +81,7 @@ define(function(require, exports, module){
 				ok: function() {
 					var dialog = this;
 					ajax.post({
-						url:'RiskMgr.Api.UserApi/Add',
+						url:'RiskMgr.Api.UserApi/Add222',
 						form:this.form,
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');

@@ -34,7 +34,10 @@
 		}
 	});
 
-	seajs.use(['jquery','bootstrap','risk/unit/route','risk/components/user/index','risk/page/frame/index'],function() {
-	});
+	if (agent.indexOf('MSIE') >= 0) {	//不支持的浏览器，都可以放这
+		document.body.innerHTML = '<div style="width:550px;margin:100px auto;padding:40px;font-size:16px;text-align:center;background:#f2dede;border:1px solid #ECBBBB;"><p>(>﹏<)&nbsp;&nbsp;呃，您的浏览器有兼容性问题，请使用桌面版</p><p><a class="btn btn-warning" target="_blank" href="http://203.195.163.209/download/setup_risk.exe">点此下载桌面版</a></p></div>';
+	}else {
+		seajs.use(['jquery','bootstrap','risk/unit/route','risk/components/user/index','risk/page/frame/index'],function() {});
+	}
 
 })();

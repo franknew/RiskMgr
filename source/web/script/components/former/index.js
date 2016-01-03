@@ -200,7 +200,8 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 					html:undefined,
 					suffix:undefined,
 					prefix:undefined,
-					attr:undefined
+					attr:undefined,
+					options:undefined
 				},{	//合并自定义属性
 					name:item.name,
 					placeholder:item.placeholder,
@@ -259,6 +260,47 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 						return rs;
 					})(item.options);
 					break;
+				case 'checkbox':
+				case 'radio':
+					itemState.tag = 'div';
+					attr.class = '';
+					itemState.sub = (function(o) {
+						var items = o;
+						if (typeof(items) == 'string') {
+							items = (SelectData[o] || []).concat([]);	//concat防止原始数据被修改
+						}
+						var rs = [];
+						var i=0,cur;
+						for(;cur=items[i++];) {
+							rs.push({
+								tag:'label',
+								attr:{
+									'class':type,
+									type:type,
+									value:cur.value,
+									selected:cur.selected?'selected':undefined
+								},
+								sub:[{
+									tag:'input',
+									attr:{
+										name:item.name,
+										type:type,
+										value:cur.value,
+										selected:cur.selected?'selected':undefined
+									}
+								},{
+									tag:'span',
+									html:cur.name,
+									attr:{
+									}
+								}]
+							});
+						}
+						return rs;
+					})(item.options);
+
+					delete item.options;
+					break;
 				case 'textarea':
 					itemState.tag = 'textarea';
 					break;
@@ -266,14 +308,6 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 				case 'button':
 					attr.type = type;
 					itemState.tag = 'button';
-					break;
-				case 'checkbox':
-					itemState.tag = 'input';
-					attr.type = 'checkbox';
-					attr.class = '';
-					attr.checked = item.checked;
-					attr.value = item.value;
-					html = '<div class="checkbox"><label>'+this._createInput(itemState,defaultValue)+' '+(item.placeholder||'')+'</label></div>';
 					break;
 				case 'date':
 					if (defaultValue && /^\d{13}$/.test(defaultValue)) {	//如果是纯13位的数字，标示为时间戳进行转化
