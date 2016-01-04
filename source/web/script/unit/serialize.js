@@ -35,8 +35,8 @@ define(function(require, exports, module){
 				tag = elem.tagName.toLowerCase(),
 				type = tag=='input'?elem.type:tag;
 
-			if ((dropEmpty && !val) || !name) {
-				return false;
+			if ((dropEmpty && !val) || !eleName) {
+				return storeObject;
 			}
 
 			switch(type) {
@@ -85,7 +85,7 @@ define(function(require, exports, module){
 		});
 
 		otherElems.map(function(i,elem) {
-			setValue(elem,list,dropEmpty);
+			list = setValue(elem,list,dropEmpty);
 		});
 
 		return list;
