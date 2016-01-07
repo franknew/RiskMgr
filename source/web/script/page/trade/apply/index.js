@@ -2074,7 +2074,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			col:'3',
 			type:'decimal',
 			required:true,
-			name:'RedemptionAmount',
+			name:'AssetRansomMoney',
 			placeholder:'',
 			suffix:'万元'
 		},{
