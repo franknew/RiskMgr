@@ -139,6 +139,9 @@ define(function(require, exports, module) {
 		 * @param [action=initPage] 加载完js执行的函数
 		 */
 		_load:function(modinfo){
+			if (!modinfo) {
+				return false;
+			}
 			var that = this,
 				conf = this._config(),
 				url = modinfo.page,

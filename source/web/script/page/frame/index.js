@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","risk/unit/ajax","risk/unit/browser"],function(require,exports,module){
+define(["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","risk/unit/string","risk/unit/ajax","risk/unit/browser"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -46,7 +46,7 @@ define.pack = function(){
  * @date    2015-07-10 21:05:28
  */
 
-define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","./tmpl","./userinfo"],function(require, exports, module){
+define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","./tmpl","./userinfo","risk/unit/string"],function(require, exports, module){
 	require('bootstrap');
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
@@ -134,7 +134,10 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 					}
 				});
 				e.preventDefault();
-			});
+			}).delegate('[data-hook="debug-fillform"]', 'click', function(ev) {//填写测试数据到表单内
+				ev.preventDefault();
+				debugForm.fill();
+			});;
 
 			//初始化路由
 			route.init({
@@ -148,6 +151,53 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 					return mod || '';
 				}
 			});
+		}
+	};
+
+	//填写测试数据进表单
+	var Str = require('risk/unit/string');
+	var debugForm = {
+		fill:function() {
+			$('input, textarea, select').each(function(i) {
+				var $elem = $(this),
+					elem = this,
+					tag = this.tagName.toLowerCase(),
+					inputType = $elem.attr('type');
+
+				switch(tag) {
+					case 'input':
+					case 'textarea':
+						$elem.val(debugForm.getVal(inputType));
+						break;
+					case 'select':
+						var seles = $elem.find('option');
+						seles.get(seles.length-1).selected = true;
+						break;
+				}
+			});
+			alert('懒神，填完了~');
+		},
+		getVal:function(type) {
+			var rs = '';
+			switch(type){
+				case 'checkbox':
+				case 'raido':
+					break;
+				case 'number':
+					rs = Math.ceil(Math.random()*1000);
+					break;
+				case 'decimal':
+					rs = (Math.random()*1000).toFixed(2);
+					break;
+				case 'date':
+					rs = Str.date(new Date(),'yyyy-MM-dd');
+					break;
+				default:
+					rs = 'abcdefghijklmnopqrstuvwxyz';
+					rs = rs.slice(Math.floor(Math.random()*rs.length));
+			}
+
+			return rs;
 		}
 	};
 
@@ -216,7 +266,7 @@ __p.push(' <b class="caret"></b></a>\n					<ul class="dropdown-menu">\n						<li
 _p(data.avatar);
 __p.push('" width="50" height="50" alt="Avatar" /></div>\n						<div class="info">\n							<a href="#page=user">');
 _p(data.name);
-__p.push('</a>\n						</div>\n					</div>\n					<ul class="cl-vnavigation">\n						<li><a href="#page=home"><i class="fa fa-home"></i><span>首页</span></a></li>\n						<li class="open"><a href="#page=trade/list"><i class="fa fa-file"></i><span>担保业务</span></a>\n							<ul class="sub-menu">\n								<li><a href="#page=trade/apply">申请额度</a></li>\n								<li><a href="#page=trade/list">查询</a></li>\n							</ul>\n						</li>\n						<li><a href="#page=workflow"><i class="fa fa-stack-overflow"></i><span>审批</span></a></li>\n						<li><a href="#page=customer"><i class="fa fa-users"></i><span>客户信息管理</span></a></li>\n						<li><a href="#page=property"><i class="fa fa-building-o"></i><span>房产信息管理</span></a></li>\n						<li><a href="#page=trade/list"><i class="fa fa-sitemap"></i><span>组织架构</span></a>\n							<ul class="sub-menu">\n								<li><a href="#page=organize/employee"><span>员工管理</span></a></li>\n								<li><a href="#page=organize/position"><span>职位管理</span></a></li>\n							</ul>\n						</li>\n						<li><a href="#page=trade/list"><i class="fa fa-bug"></i><span>开发用的</span></a>\n							<ul class="sub-menu">\n								<li><a href="https://shimo.im/spreadsheet/M3Ca9xhoXxcaTjTY" target="_blank"><span>待办开发工作</span></a></li>\n								<li><a href="#page=debugger"><span>测试后台接口</span></a></li>\n							</ul>\n						</li>\n					</ul>\n				</div>\n			</div>\n\n			<div class="text-right collapse-button" style="padding:7px 9px;">\n				<a class="link-download" href="/download/setup_risk.exe" target="_blank"><i class="fa fa-download"></i><span> 下载桌面版</span></a>\n			</div>\n\n		</div>\n	</div>\n\n	<div class="container-fluid" id="pcont">\n		<div class="page-head hide" id="J_Header"></div>\n		<div class="cl-mcont" id="J_Body">\n			<div class="loading">Loading...</div>\n		</div>\n	</div>\n</div>');
+__p.push('</a>\n						</div>\n					</div>\n					<ul class="cl-vnavigation">\n						<li><a href="#page=home"><i class="fa fa-home"></i><span>首页</span></a></li>\n						<li class="open"><a href="#page=trade/list"><i class="fa fa-file"></i><span>担保业务</span></a>\n							<ul class="sub-menu">\n								<li><a href="#page=trade/apply">申请额度</a></li>\n								<li><a href="#page=trade/list">查询</a></li>\n							</ul>\n						</li>\n						<li><a href="#page=workflow"><i class="fa fa-stack-overflow"></i><span>审批</span></a></li>\n						<li><a href="#page=customer"><i class="fa fa-users"></i><span>客户信息管理</span></a></li>\n						<li><a href="#page=property"><i class="fa fa-building-o"></i><span>房产信息管理</span></a></li>\n						<li><a href="#page=trade/list"><i class="fa fa-sitemap"></i><span>组织架构</span></a>\n							<ul class="sub-menu">\n								<li><a href="#page=organize/employee"><span>员工管理</span></a></li>\n								<li><a href="#page=organize/position"><span>职位管理</span></a></li>\n							</ul>\n						</li>\n						<li><a href="#page=trade/list"><i class="fa fa-bug"></i><span>开发用的</span></a>\n							<ul class="sub-menu">\n								<li><a href="https://shimo.im/spreadsheet/M3Ca9xhoXxcaTjTY" target="_blank"><span>待办开发工作</span></a></li>\n								<li><a href="#page=debugger"><span>测试后台接口</span></a></li>\n								<li><a href="###" data-hook="debug-fillform"><span>填表单</span></a></li>\n							</ul>\n						</li>\n					</ul>\n				</div>\n			</div>\n\n			<div class="text-right collapse-button" style="padding:7px 9px;">\n				<a class="link-download" href="/download/setup_risk.exe" target="_blank"><i class="fa fa-download"></i><span> 下载桌面版</span></a>\n			</div>\n\n		</div>\n	</div>\n\n	<div class="container-fluid" id="pcont">\n		<div class="page-head hide" id="J_Header"></div>\n		<div class="cl-mcont" id="J_Body">\n			<div class="loading">Loading...</div>\n		</div>\n	</div>\n</div>');
 
 return __p.join("");
 }

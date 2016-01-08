@@ -92,7 +92,10 @@ define(function(require, exports, module){
 					}
 				});
 				e.preventDefault();
-			});
+			}).delegate('[data-hook="debug-fillform"]', 'click', function(ev) {//填写测试数据到表单内
+				ev.preventDefault();
+				debugForm.fill();
+			});;
 
 			//初始化路由
 			route.init({
@@ -106,6 +109,53 @@ define(function(require, exports, module){
 					return mod || '';
 				}
 			});
+		}
+	};
+
+	//填写测试数据进表单
+	var Str = require('risk/unit/string');
+	var debugForm = {
+		fill:function() {
+			$('input, textarea, select').each(function(i) {
+				var $elem = $(this),
+					elem = this,
+					tag = this.tagName.toLowerCase(),
+					inputType = $elem.attr('type');
+
+				switch(tag) {
+					case 'input':
+					case 'textarea':
+						$elem.val(debugForm.getVal(inputType));
+						break;
+					case 'select':
+						var seles = $elem.find('option');
+						seles.get(seles.length-1).selected = true;
+						break;
+				}
+			});
+			alert('懒神，填完了~');
+		},
+		getVal:function(type) {
+			var rs = '';
+			switch(type){
+				case 'checkbox':
+				case 'raido':
+					break;
+				case 'number':
+					rs = Math.ceil(Math.random()*1000);
+					break;
+				case 'decimal':
+					rs = (Math.random()*1000).toFixed(2);
+					break;
+				case 'date':
+					rs = Str.date(new Date(),'yyyy-MM-dd');
+					break;
+				default:
+					rs = 'abcdefghijklmnopqrstuvwxyz';
+					rs = rs.slice(Math.floor(Math.random()*rs.length));
+			}
+
+			return rs;
 		}
 	};
 

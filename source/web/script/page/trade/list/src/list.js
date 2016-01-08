@@ -43,7 +43,8 @@ define(function(require, exports, module){
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.List(da);
+					var list = (da&&da.Record) || da;	//兼容旧cgi，刘啸改了后去掉这个或逻辑
+					var html = tmpl.List(list);
 
 					container.html(html);
 
