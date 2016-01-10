@@ -2,6 +2,7 @@
 <%
 	var Former = require('risk/components/former/index'),
 		FormData = data.data||{},
+		FormType = FormData.Type*1,
 		CanEdit = data.canEdit;
 %>
 <div class="step-pane" id="Project">
@@ -25,7 +26,23 @@
 				</div>
 				<%=Former.make(require('./tpl.project.ransombank'),{
 					data:FormData.Project,
-					disabled:!CanEdit
+					disabled:!CanEdit,
+					tplFilter:function(tpl) {
+						var rs = $.extend({},tpl);
+							name = tpl.name || (tpl.type=='label' && tpl.html),
+							type = FormData.Type*1;
+
+						switch(type) {
+							case 2: //首期款垫付
+								//首期款垫付没有这些字段
+								if ($.inArray(name, ['赎楼期限','GuaranteeMonth','赎楼金额','AssetRansomMoney']) != -1) {
+									rs = false;
+								}
+							break;
+						}
+
+						return rs;
+					}
 				})%>
 			</div>
 			<div class="well">
@@ -36,10 +53,12 @@
 					data:FormData.Project,
 					disabled:!CanEdit,
 					tplFilter:function(tpl) {
-						var rs = tpl;
+						var rs = $.extend({},tpl);
 							name = tpl.name || (tpl.type=='label' && tpl.html),
 							type = FormData.Type*1,
+							//同名转贷、贷前垫资的不同的字段
 							specKeys = ['买方贷款金额','BuyerCreditCommerceMoney','BuyerCreditFundMoney','成交金额','DealMoney','交易定金','EarnestMoney','资金监管','SupervisionMoney','资金监管银行','SupervisionBank'];	//同名转按没有这些，贷前垫资这些改为非必填
+
 						if ($.inArray(name, specKeys) != -1) {
 							switch(type) {
 								case 3: //同名转按
@@ -55,6 +74,9 @@
 					}
 				})%>
 			</div>
+			<%
+			if (FormType!=2) {	//首期款垫付没有赎楼方式
+			%>
 			<div class="well">
 				<div class="header">
 				<h4>赎楼方式</h4>
@@ -64,6 +86,7 @@
 					disabled:!CanEdit
 				})%>
 			</div>
+			<%}%>
 		</div>
 	</div>
 	<%if (data.canEdit) {%>

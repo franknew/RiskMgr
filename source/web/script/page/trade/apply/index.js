@@ -2722,6 +2722,7 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	var Former = require('risk/components/former/index'),
 		FormData = data.data||{},
+		FormType = FormData.Type*1,
 		CanEdit = data.canEdit;
 __p.push('<div class="step-pane" id="Project">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>项目信息</h3>\n		</div>\n		<div class="content">\n			<div class="well">\n				<div class="header">\n				<h4>基本情况</h4>\n				</div>');
 _p(Former.make(require('./tpl.project.base'),{
@@ -2731,17 +2732,35 @@ _p(Former.make(require('./tpl.project.base'),{
 __p.push('			</div>\n			<div class="well">\n				<div class="header">\n				<h4>赎楼行</h4>\n				</div>');
 _p(Former.make(require('./tpl.project.ransombank'),{
 					data:FormData.Project,
-					disabled:!CanEdit
+					disabled:!CanEdit,
+					tplFilter:function(tpl) {
+						var rs = $.extend({},tpl);
+							name = tpl.name || (tpl.type=='label' && tpl.html),
+							type = FormData.Type*1;
+
+						switch(type) {
+							case 2: //首期款垫付
+								//首期款垫付没有这些字段
+								if ($.inArray(name, ['赎楼期限','GuaranteeMonth','赎楼金额','AssetRansomMoney']) != -1) {
+									rs = false;
+								}
+							break;
+						}
+
+						return rs;
+					}
 				}));
 __p.push('			</div>\n			<div class="well">\n				<div class="header">\n				<h4>新贷款资料</h4>\n				</div>');
 _p(Former.make(require('./tpl.project.newloan'),{
 					data:FormData.Project,
 					disabled:!CanEdit,
 					tplFilter:function(tpl) {
-						var rs = tpl;
+						var rs = $.extend({},tpl);
 							name = tpl.name || (tpl.type=='label' && tpl.html),
 							type = FormData.Type*1,
+							//同名转贷、贷前垫资的不同的字段
 							specKeys = ['买方贷款金额','BuyerCreditCommerceMoney','BuyerCreditFundMoney','成交金额','DealMoney','交易定金','EarnestMoney','资金监管','SupervisionMoney','资金监管银行','SupervisionBank'];	//同名转按没有这些，贷前垫资这些改为非必填
+
 						if ($.inArray(name, specKeys) != -1) {
 							switch(type) {
 								case 3: //同名转按
@@ -2756,12 +2775,16 @@ _p(Former.make(require('./tpl.project.newloan'),{
 						return rs;
 					}
 				}));
-__p.push('			</div>\n			<div class="well">\n				<div class="header">\n				<h4>赎楼方式</h4>\n				</div>');
+__p.push('			</div>');
+
+			if (FormType!=2) {	//首期款垫付没有赎楼方式
+			__p.push('			<div class="well">\n				<div class="header">\n				<h4>赎楼方式</h4>\n				</div>');
 _p(Former.make(require('./tpl.project.ransomway'),{
 					data:FormData.Project,
 					disabled:!CanEdit
 				}));
-__p.push('			</div>\n		</div>\n	</div>');
+__p.push('			</div>');
+}__p.push('		</div>\n	</div>');
 if (data.canEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn-default wizard-previous"><i class="fa fa-caret-left"></i> 上一步</button>\n			&nbsp;&nbsp;\n			<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n		</div>\n	</div>');
 }__p.push('</div>');
 

@@ -125,9 +125,6 @@ define(function(require, exports, module){
 				switch(tag) {
 					case 'input':
 					case 'textarea':
-						if ($elem.attr('name')=='Type') {
-							console.log('inputType',$elem,inputType);
-						}
 						var val = debugForm.getVal(inputType);
 						if (val) {
 							$elem.val(val);

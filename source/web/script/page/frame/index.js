@@ -167,9 +167,6 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 				switch(tag) {
 					case 'input':
 					case 'textarea':
-						if ($elem.attr('name')=='Type') {
-							console.log('inputType',$elem,inputType);
-						}
 						var val = debugForm.getVal(inputType);
 						if (val) {
 							$elem.val(val);
