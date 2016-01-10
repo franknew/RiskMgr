@@ -101,9 +101,11 @@ define(function(require, exports, module){
 			col:'7',
 			type:'checkbox',
 			name:'Enabled',
-			checked:true,
-			value:1,
-			placeholder:'启用该帐号'
+			options:[{
+				selected:true,
+				value:"1",
+				name:"启用该帐号"
+			}]
 		}]
 	];
 

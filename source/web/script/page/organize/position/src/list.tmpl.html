@@ -21,7 +21,8 @@
 	<table class="no-border">
 		<thead class="no-border">
 			<tr>
-				<th>职位名称</th>
+				<th width="20%">职位</th>
+				<th>职位说明</th>
 				<th>上级职位</th>
 			</tr>
 		</thead>
@@ -37,7 +38,6 @@
 <script type="text/html" id="ListItem">
 <%
 	var List = data||[];
-	var ShowInfos = ['CnName','Name'];
 
 	var i=0,Cur;
 	if (List.length>0) {
@@ -45,14 +45,9 @@
 		for(;Cur=List[i++];) {
 %>
 	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
-		<%
-			var ii=0,CurII;
-			for(;CurII=ShowInfos[ii++];) {
-		%>
-			<td><%=Cur[CurII]||'-'%></td>
-		<%
-			}
-		%>
+			<td><%=Cur.Name%></td>
+			<td><%=Cur.Remark%></td>
+			<td><%=Cur.ParentRoleName%></td>
 	</tr>
 <%
 		}

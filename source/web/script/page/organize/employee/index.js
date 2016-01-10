@@ -154,7 +154,6 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 						ID:id
 					},
 					success:function(da) {
-						//console.log('qqq',da);
 						var item = da&&da.Record&&da.Record[0];
 						item.Password = '***不可编辑***';
 						callback && callback(item);
@@ -572,9 +571,11 @@ define.pack("./tpl.view",[],function(require, exports, module){
 			col:'7',
 			type:'checkbox',
 			name:'Enabled',
-			checked:true,
-			value:1,
-			placeholder:'启用该帐号'
+			options:[{
+				selected:true,
+				value:"1",
+				name:"启用该帐号"
+			}]
 		}]
 	];
 

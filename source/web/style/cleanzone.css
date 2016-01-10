@@ -5780,4 +5780,23 @@ table.no-border tr.pointer-item:hover {
 .collapse-button .link-download:hover {
   color: #fff;
 }
+
+.trade-approval-box {
+  max-width: 600px;
+}
+  .trade-approval-box .list-group-item p {
+    font-size: 14px;
+    line-height: 1.4em !important;
+  }
+  .trade-approval-box .list-group-item .name {
+    font-size:18px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .radio-inline + .radio-inline, .checkbox-inline + .checkbox-inline {
+    margin-left: 0;
+  }
+  .radio-inline, .checkbox-inline {
+    margin-right: 10px;
+  }
 /* risk自定义样式 END  */

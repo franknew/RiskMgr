@@ -54,22 +54,13 @@ define.pack("./index",["risk/unit/route","./list","./tmpl"],function(require, ex
 		initPage:function(params) {
 			params = params || {};
 
-			var mode = params.action || 'mine',
-				head = {
-					'mine':'查询 <small>额度申请</small>',
-					//'approval':'审批单据'
-				}[mode],
-				html = Tmpl.ListContainer({
-					mode:mode
-				});
+			var html = Tmpl.ListContainer();
 			Route.show({
-				head:head,
+				head:'查询 <small>额度申请</small>',
 				content:html
 			});
 
-			List.init({
-				mode:mode
-			});
+			List.init();
 		}
 	};
 
@@ -94,8 +85,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 		 */
 		init:function(params) {
 			this.fill({
-				container:route.container.find('#ListContainer'),
-				mode:params.mode
+				container:route.container.find('#ListContainer')
 			});
 		},
 		/** 填充列表主体html到指定容器
@@ -106,7 +96,6 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 		 */
 		fill:function(setting) {
 			setting = setting||{};
-			var mode = setting.mode;
 
 			var container = $(setting.container),
 				current = setting.current || 1,
@@ -153,8 +142,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 		},
 		_initFillEvent:function(container,setting) {
 			var that = this,
-				key = '__initFillCustomerEvent__',
-				mode = setting.mode;
+				key = '__initFillCustomerEvent__';
 			if (container.data(key)) {
 				return false;
 			}
@@ -165,10 +153,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 				ev.preventDefault();
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
-				var act = {
-					'mine':'view',
-					'approval':'approval'
-				}[mode] || mode;
+				var act = 'view';
 				route.load('page=trade/apply&action='+act+'&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
@@ -208,13 +193,7 @@ var tmpl = {
 'ListContainer': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-
-	var Mode = data.mode;
-__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">');
-if (Mode=='mine') {__p.push('		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control">\n				<option>全部</option>\n				<option selected="selected">流程中</option>\n				<option>已完结</option>\n			</select>\n		</div>');
-}__p.push('		');
-if (Mode=='approval') {__p.push('		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control">\n				<option>全部</option>\n				<option selected="selected">待审批</option>\n				<option>已审批</option>\n			</select>\n		</div>');
-}__p.push('		<div class="form-group">\n			<label>客户姓名</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>房产证号</label>\n			<input type="text" name="IdentityCode" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
+__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">\n		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control" name="Status">\n				<option value="" selected="selected">全部</option>\n				<option value="1">流程中</option>\n				<option value="5">审批不通过</option>\n				<option value="4">已终审（经理审批）</option>\n				<option value="3">已结单</option>\n			</select>\n		</div>\n		<div class="form-group">\n			<label>客户姓名</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>房产证号</label>\n			<input type="text" name="IdentityCode" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>编号</label>\n			<input type="text" name="BusinessCode" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
 
 return __p.join("");
 },
@@ -257,7 +236,9 @@ __p.push('</td>\n		<td>\n			<table class="no-strip">');
 			var bi=0,CurBuyer,
 				Buyers = Cur.Buyers||[];
 			for(;CurBuyer=Buyers[bi++];) {
-			__p.push('			<tr>\n				<td class="col-sm-4"><small class="text-success">[买]</small> ');
+			__p.push('			<tr>\n				<td class="col-sm-4 text-success"><small>[');
+_p(((Cur.Sellers&&Cur.Sellers.length>=1)?'买':'客户'));
+__p.push(']</small> ');
 _p(CurBuyer.Name);
 __p.push('</td>\n			</tr>');
 
@@ -266,7 +247,7 @@ __p.push('</td>\n			</tr>');
 			var bi=0,CurSeller,
 				Sellers = Cur.Sellers||[];
 			for(;CurSeller=Sellers[bi++];) {
-			__p.push('			<tr>\n				<td class="col-sm-4"><small class="text-danger">[卖]</small> ');
+			__p.push('			<tr>\n				<td class="col-sm-4 text-danger"><small>[卖]</small> ');
 _p(CurSeller.Name);
 __p.push('</td>\n			</tr>');
 

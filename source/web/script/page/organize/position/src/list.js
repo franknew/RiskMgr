@@ -52,7 +52,7 @@ define(function(require, exports, module){
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.ListBox(da.Record);
+					var html = tmpl.ListBox(da.Roles);
 
 					container.html(html);
 
@@ -66,7 +66,7 @@ define(function(require, exports, module){
 								current:num,
 								size:size,
 								success:function(da) {
-									that._fill(container,da.Record);
+									that._fill(container,da.Roles);
 								}
 							});
 						}
@@ -118,9 +118,9 @@ define(function(require, exports, module){
 		 */
 		query:function(conf) {
 			return ajax.post({
-				url:'RiskMgr.Api.UserApi/QueryUser',
+				url:'RiskMgr.Api.RoleApi/QueryRole',
 				data:{
-					PageSize:conf.size||10,
+					PageSize:conf.size||100,
 					CurrentIndex:conf.current || 1
 				},
 				form:$('#J_CustomerSearchForm'),

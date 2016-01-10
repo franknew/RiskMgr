@@ -41,13 +41,18 @@ define(function(require, exports, module){
 
 			switch(type) {
 				case 'checkbox':
-				case 'raido':
 					if ($elem.is(":checked")) {
 						var mul = storeObject[eleName]?storeObject[eleName].split(','):[];
 						mul.push(val);
 
 						storeObject = storeObject || {};
 						storeObject[eleName] = mul.join(',');
+					}
+					break;
+				case 'radio':
+					console.log('ischecked',$elem.is(':checked'));
+					if ($elem.is(':checked')) {
+						storeObject[eleName] = val;
 					}
 					break;
 				default:

@@ -264,6 +264,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 				case 'radio':
 					itemState.tag = 'div';
 					attr.class = '';
+
 					itemState.sub = (function(o) {
 						var items = o;
 						if (typeof(items) == 'string') {
@@ -275,31 +276,27 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 							rs.push({
 								tag:'label',
 								attr:{
-									'class':type,
-									type:type,
-									value:cur.value,
-									selected:cur.selected?'selected':undefined
+									'class':type+'-inline'
 								},
 								sub:[{
 									tag:'input',
 									attr:{
+										disabled:disabled,
 										name:item.name,
 										type:type,
 										value:cur.value,
-										selected:cur.selected?'selected':undefined
+										checked:cur.selected?'checked':undefined
 									}
 								},{
 									tag:'span',
 									html:cur.name,
-									attr:{
-									}
+									attr:{}
 								}]
 							});
 						}
 						return rs;
 					})(item.options);
 
-					delete item.options;
 					break;
 				case 'textarea':
 					itemState.tag = 'textarea';
@@ -344,7 +341,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 				subs = item.sub;
 			var ele = $(document.createElement(item.tag));
 
-			defaultValue = defaultValue || item.value;
+			defaultValue = defaultValue;
 
 			ele.attr(item.attr);//jq会自动过滤空的属性
 
@@ -387,9 +384,16 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 			ele = $(ele);
 			var eleOri = ele.get(0);
 
+
 			if(val===undefined || val===null)return;
 
-			var tagName = eleOri.tagName.toLocaleLowerCase();
+			var tagName = eleOri.tagName.toLocaleLowerCase(),
+				eleType = ele.attr('type');
+
+
+			if ($.inArray(eleType, ['checkbox','radio'])!=-1 ) {
+				tagName = eleType;
+			}
 
 			switch(tagName){
 				case 'select':
@@ -398,8 +402,11 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 					});
 					ele.find('option[value="' + val + '"]').attr('selected','selected');
 					break;
-				case 'radio':
-					ele.each(function(){
+				case 'checkbox':
+				case 'radio':	//这两个都被div包起来的
+					val = val+'';	//转成字符串，防止true/false这种值无法比较
+
+					ele.find('input[type="'+eleType+'"]').each(function(){
 						var checked = this.value == val ?  true :false;
 						this.defaultChecked	= checked;
 					});

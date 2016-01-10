@@ -11,7 +11,7 @@
 	<%
 	if (DataView.Action==3 && CurrentActivity.ActivityDefinitionID<5) {	//action==3代表是可以审批
 	 %>
-		<div class="block-transparent">
+		<div class="block-transparent trade-approval-box">
 			<div class="header">
 				<h3>审批意见</h3>
 			</div>
@@ -42,7 +42,7 @@
 	<%}%>
 
 	<%if (Approvals.length>0) {%>
-		<div class="block-transparent">
+		<div class="block-transparent trade-approval-box">
 			<div class="content">
 				<ul class="list-group tickets">
 				<%
@@ -50,8 +50,8 @@
 					for(;cur=Approvals[i++];) {
 				%>
 					<li class="list-group-item" href="#">
-						<h4 class="name"><%=cur.ActivityName%> <span class="label <%=cur.Status==1?'label-success':'label-danger'%>"><%=cur.Status==1?'通过':'不通过'%></span></h4>
-						<p><%=cur.Processor%>：<%=cur.Remark%></p>
+						<h4 class="name"><%=cur.ActivityName%> <small class="label <%=cur.Status==1?'label-success':'label-danger'%>"><%=cur.Status==1?'通过':'不通过'%></small></h4>
+						<p><strong>[<%=cur.Processor%>]</strong>：<%=cur.Remark%></p>
 						<span class="date"><%=RString.date(cur.LastUpdateTime,"yyyy-MM-dd HH:mm:ss")%></span>
 					</li>
 				<%}%>

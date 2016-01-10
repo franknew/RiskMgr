@@ -65,7 +65,7 @@ define(function(require, exports, module){
 			html:'赎楼期限'
 		},{
 			col:'3',
-			type:'decimal',
+			type:'number',
 			required:true,
 			name:'GuaranteeMonth',
 			placeholder:'',

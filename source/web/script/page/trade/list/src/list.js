@@ -18,8 +18,7 @@ define(function(require, exports, module){
 		 */
 		init:function(params) {
 			this.fill({
-				container:route.container.find('#ListContainer'),
-				mode:params.mode
+				container:route.container.find('#ListContainer')
 			});
 		},
 		/** 填充列表主体html到指定容器
@@ -30,7 +29,6 @@ define(function(require, exports, module){
 		 */
 		fill:function(setting) {
 			setting = setting||{};
-			var mode = setting.mode;
 
 			var container = $(setting.container),
 				current = setting.current || 1,
@@ -77,8 +75,7 @@ define(function(require, exports, module){
 		},
 		_initFillEvent:function(container,setting) {
 			var that = this,
-				key = '__initFillCustomerEvent__',
-				mode = setting.mode;
+				key = '__initFillCustomerEvent__';
 			if (container.data(key)) {
 				return false;
 			}
@@ -89,10 +86,7 @@ define(function(require, exports, module){
 				ev.preventDefault();
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
-				var act = {
-					'mine':'view',
-					'approval':'approval'
-				}[mode] || mode;
+				var act = 'view';
 				route.load('page=trade/apply&action='+act+'&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索

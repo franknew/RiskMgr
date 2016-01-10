@@ -107,7 +107,6 @@ define(function(require, exports, module){
 						ID:id
 					},
 					success:function(da) {
-						//console.log('qqq',da);
 						var item = da&&da.Record&&da.Record[0];
 						item.Password = '***不可编辑***';
 						callback && callback(item);

@@ -77,12 +77,12 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 						value:'删除',
 						style:'danger',
 						callback:function() {
-							if (!confirm('确认删除职位“'+data.CnName+'('+data.Name+')”？')) {
+							if (!confirm('确认删除职位“'+data.Name+(data.Remark?'('+data.Remark+')':'')+'”？')) {
 								return ;
 							}
 							var dialog = this;
 							ajax.post({
-								url:'RiskMgr.Api.UserApi/Delete',
+								url:'RiskMgr.Api.RoleApi/DeleteRole',
 								form:this.form,
 								success:function(data, textStatus, jqXHR) {
 									msg.success('删除成功.');
@@ -99,8 +99,9 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 			});
 		},
 		edit:function(id) {
-			this._getData(id,function(data) {
-				this._showDialog({
+			var that = this;
+			that._getData(id,function(data) {
+				that._showDialog({
 					title:'编辑职位',
 					former:{
 						data:data
@@ -108,7 +109,7 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 					ok: function() {
 						var dialog = this;
 						ajax.post({
-							url:'RiskMgr.Api.UserApi/Update',
+							url:'RiskMgr.Api.RoleApi/UpdateRole',
 							form:this.form,
 							success:function(data, textStatus, jqXHR) {
 								msg.success('编辑成功');
@@ -125,7 +126,7 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 				ok: function() {
 					var dialog = this;
 					ajax.post({
-						url:'RiskMgr.Api.UserApi/Add222',
+						url:'RiskMgr.Api.RoleApi/AddRole',
 						form:this.form,
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');
@@ -146,14 +147,12 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 				callback && callback();
 			}else {	//查看指定id的客户
 				ajax.post({
-					url:'RiskMgr.Api.UserApi/QueryUser',
+					url:'RiskMgr.Api.RoleApi/QueryRole',
 					data:{
 						ID:id
 					},
 					success:function(da) {
-						//console.log('qqq',da);
-						var item = da&&da.Record&&da.Record[0];
-						item.Password = '***不可编辑***';
+						var item = da&&da.Roles&&da.Roles[0];
 						callback && callback(item);
 					},
 					error:function(xhr,msg) {
@@ -166,27 +165,28 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 			var defer = $.Deferred();
 
 			ajax.post({
-				url:'RiskMgr.Api.UserApi/QueryUser',
+				url:'RiskMgr.Api.RoleApi/QueryRole',
 				data:{
-					PageSize:10,
+					PageSize:1000,
 					CurrentIndex:1
 				},
 				formDropEmpty:true,
 				success:function(da) {
-					var rs = da&&da.Record;
+					var roles = da&&da.Roles,
+						rs;
 
-					if (rs) {
+					if (roles) {
 						rs = (function(obj) {
 							var i=0, l = obj.length;
-							var rs = [];
+							var rs = [{name:'无',value:''}];
 							for(; i < l; ++i) {
 								rs.push({
-									name:obj[i].CnName,
-									value:obj[i].Name
+									name:obj[i].Name,
+									value:obj[i].ID
 								});
 							}
 							return rs;
-						})(rs);
+						})(roles);
 
 						defer.resolve(rs);
 					}else{
@@ -317,7 +317,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.ListBox(da.Record);
+					var html = tmpl.ListBox(da.Roles);
 
 					container.html(html);
 
@@ -331,7 +331,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 								current:num,
 								size:size,
 								success:function(da) {
-									that._fill(container,da.Record);
+									that._fill(container,da.Roles);
 								}
 							});
 						}
@@ -383,9 +383,9 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 		 */
 		query:function(conf) {
 			return ajax.post({
-				url:'RiskMgr.Api.UserApi/QueryUser',
+				url:'RiskMgr.Api.RoleApi/QueryRole',
 				data:{
-					PageSize:conf.size||10,
+					PageSize:conf.size||100,
 					CurrentIndex:conf.current || 1
 				},
 				form:$('#J_CustomerSearchForm'),
@@ -424,13 +424,22 @@ define.pack("./tpl.view",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
-			required:true,
+			html:'说明'
+		},{
+			col:'7',
+			type:'text',
+			name:'Remark',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:'3',
 			html:'上级职位'
 		},{
 			col:'7',
 			type:'select',
-			required:true,
-			name:'SJZW',
+			name:'ParentID',
 			options:'职位'
 		}],
 
@@ -438,27 +447,119 @@ define.pack("./tpl.view",[],function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'权限'
+			html:'数据访问权限'
 		},{
 			col:'7',
-			type:'checkbox',
+			type:'select',
 			required:true,
-			name:'quanxxx',
+			name:'DataAccessType',
 			options:[{
 				value:"1",
-				name:"申请额度"
+				name:"自己和下属部门数据",
+				selected:true
 			},{
 				value:"2",
-				name:"审批（额度）"
+				name:"所有数据"
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'录单权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanApply',
+			options:[{
+				value:"true",
+				name:"有",
+				selected:true
 			},{
-				value:"3",
-				name:"客户管理"
+				value:"false",
+				name:"无"
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'审批权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanApproval',
+			options:[{
+				value:"true",
+				name:"有"
 			},{
-				value:"4",
-				name:"房产管理"
+				value:"false",
+				name:"无",
+				selected:true
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'管理客户权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanManageCustomer',
+			options:[{
+				value:"true",
+				name:"有"
 			},{
-				value:"5",
-				name:"员工管理"
+				value:"false",
+				name:"无",
+				selected:true
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'管理房产权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanManageAsset',
+			options:[{
+				value:"true",
+				name:"有"
+			},{
+				value:"false",
+				name:"无",
+				selected:true
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'管理员工权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanManageEmployeeAndAuth',
+			options:[{
+				value:"true",
+				name:"有"
+			},{
+				value:"false",
+				name:"无",
+				selected:true
 			}]
 		}]
 	];
@@ -490,7 +591,7 @@ return __p.join("");
 'ListBox': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>职位名称</th>\n				<th>上级职位</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th width="20%">职位</th>\n				<th>职位说明</th>\n				<th>上级职位</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -502,7 +603,6 @@ return __p.join("");
 var __p=[],_p=function(s){__p.push(s)};
 
 	var List = data||[];
-	var ShowInfos = ['CnName','Name'];
 
 	var i=0,Cur;
 	if (List.length>0) {
@@ -512,16 +612,13 @@ __p.push('	<tr data-hook="view" class="pointer-item" data-id="');
 _p(Cur.ID);
 __p.push('" data-data=\'');
 _p(JSON.stringify(Cur));
-__p.push('\'>');
-
-			var ii=0,CurII;
-			for(;CurII=ShowInfos[ii++];) {
-		__p.push('			<td>');
-_p(Cur[CurII]||'-');
-__p.push('</td>');
-
-			}
-		__p.push('	</tr>');
+__p.push('\'>\n			<td>');
+_p(Cur.Name);
+__p.push('</td>\n			<td>');
+_p(Cur.Remark);
+__p.push('</td>\n			<td>');
+_p(Cur.ParentRoleName);
+__p.push('</td>\n	</tr>');
 
 		}
 	}else{

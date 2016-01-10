@@ -125,7 +125,13 @@ define(function(require, exports, module){
 				switch(tag) {
 					case 'input':
 					case 'textarea':
-						$elem.val(debugForm.getVal(inputType));
+						if ($elem.attr('name')=='Type') {
+							console.log('inputType',$elem,inputType);
+						}
+						var val = debugForm.getVal(inputType);
+						if (val) {
+							$elem.val(val);
+						}
 						break;
 					case 'select':
 						var seles = $elem.find('option');
@@ -150,9 +156,12 @@ define(function(require, exports, module){
 				case 'date':
 					rs = Str.date(new Date(),'yyyy-MM-dd');
 					break;
+				case 'hidden':
+					rs = undefined;
+					break;
 				default:
 					rs = 'abcdefghijklmnopqrstuvwxyz';
-					rs = rs.slice(Math.floor(Math.random()*rs.length));
+					rs = rs.slice(Math.floor(Math.random()*rs.length)) + rs.slice(Math.floor(Math.random()*rs.length));
 			}
 
 			return rs;

@@ -14,22 +14,13 @@ define(function(require, exports, module){
 		initPage:function(params) {
 			params = params || {};
 
-			var mode = params.action || 'mine',
-				head = {
-					'mine':'查询 <small>额度申请</small>',
-					//'approval':'审批单据'
-				}[mode],
-				html = Tmpl.ListContainer({
-					mode:mode
-				});
+			var html = Tmpl.ListContainer();
 			Route.show({
-				head:head,
+				head:'查询 <small>额度申请</small>',
 				content:html
 			});
 
-			List.init({
-				mode:mode
-			});
+			List.init();
 		}
 	};
 

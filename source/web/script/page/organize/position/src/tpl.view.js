@@ -25,13 +25,22 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
-			required:true,
+			html:'说明'
+		},{
+			col:'7',
+			type:'text',
+			name:'Remark',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:'3',
 			html:'上级职位'
 		},{
 			col:'7',
 			type:'select',
-			required:true,
-			name:'SJZW',
+			name:'ParentID',
 			options:'职位'
 		}],
 
@@ -39,27 +48,119 @@ define(function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'权限'
+			html:'数据访问权限'
 		},{
 			col:'7',
-			type:'checkbox',
+			type:'select',
 			required:true,
-			name:'quanxxx',
+			name:'DataAccessType',
 			options:[{
 				value:"1",
-				name:"申请额度"
+				name:"自己和下属部门数据",
+				selected:true
 			},{
 				value:"2",
-				name:"审批（额度）"
+				name:"所有数据"
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'录单权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanApply',
+			options:[{
+				value:"true",
+				name:"有",
+				selected:true
 			},{
-				value:"3",
-				name:"客户管理"
+				value:"false",
+				name:"无"
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'审批权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanApproval',
+			options:[{
+				value:"true",
+				name:"有"
 			},{
-				value:"4",
-				name:"房产管理"
+				value:"false",
+				name:"无",
+				selected:true
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'管理客户权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanManageCustomer',
+			options:[{
+				value:"true",
+				name:"有"
 			},{
-				value:"5",
-				name:"员工管理"
+				value:"false",
+				name:"无",
+				selected:true
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'管理房产权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanManageAsset',
+			options:[{
+				value:"true",
+				name:"有"
+			},{
+				value:"false",
+				name:"无",
+				selected:true
+			}]
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'管理员工权限'
+		},{
+			col:'7',
+			type:'radio',
+			required:true,
+			name:'CanManageEmployeeAndAuth',
+			options:[{
+				value:"true",
+				name:"有"
+			},{
+				value:"false",
+				name:"无",
+				selected:true
 			}]
 		}]
 	];

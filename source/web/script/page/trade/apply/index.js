@@ -2084,7 +2084,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			html:'赎楼期限'
 		},{
 			col:'3',
-			type:'decimal',
+			type:'number',
 			required:true,
 			name:'GuaranteeMonth',
 			placeholder:'',
@@ -2431,7 +2431,7 @@ var __p=[],_p=function(s){__p.push(s)};
 __p.push('\n<div class="step-pane" id="Approval">');
 
 	if (DataView.Action==3 && CurrentActivity.ActivityDefinitionID<5) {	//action==3代表是可以审批
-	 __p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content" style="margin:0 auto;max-width:500px;width:100%;">\n				<div class="form-group">\n					<label class="col-sm-12">');
+	 __p.push('		<div class="block-transparent trade-approval-box">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content" style="margin:0 auto;max-width:500px;width:100%;">\n				<div class="form-group">\n					<label class="col-sm-12">');
 _p(CurrentActivity.Name);
 __p.push('</label>\n					<div class="col-sm-12">\n						<textarea class="form-control" name="Remark" rows="5"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="text-center col-sm-12">\n						<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n						&nbsp;&nbsp;\n						<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n					</div>\n				</div>\n			</div>\n		</div>');
 }else {__p.push('		<div class="alert alert-info" role="alert">');
@@ -2444,19 +2444,19 @@ __p.push('</strong>，到达时间：<strong>');
 _p(RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm:ss"));
 __p.push('</strong>');
 }__p.push('		</div>');
-}if (Approvals.length>0) {__p.push('		<div class="block-transparent">\n			<div class="content">\n				<ul class="list-group tickets">');
+}if (Approvals.length>0) {__p.push('		<div class="block-transparent trade-approval-box">\n			<div class="content">\n				<ul class="list-group tickets">');
 
 					var i=0,cur;
 					for(;cur=Approvals[i++];) {
 				__p.push('					<li class="list-group-item" href="#">\n						<h4 class="name">');
 _p(cur.ActivityName);
-__p.push(' <span class="label ');
+__p.push(' <small class="label ');
 _p(cur.Status==1?'label-success':'label-danger');
 __p.push('">');
 _p(cur.Status==1?'通过':'不通过');
-__p.push('</span></h4>\n						<p>');
+__p.push('</small></h4>\n						<p><strong>[');
 _p(cur.Processor);
-__p.push('：');
+__p.push(']</strong>：');
 _p(cur.Remark);
 __p.push('</p>\n						<span class="date">');
 _p(RString.date(cur.LastUpdateTime,"yyyy-MM-dd HH:mm:ss"));

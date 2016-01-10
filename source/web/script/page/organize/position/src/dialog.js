@@ -33,12 +33,12 @@ define(function(require, exports, module){
 						value:'删除',
 						style:'danger',
 						callback:function() {
-							if (!confirm('确认删除职位“'+data.CnName+'('+data.Name+')”？')) {
+							if (!confirm('确认删除职位“'+data.Name+(data.Remark?'('+data.Remark+')':'')+'”？')) {
 								return ;
 							}
 							var dialog = this;
 							ajax.post({
-								url:'RiskMgr.Api.UserApi/Delete',
+								url:'RiskMgr.Api.RoleApi/DeleteRole',
 								form:this.form,
 								success:function(data, textStatus, jqXHR) {
 									msg.success('删除成功.');
@@ -55,8 +55,9 @@ define(function(require, exports, module){
 			});
 		},
 		edit:function(id) {
-			this._getData(id,function(data) {
-				this._showDialog({
+			var that = this;
+			that._getData(id,function(data) {
+				that._showDialog({
 					title:'编辑职位',
 					former:{
 						data:data
@@ -64,7 +65,7 @@ define(function(require, exports, module){
 					ok: function() {
 						var dialog = this;
 						ajax.post({
-							url:'RiskMgr.Api.UserApi/Update',
+							url:'RiskMgr.Api.RoleApi/UpdateRole',
 							form:this.form,
 							success:function(data, textStatus, jqXHR) {
 								msg.success('编辑成功');
@@ -81,7 +82,7 @@ define(function(require, exports, module){
 				ok: function() {
 					var dialog = this;
 					ajax.post({
-						url:'RiskMgr.Api.UserApi/Add222',
+						url:'RiskMgr.Api.RoleApi/AddRole',
 						form:this.form,
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');
@@ -102,14 +103,12 @@ define(function(require, exports, module){
 				callback && callback();
 			}else {	//查看指定id的客户
 				ajax.post({
-					url:'RiskMgr.Api.UserApi/QueryUser',
+					url:'RiskMgr.Api.RoleApi/QueryRole',
 					data:{
 						ID:id
 					},
 					success:function(da) {
-						//console.log('qqq',da);
-						var item = da&&da.Record&&da.Record[0];
-						item.Password = '***不可编辑***';
+						var item = da&&da.Roles&&da.Roles[0];
 						callback && callback(item);
 					},
 					error:function(xhr,msg) {
@@ -122,27 +121,28 @@ define(function(require, exports, module){
 			var defer = $.Deferred();
 
 			ajax.post({
-				url:'RiskMgr.Api.UserApi/QueryUser',
+				url:'RiskMgr.Api.RoleApi/QueryRole',
 				data:{
-					PageSize:10,
+					PageSize:1000,
 					CurrentIndex:1
 				},
 				formDropEmpty:true,
 				success:function(da) {
-					var rs = da&&da.Record;
+					var roles = da&&da.Roles,
+						rs;
 
-					if (rs) {
+					if (roles) {
 						rs = (function(obj) {
 							var i=0, l = obj.length;
-							var rs = [];
+							var rs = [{name:'无',value:''}];
 							for(; i < l; ++i) {
 								rs.push({
-									name:obj[i].CnName,
-									value:obj[i].Name
+									name:obj[i].Name,
+									value:obj[i].ID
 								});
 							}
 							return rs;
-						})(rs);
+						})(roles);
 
 						defer.resolve(rs);
 					}else{
