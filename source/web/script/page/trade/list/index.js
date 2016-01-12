@@ -108,7 +108,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 				current:current,
 				size:size,
 				success:function(da) {
-					var list = (da&&da.Record) || da;	//兼容旧cgi，刘啸改了后去掉这个或逻辑
+					var list = (da&&da.Record);
 					var html = tmpl.List(list);
 
 					container.html(html);
@@ -123,7 +123,8 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 								current:num,
 								size:size,
 								success:function(da) {
-									that._fill(container,da);
+									var list = (da&&da.Record);
+									that._fill(container,list);
 								}
 							});
 						}
@@ -268,7 +269,7 @@ __p.push('</td>\n	</tr>');
 
 		}
 	}else{
-__p.push('	<tr>\n	<td colspan="5">\n		<div class="alert alert-info" role="alert">没有客户信息</div>\n	</td>\n	</tr>');
+__p.push('	<tr>\n	<td colspan="5">\n		<div class="alert alert-info" role="alert">没有业务信息</div>\n	</td>\n	</tr>');
 
 	}
 __p.push('');
