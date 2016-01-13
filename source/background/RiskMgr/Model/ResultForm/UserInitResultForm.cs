@@ -13,6 +13,6 @@ namespace RiskMgr.Form
         /// </summary>
         public PagingEntity<FullUser> User { get; set; }
 
-        public List<Role> Role { get; set; }
+        public List<FullRoleInfo> Role { get; set; }
     }
 }

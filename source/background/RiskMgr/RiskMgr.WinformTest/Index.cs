@@ -35,22 +35,25 @@ namespace RiskMgr.WinformTest
             //var t1 = JsonHelper.Deserialize<DateTime?>(dt1);
             Workflow wf = new Workflow();
             RoleBLL rolebll = new RoleBLL();
-            AssetBLL assetbll = new AssetBLL();
+            //AssetBLL assetbll = new AssetBLL();
 
-            var list = rolebll.GetUserSubUserIDs("13");
-            var roles = assetbll.Query(new AssetQueryForm
-            {
-                Creators = list,
-            });
-            LogonRequest request = new LogonRequest();
-            request.form = new LogonServiceForm
-            {
-                username = "admin",
-                password = "admin",
-            };
-            var response = SDKFactory.Client.Execute(request);
-            token = response.form.token;
-            MessageBox.Show(response.ResponseBody);
+            //var list = rolebll.GetUserSubUserIDs("13");
+            //var roles = assetbll.Query(new AssetQueryForm
+            //{
+            //    Creators = list,
+            //});
+            //LogonRequest request = new LogonRequest();
+            //request.form = new LogonServiceForm
+            //{
+            //    username = "admin",
+            //    password = "123456",
+            //};
+            //var response = SDKFactory.Client.Execute(request);
+            //token = response.form.token;
+            //MessageBox.Show(response.ResponseBody);
+            LogonBLL bll = new LogonBLL();
+            var result = bll.Logon("admin", "123456");
+            token = result.token;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -111,14 +114,9 @@ namespace RiskMgr.WinformTest
 
         private void button6_Click(object sender, EventArgs e)
         {
-            QueryUserRequest request = new QueryUserRequest();
-            request.token = token;
-            request.form = new Form.FullUserQueryForm
-            {
-                ID = "1",
-            };
-            var response = SDKFactory.Client.Execute(request);
-            MessageBox.Show(response.ResponseBody);
+            Workflow wf = new Workflow();
+            UserBLL bll = new UserBLL();
+            var users = bll.Query(new FullUserQueryForm { });
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -184,20 +182,22 @@ namespace RiskMgr.WinformTest
 
         private void button12_Click(object sender, EventArgs e)
         {
-            //QueryMyApplyRequest request = new QueryMyApplyRequest();
-            //request.token = token;
-            //var response = SDKFactory.Client.Execute(request);
-            //MessageBox.Show(response.ResponseBody);
-
-            ProjectApi api = new ProjectApi();
-            var data = api.QueryMyApply();
+            QueryMyApplyRequest request = new QueryMyApplyRequest();
+            request.token = token;
+            var response = SDKFactory.Client.Execute(request);
+            MessageBox.Show(response.ResponseBody);
+            //Workflow workflow = new Workflow();
+            //RoleBLL rolebll = new RoleBLL();
+            //ProjectBLL projectbll = new ProjectBLL();
+            //var list = rolebll.GetUserSubUserIDs("10");
+            //var data = projectbll.QueryMyApply(new QueryMyApplyServiceForm { CurrentIndex = 2, PageSize = 10, Creators = list });
         }
 
         private void button13_Click(object sender, EventArgs e)
         {
-            ProjectBLL bll = new ProjectBLL();
-            string userid = "13";
-            var response = bll.QueryMyApply(userid);
+            TaskBLL bll = new TaskBLL();
+            string userid = "10";
+            var response = bll.Query(new QueryMyTaskServiceForm { UserID = userid, Status = (int)TaskProcessStatus.Started });
         }
 
         private void button14_Click(object sender, EventArgs e)
@@ -235,40 +235,43 @@ namespace RiskMgr.WinformTest
         {
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
-            //bll.UpdateTracking(new UpdateTrackingServiceForm
-            //{
-            //    LastUpdator = "13",
-            //    ChangeOwnerRemark = "123456",
-            //    MortgageRemark = "44",
-            //    InsuranceFreeTime = DateTime.Now,
-            //    ID = textBox1.Text,
-            //});
+            bll.UpdateTracking(new UpdateTrackingServiceForm
+            {
+                LastUpdator = "7",
+                ChangeOwnerRemark = "",
+                MortgageRemark = "",
+                NewAssetDate = new DateTime(2016, 1, 4),
+                LogoutAssetTime = new DateTime(2016, 1, 4),
+                ChangeOwnerProfileTime = new DateTime(2016, 1, 5),
+                ChangeOwnerProfileCode = "9C-416001002",
+                ID = textBox1.Text,
+            }, "30590d6bcda743f9a4490e73b9d92fb3", "4244955f8ea94f60ac59f2d5a392a161", "", "7");
         }
 
         private void button18_Click(object sender, EventArgs e)
         {
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
-            bll.UpdateFinance("a074c5e65c96481db5af54dfd4f75f86", "ce21b4201ee540c8b4ab99862186d336", 
+            bll.UpdateFinance("a074c5e65c96481db5af54dfd4f75f86", "ce21b4201ee540c8b4ab99862186d336",
                 "", new Project
-            {
-                RefundAccount = "1",
-                RefundBankName = "11",
-                RefundDate = DateTime.Now,
-                RefundMoney = 1,
-                RefundName = "111",
-                PaymentName = "2",
-                PaymentAccount = "22",
-                PaymentBankName = "222",
-                PaymentDate = DateTime.Now,
-                PaymentMoney = 2,
-                DeductMoneyAccount = "3",
-                DeductMoneyBankName = "33",
-                DeductMoneyDate = DateTime.Now,
-                DeductMoneyMoney = 3,
-                DeductMoneyName = "333",
-                ID = textBox1.Text,
-            }, "14");
+                {
+                    RefundAccount = "1",
+                    RefundBankName = "11",
+                    RefundDate = DateTime.Now,
+                    RefundMoney = 1,
+                    RefundName = "111",
+                    PaymentName = "2",
+                    PaymentAccount = "22",
+                    PaymentBankName = "222",
+                    PaymentDate = DateTime.Now,
+                    PaymentMoney = 2,
+                    DeductMoneyAccount = "3",
+                    DeductMoneyBankName = "33",
+                    DeductMoneyDate = DateTime.Now,
+                    DeductMoneyMoney = 3,
+                    DeductMoneyName = "333",
+                    ID = textBox1.Text,
+                }, "14");
         }
 
         private void button19_Click(object sender, EventArgs e)
@@ -294,6 +297,21 @@ namespace RiskMgr.WinformTest
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
             //bll.FinanceConfirm();
+        }
+
+        private void button21_Click(object sender, EventArgs e)
+        {
+            Workflow wf = new Workflow();
+            RoleBLL bll = new RoleBLL();
+            bll.AddRole(new AddRoleServiceForm
+            {
+                Name = "testrole",
+                ParentID = "2",
+                CanManageEmployeeAndAuth = true,
+                CanApply = true,
+                CanManageAsset = true,
+            });
+            var roles = bll.Query(new RoleQueryForm { Name = "testrole" });
         }
     }
 

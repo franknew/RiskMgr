@@ -21,5 +21,7 @@ namespace RiskMgr.Form
         public string Address { get; set; }
 
         public string CnName { get; set; }
+
+        public string Identity { get; set; }
     }
 }

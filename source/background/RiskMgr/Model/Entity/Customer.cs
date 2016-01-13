@@ -6,7 +6,7 @@ using SOAFramework.Library.DAL;
 
 namespace RiskMgr.Model
 {
-    public class Customer : SimpleEntity
+    public partial class Customer : SimpleEntity
     {
         /// <summary>
         /// 性别
@@ -46,7 +46,7 @@ namespace RiskMgr.Model
         /// <summary>
         /// 银行类型
         /// </summary>
-        public int? BankType { get; set; }
+        public string BankType { get; set; }
         
         /// <summary>
         /// 银行账号

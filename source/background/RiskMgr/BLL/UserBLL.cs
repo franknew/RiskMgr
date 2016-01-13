@@ -179,8 +179,8 @@ namespace RiskMgr.BLL
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             UserDao dao = new UserDao(mapper);
-            var userList = dao.Query(new UserQueryForm { ID = form.UserID, Password = form.OldPassword });
-            if (userList == null || userList.Count == 0)
+            var useraccount = dao.Query(new UserQueryForm { ID = form.UserID, Password = form.OldPassword }).FirstOrDefault();
+            if (useraccount == null)
             {
                 throw new Exception("用户名或者旧密码错误！");
             }
@@ -189,7 +189,7 @@ namespace RiskMgr.BLL
                 ID = form.UserID,
                 Password = form.NewPassword,
             };
-            dao.Update(new UserUpdateForm { Entity = user });
+            dao.Update(new UserUpdateForm { Entity = user, UserQueryForm = new UserQueryForm { ID = user.ID } });
             return true;
         }
 
@@ -201,8 +201,19 @@ namespace RiskMgr.BLL
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             FullUserDao dao = new FullUserDao(mapper);
+            User_RoleDao urdao = new User_RoleDao(mapper);
+            RoleDao roledao = new RoleDao(mapper);
             var userlist = dao.Query(form);
-
+            var userids = (from u in userlist select u.ID).ToList();
+            var urs = urdao.Query(new User_RoleQueryForm { UserIDs = userids });
+            var roleids = (from ur in urs select ur.RoleID).Distinct().ToList();
+            var roles = roledao.Query(new RoleQueryForm { IDs = roleids });
+            foreach (var u in userlist)
+            {
+                var ur_temp = urs.FindAll(t => t.UserID == u.ID);
+                var rolenames = (from ur in ur_temp join r in roles on ur.RoleID equals r.ID select r.Remark ).ToList();
+                u.Role = String.Join(",", rolenames);
+            }
             return userlist;
         }
 

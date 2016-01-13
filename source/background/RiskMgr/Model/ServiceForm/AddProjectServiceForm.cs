@@ -8,7 +8,7 @@ using System.Text;
 
 namespace RiskMgr.Form
 {
-    public class AddProjectServiceForm
+    public class AddProjectServiceForm : SimpleEntity
     {
         /// <summary>
         /// 项目信息

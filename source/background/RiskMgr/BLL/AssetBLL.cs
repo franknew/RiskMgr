@@ -13,6 +13,8 @@ namespace RiskMgr.BLL
         public string Add(Asset form)
         {
             AssetDao dao = new AssetDao();
+            form.IsDeleted = 0;
+            form.Enabled = 1;
             return dao.Add(form);
         }
 

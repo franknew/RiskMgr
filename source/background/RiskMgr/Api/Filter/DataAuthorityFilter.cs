@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library;
 
 namespace RiskMgr.Api
 {
@@ -18,6 +19,7 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
             var list = rolebll.GetUserSubUserIDs(userid);
+            //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "id:"+ userid + " count:" + list.Count.ToString() }, SOAFramework.Library.CacheEnum.FormMonitor);
             context.Parameters[Common.DataAuthorityKey] = list;
             return true;
         }

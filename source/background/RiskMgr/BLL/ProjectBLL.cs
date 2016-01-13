@@ -94,7 +94,6 @@ namespace RiskMgr.BLL
             {
                 foreach (var customer in updatecustomers)
                 {
-                    customer.IsDeleted = 0;
                     var c = customerdao.Query(new CustomerQueryForm { ID = customer.ID }).FirstOrDefault();
                     if (c == null)
                     {
@@ -119,6 +118,8 @@ namespace RiskMgr.BLL
                         }
                         else
                         {
+                            customer.IsDeleted = 0;
+                            customer.Enabled = 1;
                             customer.Creator = userid;
                             customerdao.Add(customer);
                         }
@@ -339,10 +340,29 @@ namespace RiskMgr.BLL
                     result.Action = ActionStatus.Approvalable;
                 }
             }
+            //如果审批前，申请人可以修改单
+            if (userid == project.Creator && !approvals.Exists(t => t.WorkflowID == workflow.ID))
+            {
+                result.Action = ActionStatus.Editable;
+            }
             #region 为财务和保后跟踪特别处理
             //读取保后跟踪的信息
-            result.Project.TransferInfo = tcolist.FindAll(t => t.ProjectID == project.ID);
-            result.Project.Mortgage = tmlist.FindAll(t => t.ProjectID == project.ID);
+            var TransferInfo = tcolist.FindAll(t => t.ProjectID == project.ID).FirstOrDefault();
+            var Mortgage = tmlist.FindAll(t => t.ProjectID == project.ID).FirstOrDefault();
+            if (TransferInfo != null)
+            {
+                result.Project.ChangeOwnerProfileCode = TransferInfo.ChangeOwnerProfileCode;
+                result.Project.ChangeOwnerProfileTime = TransferInfo.ChangeOwnerProfileTime;
+                result.Project.NewAssetCode = TransferInfo.NewAssetCode;
+                result.Project.NewAssetDate = TransferInfo.NewAssetDate;
+                result.Project.ChangeOwnerRemark = TransferInfo.ChangeOwnerRemark;
+            }
+            if (Mortgage != null)
+            {
+                result.Project.MortgageFeedbackCode = Mortgage.MortgageFeedbackCode;
+                result.Project.MortgageOverTime = Mortgage.MortgageOverTime;
+                result.Project.MortgagePredictTime = Mortgage.MortgagePredictTime;
+            }
 
             //为财务和保后跟踪特别处理
             var roles = userroles.FindAll(t => t.UserID == userid);
@@ -358,7 +378,7 @@ namespace RiskMgr.BLL
             }
             if (roles.Exists(t => t.RoleID == "5"))//处理财务
             {
-                if (financeActivity != null)
+                if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processing)
                 {
                     result.DisplayCharge = true;
                     result.ChargeCanEdit = true;
@@ -390,10 +410,7 @@ namespace RiskMgr.BLL
         {
             #region init dao
             List<InitApprovalResultForm> result = new List<InitApprovalResultForm>();
-            if (projectids == null)
-            {
-                projectids = new List<string>();
-            }
+            if (projectids == null || projectids.Count == 0) return new List<InitApprovalResultForm>();
 
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao dao = new ProjectDao(mapper);
@@ -514,17 +531,31 @@ namespace RiskMgr.BLL
             return projectdao.Query(new ProjectQueryForm { IDs = projectids });
         }
 
-        public List<InitApprovalResultForm> QueryMyApply(string curentuserid)
+        public List<InitApprovalResultForm> QueryMyApply(QueryMyApplyServiceForm form)
         {
             List<InitApprovalResultForm> list = new List<InitApprovalResultForm>();
             ISqlMapper mapper = Common.GetMapperFromSession();
             UserBLL userbll = new UserBLL();
             WorkflowDao wfdao = new WorkflowDao(mapper);
             ProjectDao projectdao = new ProjectDao(mapper);
+            switch (form.Status)
+            {
+                case 4://已终审（经理审批）
+                    form.ManagerAppvoal = true;
+                    break;
+                case 5://审批不通过
+                    form.Disagree = true;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    form.WorkflowStatus = form.Status;
+                    break;
+            }
             var users = TableCacheHelper.GetDataFromCache<User>(typeof(UserDao));
-            var workflows = wfdao.Query(new WorkflowQueryForm { Creator = curentuserid });
-            var projectids = (from w in workflows select w.ProcessID).ToList();
-            return Query(projectids, null, curentuserid);
+            var projects = projectdao.QueryMyApply(form);
+            var projectids = (from w in projects select w.ID).Distinct().ToList();
+            return Query(projectids, null, form.UserID);
         }
 
         public bool UpdateFinance(string workflowid, string activityid, string taskid, Project project, string userid)
@@ -580,6 +611,10 @@ namespace RiskMgr.BLL
 
         public bool UpdateTracking(UpdateTrackingServiceForm project, string workflowid, string activityid, string taskid, string userid)
         {
+            if (project == null || string.IsNullOrEmpty(project.ID))
+            {
+                throw new Exception("上传数据有误，缺少ID或者Form");
+            }
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao dao = new ProjectDao(mapper);
             TrackingMortgageDao tmdao = new TrackingMortgageDao(mapper);
@@ -588,37 +623,65 @@ namespace RiskMgr.BLL
             {
                 Entity = new Project
                 {
-                    MortgageRemark = project.MortgageRemark,
-                    InsuranceFreeTime = project.InsuranceFreeTime,
-                    ChangeOwnerRemark = project.ChangeOwnerRemark,
-                    PickNumberTime = project.PickNumberTime,
                     LogoutAssetTime = project.LogoutAssetTime,
-                    ChangeOwnerReceiptTime = project.ChangeOwnerReceiptTime,
-                    ChangeOwnerHandleTime = project.ChangeOwnerHandleTime,
                     PickNewAssetCodeTime = project.PickNewAssetCodeTime,
-                    NewAssetCode = project.NewAssetCode,
+                    MortgageRemark = project.MortgageRemark,
+
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
+
             //过户信息处理
-            tcodao.Delete(new TrackingChangeOwnerQueryForm { ProjectID = project.ID });
-            if (project.TransferInfo != null)
+            TrackingChangeOwner tco = new TrackingChangeOwner
             {
-                project.TransferInfo.ProjectID = project.ID;
-                project.TransferInfo.Creator = project.TransferInfo.LastUpdator = project.LastUpdator;
-                tcodao.Add(project.TransferInfo);
+                ProjectID = project.ID,
+                ChangeOwnerProfileCode = project.ChangeOwnerProfileCode,
+                ChangeOwnerRemark = project.ChangeOwnerRemark,
+                ChangeOwnerProfileTime = project.ChangeOwnerProfileTime,
+                NewAssetCode = project.NewAssetCode,
+                NewAssetDate = project.NewAssetDate,
+            };
+            TrackingChangeOwner tcoowner = tcodao.Query(new TrackingChangeOwnerQueryForm { ProjectID = project.ID }).FirstOrDefault();
+            if (tcoowner == null)
+            {
+                tco.Creator = project.LastUpdator;
+                tcodao.Add(tco);
             }
-            //借贷信息处理
-            tmdao.Delete(new TrackingMortgageQueryForm { ProjectID = project.ID });
-            if (project.Mortgage != null)
+            else
             {
-                project.Mortgage.ProjectID = project.ID;
-                project.Mortgage.Creator = project.Mortgage.LastUpdator = project.LastUpdator;
-                tmdao.Add(project.Mortgage);
+                tco.LastUpdator = project.LastUpdator;
+                tcodao.Update(new TrackingChangeOwnerUpdateForm
+                {
+                    Entity = tco,
+                    TrackingChangeOwnerQueryForm = new TrackingChangeOwnerQueryForm { ID = tcoowner.ID },
+                });
+            }
+            TrackingMortgage tm = new TrackingMortgage
+            {
+                MortgageFeedbackCode = project.MortgageFeedbackCode,
+                ProjectID = project.ID,
+                MortgageOverTime = project.MortgageOverTime,
+                MortgagePredictTime = project.MortgagePredictTime,
+            };
+            //借贷信息处理
+            var tmmodel = tmdao.Query(new TrackingMortgageQueryForm { ProjectID = project.ID }).FirstOrDefault();
+            if (tmmodel == null)
+            {
+                tm.Creator = project.LastUpdator;
+                tmdao.Add(tm);
+            }
+            else
+            {
+                tm.LastUpdator = project.LastUpdator;
+                tmdao.Update(new TrackingMortgageUpdateForm
+                {
+                    Entity = tm,
+                    TrackingMortgageQueryForm = new TrackingMortgageQueryForm { ID = tmmodel.ID },
+                });
             }
 
             WorkflowModel model = WorkflowModel.Load(workflowid);
-                model.ProcessActivity(activityid, new Approval { Status = (int)ApprovalStatus.None }, taskid, userid, new WorkflowAuthority());
+            model.ProcessActivity(activityid, new Approval { Status = (int)ApprovalStatus.None }, taskid, userid, new WorkflowAuthority());
             return true;
         }
 

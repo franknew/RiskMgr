@@ -60,6 +60,7 @@
     <Compile Include="Entity\FinancePayment.cs" />
     <Compile Include="Entity\FullActivity.cs" />
     <Compile Include="Entity\FullProject.cs" />
+    <Compile Include="Entity\FullRoleInfo.cs" />
     <Compile Include="Entity\FullTask.cs" />
     <Compile Include="Entity\FullUser.cs" />
     <Compile Include="Entity\Asset_ex.cs" />
@@ -102,7 +103,10 @@
     <Compile Include="QueryForm\LogonHistoryQueryForm.cs" />
     <Compile Include="ResultForm\InitApprovalResultForm.cs" />
     <Compile Include="ResultForm\LogonResultForm.cs" />
+    <Compile Include="ResultForm\QueryRoleResultForm.cs" />
+    <Compile Include="ServiceForm\AddRoleServiceForm.cs" />
     <Compile Include="ServiceForm\FinanceConfirmServiceForm.cs" />
+    <Compile Include="ServiceForm\QueryMyApplyServiceForm.cs" />
     <Compile Include="ServiceForm\QueryProjectRServiceForm.cs" />
     <Compile Include="ResultForm\UserInitResultForm.cs" />
     <Compile Include="ServiceForm\AddProjectServiceForm.cs" />

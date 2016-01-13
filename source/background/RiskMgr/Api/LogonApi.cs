@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Service.Filter;
+using SOAFramework.Library;
 
 namespace RiskMgr.Api
 {
@@ -26,6 +28,10 @@ namespace RiskMgr.Api
         [NoneAuthFilter]
         public LogonResultForm Logon(LogonServiceForm form)
         {
+            if (string.IsNullOrEmpty(form.username) || string.IsNullOrEmpty(form.password))
+            {
+                throw new Exception("用户名或者密码不能为空");
+            }
             var result = bll.Logon(form.username, form.password);
             MenuBLL menubll = new MenuBLL();
             result.Menu = menubll.GetCurrentUserMenu(result.token);

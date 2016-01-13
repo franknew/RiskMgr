@@ -8,15 +8,28 @@ namespace RiskMgr.Form
 {
     public class UpdateTrackingServiceForm : Project
     {
-        /// <summary>
-        /// 过户信息
-        /// </summary>
-        public TrackingChangeOwner TransferInfo { get; set; }
 
-        /// <summary>
-        /// 借贷信息
-        /// </summary>
-        public TrackingMortgage Mortgage { get; set; }
+        public string ChangeOwnerProfileCode { get; set; }
+
+        public DateTime? ChangeOwnerProfileTime { get; set; }
+
+        public string ChangeOwnerRemark { get; set; }
+
+        public DateTime? LogoutAssetTime { get; set; }
+
+        public string MortgageFeedbackCode { get; set; }
+
+        public DateTime? MortgageOverTime { get; set; }
+
+        public DateTime? MortgagePredictTime { get; set; }
+
+        public string MortgageRemark { get; set; }
+
+        public string NewAssetCode { get; set; }
+
+        public DateTime? NewAssetDate { get; set; }
+
+        public DateTime? PickNewAssetCodeTime { get; set; }
 
         public string WorkflowID { get; set; }
 

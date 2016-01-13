@@ -24,7 +24,7 @@ namespace RiskMgr.Form
         
         public string OrignalIdentityCode { get; set; }
         
-        public Int32? BankType { get; set; }
+        public string BankType { get; set; }
         
         public string BankCode { get; set; }
         

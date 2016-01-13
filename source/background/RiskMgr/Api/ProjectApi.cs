@@ -11,6 +11,7 @@ using System.Text;
 using DreamWorkflow.Engine.DAL;
 using IBatisNet.DataMapper;
 using DreamWorkflow.Engine.Form;
+using SOAFramework.Library;
 
 namespace RiskMgr.Api
 {
@@ -85,17 +86,25 @@ namespace RiskMgr.Api
         /// <param name="form"></param>
         /// <returns></returns>
         [QueryAction]
-        public List<InitApprovalResultForm> Query(QueryProjectServiceForm form)
+        [DataAuthorityFilter]
+        public PagingEntity<InitApprovalResultForm> Query(QueryProjectServiceForm form)
         {
             var list = bll.QueryProjectByRelationship(form);
             if (list.Count == 0)
             {
-                return new List<InitApprovalResultForm>();
+                return new PagingEntity<InitApprovalResultForm> { };
             }
-            var projectids = (from p in list select p.ID).ToList();
+            var projectids = (from p in list select p.ID).Distinct().ToList();
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.Query(projectids, null, userid);
+            var record = bll.Query(projectids, null, userid);
+            PagingEntity<InitApprovalResultForm> result = new PagingEntity<InitApprovalResultForm>
+            {
+                Record = record,
+                PageCount = form.PageCount,
+                RecordCount = form.RecordCount,
+            };
+            return result;
         }
 
         private List<Customer_Project> GetRelationship(List<Customer> customers, int type)
@@ -137,6 +146,7 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [QueryAction]
+        [DataAuthorityFilter]
         public List<Project> QueryMyProcessedProject()
         {
             return bll.QueryMyProject(WorkflowProcessStatus.Processed);
@@ -147,11 +157,18 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [QueryAction]
-        public List<InitApprovalResultForm> QueryMyApply()
+        [DataAuthorityFilter]
+        public PagingEntity<InitApprovalResultForm> QueryMyApply(QueryMyApplyServiceForm form)
         {
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.QueryMyApply(userid);
+            form.UserID = userid;
+            form.Creators = Common.GetDataAuthorityUserIDList();
+            PagingEntity<InitApprovalResultForm> result = new PagingEntity<InitApprovalResultForm>();
+            result.Record = bll.QueryMyApply(form);
+            result.PageCount = form.PageCount;
+            result.RecordCount = form.RecordCount;
+            return result;
         }
 
         /// <summary>
@@ -179,6 +196,8 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
             form.Project.LastUpdator = userid;
+
+            MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "entry activity id:" + form.ActivityID }, SOAFramework.Library.CacheEnum.FormMonitor);
             return bll.UpdateFinance(form.WorkflowID, form.ActivityID, form.TaskID, form.Project, userid);
         }
 
@@ -196,6 +215,11 @@ namespace RiskMgr.Api
             return bll.UpdateTracking(form, form.WorkflowID, form.ActivityID, form.TaskID, userid);
         }
 
+        /// <summary>
+        /// 回款确认
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [ApprovalAction]
         public bool FinanceConfirm(FinanceConfirmServiceForm form)
         {
@@ -203,6 +227,33 @@ namespace RiskMgr.Api
             string userid = userbll.GetCurrentUser().User.ID;
             return bll.FinanceConfirm(form.WorkflowID, form.ActivityID, form.TaskID, form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney,
                 form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate);
+        }
+
+        /// <summary>
+        /// 审批
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [ApprovalAction]
+        public bool Approval(ApprovalServiceForm form)
+        {
+            WorkflowBLL wfbll = new WorkflowBLL();
+            if (string.IsNullOrEmpty(form.WorkflowID))
+            {
+                throw new Exception("没有WorkflowID");
+            }
+            if (string.IsNullOrEmpty(form.ActivityID))
+            {
+                throw new Exception("没有ActivityID");
+            }
+            if (string.IsNullOrEmpty(form.TaskID))
+            {
+                throw new Exception("没有TaskID");
+            }
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            string userid = user.User.ID;
+            return wfbll.Approval(form.WorkflowID, form.ActivityID, form.TaskID, userid, form.Approval);
         }
     }
 }

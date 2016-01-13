@@ -92,8 +92,7 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="form"></param>
         /// <returns></returns>
-        [ChangePasswordAction]
-
+        [EditAction]
         public bool ChangePassword(ChangePasswordUpdateForm form)
         {
             return bll.ChangePassword(form);
@@ -104,7 +103,6 @@ namespace RiskMgr.Api
         /// </summary>
         /// <param name="form"></param>
         /// <returns></returns>
-        [EditAction]
         public bool ChangeSelfPassword(ChangePasswordUpdateForm form)
         {
             string token = ServiceSession.Current.Context.Parameters["token"].ToString();

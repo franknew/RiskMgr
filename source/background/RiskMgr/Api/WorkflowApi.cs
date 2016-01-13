@@ -54,7 +54,8 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             TaskBLL taskbll = new TaskBLL();
             var user = userbll.GetCurrentUser();
-            return taskbll.Query(new QueryMyTaskServiceForm { Creator = user.User.ID });
+            var creators = Common.GetDataAuthorityUserIDList();
+            return taskbll.Query(new QueryMyTaskServiceForm { Creators = creators });
         }
 
         /// <summary>

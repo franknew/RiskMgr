@@ -39,6 +39,7 @@ namespace RiskMgr.Api
             {
                 mapper.RollBackTransaction();
             }
+            if (context.Response != null) MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = context.Response.StackTrace }, SOAFramework.Library.CacheEnum.FormMonitor);
             base.OnExceptionOccurs(context);
         }
     }
