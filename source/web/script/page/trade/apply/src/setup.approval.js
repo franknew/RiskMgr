@@ -32,27 +32,25 @@ define(function(require, exports, module){
 				ipt.focus();
 				return false;
 			}
-			Data.get().done(function(da) {
-				var Params = Data.params();
+			var Params = Data.params();
 
-				Ajax.post({
-					url:'RiskMgr.Api.WorkflowApi/Approval',
-					data:{
-						//审批不用  ID:Params.ID,
-						WorkflowID:Params.WorkflowID,
-						ActivityID:Params.ActivityID,
-						TaskID:Params.TaskID || da.TaskID,
-						Approval:{
-							Remark:remark,
-							Status:result?1:2
-						}
-					},
-					success:function(da) {
-						Msg.success('处理成功.');
-						Route.load('page=workflow');
-						success && success(da);
+			Ajax.post({
+				url:'RiskMgr.Api.WorkflowApi/Approval',
+				data:{
+					//审批不用  ID:Params.ID,
+					WorkflowID:Params.WorkflowID,
+					ActivityID:Params.ActivityID,
+					TaskID:Params.TaskID || Params.ID,
+					Approval:{
+						Remark:remark,
+						Status:result?1:2
 					}
-				});
+				},
+				success:function(da) {
+					Msg.success('处理成功.');
+					Route.load('page=workflow');
+					success && success(da);
+				}
 			});
 		}
 	};
