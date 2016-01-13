@@ -9,9 +9,8 @@ define(function(require, exports, module){
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data'),
-		Params = Data.params();
 
+	var Data = require('./data');
 	var MOD = {
 		init:function() {
 			Route.on('click','finance-submit',function(ev) {//提交回款确认
@@ -21,21 +20,20 @@ define(function(require, exports, module){
 					return ;
 				}
 
-				Data.get().done(function(da) {
-					Ajax.post({
-						url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
-						data:{
-							ID:Params.ID,
-							WorkflowID:Params.WorkflowID,
-							ActivityID:Params.ActivityID,
-							TaskID:Params.TaskID
-						},
-						form:$('#FinanceConfirm'),
-						success:function(da) {
-							Msg.success('已成功确认回款.');
-							Route.reload();
-						}
-					});
+				var Params = Data.params();
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
+					data:{
+						ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID
+					},
+					form:$('#FinanceConfirm'),
+					success:function(da) {
+						Msg.success('已成功确认回款.');
+						Route.reload();
+					}
 				});
 			});
 		}

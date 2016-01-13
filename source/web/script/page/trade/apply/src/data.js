@@ -33,6 +33,7 @@ define(function(require, exports, module){
 				if (arguments.length<=0) {
 					cache = true;
 				}
+				cache = false;	//暂时永不cache，需要做根据id来cache
 				if (_CACHE && _DEFER && cache) {
 					_DEFER.resolve(_CACHE);
 				}else if ( !cache || !_DEFER) {

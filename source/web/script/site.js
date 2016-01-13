@@ -31,7 +31,10 @@
 		paths:{
 			'risk':CDN+'script',
 			'cdn':CDN
-		}
+		},
+		map:[
+			[/(.*)\.js$/,'$1.js?_='+Math.random()]	//强制不缓存
+		]
 	});
 
 	if (agent.indexOf('MSIE') >= 0) {	//不支持的浏览器，都可以放这

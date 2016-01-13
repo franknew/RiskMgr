@@ -9,8 +9,7 @@ define(function(require, exports, module){
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data'),
-		Params = Data.params();
+	var Data = require('./data');
 
 	var MOD = {
 		init:function() {
@@ -34,6 +33,7 @@ define(function(require, exports, module){
 				return false;
 			}
 			Data.get().done(function(da) {
+				var Params = Data.params();
 
 				Ajax.post({
 					url:'RiskMgr.Api.WorkflowApi/Approval',

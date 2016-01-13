@@ -228,6 +228,7 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
 				if (arguments.length<=0) {
 					cache = true;
 				}
+				cache = false;	//暂时永不cache，需要做根据id来cache
 				if (_CACHE && _DEFER && cache) {
 					_DEFER.resolve(_CACHE);
 				}else if ( !cache || !_DEFER) {
@@ -354,8 +355,7 @@ define.pack("./setup.approval",["jquery","risk/unit/ajax","risk/unit/route","ris
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data'),
-		Params = Data.params();
+	var Data = require('./data');
 
 	var MOD = {
 		init:function() {
@@ -379,6 +379,7 @@ define.pack("./setup.approval",["jquery","risk/unit/ajax","risk/unit/route","ris
 				return false;
 			}
 			Data.get().done(function(da) {
+				var Params = Data.params();
 
 				Ajax.post({
 					url:'RiskMgr.Api.WorkflowApi/Approval',
@@ -415,32 +416,27 @@ define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","r
 		route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data'),
-		Params = Data.params();
+	var Data = require('./data');
 
 	var MOD = {
 		init:function() {
 			route.on('click','charge-submit',function(ev) {//提交财务信息
 				ev.preventDefault();
 
-				Data.get().done(function(da) {
-					var action = da&&da.Action,
-						edit = da&&da.ChargeCanEdit,
-						url = action==2?'RiskMgr.Api.ProjectApi/UpdateCharge' : 'RiskMgr.Api.ProjectApi/UpdateFinance';
+				var Params = Data.params();
 
-					Ajax.post({
-						url: url,
-						data:{
-							ID:Params.ID,
-							WorkflowID:Params.WorkflowID,
-							ActivityID:Params.ActivityID,
-							TaskID:Params.TaskID,
-							Project:Serialize($('#Charge'))
-						},
-						success:function(da) {
-							Msg.success('提交成功.');
-						}
-					});
+				Ajax.post({
+					url: 'RiskMgr.Api.ProjectApi/UpdateCharge',
+					data:{
+						ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID,
+						Project:Serialize($('#Charge'))
+					},
+					success:function(da) {
+						Msg.success('提交成功.');
+					}
 				});
 			});
 		}
@@ -574,9 +570,8 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index');
 
-	var Data = require('./data'),
-		Params = Data.params();
 
+	var Data = require('./data');
 	var MOD = {
 		init:function() {
 			Route.on('click','finance-submit',function(ev) {//提交回款确认
@@ -586,21 +581,20 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 					return ;
 				}
 
-				Data.get().done(function(da) {
-					Ajax.post({
-						url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
-						data:{
-							ID:Params.ID,
-							WorkflowID:Params.WorkflowID,
-							ActivityID:Params.ActivityID,
-							TaskID:Params.TaskID
-						},
-						form:$('#FinanceConfirm'),
-						success:function(da) {
-							Msg.success('已成功确认回款.');
-							Route.reload();
-						}
-					});
+				var Params = Data.params();
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
+					data:{
+						ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID
+					},
+					form:$('#FinanceConfirm'),
+					success:function(da) {
+						Msg.success('已成功确认回款.');
+						Route.reload();
+					}
 				});
 			});
 		}
@@ -620,28 +614,26 @@ define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","ris
 
 	var Serialize = require('risk/unit/serialize');
 
-	var Data = require('./data'),
-		Params = Data.params();
+	var Data = require('./data');
 
 	var MOD = {
 		init:function() {
 			Route.on('click','followup-submit',function(ev) {//提交保后跟踪信息
 				ev.preventDefault();
 
-				Data.get().done(function(da) {
-					Ajax.post({
-						url:'RiskMgr.Api.ProjectApi/UpdateTracking',
-						data:{
-							ID:Params.ID,
-							WorkflowID:Params.WorkflowID,
-							ActivityID:Params.ActivityID,
-							TaskID:Params.TaskID,
-						},
-						form:$('#Followup'),
-						success:function(da) {
-							Msg.success('提交成功.');
-						}
-					});
+				var Params = Data.params();
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/UpdateTracking',
+					data:{
+						ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID,
+					},
+					form:$('#Followup'),
+					success:function(da) {
+						Msg.success('提交成功.');
+					}
 				});
 			});
 		}

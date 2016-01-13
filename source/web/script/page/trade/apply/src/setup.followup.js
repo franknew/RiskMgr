@@ -11,28 +11,26 @@ define(function(require, exports, module){
 
 	var Serialize = require('risk/unit/serialize');
 
-	var Data = require('./data'),
-		Params = Data.params();
+	var Data = require('./data');
 
 	var MOD = {
 		init:function() {
 			Route.on('click','followup-submit',function(ev) {//提交保后跟踪信息
 				ev.preventDefault();
 
-				Data.get().done(function(da) {
-					Ajax.post({
-						url:'RiskMgr.Api.ProjectApi/UpdateTracking',
-						data:{
-							ID:Params.ID,
-							WorkflowID:Params.WorkflowID,
-							ActivityID:Params.ActivityID,
-							TaskID:Params.TaskID,
-						},
-						form:$('#Followup'),
-						success:function(da) {
-							Msg.success('提交成功.');
-						}
-					});
+				var Params = Data.params();
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/UpdateTracking',
+					data:{
+						ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID,
+					},
+					form:$('#Followup'),
+					success:function(da) {
+						Msg.success('提交成功.');
+					}
 				});
 			});
 		}
