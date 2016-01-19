@@ -2584,7 +2584,23 @@ __p.push('<div class="step-pane" id="Followup">\n	<div class="block-transparent"
 _p(Former.make(TplFollowup,{
 			data:FollowupData,
 			disabled:!FollowupCanEdit,
-			groupCanAdd:FollowupCanEdit
+			groupCanAdd:FollowupCanEdit,
+			tplFilter:function(tpl) {
+				var rs = $.extend({},tpl);
+					name = tpl.name || (tpl.type=='label' && tpl.html),
+					type = DataView.Type*1;
+
+				switch(type) {
+					case 3: //同名转贷
+						//同名转贷没有这些字段
+						if ($.inArray(name, ['过户收文日期','ChangeOwnerProfileTime','过户办文编号','ChangeOwnerProfileCode','取新证日期','PickNewAssetCodeTime','新房产证号(不动产权号)','NewAssetCode','过户说明','ChangeOwnerRemark']) != -1) {
+							rs = false;
+						}
+					break;
+				}
+
+				return rs;
+			}
 		}));
 __p.push('		</div>\n	</div>');
 if (FollowupCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button class="btn btn btn-success" type="button" data-hook="followup-submit"><i class="fa fa-check"></i> 提交</button>\n		</div>\n	</div>');
