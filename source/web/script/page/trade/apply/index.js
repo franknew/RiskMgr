@@ -540,6 +540,16 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 		},
 		add:function(box,data) {
 			box = $(box);
+			//移除空白的
+			box.find('.list-group-item').each(function(i,ele) {
+				var $ele = $(ele);
+				if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
+					$ele.slideUp('fase',function() {
+						$ele.remove();
+					});
+				}
+			});
+
 			var html = Tmpl.CustomerItem({
 					tpl:this.getTpl,
 					data:data,
@@ -741,6 +751,16 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 		},
 		add:function(box,data) {
 			box = $(box);
+			//移除空白的
+			box.find('.list-group-item').each(function(i,ele) {
+				var $ele = $(ele);
+				if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
+					$ele.slideUp('fase',function() {
+						$ele.remove();
+					});
+				}
+			});
+
 			var html = Tmpl.GuarantorItem({
 					data:data,
 					canEdit:true
@@ -1024,6 +1044,15 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 		},
 		add:function(box,data) {
 			box = $(box);
+			//移除空白的
+			box.find('.list-group-item').each(function(i,ele) {
+				var $ele = $(ele);
+				if (!$ele.find('[name="Code"]').val() && !$ele.find('[name="Address"]').val()) {	//没填就标识要删掉
+					$ele.slideUp('fase',function() {
+						$ele.remove();
+					});
+				}
+			});
 
 			var html = Tmpl.PropertyItem({
 					tpl:this.getTpl,

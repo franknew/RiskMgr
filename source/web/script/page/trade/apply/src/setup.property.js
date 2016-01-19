@@ -110,6 +110,15 @@ define(function(require, exports, module){
 		},
 		add:function(box,data) {
 			box = $(box);
+			//移除空白的
+			box.find('.list-group-item').each(function(i,ele) {
+				var $ele = $(ele);
+				if (!$ele.find('[name="Code"]').val() && !$ele.find('[name="Address"]').val()) {	//没填就标识要删掉
+					$ele.slideUp('fase',function() {
+						$ele.remove();
+					});
+				}
+			});
 
 			var html = Tmpl.PropertyItem({
 					tpl:this.getTpl,
