@@ -37,7 +37,6 @@ define.pack = function(){
 //customer/src/selector.js
 //customer/src/tpl.view.js
 //customer/src/list.tmpl.html
-//customer/src/selector.tmpl.html
 
 //js file list:
 //customer/src/dialog.js
@@ -603,7 +602,6 @@ define.pack("./tpl.view",[],function(require, exports, module){
 });
 //tmpl file list:
 //customer/src/list.tmpl.html
-//customer/src/selector.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'list': function(data){
@@ -690,52 +688,6 @@ _p(Cur.Phone||'&nbsp;');
 __p.push('</p>\n		<p>');
 _p(Cur.Address||'&nbsp;');
 __p.push('</p>\n	</div>\n	-->');
-
-return __p.join("");
-},
-
-'Selector': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-__p.push('\n	<form class="form-inline">\n		<div class="form-group">\n			<label>姓名</label>\n			<input type="text" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat">查找</button>\n	</form>\n	<hr style="margin:10px 0;border-top-style: dashed;"/>\n\n	<div id="J_SelectorBody">');
-_p(this.SelectorList(data));
-__p.push('	</div>\n\n	<div class="j-pager"></div>\n');
-
-return __p.join("");
-},
-
-'SelectorList': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border hover">\n		<thead class="no-border">\n			<tr>\n				<th>姓名</th>\n				<th>证件号</th>\n				<th>电话</th>\n				<th>&nbsp;</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-y">');
-_p(this.SelectorItem(data));
-__p.push('		</tbody>\n	</table>');
-
-return __p.join("");
-},
-
-'SelectorItem': function(data){
-
-var __p=[],_p=function(s){__p.push(s)};
-
-
-	var List = data;
-	var i=0,Cur;
-	for(;Cur=List[i++];) {
-__p.push('	<tr class="pointer-item" data-id="');
-_p(Cur.ID);
-__p.push('" data-data=\'');
-_p(JSON.stringify(Cur));
-__p.push('\' data-hook="choose">\n		<td>');
-_p(Cur.Name);
-__p.push('</td>\n		<td>');
-_p(Cur.IdentityCode||'&nbsp;');
-__p.push('</td>\n		<td>');
-_p(Cur.Phone||'&nbsp;');
-__p.push('</td>\n		<td><i class="fa fa-square-o"></i> 选择</td>\n	</tr>');
-
-	}
-__p.push('');
 
 return __p.join("");
 }

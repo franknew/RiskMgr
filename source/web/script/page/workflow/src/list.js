@@ -43,7 +43,7 @@ define(function(require, exports, module){
 				current:current,
 				size:size,
 				success:function(da) {
-					var html = tmpl.List(da);
+					var html = tmpl.List(da&&da.Record || da);	//da是兼容旧数据，等后台发版本后去掉即可
 
 					container.html(html);
 
