@@ -77,8 +77,8 @@ define(function(require, exports, module) {
 		},
 		//加载指定的模块
 		load:function(modname) {
-			var reg = new RegExp('\b'+modname+'\b','');
-			if (!reg.test(location.hash)) {	//填上当前页的mod，并会自动触发hashchange事件
+			var reg = new RegExp('\\b'+modname+'\\b');
+			if (!reg.test(location.hash)) {	//判断是当前页面，则只用触发hashchange
 				location.hash = modname;
 			}else {	//当前页重复刷新
 				var modinfo = this._getMod(modname);
@@ -104,7 +104,7 @@ define(function(require, exports, module) {
 		 */
 		on:function(events,hook,func) {
 			var selector = '[data-hook='+hook+']';
-			this.container.children().on(events,selector,func);
+			this.container.on(events,selector,func);
 
 			return this;
 		},
@@ -226,6 +226,8 @@ define(function(require, exports, module) {
 			return rs;
 		}
 	};
+
+	window.RT = MOD;
 
 	return MOD;
 });

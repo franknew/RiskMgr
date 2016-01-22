@@ -65,16 +65,27 @@ define(function(require, exports, module){
 			});
 
 			require('./data').get().done(function(data) {
-				var id = data&&data.Project&&data.Project.Name,
-					type = data&&data.Project&&data.Project.Type,
+				data = data || {};
+				var id = data.Project&&data.Project.Name,
+					type = data.Project&&data.Project.Type,
 					typeName = Types.get(type);
 
-				var complete = data&&data.WorkflowComplete ? '<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>':'';
+				var extraText;
+
+				if (data&&data.WorkflowComplete) {
+					extraText = '<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>';
+				}else {
+					extraText = '<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>';
+				}
 
 				Setup.init({
 					mode:params.action,
-					head:head+' <small>'+typeName+'('+id+') '+complete+'</small>',
+					head:head+' <small>'+typeName+'('+id+') '+extraText+'</small>',
 					data:data
+				});
+
+				$('#J_Header').on('click','[data-hook="trade-print"]',function(ev) {
+					window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
 				});
 			});
 		}

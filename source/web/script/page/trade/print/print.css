@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+body {
+	height: auto;
+	background: #fff;
+}
+.trade-printer {width:640px;margin:20px auto;}
+	.trade-printer .operate {
+		text-align: right;
+	}
+	.trade-printer .info {
+		font-size: 18px;
+	}
+
+
+@media print {
+	.trade-printer .operate {
+		display: none;
+	}
+}

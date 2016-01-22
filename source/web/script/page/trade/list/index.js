@@ -194,7 +194,7 @@ var tmpl = {
 'ListContainer': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">\n		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control" name="Status">\n				<option value="" selected="selected">全部</option>\n				<option value="1">流程中</option>\n				<option value="5">审批不通过</option>\n				<option value="4">已终审（经理审批）</option>\n				<option value="3">已结单</option>\n			</select>\n		</div>\n		<div class="form-group">\n			<label>客户姓名</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>房产证号</label>\n			<input type="text" name="IdentityCode" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>编号</label>\n			<input type="text" name="BusinessCode" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
+__p.push('<div class="block-flat">\n	<form class="form-inline" id="J_SearchForm">\n		<div class="form-group">\n			<label>单据状态</label>\n			<select class="form-control" name="Status">\n				<option value="" selected="selected">全部</option>\n				<option value="2">流程中</option>\n				<option value="5">审批不通过</option>\n				<option value="4">已终审（经理审批）</option>\n				<option value="3">已结单</option>\n			</select>\n		</div>\n		<div class="form-group">\n			<label>客户姓名</label>\n			<input type="text" name="Name" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>房产证号</label>\n			<input type="text" name="IdentityCode" class="form-control" placeholder="">\n		</div>\n		<div class="form-group">\n			<label>编号</label>\n			<input type="text" name="BusinessCode" class="form-control" placeholder="">\n		</div>\n		<button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
 
 return __p.join("");
 },
@@ -202,7 +202,7 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>编号</th>\n				<th>业务员</th>\n				<th>客户名称</th>\n				<th>房产地址</th>\n				<th>申请时间</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>编号</th>\n				<th>业务员</th>\n				<th>客户名称</th>\n				<th>房产地址</th>\n				<th>申请时间</th>\n				<th>状态</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
 
@@ -265,6 +265,8 @@ __p.push('</td>\n			</tr>');
 			}
 			__p.push('			</table>\n		</td>\n		<td>');
 _p(RString.date(Cur.Project.CreateTime,'yyyy-MM-dd HH:mm:ss'));
+__p.push('</td>\n		<td>');
+_p(Cur.WorkflowComplete?'已回款':(Cur.CurrentActivity && Cur.CurrentActivity.Name));
 __p.push('</td>\n	</tr>');
 
 		}

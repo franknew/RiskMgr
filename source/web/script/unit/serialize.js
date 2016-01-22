@@ -50,7 +50,6 @@ define(function(require, exports, module){
 					}
 					break;
 				case 'radio':
-					console.log('ischecked',$elem.is(':checked'));
 					if ($elem.is(':checked')) {
 						storeObject[eleName] = val;
 					}
