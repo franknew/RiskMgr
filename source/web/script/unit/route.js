@@ -104,7 +104,8 @@ define(function(require, exports, module) {
 		 */
 		on:function(events,hook,func) {
 			var selector = '[data-hook='+hook+']';
-			this.container.on(events,selector,func);
+			//绑定在首个元素上，防止多个模块重复绑定
+			this.container.find('>div:first').on(events,selector,func);
 
 			return this;
 		},
