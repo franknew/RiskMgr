@@ -107,7 +107,7 @@ define(function(require, exports, module){
 			var searchForm = $('#J_SearchForm'),
 				type = searchForm.find('[name="SearchType"]').val() || 'processing',
 				url = {
-					'processing':'RiskMgr.Api.WorkflowApi/QueryMyProcessing',
+					'processing':'RiskMgr.Api.WorkflowApi/QueryMyProcessingWithPaging',
 					'processed':'RiskMgr.Api.WorkflowApi/QueryMyProcessed'
 				}[type];
 			return ajax.post({
