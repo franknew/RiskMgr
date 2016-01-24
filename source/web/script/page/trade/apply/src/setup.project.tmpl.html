@@ -38,7 +38,10 @@
 								if ($.inArray(name, ['赎楼期限','GuaranteeMonth','赎楼金额','AssetRansomMoney']) != -1) {
 									rs = false;
 								}
-							break;
+								break;
+							case 4: //贷前垫资,全部都非必填
+								rs.required = false;
+								break;
 						}
 
 						return rs;

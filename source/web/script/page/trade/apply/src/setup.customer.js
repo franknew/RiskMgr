@@ -54,7 +54,7 @@ define(function(require, exports, module){
 
 				Customer.selector({
 					success:function(data) {
-						MOD.add(box,data);
+						MOD.add(box,data,true);
 					}
 				});
 
@@ -82,6 +82,7 @@ define(function(require, exports, module){
 			});
 
 			//通过输入的关键字段，自动补齐
+			/*//先禁用，现在匹配到后会禁止修改，体验上不好，待优化
 			AutoComplete({
 				container:$('#Customer'),
 				checkList:CORE_NAME,
@@ -93,19 +94,22 @@ define(function(require, exports, module){
 					return rs;
 				}
 			});
+			*/
 
 		},
-		add:function(box,data) {
+		add:function(box,data,removeEmpty) {
 			box = $(box);
 			//移除空白的
-			box.find('.list-group-item').each(function(i,ele) {
-				var $ele = $(ele);
-				if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
-					$ele.slideUp('fase',function() {
-						$ele.remove();
-					});
-				}
-			});
+			if (removeEmpty) {
+				box.find('.list-group-item').each(function(i,ele) {
+					var $ele = $(ele);
+					if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
+						$ele.slideUp('fase',function() {
+							$ele.remove();
+						});
+					}
+				});
+			}
 
 			var html = Tmpl.CustomerItem({
 					tpl:this.getTpl,

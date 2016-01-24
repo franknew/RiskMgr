@@ -15,8 +15,8 @@
 					for(; i < l; ++i) {
 				%>
 					<%=this.PropertyItem({
-						data:Property[i],
-						tpl:data.propertyTpl,
+						type:FormData.Type,
+						property:Property[i],
 						canEdit:data.canEdit
 					})%>
 				<%
@@ -44,11 +44,37 @@
 
 <script type="text/html" id="PropertyItem">
 <%
+	//这个模板在setup.property.js里面也有用到，不好直接传FormData，改的时候注意
 	var Former = require('risk/components/former/index');
+
+	var PropertyData = data.property,
+		FormType = data.type*1;
 %>
 	<div class="list-group-item">
 		<div class="j-property-form">
-			<%=data.tpl(data.data,data.canEdit)%>
+
+			<%=Former.make(require('risk/page/Property/tpl.view'),{
+				data:PropertyData,
+				disabled:!data.canEdit,
+				tplFilter:function(tpl) {
+					var rs = $.extend({},tpl);
+						name = tpl.name || (tpl.type=='label' && tpl.html),
+						type = FormType;
+
+					//贷前垫资/首期款垫资，有一手楼，没有房产证号等信息（房产地址必须填）
+					switch(type) {
+						case 2: //首期款垫付
+						case 4: //贷前垫资
+							if ($.inArray(name, ['Address','房产地址','Position']) == -1) {
+								rs.required = false;
+							}
+							break;
+					}
+					//console.log('tplFilter:::',name,type,rs);
+
+					return rs;
+				}
+			})%>
 
 			<%/**手动增加一个备注表单**/%>
 			<%=Former.make([[{

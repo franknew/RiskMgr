@@ -21,13 +21,6 @@ define(function(require, exports, module){
 	var CORE_NAME = ['Code'];
 
 	var MOD = {
-		getTpl:function(data,canEdit) {
-			var tpl = former.make(PropertyTpl,{
-				data:data,
-				disabled:!canEdit
-			});
-			return tpl;
-		},
 		getData:function() {
 			var list = $('#PropertyBase div.j-property-form'),
 				data = [];
@@ -59,8 +52,9 @@ define(function(require, exports, module){
 
 				Property.selector({
 					success:function(data) {
+						data.ID = '';
 						delete data.ID;	//移除id，后台要根据姓名、身份证号来更新已存在客户信息
-						MOD.add(box,data);
+						MOD.add(box,data,true);
 					}
 				});
 			}).on('click','property-remove',function(ev) {//移除房产
@@ -96,6 +90,7 @@ define(function(require, exports, module){
 
 
 			//通过输入的关键字段，自动补齐
+			/*//先禁用，现在匹配到后会禁止修改，体验上不好，待优化
 			AutoComplete({
 				container:$('#PropertyBase'),
 				checkList:CORE_NAME,
@@ -107,22 +102,26 @@ define(function(require, exports, module){
 					return rs;
 				}
 			});
+			*/
 		},
-		add:function(box,data) {
+		add:function(box,data,removeEmpty) {
 			box = $(box);
 			//移除空白的
-			box.find('.list-group-item').each(function(i,ele) {
-				var $ele = $(ele);
-				if (!$ele.find('[name="Code"]').val() && !$ele.find('[name="Address"]').val()) {	//没填就标识要删掉
-					$ele.slideUp('fase',function() {
-						$ele.remove();
-					});
-				}
-			});
+			if (removeEmpty) {
+				box.find('.list-group-item').each(function(i,ele) {
+					var $ele = $(ele);
+					if (!$ele.find('[name="Code"]').val() && !$ele.find('[name="Address"]').val()) {	//没填就标识要删掉
+						$ele.slideUp('fase',function() {
+							$ele.remove();
+						});
+					}
+				});
+			}
+			console.log('ddd',data);
 
 			var html = Tmpl.PropertyItem({
-					tpl:this.getTpl,
-					data:data,
+					type:$('input[name="Type"]').val()*1,
+					property:data,
 					canEdit:true
 				});
 

@@ -41,7 +41,6 @@ define(function(require, exports, module){
 				canEdit = !! (~$.inArray(mode, ['add','edit']) || data&&data.Action==2);
 			var html = Tmpl.Setup({
 				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
-				propertyTpl:Property.getTpl,
 				data:data,
 				mode:mode,
 				canEdit:canEdit
