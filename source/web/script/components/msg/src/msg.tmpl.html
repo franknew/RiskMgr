@@ -1,3 +1,8 @@
 <script type="text/html" id="msg">
-<div class="alert <%=data.type%>" role="alert"><%=data.message%></div>
+<div class="alert alert-<%=data.type%>" role="alert">
+	<p><%=data.message%></p>
+	<%if (data.button) {%>
+		<div style="text-align:center;margin-top:10px;"><button type="button" class="btn btn-<%=data.type%> btn-sm">确定</button></div>
+	<%}%>
+</div>
 </script>

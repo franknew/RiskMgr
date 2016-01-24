@@ -13,18 +13,19 @@ define(function(require, exports, module){
 			delay = delay===false?false:(delay || '3000');
 
 			var typeMap = {
-				'error':'alert-danger',
-				'success':'alert-success',
-				'warn':'alert-warning',
-				'info':'alert-info'
-			};
+					'error':'danger',
+					'success':'success',
+					'warn':'warning',
+					'info':'info'
+				},
+				button = !!~$.inArray(type, ['error','warn']);
+
 			var html = $(tmpl.msg({
 				type:typeMap[type] || typeMap['info'],
-				message:message
+				message:message,
+				button:button
 			}));
-			html.bind('click',function() {
-				$(this).remove();
-			});
+
 			html.css({
 				fontSize:'14px',
 				lineHeight:'1.7',
@@ -37,8 +38,14 @@ define(function(require, exports, module){
 				transform:'translateX(-50%) translateY(-50%)'
 			}).appendTo(document.body);
 
+			var removeBinder = button?html.find('button'):html;
+
+			removeBinder.bind('click',function() {
+				html.remove();
+			});
+
 			//删除
-			if (delay!==false) {
+			if (delay!==false && !button) {
 				setTimeout(function() {
 					html.fadeOut(function() {
 						$(this).remove();

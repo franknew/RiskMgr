@@ -46,7 +46,7 @@ define(function(require, exports, module){
 
 				Customer.selector({
 					success:function(data) {
-						MOD.add(box,data);
+						MOD.add(box,data,true);
 					}
 				});
 
@@ -99,17 +99,19 @@ define(function(require, exports, module){
 			})
 
 		},
-		add:function(box,data) {
+		add:function(box,data,removeEmpty) {
 			box = $(box);
 			//移除空白的
-			box.find('.list-group-item').each(function(i,ele) {
-				var $ele = $(ele);
-				if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
-					$ele.slideUp('fase',function() {
-						$ele.remove();
-					});
-				}
-			});
+			if (removeEmpty) {
+				box.find('.list-group-item').each(function(i,ele) {
+					var $ele = $(ele);
+					if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
+						$ele.slideUp('fase',function() {
+							$ele.remove();
+						});
+					}
+				});
+			}
 
 			var html = Tmpl.GuarantorItem({
 					data:data,

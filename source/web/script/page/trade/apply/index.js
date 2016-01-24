@@ -508,7 +508,7 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 
 				Customer.selector({
 					success:function(data) {
-						MOD.add(box,data);
+						MOD.add(box,data,true);
 					}
 				});
 
@@ -536,6 +536,7 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 			});
 
 			//通过输入的关键字段，自动补齐
+			/*//先禁用，现在匹配到后会禁止修改，体验上不好，待优化
 			AutoComplete({
 				container:$('#Customer'),
 				checkList:CORE_NAME,
@@ -547,19 +548,22 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 					return rs;
 				}
 			});
+			*/
 
 		},
-		add:function(box,data) {
+		add:function(box,data,removeEmpty) {
 			box = $(box);
 			//移除空白的
-			box.find('.list-group-item').each(function(i,ele) {
-				var $ele = $(ele);
-				if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
-					$ele.slideUp('fase',function() {
-						$ele.remove();
-					});
-				}
-			});
+			if (removeEmpty) {
+				box.find('.list-group-item').each(function(i,ele) {
+					var $ele = $(ele);
+					if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
+						$ele.slideUp('fase',function() {
+							$ele.remove();
+						});
+					}
+				});
+			}
 
 			var html = Tmpl.CustomerItem({
 					tpl:this.getTpl,
@@ -707,7 +711,7 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 
 				Customer.selector({
 					success:function(data) {
-						MOD.add(box,data);
+						MOD.add(box,data,true);
 					}
 				});
 
@@ -760,17 +764,19 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 			})
 
 		},
-		add:function(box,data) {
+		add:function(box,data,removeEmpty) {
 			box = $(box);
 			//移除空白的
-			box.find('.list-group-item').each(function(i,ele) {
-				var $ele = $(ele);
-				if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
-					$ele.slideUp('fase',function() {
-						$ele.remove();
-					});
-				}
-			});
+			if (removeEmpty) {
+				box.find('.list-group-item').each(function(i,ele) {
+					var $ele = $(ele);
+					if (!$ele.find('[name="Name"]').val()) {	//姓名没填就标识要删掉
+						$ele.slideUp('fase',function() {
+							$ele.remove();
+						});
+					}
+				});
+			}
 
 			var html = Tmpl.GuarantorItem({
 					data:data,
@@ -841,7 +847,6 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				canEdit = !! (~$.inArray(mode, ['add','edit']) || data&&data.Action==2);
 			var html = Tmpl.Setup({
 				customerTpl:Customer.getTpl,	//获取公共客户模板的函数
-				propertyTpl:Property.getTpl,
 				data:data,
 				mode:mode,
 				canEdit:canEdit
@@ -966,13 +971,6 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 	var CORE_NAME = ['Code'];
 
 	var MOD = {
-		getTpl:function(data,canEdit) {
-			var tpl = former.make(PropertyTpl,{
-				data:data,
-				disabled:!canEdit
-			});
-			return tpl;
-		},
 		getData:function() {
 			var list = $('#PropertyBase div.j-property-form'),
 				data = [];
@@ -1004,8 +1002,9 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 
 				Property.selector({
 					success:function(data) {
+						data.ID = '';
 						delete data.ID;	//移除id，后台要根据姓名、身份证号来更新已存在客户信息
-						MOD.add(box,data);
+						MOD.add(box,data,true);
 					}
 				});
 			}).on('click','property-remove',function(ev) {//移除房产
@@ -1041,6 +1040,7 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 
 
 			//通过输入的关键字段，自动补齐
+			/*//先禁用，现在匹配到后会禁止修改，体验上不好，待优化
 			AutoComplete({
 				container:$('#PropertyBase'),
 				checkList:CORE_NAME,
@@ -1052,22 +1052,26 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 					return rs;
 				}
 			});
+			*/
 		},
-		add:function(box,data) {
+		add:function(box,data,removeEmpty) {
 			box = $(box);
 			//移除空白的
-			box.find('.list-group-item').each(function(i,ele) {
-				var $ele = $(ele);
-				if (!$ele.find('[name="Code"]').val() && !$ele.find('[name="Address"]').val()) {	//没填就标识要删掉
-					$ele.slideUp('fase',function() {
-						$ele.remove();
-					});
-				}
-			});
+			if (removeEmpty) {
+				box.find('.list-group-item').each(function(i,ele) {
+					var $ele = $(ele);
+					if (!$ele.find('[name="Code"]').val() && !$ele.find('[name="Address"]').val()) {	//没填就标识要删掉
+						$ele.slideUp('fase',function() {
+							$ele.remove();
+						});
+					}
+				});
+			}
+			console.log('ddd',data);
 
 			var html = Tmpl.PropertyItem({
-					tpl:this.getTpl,
-					data:data,
+					type:$('input[name="Type"]').val()*1,
+					property:data,
 					canEdit:true
 				});
 
@@ -2790,7 +2794,10 @@ _p(Former.make(require('./tpl.project.ransombank'),{
 								if ($.inArray(name, ['赎楼期限','GuaranteeMonth','赎楼金额','AssetRansomMoney']) != -1) {
 									rs = false;
 								}
-							break;
+								break;
+							case 4: //贷前垫资,全部都非必填
+								rs.required = false;
+								break;
 						}
 
 						return rs;
@@ -2851,8 +2858,8 @@ if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-
 					for(; i < l; ++i) {
 				__p.push('					');
 _p(this.PropertyItem({
-						data:Property[i],
-						tpl:data.propertyTpl,
+						type:FormData.Type,
+						property:Property[i],
 						canEdit:data.canEdit
 					}));
 __p.push('				');
@@ -2871,9 +2878,34 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 
+	//这个模板在setup.property.js里面也有用到，不好直接传FormData，改的时候注意
 	var Former = require('risk/components/former/index');
+
+	var PropertyData = data.property,
+		FormType = data.type*1;
 __p.push('	<div class="list-group-item">\n		<div class="j-property-form">');
-_p(data.tpl(data.data,data.canEdit));
+_p(Former.make(require('risk/page/Property/tpl.view'),{
+				data:PropertyData,
+				disabled:!data.canEdit,
+				tplFilter:function(tpl) {
+					var rs = $.extend({},tpl);
+						name = tpl.name || (tpl.type=='label' && tpl.html),
+						type = FormType;
+
+					//贷前垫资/首期款垫资，有一手楼，没有房产证号等信息（房产地址必须填）
+					switch(type) {
+						case 2: //首期款垫付
+						case 4: //贷前垫资
+							if ($.inArray(name, ['Address','房产地址','Position']) == -1) {
+								rs.required = false;
+							}
+							break;
+					}
+					//console.log('tplFilter:::',name,type,rs);
+
+					return rs;
+				}
+			}));
 /**手动增加一个备注表单**/__p.push('			');
 _p(Former.make([[{
 				type:'label',

@@ -51,18 +51,19 @@ define.pack("./index",["jquery","./tmpl"],function(require, exports, module){
 			delay = delay===false?false:(delay || '3000');
 
 			var typeMap = {
-				'error':'alert-danger',
-				'success':'alert-success',
-				'warn':'alert-warning',
-				'info':'alert-info'
-			};
+					'error':'danger',
+					'success':'success',
+					'warn':'warning',
+					'info':'info'
+				},
+				button = !!~$.inArray(type, ['error','warn']);
+
 			var html = $(tmpl.msg({
 				type:typeMap[type] || typeMap['info'],
-				message:message
+				message:message,
+				button:button
 			}));
-			html.bind('click',function() {
-				$(this).remove();
-			});
+
 			html.css({
 				fontSize:'14px',
 				lineHeight:'1.7',
@@ -75,8 +76,14 @@ define.pack("./index",["jquery","./tmpl"],function(require, exports, module){
 				transform:'translateX(-50%) translateY(-50%)'
 			}).appendTo(document.body);
 
+			var removeBinder = button?html.find('button'):html;
+
+			removeBinder.bind('click',function() {
+				html.remove();
+			});
+
 			//删除
-			if (delay!==false) {
+			if (delay!==false && !button) {
 				setTimeout(function() {
 					html.fadeOut(function() {
 						$(this).remove();
@@ -108,11 +115,15 @@ var tmpl = {
 'msg': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="alert ');
+__p.push('<div class="alert alert-');
 _p(data.type);
-__p.push('" role="alert">');
+__p.push('" role="alert">\n	<p>');
 _p(data.message);
-__p.push('</div>');
+__p.push('</p>');
+if (data.button) {__p.push('		<div style="text-align:center;margin-top:10px;"><button type="button" class="btn btn-');
+_p(data.type);
+__p.push(' btn-sm">确定</button></div>');
+}__p.push('</div>');
 
 return __p.join("");
 }
