@@ -6,6 +6,7 @@
 define(function(require, exports, module){
 
 	var $ = require('jquery'),
+		Ajax = require('risk/unit/ajax'),
 		Route = require('risk/unit/route'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
@@ -68,15 +69,24 @@ define(function(require, exports, module){
 				data = data || {};
 				var id = data.Project&&data.Project.Name,
 					type = data.Project&&data.Project.Type,
-					typeName = Types.get(type);
+					typeName = Types.get(type),
+					canDiscard = data.CanDiscard;	//可以作废
 
-				var extraText = '';
+				canDiscard = true;
+
+				var extraText = [];
 
 				if (data&&data.WorkflowComplete) {
-					extraText = '<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>';
+					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
 				}else {
-					//extraText = '<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>';
+					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
+
+				if (canDiscard) {
+					extraText.push('<button type="button" class="btn btn-danger" data-id="'+id+'" data-tip="'+typeName+'('+id+')'+'" data-hook="trade-discard">作废该单</button>');
+				}
+
+				extraText = extraText.join(' ');
 
 				Setup.init({
 					mode:params.action,
@@ -84,8 +94,31 @@ define(function(require, exports, module){
 					data:data
 				});
 
-				$('#J_Header').on('click','[data-hook="trade-print"]',function(ev) {
-					window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+				MOD._initEvent();
+			});
+		},
+		_initEvent:function() {
+			$('#J_Header').on('click','[data-hook="trade-print"]',function(ev) {
+				//打印单据
+				window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+			}).on('click','[data-hook="trade-discard"]',function(ev) {
+				//作废单据
+				ev.preventDefault();
+				var $elem = $(ev.currentTarget),
+					txt = $elem.attr('data-tip'),
+					id = $elem.attr('data-id');
+				if (!confirm('确认废弃单据“'+txt+'”？')) {
+					return ;
+				}
+
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/Discard',
+					data:{
+						id:id
+					},
+					success:function(data, textStatus, jqXHR) {
+						msg.success('废弃成功.');
+					}
 				});
 			});
 		}

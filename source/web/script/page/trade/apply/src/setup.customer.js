@@ -32,9 +32,11 @@ define(function(require, exports, module){
 		getData:function() {
 			var buyerList = $('#BuyerList div.list-group-item'),
 				sellerList = $('#SellerList div.list-group-item'),
+				thirdpartyList = $('#ThirdpartyList div.list-group-item'),
 				data = {
 					buyer:[],
-					seller:[]
+					seller:[],
+					thirdparty:[]
 				};
 
 			buyerList.each(function(i,ele) {
@@ -42,6 +44,9 @@ define(function(require, exports, module){
 			});
 			sellerList.each(function(i,ele) {
 				data.seller.push(Serialize(ele));
+			});
+			thirdpartyList.each(function(i,ele) {
+				data.thirdparty.push(Serialize(ele));
 			});
 
 			return data;

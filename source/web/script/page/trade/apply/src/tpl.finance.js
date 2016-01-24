@@ -32,6 +32,28 @@ define(function(require, exports, module){
 		}],
 
 		[{
+			type:'label',
+			col:3,
+			html:'回款金额2'
+		},{
+			col:'3',
+			type:'number',
+			name:'ReturnBackMoney2',
+			placeholder:'',
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			html:'回款时间2'
+		},{
+			col:'3',
+			type:'date',
+			required:true,
+			name:'ReturnBackTime2',
+			placeholder:''
+		}],
+
+		[{
 			col:'12',
 			type:'label',
 			html:'<hr/>'
@@ -76,6 +98,23 @@ define(function(require, exports, module){
 			col:'3',
 			type:'date',
 			name:'RefundDate'
+		}],
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'备注'
+		},{
+			col:'9',
+			type:'textarea',
+			name:'ReturnBackRemark',
+			placeholder:''
 		}]
 	];
 

@@ -73,6 +73,11 @@
 							}
 						}
 
+						//只有贷前垫资才显示“垫资金额”
+						if (type!=4 && !!~$.inArray(name,['垫资金额','CompanyPredepositMoney'])) {
+							rs = false;
+						}
+
 						return rs;
 					}
 				})%>

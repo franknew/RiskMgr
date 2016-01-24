@@ -266,9 +266,10 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
-define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./config.type","./data"],function(require, exports, module){
+define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./setup","./config.type","./data"],function(require, exports, module){
 
 	var $ = require('jquery'),
+		Ajax = require('risk/unit/ajax'),
 		Route = require('risk/unit/route'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
@@ -331,15 +332,24 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./config.t
 				data = data || {};
 				var id = data.Project&&data.Project.Name,
 					type = data.Project&&data.Project.Type,
-					typeName = Types.get(type);
+					typeName = Types.get(type),
+					canDiscard = data.CanDiscard;	//可以作废
 
-				var extraText = '';
+				canDiscard = true;
+
+				var extraText = [];
 
 				if (data&&data.WorkflowComplete) {
-					extraText = '<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>';
+					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
 				}else {
-					//extraText = '<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>';
+					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
+
+				if (canDiscard) {
+					extraText.push('<button type="button" class="btn btn-danger" data-id="'+id+'" data-tip="'+typeName+'('+id+')'+'" data-hook="trade-discard">作废该单</button>');
+				}
+
+				extraText = extraText.join(' ');
 
 				Setup.init({
 					mode:params.action,
@@ -347,8 +357,31 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./config.t
 					data:data
 				});
 
-				$('#J_Header').on('click','[data-hook="trade-print"]',function(ev) {
-					window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+				MOD._initEvent();
+			});
+		},
+		_initEvent:function() {
+			$('#J_Header').on('click','[data-hook="trade-print"]',function(ev) {
+				//打印单据
+				window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+			}).on('click','[data-hook="trade-discard"]',function(ev) {
+				//作废单据
+				ev.preventDefault();
+				var $elem = $(ev.currentTarget),
+					txt = $elem.attr('data-tip'),
+					id = $elem.attr('data-id');
+				if (!confirm('确认废弃单据“'+txt+'”？')) {
+					return ;
+				}
+
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/Discard',
+					data:{
+						id:id
+					},
+					success:function(data, textStatus, jqXHR) {
+						msg.success('废弃成功.');
+					}
 				});
 			});
 		}
@@ -486,9 +519,11 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 		getData:function() {
 			var buyerList = $('#BuyerList div.list-group-item'),
 				sellerList = $('#SellerList div.list-group-item'),
+				thirdpartyList = $('#ThirdpartyList div.list-group-item'),
 				data = {
 					buyer:[],
-					seller:[]
+					seller:[],
+					thirdparty:[]
 				};
 
 			buyerList.each(function(i,ele) {
@@ -496,6 +531,9 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 			});
 			sellerList.each(function(i,ele) {
 				data.seller.push(Serialize(ele));
+			});
+			thirdpartyList.each(function(i,ele) {
+				data.thirdparty.push(Serialize(ele));
 			});
 
 			return data;
@@ -619,6 +657,25 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 						Route.reload();
 					}
 				});
+			}).on('click','finance-save',function(ev) {//保存回款
+				ev.preventDefault();
+
+				var Params = Data.params();
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/FinanceSave',
+					data:{
+						ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID
+					},
+					form:$('#FinanceConfirm'),
+					success:function(da) {
+						Msg.success('保存成功.');
+						//Route.reload();
+					}
+				});
+
 			});
 		}
 	};
@@ -903,6 +960,7 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				data = {
 					Buyers:dataCustomer.buyer,
 					Sellers:dataCustomer.seller,
+					Thirdparty:dataCustomer.thirdparty,
 					Assets:Property.getData(),
 					Project:Project.getData(),
 					Guarantor:Guarantor.getData(),
@@ -1480,6 +1538,28 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 		}],
 
 		[{
+			type:'label',
+			col:3,
+			html:'回款金额2'
+		},{
+			col:'3',
+			type:'number',
+			name:'ReturnBackMoney2',
+			placeholder:'',
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			html:'回款时间2'
+		},{
+			col:'3',
+			type:'date',
+			required:true,
+			name:'ReturnBackTime2',
+			placeholder:''
+		}],
+
+		[{
 			col:'12',
 			type:'label',
 			html:'<hr/>'
@@ -1524,6 +1604,23 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 			col:'3',
 			type:'date',
 			name:'RefundDate'
+		}],
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'备注'
+		},{
+			col:'9',
+			type:'textarea',
+			name:'ReturnBackRemark',
+			placeholder:''
 		}]
 	];
 
@@ -2021,6 +2118,15 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 			col:"3",
 			type:'decimal',
 			name:'CustomerPredepositMoney',
+			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			html:'垫资金额'
+		},{
+			col:"3",
+			type:'decimal',
+			name:'CompanyPredepositMoney',
 			suffix:'万元'
 		}],
 
@@ -2527,8 +2633,28 @@ __p.push('	');
 
 		var FormData = data.data || {},
 			TradeType = FormData.Type;
-		var OnlyOne = !!($.inArray(TradeType,[3,4]) != -1),	//只有一种客户的交易类型
-			BuyerText = OnlyOne?'客户':'买家';
+		var showSeller = false,	//显示卖家
+			showThirdparty = false,	//显示第三方借贷人
+			BuyerText = '客户';
+
+		switch (TradeType){
+			case 1: //二手楼交易
+				BuyerText = '买家';
+				showSeller = true;
+				showThirdparty = true;
+				break;
+			case 2: //首期款垫付
+				BuyerText = '买家';
+				showSeller = true;
+				break;
+			case 3: //同名转按
+				BuyerText = '产权人';
+				showThirdparty = true;
+				break;
+			case 4: //贷前垫资
+				BuyerText = '客户';
+				break;
+		}
 	__p.push('	<div class="step-pane" id="Customer">\n		<div class="block-transparent">\n			<div class="header">\n				<h3>');
 _p(BuyerText);
 __p.push(' ');
@@ -2553,7 +2679,7 @@ _p(BuyerText);
 __p.push('&nbsp;&nbsp;</button>');
 }__p.push('			</div>\n		</div>');
 
-		if (!OnlyOne) {	//判断交易类型才显示卖家
+		if (showSeller) {
 		__p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>卖家 ');
 if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
 }__p.push('</h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="SellerList">');
@@ -2572,6 +2698,27 @@ __p.push('					');
 						}
 					__p.push('				</div>');
 if (data.canEdit) {__p.push('				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加卖家&nbsp;&nbsp;</button>');
+}__p.push('			</div>\n		</div>');
+}
+		if (showThirdparty) {
+		__p.push('		<div class="block-transparent">\n			<div class="header">\n				<h3>第三方借贷人 ');
+if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
+}__p.push('</h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="ThirdpartyList">');
+
+						var Thirdparty = FormData.Thirdparty||[];
+						var i=0, l = Thirdparty.length||1;
+						for(; i < l; ++i) {
+					__p.push('						');
+_p(this.CustomerItem({
+							data:Thirdparty[i],
+							tpl:data.customerTpl,
+							canEdit:data.canEdit
+						}));
+__p.push('					');
+
+						}
+					__p.push('				</div>');
+if (data.canEdit) {__p.push('				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加第三方借贷人&nbsp;&nbsp;</button>');
 }__p.push('			</div>\n		</div>');
 }if (data.canEdit) {__p.push('		<div class="form-group">\n			<div class="text-center col-sm-12">\n				<button class="btn btn-default wizard-cancel" data-hook="cancel">取消</button>\n				&nbsp;&nbsp;\n				<button class="btn btn-primary wizard-next">下一步 <i class="fa fa-caret-right"></i></button>\n			</div>\n		</div>');
 }__p.push('	</div>');
@@ -2608,7 +2755,7 @@ var __p=[],_p=function(s){__p.push(s)};
 __p.push('<div class="step-pane" id="FinanceConfirm">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>回款确认</h3>\n		</div>\n		<div class="content">');
 _p(Former.make(TplFinance,{data:FinanceData,disabled:!ConfirmCanEdit}));
 __p.push('		</div>\n	</div>');
-if (ConfirmCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button type="button" class="btn btn-primary btn-lg" data-hook="finance-submit">确认已回款</button>\n		</div>\n	</div>');
+if (ConfirmCanEdit) {__p.push('	<div class="form-group">\n		<div class="text-center col-sm-12">\n			<button type="button" class="btn btn-success btn-lg" data-hook="finance-save">保存</button>\n			&nbsp;\n			<button type="button" class="btn btn-primary btn-lg" data-hook="finance-submit">确认已回款</button>\n		</div>\n	</div>');
 }__p.push('</div>');
 
 return __p.join("");
@@ -2823,6 +2970,11 @@ _p(Former.make(require('./tpl.project.newloan'),{
 									rs.required = false;
 									break;
 							}
+						}
+
+						//只有贷前垫资才显示“垫资金额”
+						if (type!=4 && !!~$.inArray(name,['垫资金额','CompanyPredepositMoney'])) {
+							rs = false;
 						}
 
 						return rs;

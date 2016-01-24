@@ -35,6 +35,25 @@ define(function(require, exports, module){
 						Route.reload();
 					}
 				});
+			}).on('click','finance-save',function(ev) {//保存回款
+				ev.preventDefault();
+
+				var Params = Data.params();
+				Ajax.post({
+					url:'RiskMgr.Api.ProjectApi/FinanceSave',
+					data:{
+						ID:Params.ID,
+						WorkflowID:Params.WorkflowID,
+						ActivityID:Params.ActivityID,
+						TaskID:Params.TaskID
+					},
+					form:$('#FinanceConfirm'),
+					success:function(da) {
+						Msg.success('保存成功.');
+						//Route.reload();
+					}
+				});
+
 			});
 		}
 	};

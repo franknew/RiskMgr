@@ -97,6 +97,7 @@ define(function(require, exports, module){
 				data = {
 					Buyers:dataCustomer.buyer,
 					Sellers:dataCustomer.seller,
+					Thirdparty:dataCustomer.thirdparty,
 					Assets:Property.getData(),
 					Project:Project.getData(),
 					Guarantor:Guarantor.getData(),
