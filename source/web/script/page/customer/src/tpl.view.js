@@ -98,11 +98,11 @@ define(function(require, exports, module){
 		[{
 			col:2,
 			type:'label',
-			html:'供楼帐号'
+			html:'开户名'
 		},{
 			col:4,
-			type:'number',
-			name:'BankCode',
+			type:'text',
+			name:'BankAccountName',
 			placeholder:''
 		},{
 			col:2,
@@ -112,6 +112,17 @@ define(function(require, exports, module){
 			col:4,
 			type:'text',
 			name:'BankType'
+		}],
+
+		[{
+			col:2,
+			type:'label',
+			html:'供楼帐号'
+		},{
+			col:4,
+			type:'number',
+			name:'BankCode',
+			placeholder:''
 		}],
 
 		[{
