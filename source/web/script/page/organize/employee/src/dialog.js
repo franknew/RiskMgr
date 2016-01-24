@@ -55,6 +55,18 @@ define(function(require, exports, module){
 		},
 		edit:function(id) {
 			this._getData(id,function(data) {
+				if (data.RoleList) {
+					//重写RoleList为写入的数据
+					data.RoleList = (function(list) {
+						var rs = [];
+						var i=0,cur;
+						for(;cur=list[i++];) {
+							rs.push(cur.ID);
+						}
+						rs = rs.join(',');
+						return rs;
+					})(data.RoleList);
+				}
 				modal.show({
 					title:'编辑员工',
 					content:former.make(viewTpl,{
