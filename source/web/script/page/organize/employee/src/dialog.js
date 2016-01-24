@@ -70,6 +70,9 @@ define(function(require, exports, module){
 								dialog.close();
 							}
 						});
+					},
+					onshow:function() {
+						MOD._initEvent(this);
 					}
 				});
 			});
@@ -94,6 +97,9 @@ define(function(require, exports, module){
 					});
 
 					return true;
+				},
+				onshow:function() {
+					MOD._initEvent(this);
 				}
 			});
 		},
@@ -115,6 +121,38 @@ define(function(require, exports, module){
 					}
 				});
 			}
+		},
+		_initEvent:function(dialog) {
+			var container = $(dialog.content);
+			container.on('click','[data-hook="employee-role-choose"]',function(ev) {
+				ev.preventDefault();
+				var selected = (function() {
+					var list = container.find('[name="RoleList"]').val() || '';
+					list = list.split(',');
+					return list;
+				})();
+
+				require.async('risk/page/organize/position/index',function(m) {
+					m.selector({
+						selected:selected,
+						success:function(da) {
+							var ids = [],
+								names = [];
+							var i=0,cur;
+							for(;cur=da[i++];) {
+								ids.push(cur.id);
+								names.push(cur.name);
+							}
+
+							ids = ids.join(',');
+							names = names.join(',');
+
+							container.find('[name="RoleList"]').val(ids);
+							container.find('[name="Role"]').val(names);
+						}
+					});
+				});
+			});
 		}
 	};
 

@@ -170,7 +170,7 @@ define.pack("./index",["jquery","risk/components/parsley/index","risk/unit/class
 			});
 			box.find('button.j-op-ok').bind('click',function (ev) {	 //确定按钮
 				ev.preventDefault();
-				if (!validate || that.parsley.validate()) {	//校验表单  在没有表单的时候默认成功，所以可以全部都校验
+				if (!validate || !that.parsley || that.parsley.validate()) {	//校验表单  在没有表单的时候默认成功，所以可以全部都校验
 					if (!that._exeCallback('ok')) {	//执行『ok』回调，如果不返回true，则执行关闭浮层
 						that.close();
 					}

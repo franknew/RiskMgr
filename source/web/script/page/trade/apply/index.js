@@ -333,12 +333,12 @@ define.pack("./index",["jquery","risk/unit/route","./tmpl","./setup","./config.t
 					type = data.Project&&data.Project.Type,
 					typeName = Types.get(type);
 
-				var extraText;
+				var extraText = '';
 
 				if (data&&data.WorkflowComplete) {
 					extraText = '<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>';
 				}else {
-					extraText = '<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>';
+					//extraText = '<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>';
 				}
 
 				Setup.init({
@@ -3053,7 +3053,7 @@ var __p=[],_p=function(s){__p.push(s)};
 		ShowFinanceConfirm = DataView.DisplayConfirm;	//显示回款确认
 		//  !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
 __p.push('\n<div class="col-md-12">\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
-if (data.mode=='add') {__p.push('			<li>选择类型<span class="chevron"></span></li>');
+if (data.mode=='add') {__p.push('			<li data-hook="cancel" class="pointer-item">选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Guarantor">担保人<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n			<li data-target="Report">调查报告<span class="chevron"></span></li>');
 if (ShowApproval) {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');
 }if (ShowCharge) {__p.push('			<li data-target="Charge">收费情况<span class="chevron"></span></li>');

@@ -46,6 +46,12 @@ define(function(require, exports, module){
 		},{
 			value:"2",
 			name:"未婚"
+		},{
+			value:"3",
+			name:"离异"
+		},{
+			value:"4",
+			name:"丧偶"
 		}],
 
 		"银行":[{

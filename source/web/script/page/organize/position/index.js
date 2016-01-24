@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/data-dictionary","./selector","risk/components/pager/index"],function(require,exports,module){
+define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/data-dictionary","risk/components/pager/index","risk/unit/class"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -34,13 +34,16 @@ define.pack = function(){
 //position/src/dialog.js
 //position/src/index.js
 //position/src/list.js
+//position/src/selector.js
 //position/src/tpl.view.js
 //position/src/list.tmpl.html
+//position/src/selector.tmpl.html
 
 //js file list:
 //position/src/dialog.js
 //position/src/index.js
 //position/src/list.js
+//position/src/selector.js
 //position/src/tpl.view.js
 /**
  * 职位通用弹窗
@@ -398,6 +401,149 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 
 	return MOD;
 });/**
+ * 客户选择器
+ * @authors viktorli (i@lizhenwen.com)
+ * @date    2015-07-29 20:19:12
+ */
+
+define.pack("./selector",["jquery","risk/unit/class","risk/components/msg/index","risk/components/modal/index","risk/components/pager/index","./tmpl","./list"],function(require, exports, module){
+	var $ = require('jquery'),
+    	Clone = require('risk/unit/class').clone,
+		msg = require('risk/components/msg/index'),
+		modal = require('risk/components/modal/index'),
+		pager = require('risk/components/pager/index'),
+		Tmpl = require('./tmpl'),
+		List = require('./list');
+
+	var MOD = {
+		_DEFAULT_CONFIG:{
+			configKey:'___CONFIG___',	//存储配置的key
+			setting:{	//默认配置
+				title:'温馨提示'
+				,content:''	//内容，支持html
+				//,width:'630px'	//宽度，必须设定单位
+				,padding:'20px'	//内容区域的padding
+				,skin:''	//主容器的className
+				,ok:function () {}	//确定按钮的回调
+				,okValue:'确定'	//确定按钮文本
+				,cancel:function(){}		//取消按钮的回调
+				,cancelValue:'取消'	//取消按钮文本
+				,onclose:function () {}	 //关闭浮层时的回调
+				,onshow:function(){}	//打开浮层时的回调
+				,id:''	//浮层主容器的ID
+				,validate:true	//是否校验表单
+				,form:true	//是否自动生成外包form
+				//,button:[]	//增加按钮
+			}
+		},
+		show:function(setting) {
+			setting = setting ||{};
+			var initKey = this._DEFAULT_CONFIG.configKey,
+				obj=this;
+			if(!this[initKey]) {
+				obj = Clone(MOD);
+				obj[initKey] = true;
+				return obj.show.apply(obj,arguments);
+			}
+
+			this._initConfig(setting);
+
+			var that = this;
+
+			this.modal = modal.show({
+				title:'选择职位',
+				content:Tmpl.PositionSelector(),
+				form:false,
+				onshow:function() {
+					var content = this.content.find('#SelectorContainer');
+					List.query({
+						success:function(da) {
+							var roles = da&&da.Roles || [],
+								html = Tmpl.PositionSelectorList({
+									list:roles,
+									selected:setting.selected||[]
+								});
+
+							content.html(html);
+
+							that._initEvent(content);
+						},
+						error:function(xhr,msg) {
+							msg = '<div class="alert alert-danger">'+(msg||'请求出错，请重试')+'</div>';
+							content.html(msg);
+						}
+					});
+				},
+				ok:function() {
+					var list = [],
+						boxs = this.content.find('.external-event-light[data-id]');
+
+					boxs.each(function(i,ele) {
+						var $ele = $(ele);
+						list.push({
+							id:$ele.attr('data-id'),
+							name:$ele.attr('title')
+						});
+					});
+
+					that._exeCallback('success',list);
+				}
+			});
+
+			return this;
+		},
+		close:function() {
+			this.modal.close();
+		},
+		_initEvent:function(container) {
+			var that = this;
+
+			container.off('click','[data-id]');
+			container.on('click','[data-id]',function(ev) {
+				ev.preventDefault();
+				var elem = $(ev.currentTarget);
+				elem.toggleClass('external-event-light');
+			});
+		},
+		/** 执行回调 */
+		_exeCallback:function (name,data) {
+			var conf = this._config(),
+				fn = conf[name];
+			if($.isFunction(fn)) {
+				return fn.call(this,data);
+			}
+		},
+		/** 初始化配置 */
+		_initConfig:function (setting) {
+			var def = this._DEFAULT_CONFIG.setting,
+				key = this._DEFAULT_CONFIG.configKey,
+				conf;
+			conf = this[key] = $.extend({},def,setting);
+
+			return this[key];
+		},
+		/** 读、写配置
+		 * @param
+		 */
+		_config:function (key,value) {
+			var ckey = this._DEFAULT_CONFIG.configKey;
+			var rs;
+			var store = this[ckey],
+				argLen = arguments.length;
+			if(argLen>=2) {	//set
+				store[key] = value;
+				rs = store;
+			}else if(argLen==1) {	//get
+				rs = store[key];
+			}else {	//不传参返回全部
+				rs = store;
+			}
+			return rs;
+		}
+	};
+
+	return MOD;
+});/**
  * 员工信息的基本form表单
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-21 21:00:52
@@ -568,6 +714,7 @@ define.pack("./tpl.view",[],function(require, exports, module){
 });
 //tmpl file list:
 //position/src/list.tmpl.html
+//position/src/selector.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'list': function(data){
@@ -650,6 +797,43 @@ _p(Cur.Phone||'&nbsp;');
 __p.push('</p>\n		<p>');
 _p(Cur.Address||'&nbsp;');
 __p.push('</p>\n	</div>\n	-->');
+
+return __p.join("");
+},
+
+'PositionSelector': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+__p.push('	<div id="SelectorContainer">\n		<div class="loading">Loading...</div>\n	</div>');
+
+return __p.join("");
+},
+
+'PositionSelectorList': function(data){
+
+var __p=[],_p=function(s){__p.push(s)};
+
+	var $ = require('jquery');
+	var List = data.list,
+		Selected = data.selected || [];
+if (!List || List.length<=0) {__p.push('	<div class="alert alert-info" role="alert">没有职位数据</div>');
+}else{__p.push('<div class="position-selector-list">');
+var i=0,cur;
+	var NeedChoose = false;
+	for(;cur=List[i++];) {
+		NeedChoose = !!~$.inArray(cur.ID,Selected);
+	__p.push('		<div class="external-event ');
+_p((NeedChoose?'external-event-light':''));
+__p.push('" data-id="');
+_p(cur.ID);
+__p.push('" title="');
+_p(cur.Name);
+__p.push('">');
+_p(cur.Name);
+__p.push('</div>');
+
+	}__p.push('</div>');
+}__p.push('');
 
 return __p.join("");
 }

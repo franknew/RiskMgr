@@ -117,6 +117,9 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 								dialog.close();
 							}
 						});
+					},
+					onshow:function() {
+						MOD._initEvent(this);
 					}
 				});
 			});
@@ -141,6 +144,9 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 					});
 
 					return true;
+				},
+				onshow:function() {
+					MOD._initEvent(this);
 				}
 			});
 		},
@@ -162,6 +168,38 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 					}
 				});
 			}
+		},
+		_initEvent:function(dialog) {
+			var container = $(dialog.content);
+			container.on('click','[data-hook="employee-role-choose"]',function(ev) {
+				ev.preventDefault();
+				var selected = (function() {
+					var list = container.find('[name="RoleList"]').val() || '';
+					list = list.split(',');
+					return list;
+				})();
+
+				require.async('risk/page/organize/position/index',function(m) {
+					m.selector({
+						selected:selected,
+						success:function(da) {
+							var ids = [],
+								names = [];
+							var i=0,cur;
+							for(;cur=da[i++];) {
+								ids.push(cur.id);
+								names.push(cur.name);
+							}
+
+							ids = ids.join(',');
+							names = names.join(',');
+
+							container.find('[name="RoleList"]').val(ids);
+							container.find('[name="Role"]').val(names);
+						}
+					});
+				});
+			});
 		}
 	};
 
@@ -506,16 +544,26 @@ define.pack("./tpl.view",[],function(require, exports, module){
 		}],
 
 		[{
+			type:'hidden',
+			required:true,
+			name:'RoleList'
+		},{
 			type:'label',
 			col:'3',
 			required:true,
 			html:'职位'
 		},{
-			col:7,
-			type:'select',
-			name:'Role',
+			col:'7',
+			type:'text',
 			required:true,
-			options:"职位"
+			name:'Role',
+			disabled:true
+		},{
+			col:'2',
+			type:'button',
+			class:'btn-primary',
+			html:"选择",
+			"data-hook":'employee-role-choose'
 		}],
 
 		[{
@@ -526,6 +574,7 @@ define.pack("./tpl.view",[],function(require, exports, module){
 		},{
 			col:'7',
 			type:'text',
+			required:true,
 			name:'CnName',
 			placeholder:''
 		}],
@@ -544,12 +593,14 @@ define.pack("./tpl.view",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
+			required:true,
 			html:'手机'
 		},{
 			col:'7',
 			type:'tel',
+			required:true,
 			name:'Mobile',
-			placeholder:''
+			placeholder:'绑定微信时必须'
 		}],
 
 		[{

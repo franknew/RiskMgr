@@ -70,12 +70,12 @@ define(function(require, exports, module){
 					type = data.Project&&data.Project.Type,
 					typeName = Types.get(type);
 
-				var extraText;
+				var extraText = '';
 
 				if (data&&data.WorkflowComplete) {
 					extraText = '<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>';
 				}else {
-					extraText = '<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>';
+					//extraText = '<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>';
 				}
 
 				Setup.init({

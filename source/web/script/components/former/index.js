@@ -221,7 +221,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 			switch (type){
 				case 'button':
 					itemState.tag = 'button';
-					attr.class = 'btn btn-default '+item.class;
+					attr.class = 'btn '+(item.class || 'btn-default');
 					break;
 				case 'label':
 					itemState.tag = 'label';

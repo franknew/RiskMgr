@@ -36,16 +36,26 @@ define(function(require, exports, module){
 		}],
 
 		[{
+			type:'hidden',
+			required:true,
+			name:'RoleList'
+		},{
 			type:'label',
 			col:'3',
 			required:true,
 			html:'职位'
 		},{
-			col:7,
-			type:'select',
-			name:'Role',
+			col:'7',
+			type:'text',
 			required:true,
-			options:"职位"
+			name:'Role',
+			disabled:true
+		},{
+			col:'2',
+			type:'button',
+			class:'btn-primary',
+			html:"选择",
+			"data-hook":'employee-role-choose'
 		}],
 
 		[{
@@ -56,6 +66,7 @@ define(function(require, exports, module){
 		},{
 			col:'7',
 			type:'text',
+			required:true,
 			name:'CnName',
 			placeholder:''
 		}],
@@ -74,12 +85,14 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
+			required:true,
 			html:'手机'
 		},{
 			col:'7',
 			type:'tel',
+			required:true,
 			name:'Mobile',
-			placeholder:''
+			placeholder:'绑定微信时必须'
 		}],
 
 		[{

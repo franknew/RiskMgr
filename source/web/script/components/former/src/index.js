@@ -184,7 +184,7 @@ define(function(require, exports, module){
 			switch (type){
 				case 'button':
 					itemState.tag = 'button';
-					attr.class = 'btn btn-default '+item.class;
+					attr.class = 'btn '+(item.class || 'btn-default');
 					break;
 				case 'label':
 					itemState.tag = 'label';

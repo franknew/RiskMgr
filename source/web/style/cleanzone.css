@@ -5799,4 +5799,33 @@ table.no-border tr.pointer-item:hover {
   .radio-inline, .checkbox-inline {
     margin-right: 10px;
   }
+
+.position-selector-list .external-event {
+  background-color: #EDF7FF;
+  color: #333;
+  margin:2px 4px;
+  padding: 0 8px;
+  width:110px;
+  height: 28px;
+  line-height: 28px;
+  overflow: hidden;
+  position: relative;
+}
+  .position-selector-list .external-event:hover {
+    background-color: #CFE4F5;
+  }
+  .position-selector-list .external-event-light,
+  .position-selector-list .external-event-light:hover {
+    background-color: #2494f2;
+    color:#fff;
+  }
+  .position-selector-list .external-event-light:after{
+    font:normal normal normal 14px/1 FontAwesome;
+    content:"\f00c";
+    position: absolute;
+    right:2px;
+    top:0px;
+    height: 28px;
+    line-height: 28px;
+  }
 /* risk自定义样式 END  */

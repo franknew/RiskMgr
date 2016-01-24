@@ -1,0 +1,29 @@
+<script type="text/html" id="PositionSelector">
+	<div id="SelectorContainer">
+		<div class="loading">Loading...</div>
+	</div>
+</script>
+
+
+<script type="text/html" id="PositionSelectorList">
+<%
+	var $ = require('jquery');
+	var List = data.list,
+		Selected = data.selected || [];
+%>
+
+<%if (!List || List.length<=0) {%>
+	<div class="alert alert-info" role="alert">没有职位数据</div>
+<%}else{%>
+<div class="position-selector-list">
+	<%var i=0,cur;
+	var NeedChoose = false;
+	for(;cur=List[i++];) {
+		NeedChoose = !!~$.inArray(cur.ID,Selected);
+	%>
+		<div class="external-event <%=(NeedChoose?'external-event-light':'')%>" data-id="<%=cur.ID%>" title="<%=cur.Name%>"><%=cur.Name%></div>
+	<%
+	}%>
+</div>
+<%}%>
+</script>

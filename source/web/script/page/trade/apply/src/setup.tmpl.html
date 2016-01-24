@@ -60,7 +60,7 @@
 	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">
 		<ul class="wizard-steps">
 			<%if (data.mode=='add') {%>
-			<li>选择类型<span class="chevron"></span></li>
+			<li data-hook="cancel" class="pointer-item">选择类型<span class="chevron"></span></li>
 			<%}%>
 			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>
 			<li data-target="Assets">房产信息<span class="chevron"></span></li>
