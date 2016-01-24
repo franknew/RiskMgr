@@ -72,8 +72,6 @@ define(function(require, exports, module){
 					typeName = Types.get(type),
 					canDiscard = data.CanDiscard;	//可以作废
 
-				canDiscard = true;
-
 				var extraText = [];
 
 				if (data&&data.WorkflowComplete) {

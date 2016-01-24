@@ -335,8 +335,6 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./s
 					typeName = Types.get(type),
 					canDiscard = data.CanDiscard;	//可以作废
 
-				canDiscard = true;
-
 				var extraText = [];
 
 				if (data&&data.WorkflowComplete) {
