@@ -10,9 +10,9 @@ namespace RiskMgr.DAL
 {
     public partial class CustomerDao : SimpleDao<Customer, CustomerQueryForm, CustomerUpdateForm>
     {
-        public bool CheckIdentityCode(CustomerQueryForm form)
+        public Customer CheckIdentityCode(CustomerQueryForm form)
         {
-            return Mapper.QueryForList<Customer>("CheckIdentityCodeExists", form).Count > 0;
+            return Mapper.QueryForList<Customer>("CheckIdentityCodeExists", form).FirstOrDefault();
         }
     }
 }

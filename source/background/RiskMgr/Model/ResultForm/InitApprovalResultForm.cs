@@ -55,6 +55,9 @@ namespace RiskMgr.Form
         /// </summary>
         public bool DisplayConfirm { get; set; }
 
+        /// <summary>
+        /// 回款确认是否可以编辑
+        /// </summary>
         public bool ConfirmCanEdit { get; set; }
 
         /// <summary>
@@ -63,5 +66,10 @@ namespace RiskMgr.Form
         public bool WorkflowComplete { get; set; }
 
         public string Creator { get; set; }
+
+        /// <summary>
+        /// 是否显示流程作废
+        /// </summary>
+        public bool DisplayDiscard { get; set; }
     }
 }

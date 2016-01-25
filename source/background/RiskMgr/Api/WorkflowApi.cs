@@ -41,7 +41,7 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
-            return bll.Approval(form.WorkflowID, form.ActivityID, form.TaskID, userid, form.Approval);
+            return bll.Approval(form.WorkflowID, userid, form.Approval);
         }
 
         /// <summary>
@@ -63,12 +63,33 @@ namespace RiskMgr.Api
         /// </summary>
         /// <returns></returns>
         [QueryAction]
-        public List<FullTask> QueryMyProcessing()
+        public PagingEntity<FullTask> QueryMyProcessingWithPaging(QueryMyProcessingServiceForm form)
+        {
+            UserBLL userbll = new UserBLL();
+            TaskBLL taskbll = new TaskBLL();
+            PagingEntity<FullTask> result = new PagingEntity<FullTask>
+            {
+                PageCount = form.PageCount,
+                RecordCount = form.RecordCount,
+            };
+            var user = userbll.GetCurrentUser();
+            var record = taskbll.Query(new QueryMyTaskServiceForm { UserID = user.User.ID, Status = (int)TaskProcessStatus.Started });
+            result.Record = record;
+            return result;
+        }
+
+        /// <summary>
+        /// 查询我需要处理的流程
+        /// </summary>
+        /// <returns></returns>
+        [QueryAction]
+        public List<FullTask> QueryMyProcessing(QueryMyProcessingServiceForm form)
         {
             UserBLL userbll = new UserBLL();
             TaskBLL taskbll = new TaskBLL();
             var user = userbll.GetCurrentUser();
-            return taskbll.Query(new QueryMyTaskServiceForm { UserID = user.User.ID, Status = (int)TaskProcessStatus.Started });
+            var record = taskbll.Query(new QueryMyTaskServiceForm { UserID = user.User.ID, Status = (int)TaskProcessStatus.Started });
+            return record;
         }
 
         /// <summary>

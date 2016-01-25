@@ -542,6 +542,12 @@
         INNER JOIN Task task ON ac.ID=task.ActivityID
         INNER JOIN Approval app ON app.ActivityID=ac.ID
       </isEqual>
+      <isEqual property="Tracking" compareValue="true">
+        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID
+        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.`Name`='保后跟踪'
+        INNER JOIN Task task ON ac.ID=task.ActivityID
+        INNER JOIN Approval app ON app.ActivityID=ac.ID
+      </isEqual>
       <dynamic prepend="WHERE">
         <isNotNull prepend="AND" property="Name">
           b.Name LIKE '%$Name$%'
@@ -566,8 +572,10 @@
         <isEqual property="ManagerAppvoal" compareValue="true" prepend="AND">
           app.`status`=1
         </isEqual>
+        <isEqual property="Tracking" compareValue="true" prepend="AND">
+          app.`status`=1
+        </isEqual>
       </dynamic>
-
     </select>
     
     <select id="QueryMyApply" resultClass="ProjectTask" parameterClass="QueryMyApplyServiceForm">
@@ -617,6 +625,9 @@
         <isEqual property="ManagerAppvoal" compareValue="true" prepend="AND">
           app.`status`=1
         </isEqual>
+        <isNotNull property="Operator" prepend="AND">
+          p.`Creator` LIKE '%Operator%'
+        </isNotNull>
       </dynamic>
       ORDER BY wf.LastUpdateTime DESC
 

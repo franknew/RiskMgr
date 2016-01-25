@@ -74,7 +74,7 @@ namespace RiskMgr.BLL
             return u;
         }
 
-        public string Add(User user, UserInfo ui, User_Role role)
+        public string Add(User user, UserInfo ui, List<string> roleidlist)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             if (user == null)
@@ -95,16 +95,17 @@ namespace RiskMgr.BLL
             UserInfoDao infodao = new UserInfoDao(mapper);
             ui.ID = id;
             infodao.Add(ui);
-            if (role != null)
+            if (roleidlist == null) return id;
+            User_RoleDao urdao = new User_RoleDao(mapper);
+            foreach (var role in roleidlist)
             {
-                User_RoleDao urdao = new User_RoleDao(mapper);
-                role.UserID = id;
-                urdao.Add(role);
+                User_Role ur = new User_Role { RoleID = role, UserID = user.ID };
+                urdao.Add(ur);
             }
             return id;
         }
 
-        public bool Update(User user, UserInfo ui, string role)
+        public bool Update(User user, UserInfo ui, List<string> roleidlist)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             if (user != null)
@@ -122,15 +123,13 @@ namespace RiskMgr.BLL
                 UserInfoDao dao = new UserInfoDao(mapper);
                 dao.Update(new UserInfoUpdateForm { Entity = ui, UserInfoQueryForm = new UserInfoQueryForm { ID = ui.ID } });
             }
-            if (!string.IsNullOrEmpty(role))
+            if (roleidlist == null) return true;
+            User_RoleDao urdao = new User_RoleDao(mapper);
+            urdao.Delete(new User_RoleQueryForm { UserID = user.ID });
+            foreach (var role in roleidlist)
             {
-                User_RoleDao urdao = new User_RoleDao(mapper);
-                var ur = urdao.Query(new User_RoleQueryForm { UserID = user.ID }).FirstOrDefault();
-                if (ur != null)
-                {
-                    ur.RoleID = role;
-                    urdao.Update(new User_RoleUpdateForm { Entity = ur, User_RoleQueryForm = new User_RoleQueryForm { ID = ur.ID } });
-                }
+                User_Role ur = new User_Role { RoleID = role, UserID = user.ID };
+                urdao.Add(ur);
             }
             return true;
         }
@@ -211,8 +210,8 @@ namespace RiskMgr.BLL
             foreach (var u in userlist)
             {
                 var ur_temp = urs.FindAll(t => t.UserID == u.ID);
-                var rolenames = (from ur in ur_temp join r in roles on ur.RoleID equals r.ID select r.Remark ).ToList();
-                u.Role = String.Join(",", rolenames);
+                var rolelist = (from ur in ur_temp join r in roles on ur.RoleID equals r.ID select r).ToList();
+                u.RoleList = rolelist;
             }
             return userlist;
         }
@@ -227,67 +226,57 @@ namespace RiskMgr.BLL
             ISqlMapper mapper = Common.GetMapperFromSession();
             //验证有没有登录
             UserEntireInfo user = GetUserEntireInfoFromCache(token);
-            if (user == null)
-            {
-                return 3;
-            }
+            if (user == null) return 3;
             LogonHistoryDao logonhistorydao = new LogonHistoryDao(mapper);
             var logonList = logonhistorydao.Query(new LogonHistoryQueryForm { Token = token });
-            if (logonList.Count == 0 || DateTime.Now - logonList[0].ActiveTime > new TimeSpan(0, 30, 0))
-            {
-                return 3;
-            }
+            //登录超时
+            if (logonList.Count == 0 || DateTime.Now - logonList[0].ActiveTime > new TimeSpan(0, 30, 0)) return 3;
             logonhistorydao.Update(new LogonHistoryUpdateForm
             {
                 Entity = new LogonHistory { ActiveTime = DateTime.Now },
                 LogonHistoryQueryForm = new LogonHistoryQueryForm { Token = token },
             });
-            if (ServiceSession.Current != null)
+            if (ServiceSession.Current != null) return CheckAuth(user.Role);
+            return -1;
+        }
+
+        public int CheckAuth(List<Role> roles)
+        {
+            //验证有没有权限访问
+            var attr = ServiceSession.Current.Method.GetCustomAttribute<BaseActionAttribute>(true);
+            if (attr != null)
             {
-                //验证有没有权限访问
-                var attr = ServiceSession.Current.Method.GetCustomAttribute<BaseActionAttribute>(true);
-                if (attr != null)
+                ISqlMapper mapper = Common.GetMapperFromSession();
+                string actionName = attr.Action;
+                var servicelayer = ServiceSession.Current.Method.DeclaringType.GetCustomAttribute<ServiceLayer>(true);
+                if (servicelayer != null)
                 {
-                    string actionName = attr.Action;
-                    var servicelayer = ServiceSession.Current.Method.DeclaringType.GetCustomAttribute<ServiceLayer>(true);
-                    if (servicelayer != null)
+                    string moduleName = servicelayer.Module;
+                    var modules = TableCacheHelper.GetDataFromCache<Module>(typeof(ModuleDao));
+                    var actions = TableCacheHelper.GetDataFromCache<RiskMgr.Model.Action>(typeof(ActionDao));
+                    Role_Module_ActionDao dao = new Role_Module_ActionDao(mapper);
+                    var module = modules.Find(t => t.Name == moduleName);
+                    var action = actions.Find(t => t.Name == actionName);
+                    if (module == null || action == null) return -1;
+                    string actionID = action.ID;
+                    string moduleID = module.ID;
+                    Role_Module_ActionQueryForm query = new Role_Module_ActionQueryForm
                     {
-                        string moduleName = servicelayer.Module;
-                        var modules = TableCacheHelper.GetDataFromCache<Module>(typeof(ModuleDao));
-                        var actions = TableCacheHelper.GetDataFromCache<RiskMgr.Model.Action>(typeof(ActionDao));
-                        Role_Module_ActionDao dao = new Role_Module_ActionDao(mapper);
-                        var module = modules.Find(t => t.Name == moduleName);
-                        var action = actions.Find(t => t.Name == actionName);
-                        if (module == null)
+                        ActionID = actionID,
+                        ModuleID = moduleID
+                    };
+                    //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "action id:" + actionID + ";module id:" + moduleID }, SOAFramework.Library.CacheEnum.FormMonitor);
+                    var role_module_action = dao.Query(query);
+                    bool hasRight = false;
+                    foreach (var item in role_module_action)
+                    {
+                        if (roles != null && roles.Exists(t => t.ID == item.RoleID))
                         {
-                            return -1;
-                        }
-                        if (action == null)
-                        {
-                            return -1;
-                        }
-                        string actionID = action.ID;
-                        string moduleID = module.ID;
-                        Role_Module_ActionQueryForm query = new Role_Module_ActionQueryForm
-                        {
-                            ActionID = actionID,
-                            ModuleID = moduleID
-                        };
-                        var role_module_action = dao.Query(query);
-                        bool hasRight = false;
-                        foreach (var item in role_module_action)
-                        {
-                            if (user.Role != null && user.Role.Exists(t => t.ID == item.RoleID))
-                            {
-                                hasRight = true;
-                                break;
-                            }
-                        }
-                        if (!hasRight)
-                        {
-                            return 4;
+                            hasRight = true;
+                            break;
                         }
                     }
+                    if (!hasRight) return 4;
                 }
             }
             return -1;

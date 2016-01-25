@@ -6,8 +6,11 @@
   </alias>
   <statements>
     <select id="QueryTaskByRelationship" resultClass="FullTask" parameterClass="QueryMyTaskServiceForm">
-      SELECT t.*,apply.CnName AS Applier, process.CnName AS Processor, wf.ProcessID AS `ProcessID` FROM Task AS t
-      LEFT JOIN Workflow wf ON t.WorkflowID=wf.ID
+      SELECT DISTINCT t.*,apply.CnName AS Applier, process.CnName AS Processor, wf.ProcessID AS `ProcessID` FROM Task AS t
+      <isEqual property="Status" compareValue="1">
+      INNER JOIN Activity a ON a.ID=t.ActivityID AND a.`Status`=2
+      </isEqual>
+      INNER JOIN Workflow wf ON t.WorkflowID=wf.ID
       INNER JOIN UserInfo AS apply ON apply.ID=wf.Creator
       INNER JOIN UserInfo AS process ON process.ID=t.UserID
       <dynamic prepend="WHERE">

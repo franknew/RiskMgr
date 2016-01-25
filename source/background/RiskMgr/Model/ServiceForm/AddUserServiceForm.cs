@@ -11,6 +11,6 @@ namespace RiskMgr.Form
         /// <summary>
         /// 角色ID
         /// </summary>
-        public string Role { get; set; }
+        public List<string> RoleIDList { get; set; }
     }
 }

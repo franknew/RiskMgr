@@ -37,15 +37,7 @@ namespace RiskMgr.Api
             {
                 CnName = form.CnName,
             };
-            User_Role ur = null;
-            if (!string.IsNullOrEmpty(form.Role))
-            {
-                ur = new User_Role
-                {
-                    RoleID = form.Role,
-                };
-            };
-            return bll.Add(u, ui, ur);
+            return bll.Add(u, ui, form.RoleIDList);
         }
 
         /// <summary>
@@ -73,7 +65,7 @@ namespace RiskMgr.Api
                 QQ = form.QQ,
                 Remark = form.Remark
             };
-            return bll.Update(u, ui, form.Role);
+            return bll.Update(u, ui, form.RoleIDList);
         }
 
         /// <summary>

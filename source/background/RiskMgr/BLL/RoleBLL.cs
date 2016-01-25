@@ -186,7 +186,8 @@ namespace RiskMgr.BLL
             var approval = actions.Find(t => t.Name.Equals("approval"));
             var assetauth = modules.Find(t => t.Name.Equals("RiskMgr.AssetApi"));
             var customerauth = modules.Find(t => t.Name.Equals("RiskMgr.CustomerApi"));
-            //新增额度编辑权限
+            //删除旧的权限
+            rmadao.Delete(new Role_Module_ActionQueryForm { RoleID = id });
             //默认用户资产和客户的查询权限
             var queryaction = actions.Find(t => t.Name.Equals("query"));
             AddAuth(new List<Model.Action> { queryaction }, assetauth, id, rmadao);

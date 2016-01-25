@@ -180,7 +180,7 @@
     </dynamic>
   </update>
   <update id="DeleteRole" parameterClass="RoleQueryForm">
-    UPDATE `Role` SET IsDelete=1 WHERE 1=1
+    UPDATE `Role` SET IsDeleted=1 WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>

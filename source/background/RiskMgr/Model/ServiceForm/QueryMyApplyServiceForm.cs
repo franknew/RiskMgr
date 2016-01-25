@@ -21,6 +21,7 @@ namespace RiskMgr.Form
         /// 3：已结单
         /// 4：已终审（经理审批）
         /// 5：审批不通过
+        /// 6: 保后跟踪
         /// </summary>
         public int? Status { get; set; }
 
@@ -41,10 +42,29 @@ namespace RiskMgr.Form
 
         public List<string> Creators { get; set; }
 
+        /// <summary>
+        /// 流程状态
+        /// </summary>
         public int? WorkflowStatus { get; set; }
 
+        /// <summary>
+        /// 经理审批（终审）
+        /// </summary>
         public bool ManagerAppvoal { get; set; }
 
+        /// <summary>
+        /// 不同意
+        /// </summary>
         public bool Disagree { get; set; }
+
+        /// <summary>
+        /// 保后跟踪
+        /// </summary>
+        public bool Tracking { get; set; }
+
+        /// <summary>
+        /// 业务员
+        /// </summary>
+        public string Operator { get; set; }
     }
 }

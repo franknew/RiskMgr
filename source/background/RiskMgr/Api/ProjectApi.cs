@@ -33,22 +33,11 @@ namespace RiskMgr.Api
             List<Customer_Project> customers = new List<Customer_Project>();
             List<Customer> updateCustomers = new List<Customer>();
             WorkflowDao workflowdao = new WorkflowDao(mapper);
-
-            customers.AddRange(GetRelationship(form.Buyers, (int)CustomerType.Buyer));
-            customers.AddRange(GetRelationship(form.Sellers, (int)CustomerType.Seller));
-            if (form.Buyers != null)
-            {
-                updateCustomers.AddRange(form.Buyers);
-            }
-            if (form.Sellers != null)
-            {
-                updateCustomers.AddRange(form.Sellers);
-            }
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
             form.Project.Report = form.Report;
-            var result = bll.Add(form.Project, form.Assets, customers, updateCustomers, form.Guarantor, userid);
+            var result = bll.Add(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdPart, form.Guarantor, userid);
 
             //处理流程
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
@@ -66,7 +55,7 @@ namespace RiskMgr.Api
             var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
             if (task != null)
             {
-                workflow.ProcessActivity(workflow.CurrentActivity.Value.ID, new Approval
+                workflow.ProcessActivity(new Approval
                 {
                     Creator = user.User.ID,
                     LastUpdator = user.User.ID,
@@ -74,7 +63,7 @@ namespace RiskMgr.Api
                     Status = (int)ApprovalStatus.Agree,
                     ActivityID = workflow.CurrentActivity.Value.ID,
                     WorkflowID = workflow.Value.ID,
-                }, task.ID, user.User.ID, new WorkflowAuthority());
+                }, user.User.ID, new WorkflowAuthority());
             }
 
             return result;
@@ -182,7 +171,7 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
             form.Project.LastUpdator = userid;
-            return bll.UpdateFinance(form.WorkflowID, form.ActivityID, form.TaskID, form.Project, userid);
+            return bll.UpdateFinance(form.WorkflowID, form.Project, userid);
         }
 
         /// <summary>
@@ -197,8 +186,8 @@ namespace RiskMgr.Api
             string userid = userbll.GetCurrentUser().User.ID;
             form.Project.LastUpdator = userid;
 
-            MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "entry activity id:" + form.ActivityID }, SOAFramework.Library.CacheEnum.FormMonitor);
-            return bll.UpdateFinance(form.WorkflowID, form.ActivityID, form.TaskID, form.Project, userid);
+            //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "entry activity id:" + form.ActivityID }, SOAFramework.Library.CacheEnum.FormMonitor);
+            return bll.UpdateFinance(form.WorkflowID, form.Project, userid);
         }
 
         /// <summary>
@@ -212,7 +201,7 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
             form.LastUpdator = userid;
-            return bll.UpdateTracking(form, form.WorkflowID, form.ActivityID, form.TaskID, userid);
+            return bll.UpdateTracking(form, form.WorkflowID,userid);
         }
 
         /// <summary>
@@ -225,7 +214,21 @@ namespace RiskMgr.Api
         {
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.FinanceConfirm(form.WorkflowID, form.ActivityID, form.TaskID, form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney,
+            return bll.FinanceConfirm(form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney,
+                form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate);
+        }
+
+        /// <summary>
+        /// 回款确认保存
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [EditAction]
+        public bool FinanceConfirmSave(FinanceConfirmServiceForm form)
+        {
+            UserBLL userbll = new UserBLL();
+            string userid = userbll.GetCurrentUser().User.ID;
+            return bll.FinanceConfirmSave(form.WorkflowID, 0, userid, form.ReturnBackTime, form.ReturnBackMoney,
                 form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate);
         }
 
@@ -253,7 +256,21 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
-            return wfbll.Approval(form.WorkflowID, form.ActivityID, form.TaskID, userid, form.Approval);
+            return wfbll.Approval(form.WorkflowID, userid, form.Approval);
+        }
+
+        /// <summary>
+        /// 流程作废
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [DeleteAction]
+        public bool StopWorkflow(Task form)
+        {
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            string userid = user.User.ID;
+            return bll.StopWorkflow(form.WorkflowID, userid);
         }
     }
 }

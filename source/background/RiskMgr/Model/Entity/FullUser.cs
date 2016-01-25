@@ -44,6 +44,20 @@ namespace RiskMgr.Model
 
         public string Remark { get; set; }
 
-        public string Role { get; set; }
+        public string Role
+        {
+            get
+            {
+                string role = "";
+                if (RoleList != null)
+                {
+                    var rolenamelist = (from r in RoleList select r.Name).ToList();
+                    role = String.Join(",", rolenamelist);
+                }
+                return role;
+            }
+        }
+
+        public List<Role> RoleList { get; set; }
     }
 }

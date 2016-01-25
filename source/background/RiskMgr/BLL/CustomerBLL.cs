@@ -40,7 +40,7 @@ namespace RiskMgr.BLL
         public bool CheckIdentityCodeExists(CustomerQueryForm form)
         {
             CustomerDao dao = new CustomerDao();
-            return dao.CheckIdentityCode(form);
+            return dao.CheckIdentityCode(form) != null;
         }
 
         public Customer Save(Customer customer)

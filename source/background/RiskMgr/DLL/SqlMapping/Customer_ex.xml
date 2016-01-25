@@ -4,7 +4,7 @@
     <typeAlias alias="FullTask" type="RiskMgr.Model.FullTask" />
   </alias>
   <statements>
-    <select id="CheckIdentityCodeExists" resultClass="FullTask" parameterClass="CustomerQueryForm">
+    <select id="CheckIdentityCodeExists" resultClass="Customer" parameterClass="CustomerQueryForm">
       SELECT * FROM Customer WHERE IdentityCode=#IdentityCode# AND Enabled=1
 
       <isNotNull prepend="AND" property="ID">

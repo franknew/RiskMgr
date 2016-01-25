@@ -14,17 +14,20 @@ namespace RiskMgr.BLL
         private ICache cache = CacheFactory.Create();
 
         
-        public bool Approval(string workflowid, string activityid, string taskid, string userid, Approval approval)
+        public bool Approval(string workflowid, string userid, Approval approval)
         {
             WorkflowModel workflow = WorkflowModel.Load(workflowid);
-            workflow.ProcessActivity(activityid, approval, taskid, userid, new WorkflowAuthority());
+            //var userids = Common.GetDataAuthorityUserIDList();
+            //if (userids != null && userids.Exists(t => t.Equals(workflow.Value.Creator))) throw new Exception("该单据不是你用户组的人员创建，你没有权限审批！");
+            if (!workflow.CanUserProcess(userid)) return true;
+            workflow.ProcessActivity(approval, userid, new WorkflowAuthority());
             return true;
         }
 
         public bool StopWorkflow(string workflowid, string taskid, string userid)
         {
             WorkflowModel workflow = WorkflowModel.Load(workflowid);
-            workflow.Stop(taskid, userid);
+            workflow.Stop(userid);
             return true;
         }
     }

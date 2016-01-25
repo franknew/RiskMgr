@@ -14,6 +14,7 @@ using RiskMgr.Api;
 using RiskMgr.BLL;
 using DreamWorkflow.Engine.Model;
 using DreamWorkflow.Engine;
+using RiskMgr.DAL;
 
 namespace RiskMgr.WinformTest
 {
@@ -161,7 +162,7 @@ namespace RiskMgr.WinformTest
             var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
             if (task != null)
             {
-                workflow.ProcessActivity(workflow.CurrentActivity.Value.ID, new Approval
+                workflow.ProcessActivity(new Approval
                 {
                     Creator = userid,
                     LastUpdator = userid,
@@ -169,7 +170,7 @@ namespace RiskMgr.WinformTest
                     Status = (int)ApprovalStatus.Agree,
                     ActivityID = workflow.CurrentActivity.Value.ID,
                     WorkflowID = workflow.Value.ID,
-                }, task.ID, userid, new WorkflowAuthority());
+                }, userid, new WorkflowAuthority());
             }
         }
 
@@ -182,15 +183,15 @@ namespace RiskMgr.WinformTest
 
         private void button12_Click(object sender, EventArgs e)
         {
-            QueryMyApplyRequest request = new QueryMyApplyRequest();
-            request.token = token;
-            var response = SDKFactory.Client.Execute(request);
-            MessageBox.Show(response.ResponseBody);
-            //Workflow workflow = new Workflow();
-            //RoleBLL rolebll = new RoleBLL();
-            //ProjectBLL projectbll = new ProjectBLL();
-            //var list = rolebll.GetUserSubUserIDs("10");
-            //var data = projectbll.QueryMyApply(new QueryMyApplyServiceForm { CurrentIndex = 2, PageSize = 10, Creators = list });
+            //QueryMyApplyRequest request = new QueryMyApplyRequest();
+            //request.token = token;
+            //var response = SDKFactory.Client.Execute(request);
+            //MessageBox.Show(response.ResponseBody);
+            Workflow workflow = new Workflow();
+            RoleBLL rolebll = new RoleBLL();
+            ProjectBLL projectbll = new ProjectBLL();
+            var list = rolebll.GetUserSubUserIDs("14");
+            var data = projectbll.QueryMyApply(new QueryMyApplyServiceForm { CurrentIndex = 2, PageSize = 10, Creators = list });
         }
 
         private void button13_Click(object sender, EventArgs e)
@@ -203,7 +204,7 @@ namespace RiskMgr.WinformTest
         private void button14_Click(object sender, EventArgs e)
         {
             WorkflowBLL bll = new WorkflowBLL();
-            bll.Approval("62d03c59b62148248a49806c158e8f9b", "7fd284a5ef6649fe9c4f27fe868a15ca", "8ad46cd03d0144abbd6a698f5e8741fd", "7", new Approval
+            bll.Approval("62d03c59b62148248a49806c158e8f9b", "7", new Approval
             {
                 Status = 1,
                 Remark = "test",
@@ -245,15 +246,14 @@ namespace RiskMgr.WinformTest
                 ChangeOwnerProfileTime = new DateTime(2016, 1, 5),
                 ChangeOwnerProfileCode = "9C-416001002",
                 ID = textBox1.Text,
-            }, "30590d6bcda743f9a4490e73b9d92fb3", "4244955f8ea94f60ac59f2d5a392a161", "", "7");
+            }, "30590d6bcda743f9a4490e73b9d92fb3", "7");
         }
 
         private void button18_Click(object sender, EventArgs e)
         {
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
-            bll.UpdateFinance("a074c5e65c96481db5af54dfd4f75f86", "ce21b4201ee540c8b4ab99862186d336",
-                "", new Project
+            bll.UpdateFinance("a074c5e65c96481db5af54dfd4f75f86", new Project
                 {
                     RefundAccount = "1",
                     RefundBankName = "11",
@@ -296,22 +296,65 @@ namespace RiskMgr.WinformTest
         {
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
-            //bll.FinanceConfirm();
+            bll.FinanceConfirm("3ed1b947f1d9401fa1b799a802d9d00a", "14", null, null, null, null, null, null, null);
         }
 
         private void button21_Click(object sender, EventArgs e)
         {
             Workflow wf = new Workflow();
-            RoleBLL bll = new RoleBLL();
-            bll.AddRole(new AddRoleServiceForm
+            //RoleBLL bll = new RoleBLL();
+            //bll.AddRole(new AddRoleServiceForm
+            //{
+            //    Name = "testrole",
+            //    ParentID = "2",
+            //    CanManageEmployeeAndAuth = true,
+            //    CanApply = true,
+            //    CanManageAsset = true,
+            //});
+            //var roles = bll.Query(new RoleQueryForm { Name = "testrole" });
+            RoleBLL rolebll = new RoleBLL();
+            var roles = rolebll.Query(new RoleQueryForm { Name = "admin" }).ToList<Role>();
+            Role_Module_ActionDao dao = new Role_Module_ActionDao();
+            string actionID = "2";
+            string moduleID = "1";
+            Role_Module_ActionQueryForm query = new Role_Module_ActionQueryForm
             {
-                Name = "testrole",
-                ParentID = "2",
-                CanManageEmployeeAndAuth = true,
+                ActionID = actionID,
+                ModuleID = moduleID
+            };
+            var role_module_action = dao.Query(query);
+            bool hasRight = false;
+            foreach (var item in role_module_action)
+            {
+                if (roles != null && roles.Exists(t => t.ID == item.RoleID))
+                {
+                    hasRight = true;
+                    break;
+                }
+            }
+        }
+
+        private void button22_Click(object sender, EventArgs e)
+        {
+            Workflow wf = new Workflow();
+            RoleBLL bll = new RoleBLL();
+            bll.UpdateRole(new AddRoleServiceForm
+            {
+                ID = "be7c181f2e194a57bc66abcf1cd1e374",
                 CanApply = true,
-                CanManageAsset = true,
+                CanApproval = false,
+                CanManageAsset = false,
+                CanManageCustomer = false,
+                CanManageEmployeeAndAuth = false,
             });
-            var roles = bll.Query(new RoleQueryForm { Name = "testrole" });
+            var roles = bll.Query(new RoleQueryForm { ID = "be7c181f2e194a57bc66abcf1cd1e374" });
+        }
+
+        private void button23_Click(object sender, EventArgs e)
+        {
+            WorkflowModel model = WorkflowModel.Load("1c74c3e0ce2d4c5f983fab3dc6063223");
+            var task = model.GetUserProcessingTask("7");
+
         }
     }
 

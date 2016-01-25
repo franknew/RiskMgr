@@ -46,7 +46,7 @@ namespace RiskMgr.Form
         /// </summary>
         public string Remark { get; set; }
 
-        public string Role { get; set; }
+        public List<string> RoleIDList { get; set; }
 
     }
 }

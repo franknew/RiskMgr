@@ -107,6 +107,7 @@
     <Compile Include="ServiceForm\AddRoleServiceForm.cs" />
     <Compile Include="ServiceForm\FinanceConfirmServiceForm.cs" />
     <Compile Include="ServiceForm\QueryMyApplyServiceForm.cs" />
+    <Compile Include="ServiceForm\QueryMyProcessingServiceForm.cs" />
     <Compile Include="ServiceForm\QueryProjectRServiceForm.cs" />
     <Compile Include="ResultForm\UserInitResultForm.cs" />
     <Compile Include="ServiceForm\AddProjectServiceForm.cs" />

@@ -26,6 +26,11 @@ namespace RiskMgr.Form
         public List<Customer> Sellers { get; set; }
 
         /// <summary>
+        /// 第三方借款人ID
+        /// </summary>
+        public List<Customer> ThirdPart { get; set; }
+
+        /// <summary>
         /// 房产ID
         /// </summary>
         public List<Asset> Assets { get; set; }

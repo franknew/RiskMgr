@@ -35,11 +35,14 @@ namespace RiskMgr.Model
         /// 第三方
         /// </summary>
         Joint = 3,
-
         /// <summary>
         /// 共权人
         /// </summary>
         Guarantor = 4,
+        /// <summary>
+        /// 第三方借款人
+        /// </summary>
+        ThirdPart = 5,
     }
 
     public enum CustomerAssetType
