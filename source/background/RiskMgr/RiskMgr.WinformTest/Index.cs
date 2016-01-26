@@ -156,22 +156,49 @@ namespace RiskMgr.WinformTest
 
             //);
             //处理流程
-            WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
-            var workflow = wfdm.StartNew(userid, "", new WorkflowAuthority());
-            //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
-            var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
-            if (task != null)
+            ProjectBLL bll = new ProjectBLL();
+            bll.Add(new Project
             {
-                workflow.ProcessActivity(new Approval
+                ID = "111",
+            }, new List<Asset>
+            {
+                new Asset
                 {
-                    Creator = userid,
-                    LastUpdator = userid,
-                    Remark = "test",
-                    Status = (int)ApprovalStatus.Agree,
-                    ActivityID = workflow.CurrentActivity.Value.ID,
-                    WorkflowID = workflow.Value.ID,
-                }, userid, new WorkflowAuthority());
-            }
+                    Code = "test",
+                    Address = "test",
+                    Joint = new List<Customer> { }
+                }
+            }, new List<Customer>
+            {
+                new Customer
+                {
+                    Name = "test3",
+
+                }
+            }, new List<Customer>
+            {
+                new Customer
+                {
+                    Name = "test4",
+                }
+            }, null, null, "1");
+
+            //WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
+            //var workflow = wfdm.StartNew(userid, "", new WorkflowAuthority());
+            ////如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
+            //var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
+            //if (task != null)
+            //{
+            //    workflow.ProcessActivity(new Approval
+            //    {
+            //        Creator = userid,
+            //        LastUpdator = userid,
+            //        Remark = "test",
+            //        Status = (int)ApprovalStatus.Agree,
+            //        ActivityID = workflow.CurrentActivity.Value.ID,
+            //        WorkflowID = workflow.Value.ID,
+            //    }, userid, new WorkflowAuthority());
+            //}
         }
 
         private void button11_Click(object sender, EventArgs e)
