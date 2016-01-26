@@ -38,7 +38,8 @@ define(function(require, exports, module){
 		[{
 			type:'hidden',
 			required:true,
-			name:'RoleList'
+			name:'RoleIDList',
+			"data-form":"JSON"	//在Serialize里解析数据时会执行JSON.parse
 		},{
 			type:'label',
 			col:'3',

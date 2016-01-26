@@ -104,7 +104,7 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 			this._getData(id,function(data) {
 				if (data.RoleList) {
 					//重写RoleList为写入的数据
-					data.RoleList = (function(list) {
+					data.RoleIDList = (function(list) {
 						var rs = [];
 						var i=0,cur;
 						for(;cur=list[i++];) {
@@ -186,7 +186,7 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 			container.on('click','[data-hook="employee-role-choose"]',function(ev) {
 				ev.preventDefault();
 				var selected = (function() {
-					var list = container.find('[name="RoleList"]').val() || '';
+					var list = container.find('[name="RoleIDList"]').val() || '';
 					list = list.split(',');
 					return list;
 				})();
@@ -203,10 +203,10 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 								names.push(cur.name);
 							}
 
-							ids = ids.join(',');
+							ids = '['+ids.join(',')+']';
 							names = names.join(',');
 
-							container.find('[name="RoleList"]').val(ids);
+							container.find('[name="RoleIDList"]').val(ids);
 							container.find('[name="Role"]').val(names);
 						}
 					});
@@ -558,7 +558,8 @@ define.pack("./tpl.view",[],function(require, exports, module){
 		[{
 			type:'hidden',
 			required:true,
-			name:'RoleList'
+			name:'RoleIDList',
+			"data-form":"JSON"	//在Serialize里解析数据时会执行JSON.parse
 		},{
 			type:'label',
 			col:'3',

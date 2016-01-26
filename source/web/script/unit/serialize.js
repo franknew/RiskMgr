@@ -29,11 +29,19 @@ define(function(require, exports, module){
 	}
 
 	function setValue(elem,storeObject,dropEmpty) {
-			var $elem = $(elem);
+			var $elem = $(elem),
+				formType = $elem.attr('data-form') || '';
 			var val = gainValue(elem),
 				eleName = $elem.attr('name'),
 				tag = elem.tagName.toLowerCase(),
 				type = tag=='input'?elem.type:tag;
+
+			formType = formType.toLowerCase();
+			switch(formType){
+				case 'json':
+					val = JSON.parse(val);
+				break;
+			}
 
 			if ((dropEmpty && !val) || !eleName) {
 				return storeObject;

@@ -57,7 +57,7 @@ define(function(require, exports, module){
 			this._getData(id,function(data) {
 				if (data.RoleList) {
 					//重写RoleList为写入的数据
-					data.RoleList = (function(list) {
+					data.RoleIDList = (function(list) {
 						var rs = [];
 						var i=0,cur;
 						for(;cur=list[i++];) {
@@ -139,7 +139,7 @@ define(function(require, exports, module){
 			container.on('click','[data-hook="employee-role-choose"]',function(ev) {
 				ev.preventDefault();
 				var selected = (function() {
-					var list = container.find('[name="RoleList"]').val() || '';
+					var list = container.find('[name="RoleIDList"]').val() || '';
 					list = list.split(',');
 					return list;
 				})();
@@ -156,10 +156,10 @@ define(function(require, exports, module){
 								names.push(cur.name);
 							}
 
-							ids = ids.join(',');
+							ids = '['+ids.join(',')+']';
 							names = names.join(',');
 
-							container.find('[name="RoleList"]').val(ids);
+							container.find('[name="RoleIDList"]').val(ids);
 							container.find('[name="Role"]').val(names);
 						}
 					});
