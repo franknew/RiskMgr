@@ -68,9 +68,12 @@ define(function(require, exports, module){
 				var btn = $(ev.currentTarget),
 					itemClass = 'div.list-group-item',
 					box = btn.parents(itemClass),
-					boxSize = box.siblings(itemClass).size();
+					boxSize = box.siblings(itemClass).size(),
+					partyID = box.parent('.list-group').attr('id');
 
-				if (boxSize<=0) {
+				var notRequire = !!~$.inArray(partyID, ['ThirdpartyList']);
+
+				if (boxSize<=0 && !notRequire) {
 					msg.error('至少保留有一个客户.');
 					return ;
 				}else {

@@ -95,8 +95,19 @@
 				<div class="list-group tickets" id="ThirdpartyList">
 
 					<%
-						var Thirdparty = FormData.Thirdparty||[];
-						var i=0, l = Thirdparty.length||1;
+						var Thirdparty = FormData.ThirdParty||[];
+						var i=0, l = Thirdparty.length||0;
+
+						if (l<=0 && !data.canEdit) {
+					%>
+						<div class="alert alert-info">
+							无第三方借贷人信息
+						</div>
+					<%
+
+						}
+					%>
+					<%
 						for(; i < l; ++i) {
 					%>
 						<%=this.CustomerItem({

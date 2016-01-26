@@ -553,9 +553,12 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 				var btn = $(ev.currentTarget),
 					itemClass = 'div.list-group-item',
 					box = btn.parents(itemClass),
-					boxSize = box.siblings(itemClass).size();
+					boxSize = box.siblings(itemClass).size(),
+					partyID = box.parent('.list-group').attr('id');
 
-				if (boxSize<=0) {
+				var notRequire = !!~$.inArray(partyID, ['ThirdpartyList']);
+
+				if (boxSize<=0 && !notRequire) {
 					msg.error('至少保留有一个客户.');
 					return ;
 				}else {
@@ -958,7 +961,7 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				data = {
 					Buyers:dataCustomer.buyer,
 					Sellers:dataCustomer.seller,
-					Thirdparty:dataCustomer.thirdparty,
+					ThirdPart:dataCustomer.thirdparty,
 					Assets:Property.getData(),
 					Project:Project.getData(),
 					Guarantor:Guarantor.getData(),
@@ -2703,8 +2706,16 @@ if (data.canEdit) {__p.push('				<button type="button" class="btn btn-success" d
 if (data.canEdit) {__p.push('<button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button>');
 }__p.push('</h3>\n			</div>\n			<div class="content">\n				<div class="list-group tickets" id="ThirdpartyList">');
 
-						var Thirdparty = FormData.Thirdparty||[];
-						var i=0, l = Thirdparty.length||1;
+						var Thirdparty = FormData.ThirdParty||[];
+						var i=0, l = Thirdparty.length||0;
+
+						if (l<=0 && !data.canEdit) {
+					__p.push('						<div class="alert alert-info">\n							无第三方借贷人信息\n						</div>');
+
+
+						}
+					__p.push('					');
+
 						for(; i < l; ++i) {
 					__p.push('						');
 _p(this.CustomerItem({
