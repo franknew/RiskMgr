@@ -333,7 +333,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./s
 				var id = data.Project&&data.Project.Name,
 					type = data.Project&&data.Project.Type,
 					typeName = Types.get(type),
-					canDiscard = data.CanDiscard;	//可以作废
+					canDiscard = data.DisplayDiscard;	//可以作废
 
 				var extraText = [];
 
@@ -645,7 +645,7 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 
 				var Params = Data.params();
 				Ajax.post({
-					url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
+					url:'RiskMgr.Api.ProjectApi/FinanceConfirmSave',
 					data:{
 						ID:Params.ID,
 						WorkflowID:Params.WorkflowID,

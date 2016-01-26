@@ -70,7 +70,7 @@ define(function(require, exports, module){
 				var id = data.Project&&data.Project.Name,
 					type = data.Project&&data.Project.Type,
 					typeName = Types.get(type),
-					canDiscard = data.CanDiscard;	//可以作废
+					canDiscard = data.DisplayDiscard;	//可以作废
 
 				var extraText = [];
 

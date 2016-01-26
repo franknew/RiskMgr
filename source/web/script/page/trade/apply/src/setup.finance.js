@@ -22,7 +22,7 @@ define(function(require, exports, module){
 
 				var Params = Data.params();
 				Ajax.post({
-					url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
+					url:'RiskMgr.Api.ProjectApi/FinanceConfirmSave',
 					data:{
 						ID:Params.ID,
 						WorkflowID:Params.WorkflowID,
