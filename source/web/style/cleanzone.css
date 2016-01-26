@@ -5828,4 +5828,12 @@ table.no-border tr.pointer-item:hover {
     height: 28px;
     line-height: 28px;
   }
+
+.home-gtasks .list-group-item {
+  font-size: 14px;
+}
+  .home-gtasks .list-group-item small {
+    font-size:12px;
+    color:#A5A5A5;
+  }
 /* risk自定义样式 END  */
