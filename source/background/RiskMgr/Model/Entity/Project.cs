@@ -69,16 +69,6 @@ namespace RiskMgr.Model
         public string OrignalFundBranch { get; set; }
         
         /// <summary>
-        /// 是否提供供楼卡复印件
-        /// </summary>
-        public int? SupplyCardCopy { get; set; }
-        
-        /// <summary>
-        /// 原贷款本息
-        /// </summary>
-        public decimal? OrignalCreditPI { get; set; }
-        
-        /// <summary>
         /// 原贷款商业金额
         /// </summary>
         public decimal? OrignalCreditCommerceMoney { get; set; }
@@ -109,21 +99,6 @@ namespace RiskMgr.Model
         public string NewCreditBranch { get; set; }
         
         /// <summary>
-        /// 短期赎楼贷款银行
-        /// </summary>
-        public string ShortTermAssetRansomBank { get; set; }
-        
-        /// <summary>
-        /// 短期赎楼贷款银行支行
-        /// </summary>
-        public string ShortTermAssetRansomBranch { get; set; }
-        
-        /// <summary>
-        /// 担保金额
-        /// </summary>
-        public decimal? GuaranteeMoney { get; set; }
-        
-        /// <summary>
         /// 担保期限
         /// </summary>
         public int? GuaranteeMonth { get; set; }
@@ -137,11 +112,6 @@ namespace RiskMgr.Model
         /// 买方贷款公积金金额
         /// </summary>
         public decimal? BuyerCreditFundMoney { get; set; }
-        
-        /// <summary>
-        /// 贷款放款金额
-        /// </summary>
-        public decimal? LoanMoney { get; set; }
         
         /// <summary>
         /// 成交金额
@@ -189,21 +159,6 @@ namespace RiskMgr.Model
         public string CreditReceiverAccount { get; set; }
         
         /// <summary>
-        /// 工行托管账号
-        /// </summary>
-        public string TrusteeshipAccount { get; set; }
-        
-        /// <summary>
-        /// 预计赎楼金额
-        /// </summary>
-        public decimal? AssetRansomPredictMoney { get; set; }
-        
-        /// <summary>
-        /// 赎楼员
-        /// </summary>
-        public string AssetRansomer { get; set; }
-        
-        /// <summary>
         /// 赎楼方式
         /// </summary>
         public int? AssetRansomType { get; set; }
@@ -217,16 +172,6 @@ namespace RiskMgr.Model
         /// 收费方式
         /// </summary>
         public int? ChargeType { get; set; }
-        
-        /// <summary>
-        /// 申请支票数量及限额
-        /// </summary>
-        public string CheckNumbersAndLimit { get; set; }
-        
-        /// <summary>
-        /// 驻点人员
-        /// </summary>
-        public string Stagnationer { get; set; }
         
         /// <summary>
         /// 索引
@@ -359,31 +304,6 @@ namespace RiskMgr.Model
         public DateTime? PaymentDate { get; set; }
         
         /// <summary>
-        /// 扣款户名
-        /// </summary>
-        public string DeductMoneyName { get; set; }
-        
-        /// <summary>
-        /// 扣款账号
-        /// </summary>
-        public string DeductMoneyAccount { get; set; }
-        
-        /// <summary>
-        /// 扣款开户行
-        /// </summary>
-        public string DeductMoneyBankName { get; set; }
-        
-        /// <summary>
-        /// 扣款金额
-        /// </summary>
-        public decimal? DeductMoneyMoney { get; set; }
-        
-        /// <summary>
-        /// 扣款日期
-        /// </summary>
-        public DateTime? DeductMoneyDate { get; set; }
-        
-        /// <summary>
         /// 
         /// </summary>
         public string ChangeOwnerRemark { get; set; }
@@ -432,6 +352,31 @@ namespace RiskMgr.Model
         /// 取新证日期
         /// </summary>
         public DateTime? PickNewAssetCodeTime { get; set; }
+        
+        /// <summary>
+        /// 回款金额2
+        /// </summary>
+        public decimal? ReturnBackMoney2 { get; set; }
+        
+        /// <summary>
+        /// 回款时间2
+        /// </summary>
+        public DateTime? ReturnBackTime2 { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ReturnBackRemark { get; set; }
+        
+        /// <summary>
+        /// 垫资金额
+        /// </summary>
+        public decimal? CompanyPredepositMoney { get; set; }
+        
+        /// <summary>
+        /// 收费备注
+        /// </summary>
+        public string ChargeFinanceRemark { get; set; }
         
     }
 }

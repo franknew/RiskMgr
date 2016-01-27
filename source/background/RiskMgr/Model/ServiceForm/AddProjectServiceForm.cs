@@ -28,7 +28,7 @@ namespace RiskMgr.Form
         /// <summary>
         /// 第三方借款人ID
         /// </summary>
-        public List<Customer> ThirdPart { get; set; }
+        public List<Customer> ThirdParty { get; set; }
 
         /// <summary>
         /// 房产ID

@@ -37,7 +37,7 @@ namespace RiskMgr.Api
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
             form.Project.Report = form.Report;
-            var result = bll.Add(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdPart, form.Guarantor, userid);
+            var result = bll.Add(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdParty, form.Guarantor, userid);
 
             //处理流程
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");

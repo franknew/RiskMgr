@@ -15,20 +15,51 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="LinkDefinitionID">
         `LinkDefinitionID`=#LinkDefinitionID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="LinkDefinitionIDs">
+        <iterate property="LinkDefinitionIDs" open="(" close=")" conjunction="OR">
+         `LinkDefinitionID`=#LinkDefinitionIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="FromActivityID">
         `FromActivityID`=#FromActivityID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="FromActivityIDs">
+        <iterate property="FromActivityIDs" open="(" close=")" conjunction="OR">
+         `FromActivityID`=#FromActivityIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ToAcivityID">
         `ToAcivityID`=#ToAcivityID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ToAcivityIDs">
+        <iterate property="ToAcivityIDs" open="(" close=")" conjunction="OR">
+         `ToAcivityID`=#ToAcivityIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -36,17 +67,26 @@
     <isNotNull prepend="AND" property="CreateTime_End">
         `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Passed">
         `Passed`=#Passed#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="PassedTime_Start">
         `PassedTime`&gt;=#PassedTime_Start#
     </isNotNull>
     <isNotNull prepend="AND" property="PassedTime_End">
         `PassedTime`&lt;=#PassedTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="WorkflowID">
         `WorkflowID`=#WorkflowID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
@@ -54,24 +94,11 @@
     <isNotNull prepend="AND" property="LastUpdateTime_End">
         `LastUpdateTime`&lt;=#LastUpdateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Creators">
-        <iterate property="Creators" open="(" close=")" conjunction="OR">
-         `Creator`=#Creators[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="WorkflowIDs">
-        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
-         `WorkflowID`=#WorkflowIDs[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
-        </iterate>
-    </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -202,20 +229,45 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="LinkDefinitionID">
         `LinkDefinitionID`=#LinkDefinitionID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="LinkDefinitionIDs">
+        <iterate property="LinkDefinitionIDs" open="(" close=")" conjunction="OR">
+         `LinkDefinitionID`=#LinkDefinitionIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="FromActivityID">
         `FromActivityID`=#FromActivityID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="FromActivityIDs">
+        <iterate property="FromActivityIDs" open="(" close=")" conjunction="OR">
+         `FromActivityID`=#FromActivityIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ToAcivityID">
         `ToAcivityID`=#ToAcivityID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ToAcivityIDs">
+        <iterate property="ToAcivityIDs" open="(" close=")" conjunction="OR">
+         `ToAcivityID`=#ToAcivityIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -235,6 +287,11 @@
     <isNotNull prepend="AND" property="WorkflowID">
         `WorkflowID`=#WorkflowID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
     </isNotNull>
@@ -243,21 +300,6 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
-    </isNotNull>
-    <isNotNull prepend="AND"  property="Creators">
-        <iterate property="Creators" open="(" close=")" conjunction="OR">
-         `Creator`=#Creators[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="WorkflowIDs">
-        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
-         `WorkflowID`=#WorkflowIDs[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
-        </iterate>
     </isNotNull>
   </delete>
    <select id="QueryLinkLastUpdateTime" resultClass="DateTime">
@@ -269,20 +311,45 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="LinkDefinitionID">
         `LinkDefinitionID`=#LinkDefinitionID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="LinkDefinitionIDs">
+        <iterate property="LinkDefinitionIDs" open="(" close=")" conjunction="OR">
+         `LinkDefinitionID`=#LinkDefinitionIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="FromActivityID">
         `FromActivityID`=#FromActivityID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="FromActivityIDs">
+        <iterate property="FromActivityIDs" open="(" close=")" conjunction="OR">
+         `FromActivityID`=#FromActivityIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ToAcivityID">
         `ToAcivityID`=#ToAcivityID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ToAcivityIDs">
+        <iterate property="ToAcivityIDs" open="(" close=")" conjunction="OR">
+         `ToAcivityID`=#ToAcivityIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -302,6 +369,11 @@
     <isNotNull prepend="AND" property="WorkflowID">
         `WorkflowID`=#WorkflowID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="WorkflowIDs">
+        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
+         `WorkflowID`=#WorkflowIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
     </isNotNull>
@@ -310,21 +382,6 @@
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
-    </isNotNull>
-    <isNotNull prepend="AND"  property="Creators">
-        <iterate property="Creators" open="(" close=")" conjunction="OR">
-         `Creator`=#Creators[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="WorkflowIDs">
-        <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
-         `WorkflowID`=#WorkflowIDs[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
-        </iterate>
     </isNotNull>
     </dynamic>
    </select>

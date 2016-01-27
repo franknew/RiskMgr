@@ -36,12 +36,6 @@ namespace RiskMgr.Form
         
         public string OrignalFundBranch { get; set; }
         
-        public UInt64? SupplyCardCopy { get; set; }
-        
-        public DateTime? OrignalCreditPI_Start { get; set; }
-        
-        public DateTime? OrignalCreditPI_End { get; set; }
-        
         public DateTime? OrignalCreditCommerceMoney_Start { get; set; }
         
         public DateTime? OrignalCreditCommerceMoney_End { get; set; }
@@ -58,14 +52,6 @@ namespace RiskMgr.Form
         
         public string NewCreditBranch { get; set; }
         
-        public string ShortTermAssetRansomBank { get; set; }
-        
-        public string ShortTermAssetRansomBranch { get; set; }
-        
-        public DateTime? GuaranteeMoney_Start { get; set; }
-        
-        public DateTime? GuaranteeMoney_End { get; set; }
-        
         public Int32? GuaranteeMonth { get; set; }
         
         public DateTime? BuyerCreditCommerceMoney_Start { get; set; }
@@ -75,10 +61,6 @@ namespace RiskMgr.Form
         public DateTime? BuyerCreditFundMoney_Start { get; set; }
         
         public DateTime? BuyerCreditFundMoney_End { get; set; }
-        
-        public DateTime? LoanMoney_Start { get; set; }
-        
-        public DateTime? LoanMoney_End { get; set; }
         
         public DateTime? DealMoney_Start { get; set; }
         
@@ -108,23 +90,11 @@ namespace RiskMgr.Form
         
         public string CreditReceiverAccount { get; set; }
         
-        public string TrusteeshipAccount { get; set; }
-        
-        public DateTime? AssetRansomPredictMoney_Start { get; set; }
-        
-        public DateTime? AssetRansomPredictMoney_End { get; set; }
-        
-        public string AssetRansomer { get; set; }
-        
         public Int32? AssetRansomType { get; set; }
         
         public Int32? PredictDays { get; set; }
         
         public Int32? ChargeType { get; set; }
-        
-        public string CheckNumbersAndLimit { get; set; }
-        
-        public string Stagnationer { get; set; }
         
         public Int32? Index { get; set; }
         
@@ -206,20 +176,6 @@ namespace RiskMgr.Form
         
         public DateTime? PaymentDate_End { get; set; }
         
-        public string DeductMoneyName { get; set; }
-        
-        public string DeductMoneyAccount { get; set; }
-        
-        public string DeductMoneyBankName { get; set; }
-        
-        public DateTime? DeductMoneyMoney_Start { get; set; }
-        
-        public DateTime? DeductMoneyMoney_End { get; set; }
-        
-        public DateTime? DeductMoneyDate_Start { get; set; }
-        
-        public DateTime? DeductMoneyDate_End { get; set; }
-        
         public string ChangeOwnerRemark { get; set; }
         
         public Int32? InsurancePeriod { get; set; }
@@ -251,6 +207,22 @@ namespace RiskMgr.Form
         public DateTime? PickNewAssetCodeTime_Start { get; set; }
         
         public DateTime? PickNewAssetCodeTime_End { get; set; }
+        
+        public DateTime? ReturnBackMoney2_Start { get; set; }
+        
+        public DateTime? ReturnBackMoney2_End { get; set; }
+        
+        public DateTime? ReturnBackTime2_Start { get; set; }
+        
+        public DateTime? ReturnBackTime2_End { get; set; }
+        
+        public string ReturnBackRemark { get; set; }
+        
+        public DateTime? CompanyPredepositMoney_Start { get; set; }
+        
+        public DateTime? CompanyPredepositMoney_End { get; set; }
+        
+        public string ChargeFinanceRemark { get; set; }
         
     }
 }

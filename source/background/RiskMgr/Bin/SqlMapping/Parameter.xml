@@ -15,20 +15,29 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
-    <isNotNull prepend="AND" property="ContextID">
-        `ContextID`=#ContextID#
-    </isNotNull>
-    <isNotNull prepend="AND" property="Key">
-        `Key`=#Key#
-    </isNotNull>
-    <isNotNull prepend="AND" property="Value">
-        `Value`=#Value#
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
+    
+        <isNotNull prepend="AND"  property="IDs">
         <iterate property="IDs" open="(" close=")" conjunction="OR">
          `ID`=#IDs[]#
         </iterate>
     </isNotNull>
+    <isNotNull prepend="AND" property="ContextID">
+        `ContextID`=#ContextID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ContextIDs">
+        <iterate property="ContextIDs" open="(" close=")" conjunction="OR">
+         `ContextID`=#ContextIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="Key">
+        `Key`=#Key#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="Value">
+        `Value`=#Value#
+    </isNotNull>
+    
     </dynamic>
     <isNotNull property="PageSize">
         <isGreaterThan property="PageSize" compareValue="0">
@@ -85,19 +94,24 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ContextID">
         `ContextID`=#ContextID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ContextIDs">
+        <iterate property="ContextIDs" open="(" close=")" conjunction="OR">
+         `ContextID`=#ContextIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Key">
         `Key`=#Key#
     </isNotNull>
     <isNotNull prepend="AND" property="Value">
         `Value`=#Value#
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
-        </iterate>
     </isNotNull>
   </delete>
    <select id="QueryParameterRecordCount" resultClass="int" parameterClass="ParameterQueryForm">
@@ -106,19 +120,24 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="ContextID">
         `ContextID`=#ContextID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ContextIDs">
+        <iterate property="ContextIDs" open="(" close=")" conjunction="OR">
+         `ContextID`=#ContextIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Key">
         `Key`=#Key#
     </isNotNull>
     <isNotNull prepend="AND" property="Value">
         `Value`=#Value#
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
-        </iterate>
     </isNotNull>
     </dynamic>
    </select>

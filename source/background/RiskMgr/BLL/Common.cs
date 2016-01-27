@@ -11,6 +11,7 @@ namespace RiskMgr.BLL
     {
         public const string DataAuthorityKey = "_dataauthorityuseridlist";
         public const string MapperKey = "_Mapper";
+        public const string AuthorityMappingFile = "AuthorityMapping.xml";
 
         public static ISqlMapper GetMapperFromSession()
         {

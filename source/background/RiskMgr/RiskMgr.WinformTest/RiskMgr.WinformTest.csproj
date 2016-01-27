@@ -46,6 +46,10 @@
     <Reference Include="SOAFramework.Library.Json">
       <HintPath>..\CommonDll\SOAFramework.Library.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SOAFramework.Library.XML, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9a50c39ae211549b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\SOAFramework.Library.XML.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Service.Core.Model">
       <HintPath>..\CommonDll\SOAFramework.Service.Core.Model.dll</HintPath>
     </Reference>

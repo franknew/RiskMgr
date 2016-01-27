@@ -14,6 +14,7 @@ namespace RiskMgr.BLL
 {
     public class RoleBLL
     {
+        #region action
         /// <summary>
         /// 查询角色
         /// </summary>
@@ -27,38 +28,24 @@ namespace RiskMgr.BLL
             List<FullRoleInfo> result = new List<FullRoleInfo>();
             form.IsDeleted = 0;
             var roles = dao.Query(form);
-            var modules = TableCacheHelper.GetDataFromCache<Module>(typeof(ModuleDao));
-            var actions = TableCacheHelper.GetDataFromCache<Model.Action>(typeof(ActionDao));
-            var rmas = rmadao.Query(new Role_Module_ActionQueryForm { });
-            var assetauth = modules.Find(t => t.Name.Equals("RiskMgr.AssetApi"));
-            var projectauth = modules.Find(t => t.Name.Equals("RiskMgr.ProjectApi"));
-            var userauth = modules.Find(t => t.Name.Equals("RiskMgr.UserApi"));
-            var customerauth = modules.Find(t => t.Name.Equals("RiskMgr.CustomerApi"));
-            var manageractions = actions.FindAll(t => t.Name.Equals("edit") || t.Name.Equals("query") || t.Name.Equals("delete"));
+            var roleids = (from r in roles select r.ID).ToList();
+            var rmas = rmadao.Query(new Role_Module_ActionQueryForm { RoleIDs = roleids });
+            AuthorityMapping mapping = XMLHelper.DeserializeFromFile<AuthorityMapping>(Common.AuthorityMappingFile);
             foreach (var role in roles)
             {
                 var data = role.ConvertTo<FullRoleInfo>();
                 var parentrole = roles.Find(t => t.ID == role.ParentID);
                 if (parentrole != null) data.ParentRoleName = parentrole.Name;
                 #region 查询权限
-                var edit = actions.Find(t => t.Name.Equals("edit"));
-                if (projectauth != null)
+                var role_rmas = rmas.FindAll(t => t.RoleID.Equals(role.ID));
+                data.Authority = new List<AuthorityNodeForCheck>();
+                foreach (var auth in mapping.AuthNode)
                 {
-                    var approval = actions.Find(t => t.Name.Equals("approval"));
-                    if (rmas.Exists(t => t.ModuleID == projectauth.ID && t.RoleID == role.ID && t.ActionID == edit.ID)) data.CanApply = true;
-                    if (rmas.Exists(t => t.ModuleID == projectauth.ID && t.RoleID == role.ID && t.ActionID == approval.ID)) data.CanApproval = true;
-                }
-                if (userauth != null)
-                {
-                    if (rmas.Exists(t => t.ModuleID == userauth.ID && t.RoleID == role.ID && t.ActionID == edit.ID)) data.CanManageEmployeeAndAuth = true;
-                }
-                if (customerauth != null)
-                {
-                    if (rmas.Exists(t => t.ModuleID == customerauth.ID && t.RoleID == role.ID && t.ActionID == edit.ID)) data.CanManageCustomer = true;
-                }
-                if (assetauth != null)
-                {
-                    if (rmas.Exists(t => t.ModuleID == assetauth.ID && t.RoleID == role.ID && t.ActionID == edit.ID)) data.CanManageAsset = true;
+                    auth.Checked = (from au in auth.Item
+                                    from r in role_rmas
+                                    where au.ModuleID == r.ModuleID && au.ActionID == r.ActionID
+                                    select au).Count() == auth.Item.Count;
+                    data.Authority.Add(auth as AuthorityNodeForCheck);
                 }
                 #endregion
                 result.Add(data);
@@ -66,6 +53,11 @@ namespace RiskMgr.BLL
             return result;
         }
 
+        /// <summary>
+        /// 获得用户角色子级下的所有用户
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         public List<string> GetUserSubUserIDs(string userid)
         {
             UserBLL userbll = new UserBLL();
@@ -100,6 +92,11 @@ namespace RiskMgr.BLL
             return useridlist;
         }
 
+        /// <summary>
+        /// 获得角色子级下的所有角色
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <returns></returns>
         public List<Role> GetAllSubRoles(string roleid)
         {
             var allroles = TableCacheHelper.GetDataFromCache<Role>(typeof(RoleDao));
@@ -109,6 +106,11 @@ namespace RiskMgr.BLL
             return list;
         }
 
+        /// <summary>
+        /// 获得角色下的所有用户以及角色子级下的所有角色
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <returns></returns>
         public List<string> GetRoleUserIDs(string roleid)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
@@ -146,6 +148,8 @@ namespace RiskMgr.BLL
             }
             ISqlMapper mapper = Common.GetMapperFromSession();
             RoleDao dao = new RoleDao(mapper);
+            Role_Module_ActionDao rmadao = new Role_Module_ActionDao(mapper);
+            rmadao.Delete(new Role_Module_ActionQueryForm { RoleID = form.ID });
             AddRoleAuth(mapper, form, form.ID);
             return dao.Update(new RoleUpdateForm
             {
@@ -173,7 +177,9 @@ namespace RiskMgr.BLL
             rmadao.Delete(new Role_Module_ActionQueryForm { RoleID = id });
             return dao.Delete(new RoleQueryForm { ID = id });
         }
+        #endregion
 
+        #region private 
         private void AddRoleAuth(ISqlMapper mapper, AddRoleServiceForm form, string id)
         {
             #region 权限新增
@@ -181,39 +187,23 @@ namespace RiskMgr.BLL
             Role_Module_ActionDao rmadao = new Role_Module_ActionDao(mapper);
             List<Module> modules = TableCacheHelper.GetDataFromCache<Module>(typeof(ModuleDao));
             List<Model.Action> actions = TableCacheHelper.GetDataFromCache<Model.Action>(typeof(ActionDao));
-            var projectauth = modules.Find(t => t.Name.Equals("RiskMgr.ProjectApi"));
-            var manageractions = actions.FindAll(t => t.Name.Equals("edit") || t.Name.Equals("delete"));
-            var approval = actions.Find(t => t.Name.Equals("approval"));
-            var assetauth = modules.Find(t => t.Name.Equals("RiskMgr.AssetApi"));
-            var customerauth = modules.Find(t => t.Name.Equals("RiskMgr.CustomerApi"));
-            //删除旧的权限
-            rmadao.Delete(new Role_Module_ActionQueryForm { RoleID = id });
-            //默认用户资产和客户的查询权限
-            var queryaction = actions.Find(t => t.Name.Equals("query"));
-            AddAuth(new List<Model.Action> { queryaction }, assetauth, id, rmadao);
-            AddAuth(new List<Model.Action> { queryaction }, customerauth, id, rmadao);
-            if (form.CanApply.HasValue && form.CanApply.Value)
+            AuthorityMapping mapping = XMLHelper.DeserializeFromFile<AuthorityMapping>(Common.AuthorityMappingFile);
+            foreach (var auth in form.Authority)
             {
-                var edit = actions.Find(t => t.Name.Equals("edit"));
-                AddAuth(new List<Model.Action> { edit }, projectauth, id, rmadao);
-            }
-            //新增额度审批权限
-            if (form.CanApproval.HasValue && form.CanApproval.Value) AddAuth(new List<Model.Action> { approval }, projectauth, id, rmadao);
-            //新增资产管理权限
-            if (form.CanManageAsset.HasValue && form.CanManageAsset.Value) AddAuth(manageractions, assetauth, id, rmadao);
-            //新增客户管理权限
-            if (form.CanManageCustomer.HasValue && form.CanManageCustomer.Value) AddAuth(manageractions, customerauth, id, rmadao);
-            //新增员工和权限管理权限
-            if (form.CanManageEmployeeAndAuth.HasValue && form.CanManageEmployeeAndAuth.Value)
-            {
-                var userauth = modules.Find(t => t.Name.Equals("RiskMgr.UserApi"));
-                var roleauth = modules.Find(t => t.Name.Equals("RiskMgr.RoleApi"));
-                AddAuth(manageractions, userauth, id, rmadao);
-                AddAuth(manageractions, roleauth, id, rmadao);
+                if (!auth.Checked) continue;
+                var authonode = mapping.AuthNode.Find(t => t.ID.Equals(auth.ID));
+                if (authonode == null) continue;
+                AddAuth(authonode.Item, form.ID, rmadao);
             }
             #endregion
         }
 
+        /// <summary>
+        /// 递归获得角色子级的角色
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="allroles"></param>
+        /// <param name="list"></param>
         private void GetSubRole_Resc(Role role, List<Role> allroles, List<Role> list)
         {
             var subroles = allroles.FindAll(t => t.ParentID == role.ID);
@@ -227,14 +217,20 @@ namespace RiskMgr.BLL
             }
         }
 
-        private void AddAuth(List<Model.Action> actions, Module module, string roleid, Role_Module_ActionDao dao)
+        /// <summary>
+        /// 新增角色权限
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="roleid"></param>
+        /// <param name="dao"></param>
+        private void AddAuth(List<AuthorityItem> items, string roleid, Role_Module_ActionDao dao)
         {
-            if (module == null) return;
-            foreach (var a in actions)
+            foreach (var a in items)
             {
-                dao.Add(new Role_Module_Action { ActionID = a.ID, ModuleID = module.ID, RoleID = roleid });
+                dao.Add(new Role_Module_Action { ActionID = a.ActionID, ModuleID = a.ModuleID, RoleID = roleid });
             }
         }
+        #endregion
     }
 
     public enum DataAccesssEnum

@@ -13,28 +13,8 @@ namespace RiskMgr.Model
         public string ParentRoleName { get; set; }
 
         /// <summary>
-        /// 录单权限
+        /// 权限列表
         /// </summary>
-        public bool CanApply { get; set; }
-
-        /// <summary>
-        /// 审批权限
-        /// </summary>
-        public bool CanApproval { get; set; }
-
-        /// <summary>
-        /// 管理员工权限
-        /// </summary>
-        public bool CanManageEmployeeAndAuth { get; set; }
-
-        /// <summary>
-        /// 管理客户权限
-        /// </summary>
-        public bool CanManageCustomer { get; set; }
-
-        /// <summary>
-        /// 管理房产权限
-        /// </summary>
-        public bool CanManageAsset { get; set; }
+        public List<AuthorityNodeForCheck> Authority { get; set; }
     }
 }

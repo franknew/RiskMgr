@@ -15,17 +15,19 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="WorkflowID">
         `WorkflowID`=#WorkflowID#
     </isNotNull>
-    <isNotNull prepend="AND"  property="WorkflowIDs">
+    
+        <isNotNull prepend="AND"  property="WorkflowIDs">
         <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
          `WorkflowID`=#WorkflowIDs[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
         </iterate>
     </isNotNull>
     </dynamic>
@@ -68,17 +70,17 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="WorkflowID">
         `WorkflowID`=#WorkflowID#
     </isNotNull>
-    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <isNotNull prepend="AND"  property="WorkflowIDs">
         <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
          `WorkflowID`=#WorkflowIDs[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
         </iterate>
     </isNotNull>
   </delete>
@@ -88,17 +90,17 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="WorkflowID">
         `WorkflowID`=#WorkflowID#
     </isNotNull>
-    <isNotNull prepend="AND"  property="WorkflowIDs">
+        <isNotNull prepend="AND"  property="WorkflowIDs">
         <iterate property="WorkflowIDs" open="(" close=")" conjunction="OR">
          `WorkflowID`=#WorkflowIDs[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
         </iterate>
     </isNotNull>
     </dynamic>

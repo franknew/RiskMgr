@@ -15,11 +15,24 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -27,17 +40,32 @@
     <isNotNull prepend="AND" property="CreateTime_End">
         `CreateTime`&lt;=#CreateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Type">
         `Type`=#Type#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="Value">
         `Value`=#Value#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="ActivityDefinitionID">
         `ActivityDefinitionID`=#ActivityDefinitionID#
     </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ActivityDefinitionIDs">
+        <iterate property="ActivityDefinitionIDs" open="(" close=")" conjunction="OR">
+         `ActivityDefinitionID`=#ActivityDefinitionIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="WorkflowDefinitionID">
         `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="WorkflowDefinitionIDs">
+        <iterate property="WorkflowDefinitionIDs" open="(" close=")" conjunction="OR">
+         `WorkflowDefinitionID`=#WorkflowDefinitionIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
@@ -45,22 +73,15 @@
     <isNotNull prepend="AND" property="LastUpdateTime_End">
         `LastUpdateTime`&lt;=#LastUpdateTime_End#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="LastUpdator">
         `LastUpdator`=#LastUpdator#
     </isNotNull>
+    
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
     </isNotNull>
-    <isNotNull prepend="AND"  property="Creators">
-        <iterate property="Creators" open="(" close=")" conjunction="OR">
-         `Creator`=#Creators[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
-        </iterate>
-    </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -176,15 +197,25 @@
     </dynamic>
   </update>
   <update id="DeleteActivityAuthDefinition" parameterClass="ActivityAuthDefinitionQueryForm">
-    UPDATE `ActivityAuthDefinition` SET IsDelete=1 WHERE 1=1
+    UPDATE `ActivityAuthDefinition` SET IsDeleted=1 WHERE 1=1
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -201,8 +232,18 @@
     <isNotNull prepend="AND" property="ActivityDefinitionID">
         `ActivityDefinitionID`=#ActivityDefinitionID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="ActivityDefinitionIDs">
+        <iterate property="ActivityDefinitionIDs" open="(" close=")" conjunction="OR">
+         `ActivityDefinitionID`=#ActivityDefinitionIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="WorkflowDefinitionID">
         `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="WorkflowDefinitionIDs">
+        <iterate property="WorkflowDefinitionIDs" open="(" close=")" conjunction="OR">
+         `WorkflowDefinitionID`=#WorkflowDefinitionIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
@@ -215,16 +256,6 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
-    </isNotNull>
-    <isNotNull prepend="AND"  property="Creators">
-        <iterate property="Creators" open="(" close=")" conjunction="OR">
-         `Creator`=#Creators[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
-        </iterate>
     </isNotNull>
   </update>
    <select id="QueryActivityAuthDefinitionLastUpdateTime" resultClass="DateTime">
@@ -236,11 +267,21 @@
     <isNotNull prepend="AND" property="ID">
         `ID`=#ID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="Name">
         `Name`=#Name#
     </isNotNull>
     <isNotNull prepend="AND" property="Creator">
         `Creator`=#Creator#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="Creators">
+        <iterate property="Creators" open="(" close=")" conjunction="OR">
+         `Creator`=#Creators[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="CreateTime_Start">
         `CreateTime`&gt;=#CreateTime_Start#
@@ -257,8 +298,18 @@
     <isNotNull prepend="AND" property="ActivityDefinitionID">
         `ActivityDefinitionID`=#ActivityDefinitionID#
     </isNotNull>
+        <isNotNull prepend="AND"  property="ActivityDefinitionIDs">
+        <iterate property="ActivityDefinitionIDs" open="(" close=")" conjunction="OR">
+         `ActivityDefinitionID`=#ActivityDefinitionIDs[]#
+        </iterate>
+    </isNotNull>
     <isNotNull prepend="AND" property="WorkflowDefinitionID">
         `WorkflowDefinitionID`=#WorkflowDefinitionID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="WorkflowDefinitionIDs">
+        <iterate property="WorkflowDefinitionIDs" open="(" close=")" conjunction="OR">
+         `WorkflowDefinitionID`=#WorkflowDefinitionIDs[]#
+        </iterate>
     </isNotNull>
     <isNotNull prepend="AND" property="LastUpdateTime_Start">
         `LastUpdateTime`&gt;=#LastUpdateTime_Start#
@@ -271,16 +322,6 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
-    </isNotNull>
-    <isNotNull prepend="AND"  property="Creators">
-        <iterate property="Creators" open="(" close=")" conjunction="OR">
-         `Creator`=#Creators[]#
-        </iterate>
-    </isNotNull>
-    <isNotNull prepend="AND"  property="IDs">
-        <iterate property="IDs" open="(" close=")" conjunction="OR">
-         `ID`=#IDs[]#
-        </iterate>
     </isNotNull>
     </dynamic>
    </select>

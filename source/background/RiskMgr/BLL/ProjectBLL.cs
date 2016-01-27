@@ -34,13 +34,15 @@ namespace RiskMgr.BLL
             #endregion
 
             #region 处理项目信息
-            string projectid = null;
             DateTime createstart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             DateTime createend = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
-            int index = projectdao.QueryMaxProjectIndex(new ProjectQueryForm { CreateTime_Start = createstart, CreateTime_End = createend });
-            string code = DateTime.Now.ToString("yyMMdd") + (index + 1).ToString();
-            project.Name = code;
-            project.Index = index + 1;
+            if (string.IsNullOrEmpty(project.Name))
+            {
+                int index = projectdao.QueryMaxProjectIndex(new ProjectQueryForm { CreateTime_Start = createstart, CreateTime_End = createend });
+                string code = DateTime.Now.ToString("yyMMdd") + (index + 1).ToString();
+                project.Name = code;
+                project.Index = index + 1;
+            }
             project.Creator = project.LastUpdator = userid;
             project.IsDeleted = 0;
             var projecttemp = projectdao.Query(new ProjectQueryForm { ID = project.ID }).FirstOrDefault();
@@ -91,9 +93,9 @@ namespace RiskMgr.BLL
             #endregion
 
             #region 处理客户信息
-            ProcessCustomer(buyers, customerdao, cpdao, projectid, userid, CustomerType.Buyer);
-            ProcessCustomer(sellers, customerdao, cpdao, projectid, userid, CustomerType.Seller);
-            ProcessCustomer(thirdpart, customerdao, cpdao, projectid, userid, CustomerType.ThirdPart);
+            ProcessCustomer(buyers, customerdao, cpdao, project.ID, userid, CustomerType.Buyer);
+            ProcessCustomer(sellers, customerdao, cpdao, project.ID, userid, CustomerType.Seller);
+            ProcessCustomer(thirdpart, customerdao, cpdao, project.ID, userid, CustomerType.ThirdParty);
             #endregion
 
             #region 处理共权人信息
@@ -126,9 +128,8 @@ namespace RiskMgr.BLL
                 }
             }
             #endregion
-
-            projectid = project.ID;
-            return projectid;
+            
+            return project.ID;
         }
 
         private InitApprovalResultForm QueryDetail(Project project, List<Customer> customers,
@@ -152,6 +153,10 @@ namespace RiskMgr.BLL
             var sellerids = (from c in cps
                              where c.ProjectID == project.ID && c.Type == (int)CustomerType.Seller
                              select c.CustomerID).ToList();
+            //第三方借款人
+            var thirdpartyids = (from c in cps
+                                 where c.ProjectID == project.ID && c.Type == (int)CustomerType.ThirdParty
+                                 select c.CustomerID).ToList();
             //共权人
             var guarantorids = (from g in cps
                                 where g.ProjectID == project.ID && g.Type == (int)CustomerType.Guarantor
@@ -166,6 +171,9 @@ namespace RiskMgr.BLL
             result.Sellers = (from c in customers
                               where sellerids.Exists(t => t == c.ID)
                               select c).ToList();
+            result.ThirdParty = (from c in customers
+                                 where thirdpartyids.Exists(t => t == c.ID)
+                                 select c).ToList();
             var guarantors = (from c in customers
                               where guarantorids.Exists(t => t == c.ID)
                               select c).ToList();
@@ -536,11 +544,6 @@ namespace RiskMgr.BLL
                     PaymentBankName = project.PaymentBankName,
                     PaymentDate = project.PaymentDate,
                     PaymentMoney = project.PaymentMoney,
-                    DeductMoneyAccount = project.DeductMoneyAccount,
-                    DeductMoneyBankName = project.DeductMoneyBankName,
-                    DeductMoneyDate = project.DeductMoneyDate,
-                    DeductMoneyMoney = project.DeductMoneyMoney,
-                    DeductMoneyName = project.DeductMoneyName,
                     DelayFee = project.DelayFee,
                     DelayTime = project.DelayTime,
                     InsuranceFee = project.InsuranceFee,
@@ -712,12 +715,56 @@ namespace RiskMgr.BLL
             if (customers == null || customers.Count == 0) return;
             foreach (var customer in customers)
             {
-                customer.IsDeleted = 0;
-                customer.Enabled = 1;
-                customer.Creator = userid;
-                customerdao.Add(customer);
-                cpdao.Add(new Customer_Project { CustomerID = customer.ID, ProjectID = projectid, Type = (int)type });
+                Customer c = null;
+                if (string.IsNullOrEmpty(customer.ID))
+                {
+                    customer.IsDeleted = 0;
+                    customer.Enabled = 1;
+                    customer.Creator = userid;
+                    customerdao.Add(customer);
+                    c = customer;
+                }
+                else
+                {
+                    c = customerdao.Query(new CustomerQueryForm { ID = customer.ID }).FirstOrDefault();
+                    if (c == null)
+                    {
+                        customer.IsDeleted = 0;
+                        customer.Enabled = 1;
+                        customer.Creator = userid;
+                        customerdao.Add(customer);
+                        c = customer;
+                    }
+                    else
+                    {
+                        customerdao.Update(new CustomerUpdateForm
+                        {
+                            Entity = new Customer
+                            {
+                                Name = customer.Name,
+                                IdentityCode = customer.IdentityCode,
+                                CardType = customer.CardType,
+                                Phone = customer.Phone,
+                                Gender = customer.Gender,
+                                Marrage = customer.Marrage,
+                                Address = customer.Address,
+                                OrignalName = customer.OrignalName,
+                                OrignalIdentityCode = customer.OrignalIdentityCode,
+                                BankCode = customer.BankCode,
+                                BankType = customer.BankType,
+                                WorkUnit = customer.WorkUnit,
+                            },
+                            CustomerQueryForm = new CustomerQueryForm { ID = customer.ID }
+                        });
+                    }
+                }
+                cpdao.Add(new Customer_Project { CustomerID = c.ID, ProjectID = projectid, Type = (int)type });
             }
+        }
+
+        public string SaveProject(Project project)
+        {
+            return null;
         }
         #endregion
     }

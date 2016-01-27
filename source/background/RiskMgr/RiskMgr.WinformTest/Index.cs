@@ -15,6 +15,7 @@ using RiskMgr.BLL;
 using DreamWorkflow.Engine.Model;
 using DreamWorkflow.Engine;
 using RiskMgr.DAL;
+using System.IO;
 
 namespace RiskMgr.WinformTest
 {
@@ -217,7 +218,7 @@ namespace RiskMgr.WinformTest
             Workflow workflow = new Workflow();
             RoleBLL rolebll = new RoleBLL();
             ProjectBLL projectbll = new ProjectBLL();
-            var list = rolebll.GetUserSubUserIDs("14");
+            var list = rolebll.GetUserSubUserIDs("1");
             var data = projectbll.QueryMyApply(new QueryMyApplyServiceForm { CurrentIndex = 2, PageSize = 10, Creators = list });
         }
 
@@ -281,24 +282,19 @@ namespace RiskMgr.WinformTest
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
             bll.UpdateFinance("a074c5e65c96481db5af54dfd4f75f86", new Project
-                {
-                    RefundAccount = "1",
-                    RefundBankName = "11",
-                    RefundDate = DateTime.Now,
-                    RefundMoney = 1,
-                    RefundName = "111",
-                    PaymentName = "2",
-                    PaymentAccount = "22",
-                    PaymentBankName = "222",
-                    PaymentDate = DateTime.Now,
-                    PaymentMoney = 2,
-                    DeductMoneyAccount = "3",
-                    DeductMoneyBankName = "33",
-                    DeductMoneyDate = DateTime.Now,
-                    DeductMoneyMoney = 3,
-                    DeductMoneyName = "333",
-                    ID = textBox1.Text,
-                }, "14");
+            {
+                RefundAccount = "1",
+                RefundBankName = "11",
+                RefundDate = DateTime.Now,
+                RefundMoney = 1,
+                RefundName = "111",
+                PaymentName = "2",
+                PaymentAccount = "22",
+                PaymentBankName = "222",
+                PaymentDate = DateTime.Now,
+                PaymentMoney = 2,
+                ID = textBox1.Text,
+            }, "14");
         }
 
         private void button19_Click(object sender, EventArgs e)
@@ -368,11 +364,6 @@ namespace RiskMgr.WinformTest
             bll.UpdateRole(new AddRoleServiceForm
             {
                 ID = "be7c181f2e194a57bc66abcf1cd1e374",
-                CanApply = true,
-                CanApproval = false,
-                CanManageAsset = false,
-                CanManageCustomer = false,
-                CanManageEmployeeAndAuth = false,
             });
             var roles = bll.Query(new RoleQueryForm { ID = "be7c181f2e194a57bc66abcf1cd1e374" });
         }
@@ -382,6 +373,50 @@ namespace RiskMgr.WinformTest
             WorkflowModel model = WorkflowModel.Load("1c74c3e0ce2d4c5f983fab3dc6063223");
             var task = model.GetUserProcessingTask("7");
 
+        }
+
+        private void button24_Click(object sender, EventArgs e)
+        {
+            AuthorityMapping mapping = new AuthorityMapping
+            {
+                AuthNode = new List<AuthorityMappingNode>
+                {
+                    new AuthorityMappingNode { Name = "录单", Item = new List<AuthorityItem> {
+                        new AuthorityItem { ModuleID = "2", ActionID = "1" }
+                    },
+                    },
+                    new AuthorityMappingNode {Name ="房产管理", Item = new List<AuthorityItem> {
+                        new AuthorityItem { ModuleID="3" , ActionID= "2"}
+                    },
+                }
+            }
+            };
+            string xml = XMLHelper.Serialize(mapping);
+            //File.WriteAllText("AuthorityMapping.xml", xml);
+        }
+
+        private void button25_Click(object sender, EventArgs e)
+        {
+            Workflow wf = new Workflow();
+            RoleBLL bll = new RoleBLL();
+            bll.UpdateRole(new AddRoleServiceForm
+            {
+                Authority = new List<AuthorityNodeForCheck>
+                {
+                    new AuthorityNodeForCheck
+                    {
+                        ID = "1",
+                        Checked = true,
+                    },
+                    new AuthorityNodeForCheck
+                    {
+                        ID="2",
+                        Checked = true,
+                    }
+                },
+                ID = "3",
+            });
+            var roles = bll.Query(new RoleQueryForm { ID = "3" });
         }
     }
 

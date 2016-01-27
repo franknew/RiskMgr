@@ -42,7 +42,7 @@ namespace RiskMgr.Model
         /// <summary>
         /// 第三方借款人
         /// </summary>
-        ThirdPart = 5,
+        ThirdParty = 5,
     }
 
     public enum CustomerAssetType
