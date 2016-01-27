@@ -37,10 +37,20 @@
 		]
 	});
 
-	if (!(/\bchrome\b/i.test(agent) || /\bsafari\b/i.test(agent))) {	//仅支持chrome、safari看
-		document.body.innerHTML = '<div style="width:550px;margin:100px auto;padding:40px;font-size:16px;text-align:center;background:#f2dede;border:1px solid #ECBBBB;"><p>(>﹏<)&nbsp;&nbsp;呃，您的浏览器有兼容性问题，请使用桌面版</p><p><a class="btn btn-warning" target="_blank" href="http://203.195.163.209/download/setup_risk.exe">点此下载桌面版</a></p></div>';
-	}else {
+
+
+	var iPad = agent.match(/(iPad).*OS\s([\d_]+)/),
+		iPhone = !iPad && agent.match(/(iPhone\sOS)\s([\d_]+)/),
+		iPod = agent.match(/(iPod).*OS\s([\d_]+)/),
+		android = agent.match(/(Android)\s+([\d.]+)/)||agent.match(/Android/),
+		wp = agent.match(/Windows Phone ([\d.]+)/),
+		isMobile = iPad || iPhone || iPad || wp || android,
+		isChrome = !!(/\bchrome\b/i.test(agent) || /\bsafari\b/i.test(agent));
+
+	if (isMobile && isChrome) {	//仅支持手机、chrome、safari看
 		seajs.use(['jquery','bootstrap','risk/unit/route','risk/components/user/index','risk/page/frame/index'],function() {});
+	}else {
+		document.body.innerHTML = '<div style="width:550px;margin:100px auto;padding:40px;font-size:16px;text-align:center;background:#f2dede;border:1px solid #ECBBBB;"><p>(>﹏<)&nbsp;&nbsp;呃，您的浏览器有兼容性问题，请使用桌面版</p><p><a class="btn btn-warning" target="_blank" href="http://203.195.163.209/download/setup_risk.exe">点此下载桌面版</a></p></div>';
 	}
 
 })();
