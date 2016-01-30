@@ -2,7 +2,7 @@
 <%
 	//测试数据
 	if (location.href.indexOf('testdata')!=-1) {
-		data.mode = 'view';
+		data.mode = data.mode || 'view';
 		data.data = data.data || {};
 		if (data.data) {
 		data.data["Approvals"]  = {

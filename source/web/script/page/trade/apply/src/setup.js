@@ -36,7 +36,6 @@ define(function(require, exports, module){
 				data = opts.data,
 				head = opts.head;
 
-
 			var that = this,
 				canEdit = !! (~$.inArray(mode, ['add','edit']) || data&&data.Action==2);
 			var html = Tmpl.Setup({

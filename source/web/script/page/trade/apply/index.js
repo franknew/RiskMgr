@@ -335,14 +335,12 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./s
 					typeName = Types.get(type),
 					canDiscard = data.DisplayDiscard;	//可以作废
 
-				canDiscard = true;
-
 				var extraText = [];
 
 				if (data&&data.WorkflowComplete) {
 					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
 				}else {
-					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
+					//extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
 
 				if (canDiscard) {
@@ -606,6 +604,12 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 				});
 			}
 
+			//移除id，防止串
+			if (data && data.ID) {
+				data.ID = undefined;
+				delete data.ID;
+			}
+
 			var html = Tmpl.CustomerItem({
 					tpl:this.getTpl,
 					data:data,
@@ -614,7 +618,7 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 
 			html = $(html);
 			if (data) {//导入的关键数据不可编辑
-				html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
+				//html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
 			}
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {});
@@ -902,7 +906,6 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				data = opts.data,
 				head = opts.head;
 
-
 			var that = this,
 				canEdit = !! (~$.inArray(mode, ['add','edit']) || data&&data.Action==2);
 			var html = Tmpl.Setup({
@@ -1138,7 +1141,7 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 
 			html = $(html);
 			if (data) {//导入的关键数据不可编辑
-				html.find('[name="Code"]').attr('disabled','disabled');
+				//html.find('[name="Code"]').attr('disabled','disabled');
 			}
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {
@@ -1399,7 +1402,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'GuaranteeMonth',
+			name:'GuaranteePeriod',
 			placeholder:'',
 			suffix:'天'
 		},{
@@ -3212,7 +3215,7 @@ var __p=[],_p=function(s){__p.push(s)};
 
 	//测试数据
 	if (location.href.indexOf('testdata')!=-1) {
-		data.mode = 'view';
+		data.mode = data.mode || 'view';
 		data.data = data.data || {};
 		if (data.data) {
 		data.data["Approvals"]  = {

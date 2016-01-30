@@ -72,14 +72,12 @@ define(function(require, exports, module){
 					typeName = Types.get(type),
 					canDiscard = data.DisplayDiscard;	//可以作废
 
-				canDiscard = true;
-
 				var extraText = [];
 
 				if (data&&data.WorkflowComplete) {
 					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
 				}else {
-					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
+					//extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
 
 				if (canDiscard) {

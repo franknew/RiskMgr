@@ -480,7 +480,7 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 			return ajax.post({
 				url:'RiskMgr.Api.RoleApi/QueryRole',
 				data:{
-					PageSize:conf.size||100,
+					PageSize:conf.size||0,
 					CurrentIndex:conf.current || 1
 				},
 				form:$('#J_CustomerSearchForm'),

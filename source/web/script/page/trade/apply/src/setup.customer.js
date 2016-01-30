@@ -119,6 +119,12 @@ define(function(require, exports, module){
 				});
 			}
 
+			//移除id，防止串
+			if (data && data.ID) {
+				data.ID = undefined;
+				delete data.ID;
+			}
+
 			var html = Tmpl.CustomerItem({
 					tpl:this.getTpl,
 					data:data,
@@ -127,7 +133,7 @@ define(function(require, exports, module){
 
 			html = $(html);
 			if (data) {//导入的关键数据不可编辑
-				html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
+				//html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
 			}
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {});
