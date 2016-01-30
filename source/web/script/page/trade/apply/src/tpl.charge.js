@@ -42,7 +42,7 @@ define(function(require, exports, module){
 			required:true,
 			name:'ExportMoney',
 			placeholder:'',
-			suffix:'万元'
+			suffix:'元'
 		},{
 			type:'label',
 			col:3,
@@ -58,16 +58,6 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'预计回款时间'
-		},{
-			col:'3',
-			type:'date',
-			required:true,
-			name:'PredictReturnBackMoneyTime',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
 			html:'担保期限'
 		},{
 			col:'3',
@@ -76,19 +66,16 @@ define(function(require, exports, module){
 			name:'GuaranteeMonth',
 			placeholder:'',
 			suffix:'天'
-		}],
-
-		[{
+		},{
 			type:'label',
 			col:3,
-			html:'展期费用'
+			html:'回款时间'
 		},{
 			col:'3',
-			type:'number',
+			type:'date',
 			required:true,
-			name:'HasExpired',
-			placeholder:'',
-			suffix:'元'
+			name:'PaymentDate',
+			placeholder:''
 		}],
 
 
@@ -96,6 +83,18 @@ define(function(require, exports, module){
 			col:'12',
 			type:'label',
 			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'实际出款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'PaymentMoney',
+			placeholder:'',
+			suffix:'元'
 		}],
 
 		[{
@@ -120,27 +119,6 @@ define(function(require, exports, module){
 		}],
 
 		[{
-			type:'label',
-			col:3,
-			html:'实际出款金额'
-		},{
-			col:'3',
-			type:'number',
-			name:'PaymentMoney',
-			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'出款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'PaymentDate'
-		}],
-
-
-		[{
 			col:'12',
 			type:'label',
 			html:'<hr/>'
@@ -149,23 +127,11 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'滞纳金'
+			html:'备注'
 		},{
-			col:'3',
-			type:'number',
-			required:true,
-			name:'DelayFee',
-			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'滞纳金时间'
-		},{
-			col:'3',
-			type:'date',
-			required:true,
-			name:'DelayTime',
+			col:'9',
+			type:'textarea',
+			name:'ChargeFinanceRemark',
 			placeholder:''
 		}]
 	];

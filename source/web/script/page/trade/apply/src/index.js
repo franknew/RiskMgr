@@ -72,6 +72,8 @@ define(function(require, exports, module){
 					typeName = Types.get(type),
 					canDiscard = data.DisplayDiscard;	//可以作废
 
+				canDiscard = true;
+
 				var extraText = [];
 
 				if (data&&data.WorkflowComplete) {
@@ -81,7 +83,7 @@ define(function(require, exports, module){
 				}
 
 				if (canDiscard) {
-					extraText.push('<button type="button" class="btn btn-danger" data-id="'+id+'" data-tip="'+typeName+'('+id+')'+'" data-hook="trade-discard">作废该单</button>');
+					extraText.push('<button type="button" class="btn btn-danger" data-workflowID="'+data.WorkflowID+'" data-tip="'+typeName+'('+id+')'+'" data-hook="trade-discard">作废该单</button>');
 				}
 
 				extraText = extraText.join(' ');
@@ -104,15 +106,15 @@ define(function(require, exports, module){
 				ev.preventDefault();
 				var $elem = $(ev.currentTarget),
 					txt = $elem.attr('data-tip'),
-					id = $elem.attr('data-id');
+					id = $elem.attr('data-workflowID');
 				if (!confirm('确认废弃单据“'+txt+'”？')) {
 					return ;
 				}
 
 				Ajax.post({
-					url:'RiskMgr.Api.ProjectApi/Discard',
+					url:'RiskMgr.Api.ProjectApi/StopWorkflow',
 					data:{
-						id:id
+						WorkflowID:id
 					},
 					success:function(data, textStatus, jqXHR) {
 						msg.success('废弃成功.');

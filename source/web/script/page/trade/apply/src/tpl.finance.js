@@ -17,7 +17,7 @@ define(function(require, exports, module){
 			required:true,
 			name:'ReturnBackMoney',
 			placeholder:'',
-			suffix:'万元'
+			suffix:'元'
 		},{
 			type:'label',
 			col:3,
@@ -40,7 +40,7 @@ define(function(require, exports, module){
 			type:'number',
 			name:'ReturnBackMoney2',
 			placeholder:'',
-			suffix:'万元'
+			suffix:'元'
 		},{
 			type:'label',
 			col:3,
@@ -48,7 +48,6 @@ define(function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			required:true,
 			name:'ReturnBackTime2',
 			placeholder:''
 		}],
@@ -57,6 +56,76 @@ define(function(require, exports, module){
 			col:'12',
 			type:'label',
 			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'展期费用'
+		},{
+			col:'3',
+			type:'number',
+			name:'RollFee',
+			placeholder:'',
+			suffix:'元'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'展期备注'
+		},{
+			col:'9',
+			type:'text',
+			name:'RollRemark',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'滞纳金'
+		},{
+			col:'3',
+			type:'number',
+			name:'DelayFee',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'滞纳金时间'
+		},{
+			col:'3',
+			type:'date',
+			name:'DelayTime',
+			placeholder:''
+		}],
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'RefundMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'退款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'RefundDate'
 		}],
 
 		[{
@@ -78,26 +147,6 @@ define(function(require, exports, module){
 			type:'text',
 			name:'RefundBankName',
 			placeholder:'开户行'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'退款金额'
-		},{
-			col:'3',
-			type:'number',
-			name:'RefundMoney',
-			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'退款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'RefundDate'
 		}],
 
 		[{

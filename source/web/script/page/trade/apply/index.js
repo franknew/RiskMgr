@@ -335,6 +335,8 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./s
 					typeName = Types.get(type),
 					canDiscard = data.DisplayDiscard;	//可以作废
 
+				canDiscard = true;
+
 				var extraText = [];
 
 				if (data&&data.WorkflowComplete) {
@@ -344,7 +346,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./s
 				}
 
 				if (canDiscard) {
-					extraText.push('<button type="button" class="btn btn-danger" data-id="'+id+'" data-tip="'+typeName+'('+id+')'+'" data-hook="trade-discard">作废该单</button>');
+					extraText.push('<button type="button" class="btn btn-danger" data-workflowID="'+data.WorkflowID+'" data-tip="'+typeName+'('+id+')'+'" data-hook="trade-discard">作废该单</button>');
 				}
 
 				extraText = extraText.join(' ');
@@ -367,15 +369,15 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./s
 				ev.preventDefault();
 				var $elem = $(ev.currentTarget),
 					txt = $elem.attr('data-tip'),
-					id = $elem.attr('data-id');
+					id = $elem.attr('data-workflowID');
 				if (!confirm('确认废弃单据“'+txt+'”？')) {
 					return ;
 				}
 
 				Ajax.post({
-					url:'RiskMgr.Api.ProjectApi/Discard',
+					url:'RiskMgr.Api.ProjectApi/StopWorkflow',
 					data:{
-						id:id
+						WorkflowID:id
 					},
 					success:function(data, textStatus, jqXHR) {
 						msg.success('废弃成功.');
@@ -423,7 +425,7 @@ define.pack("./setup.approval",["jquery","risk/unit/ajax","risk/unit/route","ris
 			var Params = Data.params();
 
 			Ajax.post({
-				url:'RiskMgr.Api.WorkflowApi/Approval',
+				url:'RiskMgr.Api.ProjectApi/Approval',
 				data:{
 					//审批不用  ID:Params.ID,
 					WorkflowID:Params.WorkflowID,
@@ -645,7 +647,7 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 
 				var Params = Data.params();
 				Ajax.post({
-					url:'RiskMgr.Api.ProjectApi/FinanceConfirmSave',
+					url:'RiskMgr.Api.ProjectApi/FinanceConfirm',
 					data:{
 						ID:Params.ID,
 						WorkflowID:Params.WorkflowID,
@@ -663,7 +665,7 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 
 				var Params = Data.params();
 				Ajax.post({
-					url:'RiskMgr.Api.ProjectApi/FinanceSave',
+					url:'RiskMgr.Api.ProjectApi/FinanceConfirmSave',
 					data:{
 						ID:Params.ID,
 						WorkflowID:Params.WorkflowID,
@@ -961,7 +963,7 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				data = {
 					Buyers:dataCustomer.buyer,
 					Sellers:dataCustomer.seller,
-					ThirdPart:dataCustomer.thirdparty,
+					ThirdParty:dataCustomer.thirdparty,
 					Assets:Property.getData(),
 					Project:Project.getData(),
 					Guarantor:Guarantor.getData(),
@@ -1376,7 +1378,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			required:true,
 			name:'ExportMoney',
 			placeholder:'',
-			suffix:'万元'
+			suffix:'元'
 		},{
 			type:'label',
 			col:3,
@@ -1392,16 +1394,6 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'预计回款时间'
-		},{
-			col:'3',
-			type:'date',
-			required:true,
-			name:'PredictReturnBackMoneyTime',
-			placeholder:''
-		},{
-			type:'label',
-			col:3,
 			html:'担保期限'
 		},{
 			col:'3',
@@ -1410,19 +1402,16 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			name:'GuaranteeMonth',
 			placeholder:'',
 			suffix:'天'
-		}],
-
-		[{
+		},{
 			type:'label',
 			col:3,
-			html:'展期费用'
+			html:'回款时间'
 		},{
 			col:'3',
-			type:'number',
+			type:'date',
 			required:true,
-			name:'HasExpired',
-			placeholder:'',
-			suffix:'元'
+			name:'PaymentDate',
+			placeholder:''
 		}],
 
 
@@ -1430,6 +1419,18 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'12',
 			type:'label',
 			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'实际出款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'PaymentMoney',
+			placeholder:'',
+			suffix:'元'
 		}],
 
 		[{
@@ -1454,27 +1455,6 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 		}],
 
 		[{
-			type:'label',
-			col:3,
-			html:'实际出款金额'
-		},{
-			col:'3',
-			type:'number',
-			name:'PaymentMoney',
-			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'出款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'PaymentDate'
-		}],
-
-
-		[{
 			col:'12',
 			type:'label',
 			html:'<hr/>'
@@ -1483,23 +1463,11 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
-			html:'滞纳金'
+			html:'备注'
 		},{
-			col:'3',
-			type:'number',
-			required:true,
-			name:'DelayFee',
-			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'滞纳金时间'
-		},{
-			col:'3',
-			type:'date',
-			required:true,
-			name:'DelayTime',
+			col:'9',
+			type:'textarea',
+			name:'ChargeFinanceRemark',
 			placeholder:''
 		}]
 	];
@@ -1524,7 +1492,7 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 			required:true,
 			name:'ReturnBackMoney',
 			placeholder:'',
-			suffix:'万元'
+			suffix:'元'
 		},{
 			type:'label',
 			col:3,
@@ -1547,7 +1515,7 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 			type:'number',
 			name:'ReturnBackMoney2',
 			placeholder:'',
-			suffix:'万元'
+			suffix:'元'
 		},{
 			type:'label',
 			col:3,
@@ -1555,7 +1523,6 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 		},{
 			col:'3',
 			type:'date',
-			required:true,
 			name:'ReturnBackTime2',
 			placeholder:''
 		}],
@@ -1564,6 +1531,76 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 			col:'12',
 			type:'label',
 			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'展期费用'
+		},{
+			col:'3',
+			type:'number',
+			name:'RollFee',
+			placeholder:'',
+			suffix:'元'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'展期备注'
+		},{
+			col:'9',
+			type:'text',
+			name:'RollRemark',
+			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'滞纳金'
+		},{
+			col:'3',
+			type:'number',
+			name:'DelayFee',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'滞纳金时间'
+		},{
+			col:'3',
+			type:'date',
+			name:'DelayTime',
+			placeholder:''
+		}],
+
+		[{
+			col:'12',
+			type:'label',
+			html:'<hr/>'
+		}],
+
+		[{
+			type:'label',
+			col:3,
+			html:'退款金额'
+		},{
+			col:'3',
+			type:'number',
+			name:'RefundMoney',
+			placeholder:'',
+			suffix:'元'
+		},{
+			type:'label',
+			col:3,
+			html:'退款日期'
+		},{
+			col:'3',
+			type:'date',
+			name:'RefundDate'
 		}],
 
 		[{
@@ -1585,26 +1622,6 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 			type:'text',
 			name:'RefundBankName',
 			placeholder:'开户行'
-		}],
-
-		[{
-			type:'label',
-			col:3,
-			html:'退款金额'
-		},{
-			col:'3',
-			type:'number',
-			name:'RefundMoney',
-			placeholder:'',
-			suffix:'元'
-		},{
-			type:'label',
-			col:3,
-			html:'退款日期'
-		},{
-			col:'3',
-			type:'date',
-			name:'RefundDate'
 		}],
 
 		[{

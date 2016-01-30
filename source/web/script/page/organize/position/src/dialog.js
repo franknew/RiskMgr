@@ -13,6 +13,8 @@ define(function(require, exports, module){
 
 	var SelectData = require('risk/data-dictionary');
 
+	var PRE_AUTHOR = 'AuthorityRadio_';	//权限input的Name前缀
+
 	var MOD = {
 		view:function(id,oriBox) {
 			var that = this;
@@ -67,6 +69,7 @@ define(function(require, exports, module){
 						ajax.post({
 							url:'RiskMgr.Api.RoleApi/UpdateRole',
 							form:this.form,
+							formFilter:that._filterFormData,
 							success:function(data, textStatus, jqXHR) {
 								msg.success('编辑成功');
 								dialog.close();
@@ -77,25 +80,34 @@ define(function(require, exports, module){
 			});
 		},
 		add:function(success) {
-			this._showDialog({
-				title:'新增职位',
-				ok: function() {
-					var dialog = this;
-					ajax.post({
-						url:'RiskMgr.Api.RoleApi/AddRole',
-						form:this.form,
-						success:function(data, textStatus, jqXHR) {
-							msg.success('添加成功');
-							dialog.close();
-							//添加完毕，刷新
-							if (!success || !success()) {	//如果回调返回false则默认跳转
-								route.load('page=organize/position');
-							}
+			var that = this;
+			that._getAuthority().done(function(list) {
+				that._showDialog({
+					title:'新增职位',
+					former:{
+						data:{
+							Authority:list
 						}
-					});
+					},
+					ok: function() {
+						var dialog = this;
+						ajax.post({
+							url:'RiskMgr.Api.RoleApi/AddRole',
+							form:this.form,
+							formFilter:that._filterFormData,
+							success:function(data, textStatus, jqXHR) {
+								msg.success('添加成功');
+								dialog.close();
+								//添加完毕，刷新
+								if (!success || !success()) {	//如果回调返回false则默认跳转
+									route.load('page=organize/position');
+								}
+							}
+						});
 
-					return true;
-				}
+						return true;
+					}
+				});
 			});
 		},
 		_getData:function(id,callback) {
@@ -156,22 +168,102 @@ define(function(require, exports, module){
 
 			return defer;
 		},
+		//获取权限列表
+		_getAuthority:function() {
+			var defer = $.Deferred();
+
+			ajax.post({
+				url:'RiskMgr.Api.RoleApi/QueryAuthority',
+				data:{
+					PageSize:1000,
+					CurrentIndex:1
+				},
+				formDropEmpty:true,
+				success:function(da) {
+					var list = da;
+
+					if (list) {
+						defer.resolve(list);
+					}else{
+						defer.reject(da);
+					}
+				},
+				error:function() {
+					defer.reject();
+				}
+			});
+
+			return defer;
+		},
 		//在显示dialog之前，把职位list拉好并拼接进数据字典
 		_showDialog:function(args) {
 			args = args || {};
 
 			this._getOptions().done(function(list) {
+				var newTpl,
+					formData = args.former&&args.former.data || {};
 
 				SelectData['职位'] = list;	//重写数据字典
 
 				if (!args.content) {
-					args.content = former.make(viewTpl,args.former);
+					newTpl = (function(tpl,auths) {
+						var rs = tpl.slice(0);
+
+						var i=0,Cur;
+						for(;Cur=auths[i++];) {
+							rs.push([{
+								type:'label',
+								col:'3',
+								required:true,
+								html:Cur.Name
+							},{
+								col:'7',
+								type:'radio',
+								required:true,
+								name:PRE_AUTHOR+Cur.ID,
+								"data-id":Cur.ID,
+								options:[{
+									value:'1',
+									name:"有权限",
+									selected:Cur.Checked?true:false
+								},{
+									value:'',
+									name:"无权限",
+									selected:Cur.Checked?false:true
+								}]
+							}]);
+						}
+
+						return rs;
+					})(viewTpl,formData.Authority);
+
+					args.content = former.make(newTpl,args.former);
 				}
 
 				modal.show(args);
 			}).fail(function() {
 				msg.error('拉取职位列表出错，请重试。');
 			});
+		},
+		//格式化Form表单
+		_filterFormData:function(data) {
+			var rs = data,
+				auths = [];
+
+			for(var key in rs) {
+				if(rs.hasOwnProperty(key) && key.indexOf(PRE_AUTHOR)==0) {
+					auths.push({
+						Checked:!!rs[key],
+						ID:key.substr(PRE_AUTHOR.length)
+					});
+					rs[key] = undefined;
+					delete rs[key];
+				}
+			}
+
+			rs.Authority = auths;
+
+			return rs;
 		}
 	};
 
