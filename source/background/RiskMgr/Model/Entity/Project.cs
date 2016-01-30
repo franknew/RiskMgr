@@ -378,5 +378,15 @@ namespace RiskMgr.Model
         /// </summary>
         public string ChargeFinanceRemark { get; set; }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        public decimal? RollFee { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string RollRemark { get; set; }
+        
     }
 }

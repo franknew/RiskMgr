@@ -57,6 +57,12 @@ namespace RiskMgr.Api
             return bll.DeleteRole(form.ID);
         }
 
+        [QueryAction]
+        public List<AuthorityNodeForCheck> QueryAuthority()
+        {
+            return bll.QueryAuthority();
+        }
+
         /// <summary>
         /// 查询角色
         /// </summary>

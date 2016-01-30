@@ -37,7 +37,7 @@ namespace RiskMgr.Api
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
             form.Project.Report = form.Report;
-            var result = bll.Add(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdParty, form.Guarantor, userid);
+            var result = bll.Save(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdParty, form.Guarantor, userid);
 
             //处理流程
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
@@ -67,6 +67,21 @@ namespace RiskMgr.Api
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 保存单据
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [EditAction]
+        public string Save(AddProjectServiceForm form)
+        {
+            UserBLL userbll = new UserBLL();
+            var user = userbll.GetCurrentUser();
+            string userid = user.User.ID;
+            form.Project.Report = form.Report;
+            return bll.Save(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdParty, form.Guarantor, userid);
         }
 
         /// <summary>
@@ -214,8 +229,9 @@ namespace RiskMgr.Api
         {
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.FinanceConfirm(form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney,
-                form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate);
+            return bll.FinanceConfirm(form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney, form.ReturnBackTime2, form.ReturnBackMoney2,
+                form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate, form.DelayFee, form.DelayTime, form.ReturnBackRemark,
+                form.RollFee, form.RollRemark);
         }
 
         /// <summary>
@@ -228,8 +244,9 @@ namespace RiskMgr.Api
         {
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.FinanceConfirmSave(form.WorkflowID, 0, userid, form.ReturnBackTime, form.ReturnBackMoney,
-                form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate);
+            return bll.FinanceConfirmSave(form.WorkflowID, 0, userid, form.ReturnBackTime, form.ReturnBackMoney, form.ReturnBackTime2, form.ReturnBackMoney2,
+                form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate, form.DelayFee,
+                form.DelayTime, form.ReturnBackRemark, form.RollFee, form.RollRemark);
         }
 
         /// <summary>
@@ -265,7 +282,7 @@ namespace RiskMgr.Api
         /// <param name="form"></param>
         /// <returns></returns>
         [DeleteAction]
-        public bool StopWorkflow(Task form)
+        public bool StopWorkflow(StopWorkflowServiceForm form)
         {
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();

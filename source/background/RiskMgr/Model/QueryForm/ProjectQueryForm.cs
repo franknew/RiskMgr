@@ -224,5 +224,11 @@ namespace RiskMgr.Form
         
         public string ChargeFinanceRemark { get; set; }
         
+        public DateTime? RollFee_Start { get; set; }
+        
+        public DateTime? RollFee_End { get; set; }
+        
+        public string RollRemark { get; set; }
+        
     }
 }

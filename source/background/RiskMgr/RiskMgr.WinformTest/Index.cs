@@ -158,7 +158,7 @@ namespace RiskMgr.WinformTest
             //);
             //处理流程
             ProjectBLL bll = new ProjectBLL();
-            bll.Add(new Project
+            bll.Save(new Project
             {
                 ID = "111",
             }, new List<Asset>
@@ -319,7 +319,7 @@ namespace RiskMgr.WinformTest
         {
             Workflow workflow = new Workflow();
             ProjectBLL bll = new ProjectBLL();
-            bll.FinanceConfirm("3ed1b947f1d9401fa1b799a802d9d00a", "14", null, null, null, null, null, null, null);
+            //bll.FinanceConfirm("3ed1b947f1d9401fa1b799a802d9d00a", "14", null, null, null, null, null, null, null);
         }
 
         private void button21_Click(object sender, EventArgs e)

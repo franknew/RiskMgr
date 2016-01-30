@@ -45,10 +45,21 @@ namespace RiskMgr.BLL
                                     from r in role_rmas
                                     where au.ModuleID == r.ModuleID && au.ActionID == r.ActionID
                                     select au).Count() == auth.Item.Count;
-                    data.Authority.Add(auth as AuthorityNodeForCheck);
+                    data.Authority.Add(new AuthorityNodeForCheck { ID = auth.ID, Checked = auth.Checked, Name = auth.Name });
                 }
                 #endregion
                 result.Add(data);
+            }
+            return result;
+        }
+
+        public List<AuthorityNodeForCheck> QueryAuthority()
+        {
+            AuthorityMapping mapping = XMLHelper.DeserializeFromFile<AuthorityMapping>(Common.AuthorityMappingFile);
+            List<AuthorityNodeForCheck> result = new List<AuthorityNodeForCheck>();
+            foreach (var auth in mapping.AuthNode)
+            {
+                result.Add(new AuthorityNodeForCheck { ID = auth.ID, Checked = auth.Checked, Name = auth.Name });
             }
             return result;
         }

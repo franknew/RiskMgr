@@ -122,6 +122,7 @@
     <Compile Include="ServiceForm\LogonServiceForm.cs" />
     <Compile Include="ServiceForm\QueryDataDictionaryByGroupNamesServiceForm.cs" />
     <Compile Include="ServiceForm\QueryMyTaskServiceForm.cs" />
+    <Compile Include="ServiceForm\StopWorkflowServiceForm.cs" />
     <Compile Include="ServiceForm\UpdateTrackingServiceForm.cs" />
     <Compile Include="ServiceForm\UpdateUserServiceForm.cs" />
     <Compile Include="UpdateForm\AssetUpdateForm.cs" />

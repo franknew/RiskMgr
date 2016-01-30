@@ -18,7 +18,7 @@ namespace RiskMgr.BLL
     public class ProjectBLL
     {
         #region action
-        public string Add(Project project, List<Asset> assets, List<Customer> buyers, List<Customer> sellers, List<Customer> thirdpart,
+        public string Save(Project project, List<Asset> assets, List<Customer> buyers, List<Customer> sellers, List<Customer> thirdpart,
             List<Guarantor> Guarantor, string userid)
         {
             #region 初始化变量
@@ -63,6 +63,7 @@ namespace RiskMgr.BLL
             #region 处理房产信息
             if (assets != null)
             {
+                apdao.Delete(new Asset_ProjectQueryForm { ProjectID = project.ID });
                 foreach (var asset in assets)
                 {
                     asset.Creator = userid;
@@ -93,12 +94,14 @@ namespace RiskMgr.BLL
             #endregion
 
             #region 处理客户信息
+            cpdao.Delete(new Customer_ProjectQueryForm { ProjectID = project.ID });
             ProcessCustomer(buyers, customerdao, cpdao, project.ID, userid, CustomerType.Buyer);
             ProcessCustomer(sellers, customerdao, cpdao, project.ID, userid, CustomerType.Seller);
             ProcessCustomer(thirdpart, customerdao, cpdao, project.ID, userid, CustomerType.ThirdParty);
             #endregion
 
             #region 处理共权人信息
+            cadao.Delete(new Customer_AssetQueryForm { ProjectID = project.ID });
             if (Guarantor != null)
             {
                 foreach (Guarantor g in Guarantor)
@@ -544,14 +547,11 @@ namespace RiskMgr.BLL
                     PaymentBankName = project.PaymentBankName,
                     PaymentDate = project.PaymentDate,
                     PaymentMoney = project.PaymentMoney,
-                    DelayFee = project.DelayFee,
-                    DelayTime = project.DelayTime,
                     InsuranceFee = project.InsuranceFee,
                     InsuranceTime = project.InsuranceTime,
                     ExportMoney = project.ExportMoney,
                     ExportTime = project.ExportTime,
                     HasExpired = project.HasExpired,
-                    PredictReturnBackMoneyTime = project.PredictReturnBackMoneyTime,
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
@@ -635,17 +635,19 @@ namespace RiskMgr.BLL
         }
 
         public bool FinanceConfirm(string projectid, string userid, DateTime? returnBackTime,
-            decimal? returnBackMoney, string refundName, string refundAccount, string refundBank, decimal? refundAmount, DateTime? refundTime)
+            decimal? returnBackMoney, DateTime? returnBackTim2, decimal? returnBackMoney2, string refundName, string refundAccount, 
+            string refundBank, decimal? refundAmount, DateTime? refundTime, decimal? delayFee, DateTime? delayTime, string returnBackRemark, 
+            decimal? rollFee, string rollRemarl)
         {
 
-            FinanceConfirmSave(projectid, 1, userid, returnBackTime, returnBackMoney, refundName, refundAccount, refundBank,
-                refundAmount, refundTime);
+            FinanceConfirmSave(projectid, 1, userid, returnBackTime, returnBackMoney, returnBackTim2, returnBackMoney2, refundName, refundAccount, refundBank,
+                refundAmount, refundTime, delayFee, delayTime, returnBackRemark, rollFee, rollRemarl);
             FinanceConfirmAction(projectid, userid);
             return true;
         }
 
         public bool FinanceConfirmSave(string projectid, int confirm, string userid, DateTime? returnBackTime,
-            decimal? returnBackMoney, string refundName, string refundAccount, string refundBank, decimal? refundAmount, DateTime? refundTime)
+            decimal? returnBackMoney, DateTime? returnBackTim2, decimal? returnBackMoney2, string refundName, string refundAccount, string refundBank, decimal? refundAmount, DateTime? refundTime, decimal? delayFee, DateTime? delayTime, string returnBackRemark, decimal? rollFee, string rollRemark)
         {
             //处理项目
             ISqlMapper mapper = Common.GetMapperFromSession();
@@ -661,6 +663,13 @@ namespace RiskMgr.BLL
                 {
                     ReturnBackTime = returnBackTime,
                     ReturnBackMoney = returnBackMoney,
+                    ReturnBackMoney2 = returnBackMoney2,
+                    ReturnBackTime2 = returnBackTim2,
+                    ReturnBackRemark = returnBackRemark,
+                    DelayFee = delayFee,
+                    DelayTime = delayTime,
+                    RollFee = rollFee,
+                    RollRemark = rollRemark,
                     LastUpdator = userid,
                     FinanceConfirm = confirm,
                     RefundAccount = refundAccount,
@@ -760,11 +769,6 @@ namespace RiskMgr.BLL
                 }
                 cpdao.Add(new Customer_Project { CustomerID = c.ID, ProjectID = projectid, Type = (int)type });
             }
-        }
-
-        public string SaveProject(Project project)
-        {
-            return null;
         }
         #endregion
     }
