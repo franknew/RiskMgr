@@ -110,7 +110,7 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 						for(;cur=list[i++];) {
 							rs.push(cur.ID);
 						}
-						rs = rs.join(',');
+						rs = JSON.stringify(rs);
 						return rs;
 					})(data.RoleList);
 				}
@@ -185,9 +185,10 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 			var container = $(dialog.content);
 			container.on('click','[data-hook="employee-role-choose"]',function(ev) {
 				ev.preventDefault();
+				//读取已选中的
 				var selected = (function() {
 					var list = container.find('[name="RoleIDList"]').val() || '';
-					list = list.split(',');
+					list = JSON.parse(list);
 					return list;
 				})();
 
@@ -203,7 +204,7 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 								names.push(cur.name);
 							}
 
-							ids = '['+ids.join(',')+']';
+							ids = JSON.stringify(ids);
 							names = names.join(',');
 
 							container.find('[name="RoleIDList"]').val(ids);
