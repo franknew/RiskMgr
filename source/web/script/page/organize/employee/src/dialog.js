@@ -141,7 +141,7 @@ define(function(require, exports, module){
 				//读取已选中的
 				var selected = (function() {
 					var list = container.find('[name="RoleIDList"]').val() || '';
-					list = JSON.parse(list);
+					list = JSON.parse(list||'[]');
 					return list;
 				})();
 
