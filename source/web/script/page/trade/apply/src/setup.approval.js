@@ -35,7 +35,7 @@ define(function(require, exports, module){
 			var Params = Data.params();
 
 			Ajax.post({
-				url:'RiskMgr.Api.WorkflowApi/Approval',
+				url:'RiskMgr.Api.ProjectApi/Approval',
 				data:{
 					//审批不用  ID:Params.ID,
 					WorkflowID:Params.WorkflowID,

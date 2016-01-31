@@ -2,8 +2,28 @@
 	<%
 		var FormData = data.data || {},
 			TradeType = FormData.Type;
-		var OnlyOne = !!($.inArray(TradeType,[3,4]) != -1),	//只有一种客户的交易类型
-			BuyerText = OnlyOne?'客户':'买家';
+		var showSeller = false,	//显示卖家
+			showThirdparty = false,	//显示第三方借贷人
+			BuyerText = '客户';
+
+		switch (TradeType){
+			case 1: //二手楼交易
+				BuyerText = '买家';
+				showSeller = true;
+				showThirdparty = true;
+				break;
+			case 2: //首期款垫付
+				BuyerText = '买家';
+				showSeller = true;
+				break;
+			case 3: //同名转按
+				BuyerText = '产权人';
+				showThirdparty = true;
+				break;
+			case 4: //贷前垫资
+				BuyerText = '客户';
+				break;
+		}
 	%>
 	<div class="step-pane" id="Customer">
 		<div class="block-transparent">
@@ -34,7 +54,7 @@
 		</div>
 
 		<%
-		if (!OnlyOne) {	//判断交易类型才显示卖家
+		if (showSeller) {
 		%>
 		<div class="block-transparent">
 			<div class="header">
@@ -59,6 +79,48 @@
 				</div>
 				<%if (data.canEdit) {%>
 				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加卖家&nbsp;&nbsp;</button>
+				<%}%>
+			</div>
+		</div>
+		<%}%>
+
+		<%
+		if (showThirdparty) {
+		%>
+		<div class="block-transparent">
+			<div class="header">
+				<h3>第三方借贷人 <%if (data.canEdit) {%><button type="button" class="btn btn-default" data-hook="customer-import"><i class="fa fa-sign-in"></i> 导入现有客户</button><%}%></h3>
+			</div>
+			<div class="content">
+				<div class="list-group tickets" id="ThirdpartyList">
+
+					<%
+						var Thirdparty = FormData.ThirdParty||[];
+						var i=0, l = Thirdparty.length||0;
+
+						if (l<=0 && !data.canEdit) {
+					%>
+						<div class="alert alert-info">
+							无第三方借贷人信息
+						</div>
+					<%
+
+						}
+					%>
+					<%
+						for(; i < l; ++i) {
+					%>
+						<%=this.CustomerItem({
+							data:Thirdparty[i],
+							tpl:data.customerTpl,
+							canEdit:data.canEdit
+						})%>
+					<%
+						}
+					%>
+				</div>
+				<%if (data.canEdit) {%>
+				<button type="button" class="btn btn-success" data-hook="customer-add">&nbsp;&nbsp;<i class="fa fa-plus"></i> 增加第三方借贷人&nbsp;&nbsp;</button>
 				<%}%>
 			</div>
 		</div>

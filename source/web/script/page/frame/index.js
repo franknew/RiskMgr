@@ -200,7 +200,7 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 					break;
 				default:
 					rs = '我梦想有一天，这个国家会站立起来，真正实现其信条的真谛：“我们认为真理是不言而喻，人人生而平等。”我梦想有一天，在佐治亚的红山上，昔日奴隶的儿子将能够和昔日奴隶主的儿子坐在一起，共叙兄弟情谊。我梦想有一天，甚至连密西西比州这个正义匿迹，压迫成风，如同沙漠般的地方，也将变成自由和正义的绿洲。我梦想有一天，我的四个孩子将在一个不是以他们的肤色，而是以他们的品格优劣来评价他们的国度里生活。';
-					rs = rs.slice(Math.floor(Math.random()*rs.length)) + rs.slice(Math.floor(Math.random()*rs.length));
+					rs = rs.substr(Math.floor(Math.random()*(rs.length-5)) ,Math.ceil(Math.random()*4));
 			}
 
 			return rs;

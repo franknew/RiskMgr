@@ -81,7 +81,7 @@ var __p=[],_p=function(s){__p.push(s)};
 			'1':'审批中',
 			'3':'审批完成'
 		};
-__p.push('<div class="row dash-cols">\n	<div class="col-sm-6 col-md-6">\n\n		<div class="block-flat">\n			<div class="header">\n				<h3>待办事项</h3>\n			</div>\n			<div class="content">\n				<div class="list-group">');
+__p.push('<div class="row dash-cols">\n	<div class="col-sm-6 col-md-6">\n\n		<div class="block-flat">\n			<div class="header">\n				<h3>待办事项</h3>\n			</div>\n			<div class="content">\n				<div class="list-group home-gtasks">');
 if (Task && Task.length>0) {__p.push('						');
 
 						var i=0,Cur;
@@ -97,12 +97,14 @@ _p(Cur.TaskID);
 __p.push('" class="list-group-item">[');
 _p(Cur.Name);
 __p.push('] ');
+_p(Cur.Applier);
+__p.push('<small>申请，客户：</small>');
 _p(Cur.Title);
-__p.push('&nbsp;&nbsp;');
+__p.push('&nbsp;&nbsp;<small>');
 _p(RString.date(Cur.LastUpdateTime,'MM-dd HH:mm'));
-__p.push(' <span class="badge">');
+__p.push('</small> <!--<span class="badge">');
 _p((StatusText[Cur.Status] || Cur.Status));
-__p.push('</span></a>');
+__p.push('</span>--></a>');
 
 						}
 						__p.push('					');

@@ -15,13 +15,13 @@
 				<h3>待办事项</h3>
 			</div>
 			<div class="content">
-				<div class="list-group">
+				<div class="list-group home-gtasks">
 					<%if (Task && Task.length>0) {%>
 						<%
 						var i=0,Cur;
 						for(;Cur=Task[i++];) {
 						%>
-						<a href="#page=trade/apply&action=approval&ID=<%=Cur.ProcessID%>&WorkflowID=<%=Cur.WorkflowID%>&ActivityID=<%=Cur.ActivityID%>&TaskID=<%=Cur.TaskID%>" class="list-group-item">[<%=Cur.Name%>] <%=Cur.Title%>&nbsp;&nbsp;<%=RString.date(Cur.LastUpdateTime,'MM-dd HH:mm')%> <span class="badge"><%=(StatusText[Cur.Status] || Cur.Status)%></span></a>
+						<a href="#page=trade/apply&action=approval&ID=<%=Cur.ProcessID%>&WorkflowID=<%=Cur.WorkflowID%>&ActivityID=<%=Cur.ActivityID%>&TaskID=<%=Cur.TaskID%>" class="list-group-item">[<%=Cur.Name%>] <%=Cur.Applier%><small>申请，客户：</small><%=Cur.Title%>&nbsp;&nbsp;<small><%=RString.date(Cur.LastUpdateTime,'MM-dd HH:mm')%></small> <!--<span class="badge"><%=(StatusText[Cur.Status] || Cur.Status)%></span>--></a>
 						<%
 						}
 						%>

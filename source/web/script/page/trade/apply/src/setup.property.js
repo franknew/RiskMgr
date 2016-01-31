@@ -127,7 +127,7 @@ define(function(require, exports, module){
 
 			html = $(html);
 			if (data) {//导入的关键数据不可编辑
-				html.find('[name="Code"]').attr('disabled','disabled');
+				//html.find('[name="Code"]').attr('disabled','disabled');
 			}
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {

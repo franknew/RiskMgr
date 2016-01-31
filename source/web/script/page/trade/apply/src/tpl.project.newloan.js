@@ -106,6 +106,15 @@ define(function(require, exports, module){
 			type:'decimal',
 			name:'CustomerPredepositMoney',
 			suffix:'万元'
+		},{
+			type:'label',
+			col:3,
+			html:'垫资金额'
+		},{
+			col:"3",
+			type:'decimal',
+			name:'CompanyPredepositMoney',
+			suffix:'万元'
 		}],
 
 		[{

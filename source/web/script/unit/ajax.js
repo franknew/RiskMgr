@@ -18,7 +18,8 @@ define(function(require, exports, module){
 
 	var MOD = {
 		/** 请求ajax，基本参数和ajax一致，扩展的参数有：
-		 * @param form {DOM} form表单，传递进来后会自动读取form表单内的数据
+		 * @param [form] {DOM} form表单，传递进来后会自动读取form表单内的数据
+		 * @param [formFilter] {Function} 如果传入form参数后，可以使用formFormat来
 		 * @param [formDropEmpty=false] {Boolen} 传了form参数时，如果formDropEmpty=true，则扔掉空白value的值
 		 * @param [riskForm=true] {Boolen} data会被包一层form，适用于risk后台
 		 */
@@ -26,7 +27,8 @@ define(function(require, exports, module){
 			var oriConfig = $.extend({},conf);
 
 			var url = conf.url,
-				form = conf.form;
+				form = conf.form,
+				formFilter = conf.formFilter;
 
 			var loadingObj = loading.show();//显示通用的loading
 
@@ -39,6 +41,9 @@ define(function(require, exports, module){
 			if (form) {
 				conf.data = conf.data || {};
 				conf.data = $.extend(conf.data,Serialize(form,conf.formDropEmpty));
+				if (conf.formFilter) {
+					conf.data = conf.formFilter(conf.data);
+				}
 				delete conf.form;
 			}
 

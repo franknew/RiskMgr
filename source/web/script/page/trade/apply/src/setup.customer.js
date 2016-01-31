@@ -32,9 +32,11 @@ define(function(require, exports, module){
 		getData:function() {
 			var buyerList = $('#BuyerList div.list-group-item'),
 				sellerList = $('#SellerList div.list-group-item'),
+				thirdpartyList = $('#ThirdpartyList div.list-group-item'),
 				data = {
 					buyer:[],
-					seller:[]
+					seller:[],
+					thirdparty:[]
 				};
 
 			buyerList.each(function(i,ele) {
@@ -42,6 +44,9 @@ define(function(require, exports, module){
 			});
 			sellerList.each(function(i,ele) {
 				data.seller.push(Serialize(ele));
+			});
+			thirdpartyList.each(function(i,ele) {
+				data.thirdparty.push(Serialize(ele));
 			});
 
 			return data;
@@ -63,9 +68,12 @@ define(function(require, exports, module){
 				var btn = $(ev.currentTarget),
 					itemClass = 'div.list-group-item',
 					box = btn.parents(itemClass),
-					boxSize = box.siblings(itemClass).size();
+					boxSize = box.siblings(itemClass).size(),
+					partyID = box.parent('.list-group').attr('id');
 
-				if (boxSize<=0) {
+				var notRequire = !!~$.inArray(partyID, ['ThirdpartyList']);
+
+				if (boxSize<=0 && !notRequire) {
 					msg.error('至少保留有一个客户.');
 					return ;
 				}else {
@@ -111,6 +119,12 @@ define(function(require, exports, module){
 				});
 			}
 
+			//移除id，防止串
+			if (data && data.ID) {
+				data.ID = undefined;
+				delete data.ID;
+			}
+
 			var html = Tmpl.CustomerItem({
 					tpl:this.getTpl,
 					data:data,
@@ -119,7 +133,7 @@ define(function(require, exports, module){
 
 			html = $(html);
 			if (data) {//导入的关键数据不可编辑
-				html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
+				//html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
 			}
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {});
