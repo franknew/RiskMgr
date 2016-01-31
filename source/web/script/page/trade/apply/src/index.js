@@ -8,6 +8,7 @@ define(function(require, exports, module){
 	var $ = require('jquery'),
 		Ajax = require('risk/unit/ajax'),
 		Route = require('risk/unit/route'),
+		Msg = require('risk/components/msg/index'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
 		Types = require('./config.type');
@@ -96,10 +97,15 @@ define(function(require, exports, module){
 			});
 		},
 		_initEvent:function() {
-			$('#J_Header').on('click','[data-hook="trade-print"]',function(ev) {
+			//必须用bind，防止重复绑定
+			var header = $('#J_Header');
+
+			header.find('[data-hook="trade-print"]').bind('click',function(ev) {
 				//打印单据
 				window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
-			}).on('click','[data-hook="trade-discard"]',function(ev) {
+			});
+
+			header.find('[data-hook="trade-discard"]').bind('click',function(ev) {
 				//作废单据
 				ev.preventDefault();
 				var $elem = $(ev.currentTarget),
@@ -115,7 +121,8 @@ define(function(require, exports, module){
 						WorkflowID:id
 					},
 					success:function(data, textStatus, jqXHR) {
-						msg.success('废弃成功.');
+						Msg.success('废弃成功.');
+						Route.load('page=trade/list');
 					}
 				});
 			});

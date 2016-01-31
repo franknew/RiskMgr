@@ -266,11 +266,12 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
-define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./setup","./config.type","./data"],function(require, exports, module){
+define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./tmpl","./setup","./config.type","./data"],function(require, exports, module){
 
 	var $ = require('jquery'),
 		Ajax = require('risk/unit/ajax'),
 		Route = require('risk/unit/route'),
+		Msg = require('risk/components/msg/index'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
 		Types = require('./config.type');
@@ -359,10 +360,15 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./s
 			});
 		},
 		_initEvent:function() {
-			$('#J_Header').on('click','[data-hook="trade-print"]',function(ev) {
+			//必须用bind，防止重复绑定
+			var header = $('#J_Header');
+
+			header.find('[data-hook="trade-print"]').bind('click',function(ev) {
 				//打印单据
 				window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
-			}).on('click','[data-hook="trade-discard"]',function(ev) {
+			});
+
+			header.find('[data-hook="trade-discard"]').bind('click',function(ev) {
 				//作废单据
 				ev.preventDefault();
 				var $elem = $(ev.currentTarget),
@@ -378,7 +384,8 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","./tmpl","./s
 						WorkflowID:id
 					},
 					success:function(data, textStatus, jqXHR) {
-						msg.success('废弃成功.');
+						Msg.success('废弃成功.');
+						Route.load('page=trade/list');
 					}
 				});
 			});
@@ -1402,7 +1409,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'GuaranteePeriod',
+			name:'GuaranteeMonth',
 			placeholder:'',
 			suffix:'天'
 		},{
