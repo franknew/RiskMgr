@@ -81,7 +81,7 @@ define(function(require, exports, module){
 				var btn = $(ev.currentTarget),
 					box = btn.parent().siblings('div.j-guarantor-house');
 
-				MOD.addHouse(box);
+				MOD.addHouse(box,1);
 			}).on('click','guarantor-removehouse',function(ev) {
 				ev.preventDefault();
 				var btn = $(ev.currentTarget),
@@ -113,6 +113,12 @@ define(function(require, exports, module){
 				});
 			}
 
+			//移除id，不要复用id，后台的逻辑会串
+			if (data && data.ID) {
+				data.ID = undefined;
+				delete data.ID;
+			}
+
 			var html = Tmpl.GuarantorItem({
 					data:data,
 					canEdit:true
@@ -120,7 +126,7 @@ define(function(require, exports, module){
 
 			html = $(html);
 			if (data) {//导入的关键数据不可编辑
-				html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
+				//html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
 			}
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {});

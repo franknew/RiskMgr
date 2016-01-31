@@ -18,7 +18,7 @@ define(function(require, exports, module){
 
 			var html = tmpl.list();
 			route.show({
-				head:'职位管理（开发中，勿使用）',
+				head:'职位管理',
 				content:html
 			});
 

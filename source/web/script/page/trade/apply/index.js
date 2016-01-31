@@ -611,7 +611,7 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 				});
 			}
 
-			//移除id，防止串
+			//移除id，不要复用id，后台的逻辑多个单会串
 			if (data && data.ID) {
 				data.ID = undefined;
 				delete data.ID;
@@ -817,7 +817,7 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 				var btn = $(ev.currentTarget),
 					box = btn.parent().siblings('div.j-guarantor-house');
 
-				MOD.addHouse(box);
+				MOD.addHouse(box,1);
 			}).on('click','guarantor-removehouse',function(ev) {
 				ev.preventDefault();
 				var btn = $(ev.currentTarget),
@@ -849,6 +849,12 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 				});
 			}
 
+			//移除id，不要复用id，后台的逻辑会串
+			if (data && data.ID) {
+				data.ID = undefined;
+				delete data.ID;
+			}
+
 			var html = Tmpl.GuarantorItem({
 					data:data,
 					canEdit:true
@@ -856,7 +862,7 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 
 			html = $(html);
 			if (data) {//导入的关键数据不可编辑
-				html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
+				//html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
 			}
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {});
