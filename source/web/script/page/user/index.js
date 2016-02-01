@@ -245,10 +245,12 @@ define.pack("./tpl.password",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
+			required:true,
 			html:'原始密码'
 		},{
 			col:'7',
 			type:'password',
+			required:true,
 			name:'OldPassword',
 			placeholder:''
 		}],
@@ -256,12 +258,28 @@ define.pack("./tpl.password",[],function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
+			required:true,
 			html:'新密码'
 		},{
 			col:'7',
+			required:true,
 			type:'password',
 			name:'NewPassword',
 			placeholder:''
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			required:true,
+			html:'确认新密码'
+		},{
+			col:'7',
+			required:true,
+			type:'password',
+			name:'NewPasswordCheck',
+			placeholder:'',
+			"data-parsley-equalto":"[name='NewPassword']"
 		}]
 	];
 
