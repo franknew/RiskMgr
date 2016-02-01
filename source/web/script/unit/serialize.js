@@ -41,7 +41,10 @@ define(function(require, exports, module){
 				switch(formType){
 					case 'json':
 						val = JSON.parse(val);
-					break;
+						break;
+					case 'number':
+						val = val*1;
+						break;
 				}
 			}
 
