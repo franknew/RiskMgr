@@ -2895,6 +2895,8 @@ var __p=[],_p=function(s){__p.push(s)};
 		TplCustomer = require('risk/page/customer/tpl.view');
 	var CanEdit = data.canEdit,
 		GuarantorData = data&&data.data;
+
+	console.log('GuarantorData',GuarantorData);
 __p.push('\n	<div class="list-group-item">\n		<div class="j-guarantor-form">');
 _p(Former.make(TplCustomer,{
 				data:GuarantorData,
@@ -2909,7 +2911,7 @@ _p(Former.make([[{
 			},{
 				col:'10',
 				type:'textarea',
-				name:'GuarantorRemark',
+				name:'Remark',
 				placeholder:''
 			}]],{
 				data:GuarantorData,
@@ -3111,13 +3113,14 @@ _p(Former.make([[{
 				name:'Remark',
 				placeholder:''
 			}]],{
-				data:data.data,
+				data:PropertyData,
 				disabled:!data.canEdit
 			}));
 __p.push('\n		</div>\n		<div class="form-group">');
 
-				var Joint = data.data&&data.data.Joint || [],
+				var Joint = PropertyData&&PropertyData.Joint || [],
 					JointLen = Joint.length;
+				console.log('Joint',Joint);
 			__p.push('			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">');
 if (data.canEdit) {__p.push('<button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>');
 }__p.push('				&nbsp;&nbsp;');
