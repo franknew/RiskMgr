@@ -47,10 +47,8 @@ define(function(require, exports, module){
 
 			//如果传递进来form表单，则自动解析表单字段为data
 			if (form) {
-				console.log('conf.formValidate',conf.formValidate);
 				if (conf.formValidate) {
 					formParsley = form.parsley();
-					console.log('formParsley',formParsley,formParsley.validate());
 					if (formParsley && !formParsley.validate()) {
 						loadingObj.hide();
 						return false;
