@@ -611,7 +611,7 @@ define.pack("./setup.customer",["jquery","risk/unit/route","risk/components/form
 				});
 			}
 
-			//移除id，防止串
+			//移除id，不要复用id，后台的逻辑多个单会串
 			if (data && data.ID) {
 				data.ID = undefined;
 				delete data.ID;
@@ -817,7 +817,7 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 				var btn = $(ev.currentTarget),
 					box = btn.parent().siblings('div.j-guarantor-house');
 
-				MOD.addHouse(box);
+				MOD.addHouse(box,1);
 			}).on('click','guarantor-removehouse',function(ev) {
 				ev.preventDefault();
 				var btn = $(ev.currentTarget),
@@ -849,6 +849,12 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 				});
 			}
 
+			//移除id，不要复用id，后台的逻辑会串
+			if (data && data.ID) {
+				data.ID = undefined;
+				delete data.ID;
+			}
+
 			var html = Tmpl.GuarantorItem({
 					data:data,
 					canEdit:true
@@ -856,7 +862,7 @@ define.pack("./setup.guarantor",["jquery","risk/unit/route","risk/components/for
 
 			html = $(html);
 			if (data) {//导入的关键数据不可编辑
-				html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
+				//html.find('[name="Name"],[name="CardType"],[name="IdentityCode"]').attr('disabled','disabled');
 			}
 			html.hide();
 			html.appendTo(box).slideDown('fast', function() {});
@@ -2889,6 +2895,8 @@ var __p=[],_p=function(s){__p.push(s)};
 		TplCustomer = require('risk/page/customer/tpl.view');
 	var CanEdit = data.canEdit,
 		GuarantorData = data&&data.data;
+
+	console.log('GuarantorData',GuarantorData);
 __p.push('\n	<div class="list-group-item">\n		<div class="j-guarantor-form">');
 _p(Former.make(TplCustomer,{
 				data:GuarantorData,
@@ -2903,7 +2911,7 @@ _p(Former.make([[{
 			},{
 				col:'10',
 				type:'textarea',
-				name:'GuarantorRemark',
+				name:'Remark',
 				placeholder:''
 			}]],{
 				data:GuarantorData,
@@ -3105,13 +3113,14 @@ _p(Former.make([[{
 				name:'Remark',
 				placeholder:''
 			}]],{
-				data:data.data,
+				data:PropertyData,
 				disabled:!data.canEdit
 			}));
 __p.push('\n		</div>\n		<div class="form-group">');
 
-				var Joint = data.data&&data.data.Joint || [],
+				var Joint = PropertyData&&PropertyData.Joint || [],
 					JointLen = Joint.length;
+				console.log('Joint',Joint);
 			__p.push('			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">');
 if (data.canEdit) {__p.push('<button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>');
 }__p.push('				&nbsp;&nbsp;');

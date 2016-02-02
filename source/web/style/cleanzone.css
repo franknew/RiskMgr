@@ -5766,8 +5766,9 @@ table.no-border tr.pointer-item:hover {
   content: " ";
 }
 
-.form-control[disabled] {
+.form-control[disabled], select[disabled] {
   border-color: #E8E8E8;
+  background-color: #eee;
   /*background-color: transparent;*/
 }
 

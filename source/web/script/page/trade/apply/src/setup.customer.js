@@ -119,7 +119,7 @@ define(function(require, exports, module){
 				});
 			}
 
-			//移除id，防止串
+			//移除id，不要复用id，后台的逻辑多个单会串
 			if (data && data.ID) {
 				data.ID = undefined;
 				delete data.ID;

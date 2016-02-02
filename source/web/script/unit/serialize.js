@@ -37,10 +37,15 @@ define(function(require, exports, module){
 				type = tag=='input'?elem.type:tag;
 
 			formType = formType.toLowerCase();
-			switch(formType){
-				case 'json':
-					val = JSON.parse(val);
-				break;
+			if (val) {
+				switch(formType){
+					case 'json':
+						val = JSON.parse(val);
+						break;
+					case 'number':
+						val = val*1;
+						break;
+				}
 			}
 
 			if ((dropEmpty && !val) || !eleName) {

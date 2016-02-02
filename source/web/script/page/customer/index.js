@@ -524,7 +524,8 @@ define.pack("./tpl.view",[],function(require, exports, module){
 			name:'Gender',
 			required:true,
 			options:"性别",
-			remark:'性别'
+			remark:'性别',
+			"data-form":"number"
 		},{
 			col:3,
 			type:'select',
