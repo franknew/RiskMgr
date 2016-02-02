@@ -143,7 +143,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 			rs[1] = (group.join(''));
 
 			if (groupInfo.addText && conf.groupCanAdd) {
-				rs.push('<div class="col-sm-12 text-center"><button class="btn btn-default btn-sm" style="padding:4px 35px;" data-hook="former-group-add" data-group-name="'+groupName+'"><i class="fa fa-plus"></i>'+groupInfo.addText+'</button></div>');
+				rs.push('<div class="col-sm-12 text-center"><button class="btn btn-default btn-sm" style="padding:4px 35px;" data-hook="former-group-add" data-group-name="'+groupName+'"><i class="fa fa-plus"></i>增加'+groupInfo.addText+'</button></div>');
 			}
 			rs = rs.join('');
 
@@ -233,6 +233,13 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 					delete attr.required;
 					delete attr.name;
+					break;
+				case 'html':
+					itemState.tag = 'div';
+					delete attr.required;
+					delete attr.name;
+					delete attr.col;
+					delete attr.class;
 					break;
 				case 'select':
 					itemState.tag = 'select';

@@ -7,6 +7,38 @@
 define(function(require, exports, module){
 	var MOD = [
 		[{
+			type:'group',
+			name:'ReturnBackMoneyInfo',
+			addText:'回款信息',
+			groups:[
+				[{
+					type:'label',
+					col:3,
+					required:true,
+					html:'回款金额'
+				},{
+					col:'3',
+					type:'number',
+					required:true,
+					name:'ReturnBackMoney',
+					placeholder:'',
+					suffix:'元'
+				},{
+					type:'label',
+					col:3,
+					required:true,
+					html:'回款时间'
+				},{
+					col:'3',
+					type:'date',
+					required:true,
+					name:'ReturnBackTime',
+					placeholder:''
+				}]
+			]
+		}],
+		/*
+		[{
 			type:'label',
 			col:3,
 			required:true,
@@ -51,10 +83,11 @@ define(function(require, exports, module){
 			name:'ReturnBackTime2',
 			placeholder:''
 		}],
+		*/
 
 		[{
 			col:'12',
-			type:'label',
+			type:'html',
 			html:'<hr/>'
 		}],
 
@@ -91,7 +124,9 @@ define(function(require, exports, module){
 			name:'DelayFee',
 			placeholder:'',
 			suffix:'元'
-		},{
+		}],
+
+		[{
 			type:'label',
 			col:3,
 			html:'滞纳金时间'
@@ -99,7 +134,14 @@ define(function(require, exports, module){
 			col:'3',
 			type:'date',
 			name:'DelayTime',
-			placeholder:''
+			placeholder:'',
+			prefix:'开始'
+		},{
+			col:'3',
+			type:'date',
+			name:'DelayTimeEnd',
+			placeholder:'',
+			prefix:'结束'
 		}],
 
 		[{
