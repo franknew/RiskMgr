@@ -341,7 +341,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 				if (data&&data.WorkflowComplete) {
 					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
 				}else {
-					//extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
+					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
 
 				if (canDiscard) {

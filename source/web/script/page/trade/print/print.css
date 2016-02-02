@@ -11,7 +11,10 @@ body {
 	.trade-printer .info {
 		font-size: 18px;
 	}
-
+.trade-printer table th {
+	vertical-align: middle !important;
+	text-align: center;
+}
 
 @media print {
 	.trade-printer .operate {
