@@ -4,7 +4,8 @@
 
 define(function(require, exports, module){
 	require('risk/page/trade/print/print.css');
-	var $ = require('jquery');
+	var $ = require('jquery'),
+		Str = require('risk/unit/string');
 
 	var Tmpl = require('./tmpl'),
 		Trade = require('risk/page/trade/apply/index');
@@ -14,7 +15,7 @@ define(function(require, exports, module){
 		initPage:function(params) {
 			params = params || {};
 
-			document.title = '申请单据';
+			document.title = '审批表';
 
 			var container = $('body');
 			container.empty().html('<div class="loading">Loading...</div>');
