@@ -91,7 +91,7 @@ var tmpl = {
 var __p=[],_p=function(s){__p.push(s)};
 
 	var Type = data&&data.Project.Type;
-	Type = 3;
+	//Type = 3;
 	var TypeTpl = 'PrintType'+Type,
 		TplFn = this[TypeTpl],
 		TplTitle = {

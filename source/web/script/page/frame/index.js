@@ -101,15 +101,18 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 				//打开菜单
 				menuButton.click(function(e){
 					e.preventDefault();
-					console.log('11');
 					var elem = $(e.currentTarget),
 					ul = $(elem.attr('data-target'));
 					ul.slideToggle(300, 'swing', function () {});
 				});
 				//点击菜单时关闭
 				$('#J_Vnavigation').on('click','a[href^="#page="]',function(e) {
-					var ul = $(e.delegateTarget);
-					ul.slideToggle(300, 'swing', function () {});
+					var ul = $(e.delegateTarget),
+						link = $(e.currentTarget);
+					//没有下级菜单才自动收起
+					if (link.parent('.parent').size()<=0) {
+						ul.slideToggle(300, 'swing', function () {});
+					}
 				});
 			}
 
@@ -122,6 +125,7 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 			});
 			$(".cl-vnavigation").delegate(".parent > a","click",function(e){
 				e.stopPropagation();
+				e.preventDefault();
 				$(".cl-vnavigation .parent.open > ul").not($(this).parent().find("ul")).slideUp(300, 'swing',function(){
 					$(this).parent().removeClass("open");
 				});
@@ -135,11 +139,10 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 						p.addClass("open");
 					}
 				});
-				e.preventDefault();
 			}).delegate('[data-hook="debug-fillform"]', 'click', function(ev) {//填写测试数据到表单内
 				ev.preventDefault();
 				debugForm.fill();
-			});;
+			});
 
 			//初始化路由
 			route.init({
@@ -266,15 +269,15 @@ var tmpl = {
 var __p=[],_p=function(s){__p.push(s)};
 
 	data.avatar = data.avatar || 'about:blank'; //防止空src
-__p.push('<div id="head-nav" class="navbar navbar-default navbar-fixed-top">\n	<div class="container-fluid">\n		<div class="navbar-header">\n			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">\n				<span class="fa fa-gear"></span>\n			</button>\n			<a class="navbar-brand" href="/"><span>风险管理系统</span></a>\n		</div>\n		<div class="navbar-collapse collapse">\n			<!--\n			<ul class="nav navbar-nav">\n			<li><a href="#page=apply-amount">申请额度</a></li>\n			<li><a href="#about">快捷连接22</a></li>\n			</ul>\n			-->\n			<ul class="nav navbar-nav navbar-right user-nav" id="J_UserNav">\n				<li class="dropdown profile_menu">\n					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="');
+__p.push('<div id="head-nav" class="navbar navbar-default navbar-fixed-top">\n	<div class="container-fluid">\n		<div class="navbar-header">\n			<a class="navbar-brand" href="/"><span>风险管理系统</span></a>\n		</div>\n		<div class="navbar-collapse collapse">\n			<!--\n			<ul class="nav navbar-nav">\n			<li><a href="#page=apply-amount">申请额度</a></li>\n			<li><a href="#about">快捷连接22</a></li>\n			</ul>\n			-->\n			<ul class="nav navbar-nav navbar-right user-nav" id="J_UserNav">\n				<li class="dropdown profile_menu">\n					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="');
 _p(data.avatar);
 __p.push('" width="30" height="30" />');
 _p(data.name);
-__p.push(' <b class="caret"></b></a>\n					<ul class="dropdown-menu">\n						<li><a href="#page=user">个人资料</a></li>\n						<li><a href="#page=user&action=password">修改密码</a></li>\n						<li class="divider"></li>\n						<li><a href="#" id="J_Logout">退出登录</a></li>\n					</ul>\n				</li>\n			</ul>\n\n		</div>\n	</div>\n</div>\n\n<div id="cl-wrapper" class="fixed-menu">\n	<div class="cl-sidebar" data-position="right" data-step="1" data-intro="<strong>Fixed Sidebar</strong> <br/> It adjust to your needs." >\n		<div class="cl-toggle" id="J_MenuToggle" data-target="#J_Vnavigation"><i class="fa fa-bars"></i></div>\n		<div class="cl-navblock">\n\n			<div class="menu-space">\n				<div class="content">\n					<div class="side-user" id="J_SideUser">\n						<div class="avatar"><img src="');
+__p.push(' <b class="caret"></b></a>\n					<ul class="dropdown-menu">\n						<li><a href="#page=user">个人资料</a></li>\n						<li><a href="#page=user&action=password">修改密码</a></li>\n						<li class="divider"></li>\n						<li><a href="#" id="J_Logout">退出登录</a></li>\n					</ul>\n				</li>\n			</ul>\n\n		</div>\n	</div>\n</div>\n\n<div id="cl-wrapper" class="fixed-menu">\n	<div class="cl-sidebar" data-position="right" data-step="1" data-intro="<strong>Fixed Sidebar</strong> <br/> It adjust to your needs." >\n		<div class="cl-toggle" id="J_MenuToggle" data-target="#J_Vnavigation"><i class="fa fa-bars"></i> 菜单</div>\n		<div class="cl-navblock">\n\n			<div class="menu-space">\n				<div class="content">\n					<div class="side-user" id="J_SideUser">\n						<div class="avatar"><img src="');
 _p(data.avatar);
 __p.push('" width="50" height="50" alt="Avatar" /></div>\n						<div class="info">\n							<a href="#page=user">');
 _p(data.name);
-__p.push('</a>\n						</div>\n					</div>\n					<ul class="cl-vnavigation" id="J_Vnavigation">\n						<li><a href="#page=home"><i class="fa fa-home"></i><span>首页</span></a></li>\n						<li class="open"><a href="#page=trade/list"><i class="fa fa-file"></i><span>担保业务</span></a>\n							<ul class="sub-menu">\n								<li><a href="#page=trade/apply">申请额度</a></li>\n								<li><a href="#page=trade/list">查询</a></li>\n							</ul>\n						</li>\n						<li><a href="#page=workflow"><i class="fa fa-stack-overflow"></i><span>审批</span></a></li>\n						<li><a href="#page=customer"><i class="fa fa-users"></i><span>客户信息管理</span></a></li>\n						<li><a href="#page=property"><i class="fa fa-building-o"></i><span>房产信息管理</span></a></li>\n						<li><a href="#page=trade/list"><i class="fa fa-sitemap"></i><span>组织架构</span></a>\n							<ul class="sub-menu">\n								<li><a href="#page=organize/employee"><span>员工管理</span></a></li>\n								<li><a href="#page=organize/position"><span>职位管理</span></a></li>\n							</ul>\n						</li>\n						<li><a href="#page=trade/list"><i class="fa fa-bug"></i><span>开发用的</span></a>\n							<ul class="sub-menu">\n								<li><a href="https://shimo.im/spreadsheet/M3Ca9xhoXxcaTjTY" target="_blank"><span>待办开发工作</span></a></li>\n								<li><a href="#page=debugger"><span>测试后台接口</span></a></li>\n								<li><a href="###" data-hook="debug-fillform"><span>填表单</span></a></li>\n							</ul>\n						</li>\n					</ul>\n				</div>\n			</div>\n\n			<div class="text-right collapse-button" style="padding:7px 9px;">\n				<a class="link-download" href="/download/setup_risk.exe" target="_blank"><i class="fa fa-download"></i><span> 下载桌面版</span></a>\n			</div>\n\n		</div>\n	</div>\n\n	<div class="container-fluid" id="pcont">\n		<div class="page-head hide" id="J_Header"></div>\n		<div class="cl-mcont" id="J_Body">\n			<div class="loading">Loading...</div>\n		</div>\n	</div>\n</div>');
+__p.push('</a>\n						</div>\n					</div>\n					<ul class="cl-vnavigation" id="J_Vnavigation">\n						<li><a href="#page=home"><i class="fa fa-home"></i><span>首页</span></a></li>\n						<li class="open"><a href="#"><i class="fa fa-file"></i><span>担保业务</span></a>\n							<ul class="sub-menu">\n								<li><a href="#page=trade/apply">申请额度</a></li>\n								<li><a href="#page=trade/list">查询</a></li>\n							</ul>\n						</li>\n						<li><a href="#page=workflow"><i class="fa fa-stack-overflow"></i><span>审批</span></a></li>\n						<li><a href="#page=customer"><i class="fa fa-users"></i><span>客户信息管理</span></a></li>\n						<li><a href="#page=property"><i class="fa fa-building-o"></i><span>房产信息管理</span></a></li>\n						<li><a href="#"><i class="fa fa-sitemap"></i><span>组织架构</span></a>\n							<ul class="sub-menu">\n								<li><a href="#page=organize/employee"><span>员工管理</span></a></li>\n								<li><a href="#page=organize/position"><span>职位管理</span></a></li>\n							</ul>\n						</li>\n						<li><a href="#"><i class="fa fa-bug"></i><span>开发用的</span></a>\n							<ul class="sub-menu">\n								<li><a href="https://shimo.im/spreadsheet/M3Ca9xhoXxcaTjTY" target="_blank"><span>待办开发工作</span></a></li>\n								<li><a href="#page=debugger"><span>测试后台接口</span></a></li>\n								<li><a href="###" data-hook="debug-fillform"><span>填表单</span></a></li>\n							</ul>\n						</li>\n					</ul>\n				</div>\n			</div>\n\n			<div class="text-right collapse-button" style="padding:7px 9px;">\n				<a class="link-download" href="/download/setup_risk.exe" target="_blank"><i class="fa fa-download"></i><span> 下载桌面版</span></a>\n			</div>\n\n		</div>\n	</div>\n\n	<div class="container-fluid" id="pcont">\n		<div class="page-head hide" id="J_Header"></div>\n		<div class="cl-mcont" id="J_Body">\n			<div class="loading">Loading...</div>\n		</div>\n	</div>\n</div>');
 
 return __p.join("");
 }

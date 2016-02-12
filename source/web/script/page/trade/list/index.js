@@ -202,9 +202,9 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>编号</th>\n				<th>业务员</th>\n				<th>客户名称</th>\n				<th>房产地址</th>\n				<th>申请时间</th>\n				<th>状态</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<div class="table-container">\n	<table class="table no-border" style="min-width:650px;">\n		<thead class="no-border">\n			<tr>\n				<th width="70">编号</th>\n				<th width="70">业务员</th>\n				<th width="120">客户名称</th>\n				<th>房产地址</th>\n				<th width="140">申请时间</th>\n				<th width="70">状态</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
-__p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
+__p.push('		</tbody>\n	</table>\n	</div>\n\n	<div class="j-pager"></div>\n');
 
 return __p.join("");
 },
@@ -237,7 +237,7 @@ __p.push('</td>\n		<td>\n			<table class="no-strip">');
 			var bi=0,CurBuyer,
 				Buyers = Cur.Buyers||[];
 			for(;CurBuyer=Buyers[bi++];) {
-			__p.push('			<tr>\n				<td class="col-sm-4 text-success"><small>[');
+			__p.push('			<tr>\n				<td class="text-success nopadding"><small>[');
 _p(((Cur.Sellers&&Cur.Sellers.length>=1)?'买':'客户'));
 __p.push(']</small> ');
 _p(CurBuyer.Name);
@@ -248,7 +248,7 @@ __p.push('</td>\n			</tr>');
 			var bi=0,CurSeller,
 				Sellers = Cur.Sellers||[];
 			for(;CurSeller=Sellers[bi++];) {
-			__p.push('			<tr>\n				<td class="col-sm-4 text-danger"><small>[卖]</small> ');
+			__p.push('			<tr>\n				<td class="nopadding text-danger"><small>[卖]</small> ');
 _p(CurSeller.Name);
 __p.push('</td>\n			</tr>');
 
@@ -258,7 +258,7 @@ __p.push('</td>\n			</tr>');
 			var bi=0,CurAssets,
 				Assets = Cur.Assets||[];
 			for(;CurAssets=Assets[bi++];) {
-			__p.push('			<tr>\n				<td>');
+			__p.push('			<tr>\n				<td class="nopadding">');
 _p(CurAssets.Address);
 __p.push('</td>\n			</tr>');
 

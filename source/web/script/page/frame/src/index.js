@@ -59,15 +59,18 @@ define(function(require, exports, module){
 				//打开菜单
 				menuButton.click(function(e){
 					e.preventDefault();
-					console.log('11');
 					var elem = $(e.currentTarget),
 					ul = $(elem.attr('data-target'));
 					ul.slideToggle(300, 'swing', function () {});
 				});
 				//点击菜单时关闭
 				$('#J_Vnavigation').on('click','a[href^="#page="]',function(e) {
-					var ul = $(e.delegateTarget);
-					ul.slideToggle(300, 'swing', function () {});
+					var ul = $(e.delegateTarget),
+						link = $(e.currentTarget);
+					//没有下级菜单才自动收起
+					if (link.parent('.parent').size()<=0) {
+						ul.slideToggle(300, 'swing', function () {});
+					}
 				});
 			}
 
@@ -80,6 +83,7 @@ define(function(require, exports, module){
 			});
 			$(".cl-vnavigation").delegate(".parent > a","click",function(e){
 				e.stopPropagation();
+				e.preventDefault();
 				$(".cl-vnavigation .parent.open > ul").not($(this).parent().find("ul")).slideUp(300, 'swing',function(){
 					$(this).parent().removeClass("open");
 				});
@@ -93,11 +97,10 @@ define(function(require, exports, module){
 						p.addClass("open");
 					}
 				});
-				e.preventDefault();
 			}).delegate('[data-hook="debug-fillform"]', 'click', function(ev) {//填写测试数据到表单内
 				ev.preventDefault();
 				debugForm.fill();
-			});;
+			});
 
 			//初始化路由
 			route.init({
