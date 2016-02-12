@@ -59,6 +59,7 @@ define(function(require, exports, module){
 				//打开菜单
 				menuButton.click(function(e){
 					e.preventDefault();
+					console.log('11');
 					var elem = $(e.currentTarget),
 					ul = $(elem.attr('data-target'));
 					ul.slideToggle(300, 'swing', function () {});
@@ -78,6 +79,7 @@ define(function(require, exports, module){
 				$(this).parent().show().parent().addClass("open");
 			});
 			$(".cl-vnavigation").delegate(".parent > a","click",function(e){
+				e.stopPropagation();
 				$(".cl-vnavigation .parent.open > ul").not($(this).parent().find("ul")).slideUp(300, 'swing',function(){
 					$(this).parent().removeClass("open");
 				});
