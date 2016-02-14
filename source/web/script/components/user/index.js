@@ -188,6 +188,11 @@ define.pack("./wx",["risk/components/modal/index","risk/unit/ajax","jquery","./t
 			//微信登录
 			var params,wxCode,wxState,hasJump;
 
+			//非测试环境先不检测wx
+			if (!~location.host.indexOf(':8080')) {
+				return false;
+			}
+
 			if (browser.client == 'wx') {
 				params = uri(location.href);
 				params = params && params.params || {};
