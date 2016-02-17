@@ -5741,7 +5741,7 @@ table.no-border tr.pointer-item:hover {
   content: " ";
 }
 
-.form-control[disabled], select[disabled] {
+.form-control[disabled], select[disabled], .input-group-disabled .input-group-addon {
   border-color: #E8E8E8;
   background-color: #eee;
   /*background-color: transparent;*/
@@ -5812,6 +5812,21 @@ table.no-border tr.pointer-item:hover {
     font-size:12px;
     color:#A5A5A5;
   }
+
+.former-group-item {
+  margin-bottom: 5px;
+}
+.former-group-button {
+  text-align: center;
+}
+.former-group-remove {
+    position: absolute;
+    right: 2px;
+    top: 9px;
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
+}
 /* risk自定义样式 END  */
 
 
