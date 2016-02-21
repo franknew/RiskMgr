@@ -30,6 +30,7 @@ define(function(require, exports, module){
 					form:$('#Followup'),
 					success:function(da) {
 						Msg.success('提交成功.');
+						Route.reload('tab=Followup');
 					}
 				});
 			});

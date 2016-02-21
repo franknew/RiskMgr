@@ -5,6 +5,8 @@
  */
 
 define(function(require, exports, module){
+	var $ = require('jquery');
+
 	var MOD = {
 		/**
 		* 将字符串中的特殊字符转换为实体
@@ -88,6 +90,23 @@ define(function(require, exports, module){
 				}
 			}).replace('tt', tt);
 			return res;
+		},
+		/** 将 width=1680&height=1050  格式化成 { width:1680, height:1050 }
+		 * @param
+		 */
+		unparam:function(str) {
+			str = $.trim(str);
+			var rs = {},
+				arr = str.split('&');
+
+			var i=0, l = arr.length,
+				cur;
+			for(; i < l; ++i) {
+				cur = $.trim(arr[i]).split('=');
+				rs[$.trim(cur[0])] = $.trim(cur[1]);
+			}
+
+			return rs;
 		}
 	};
 

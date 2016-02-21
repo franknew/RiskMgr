@@ -41,10 +41,12 @@
 %>
 
 <%
+	var RString = require('risk/unit/string');
 	var DataView = data.data || {},
 		Approvals = DataView.Approvals || {},	//审批信息
 		Charge = DataView.Charge,	//财务信息
-		Followup = DataView.Followup;	//保后跟踪
+		Followup = DataView.Followup,	//保后跟踪
+		CurrentActivity = DataView.CurrentActivity || [];
 
 	//把业务类型放到一级，方便判断
 	DataView.Type = DataView.Type || DataView.Project&&DataView.Project.Type || 1;
@@ -56,7 +58,15 @@
 		//  !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
 %>
 
-<div class="col-md-12">
+<div class="col-md-12 trade-detail">
+	<%if (ShowApproval) {%>
+		<%if (DataView.WorkflowComplete) { %>
+			<div class="alert alert-success" role="alert"><i class="fa fa-check-circle"></i> 已确认回款，流程已结束</div>
+		<%}else {%>
+			<div class="alert alert-info" role="alert">当前流程到了<strong><%=CurrentActivity.Name%></strong>，审批人：<strong><%=DataView.Operator||'?'%></strong>，到达时间：<strong><%=RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm:ss")%></strong></div>
+		<%}%>
+	<%}%>
+
 	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">
 		<ul class="wizard-steps">
 			<%if (data.mode=='add') {%>

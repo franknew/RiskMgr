@@ -23,6 +23,7 @@ define(function(require, exports, module){
 				,btnPrev:'.wizard-previous'	//上一步按钮的选择器
 				,validate:true	//进入下一步时，是否要校验表单
 				//,success:function() {}	//最后一步完成时执行
+				//,showed:''	//默认显示的tab ID
 			}
 		},
 		init:function (setting) {
@@ -41,6 +42,12 @@ define(function(require, exports, module){
 
 			this._initBox();
 			this._initButton();
+
+			//显示默认tab
+			var showID = conf.showed;
+			if (showID) {
+				this._show(showID);
+			}
 
 			return this;
 		},

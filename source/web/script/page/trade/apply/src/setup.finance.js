@@ -32,7 +32,7 @@ define(function(require, exports, module){
 					form:$('#FinanceConfirm'),
 					success:function(da) {
 						Msg.success('已成功确认回款.');
-						Route.reload();
+						Route.reload('tab=FinanceConfirm');
 					}
 				});
 			}).on('click','finance-save',function(ev) {//保存回款
@@ -50,7 +50,7 @@ define(function(require, exports, module){
 					form:$('#FinanceConfirm'),
 					success:function(da) {
 						Msg.success('保存成功.');
-						//Route.reload();
+						Route.reload('tab=FinanceConfirm');
 					}
 				});
 

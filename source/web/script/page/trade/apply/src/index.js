@@ -50,7 +50,6 @@ define(function(require, exports, module){
 			this._shown(params);
 		},
 		_shown:function(params) {
-
 			//显示页面的主入口，先清理缓存
 			require('./data').clearCache();
 
@@ -75,9 +74,7 @@ define(function(require, exports, module){
 
 				var extraText = [];
 
-				if (data&&data.WorkflowComplete) {
-					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
-				}else {
+				if (!(data&&data.WorkflowComplete)) {
 					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
 
@@ -90,7 +87,8 @@ define(function(require, exports, module){
 				Setup.init({
 					mode:params.action,
 					head:head+' <small>'+typeName+'('+id+') '+extraText+'</small>',
-					data:data
+					data:data,
+					showed:params.tab || ''
 				});
 
 				MOD._initEvent();

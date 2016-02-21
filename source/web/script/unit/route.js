@@ -6,7 +6,8 @@
  */
 define(function(require, exports, module) {
 	var $ = require('jquery'),
-		URI = require('./uri');
+		URI = require('./uri'),
+		Str = require('risk/unit/string');
 
 	var _CONFIG = {	//初始配置
 			//loading:'<h3 class="text-center">Loading...</h3>',
@@ -86,8 +87,14 @@ define(function(require, exports, module) {
 			}
 		},
 		//刷新该页面
-		reload:function() {
+		reload:function(addParams) {
 			var mod = this._getMod(location.href);
+			if (addParams) {
+				mod = $.extend(mod,(function(p) {
+					var rs = Str.unparam(p);
+					return rs;
+				})(addParams));
+			}
 			this._load(mod);
 		},
 		/** 获取当前展示的模块url id

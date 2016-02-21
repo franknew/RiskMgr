@@ -30,6 +30,7 @@ define(function(require, exports, module){
 			mode:模式，可选有add、edit、view
 			head:标题文本
 			data:表单数据
+			showed: 默认显示的tab ID
 		 */
 		init:function(opts) {
 			var mode = opts.mode,
@@ -53,7 +54,8 @@ define(function(require, exports, module){
 				container:'#J_Wizzard',
 				success:function() {
 					that.submit(mode);
-				}
+				},
+				showed:opts.showed
 			});
 
 			this._initEvent();
