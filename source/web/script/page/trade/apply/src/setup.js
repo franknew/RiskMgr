@@ -112,7 +112,8 @@ define(function(require, exports, module){
 				data:data,
 				success:function(data, textStatus, jqXHR) {
 					msg.success('申请成功');
-					route.load('page=trade/list');
+
+					route.load('page=trade/apply&action=view&ID='+data);
 				}
 			});
 		}

@@ -47,21 +47,23 @@
 </script>
 
 <script type="text/html" id="List">
-	<table class="no-border">
+	<div class="table-container">
+	<table class="table no-border" style="min-width:650px;">
 		<thead class="no-border">
 			<tr>
-				<th>编号</th>
-				<th>业务员</th>
-				<th>客户名称</th>
+				<th width="70">编号</th>
+				<th width="70">业务员</th>
+				<th width="120">客户名称</th>
 				<th>房产地址</th>
-				<th>申请时间</th>
-				<th>状态</th>
+				<th width="140">申请时间</th>
+				<th width="70">状态</th>
 			</tr>
 		</thead>
 		<tbody class="no-border-x no-border-y" id="J_Lister">
 			<%=this.ListItem(data)%>
 		</tbody>
 	</table>
+	</div>
 
 	<div class="j-pager"></div>
 
@@ -89,7 +91,7 @@
 			for(;CurBuyer=Buyers[bi++];) {
 			%>
 			<tr>
-				<td class="col-sm-4 text-success"><small>[<%=((Cur.Sellers&&Cur.Sellers.length>=1)?'买':'客户')%>]</small> <%=CurBuyer.Name%></td>
+				<td class="text-success nopadding"><small>[<%=((Cur.Sellers&&Cur.Sellers.length>=1)?'买':'客户')%>]</small> <%=CurBuyer.Name%></td>
 			</tr>
 			<%
 			}
@@ -101,7 +103,7 @@
 			for(;CurSeller=Sellers[bi++];) {
 			%>
 			<tr>
-				<td class="col-sm-4 text-danger"><small>[卖]</small> <%=CurSeller.Name%></td>
+				<td class="nopadding text-danger"><small>[卖]</small> <%=CurSeller.Name%></td>
 			</tr>
 			<%
 			}
@@ -117,7 +119,7 @@
 			for(;CurAssets=Assets[bi++];) {
 			%>
 			<tr>
-				<td><%=CurAssets.Address%></td>
+				<td class="nopadding"><%=CurAssets.Address%></td>
 			</tr>
 			<%
 			}

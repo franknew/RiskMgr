@@ -1,14 +1,23 @@
 <script type="text/html" id="Printer">
+<%
+	var Type = data&&data.Project.Type;
+	//Type = 3;
+	var TypeTpl = 'PrintType'+Type,
+		TplFn = this[TypeTpl],
+		TplTitle = {
+			'1':'交易类现金赎楼',
+			'2':'首期款垫资',
+			'3':'转贷类现金赎楼',
+			'4':''
+		}[Type+''];
+%>
 <div class="trade-printer">
-	<div class="operate"><button type="button" class="btn btn-primary" id="TradePrinter">打印</button></div>
-	<div class="info">编号：<%=data.Project.Name%></div>
-	<table>
-		<tr>
-			<th>申请人</th>
-			<td>阿斯顿发</td>
-			<th>日期</th>
-			<td>2015-01-01</td>
-		</tr>
-	</table>
+	<div class="operate"><button type="button" class="btn btn-primary btn-lg" id="TradePrinter">打印审批表</button></div>
+	<div class="info"><%=TplTitle%>业务审批表&nbsp;&nbsp;&nbsp;<small class="sn">业务员：<%=data.Creator%>&nbsp;&nbsp;&nbsp;&nbsp;编号：<%=data.Project.Name%></small></div>
+	<%if (TplFn) {%>
+		<%=TplFn(data)%>
+	<%}else{%>
+		没有找到type=<%=Type%>的打印模板，请联系开发。
+	<%}%>
 </div>
 </script>

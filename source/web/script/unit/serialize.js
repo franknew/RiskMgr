@@ -88,12 +88,12 @@ define(function(require, exports, module){
 				name = box.attr('data-group-box'),
 				items = box.find(':input[data-group='+name+']'),
 				rs,
-				data;	//不预设值，因为dropEmpty参数要实现
+				data = {};
 			items.map(function() {
 				data = setValue(this,data,dropEmpty);
 			});
 
-			if (!data) {
+			if (!data || $.isEmptyObject(data)) {
 				return ;
 			}
 

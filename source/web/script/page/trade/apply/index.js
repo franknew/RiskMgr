@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/ajax","risk/components/msg/index","risk/components/modal/index","risk/unit/uri","risk/unit/route","risk/unit/serialize","risk/components/former/index","risk/page/customer/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
+define(["jquery","risk/unit/ajax","risk/components/msg/index","risk/components/modal/index","risk/unit/uri","risk/unit/route","risk/unit/serialize","risk/unit/string","risk/components/former/index","risk/page/customer/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -341,7 +341,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 				if (data&&data.WorkflowComplete) {
 					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
 				}else {
-					//extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
+					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
 
 				if (canDiscard) {
@@ -456,11 +456,12 @@ define.pack("./setup.approval",["jquery","risk/unit/ajax","risk/unit/route","ris
  * @authors viktorli (i@lizhenwen.com)
  */
 
-define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./data"],function(require, exports, module){
+define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","risk/unit/route","risk/unit/string","risk/components/msg/index","./data"],function(require, exports, module){
 	var $ = require('jquery'),
 		Serialize = require('risk/unit/serialize'),
 		Ajax = require('risk/unit/ajax'),
 		route = require('risk/unit/route'),
+		string = require('risk/unit/string'),
 		Msg = require('risk/components/msg/index');
 
 	var Data = require('./data');
@@ -485,6 +486,26 @@ define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","r
 						Msg.success('提交成功.');
 					}
 				});
+			});
+
+			//自动计算回款时间
+			var chargeBox = route.container.find('#Charge'),
+				ExportTime = 'ExportTime',	//放款时间
+				GuaranteeMonth = 'GuaranteeMonth',	//担保期限
+				PaymentDate = 'PaymentDate';	//回款时间
+			chargeBox.find('input[name="'+ExportTime+'"],input[name="'+GuaranteeMonth+'"]').bind('keyup change',function(ev) {
+				var time = chargeBox.find('input[name="'+ExportTime+'"]').val(),
+					limit = chargeBox.find('input[name="'+GuaranteeMonth+'"]').val() *1,
+					rs;
+				if (time && limit && !isNaN(limit)) {
+					time = new Date(time);
+					rs = time.setDate(time.getDate()+limit);	//得到时间戳
+					rs = string.date(rs,'yyyy-MM-dd');
+				}else{
+					rs = ''
+				}
+
+				chargeBox.find('input[name="'+PaymentDate+'"]').val(rs);
 			});
 		}
 	};
@@ -995,7 +1016,8 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				data:data,
 				success:function(data, textStatus, jqXHR) {
 					msg.success('申请成功');
-					route.load('page=trade/list');
+
+					route.load('page=trade/apply&action=view&ID='+data);
 				}
 			});
 		}
@@ -1415,7 +1437,7 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'GuaranteeMonth',
+			name:'GuaranteePeriod',
 			placeholder:'',
 			suffix:'天'
 		},{
@@ -1498,6 +1520,38 @@ define.pack("./tpl.charge",[],function(require, exports, module){
 define.pack("./tpl.finance",[],function(require, exports, module){
 	var MOD = [
 		[{
+			type:'group',
+			name:'ReturnBackMoneyInfo',
+			addText:'回款信息',
+			groups:[
+				[{
+					type:'label',
+					col:3,
+					required:true,
+					html:'回款金额'
+				},{
+					col:'3',
+					type:'number',
+					required:true,
+					name:'ReturnBackMoney',
+					placeholder:'',
+					suffix:'元'
+				},{
+					type:'label',
+					col:3,
+					required:true,
+					html:'回款时间'
+				},{
+					col:'3',
+					type:'date',
+					required:true,
+					name:'ReturnBackTime',
+					placeholder:''
+				}]
+			]
+		}],
+		/*
+		[{
 			type:'label',
 			col:3,
 			required:true,
@@ -1542,10 +1596,11 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 			name:'ReturnBackTime2',
 			placeholder:''
 		}],
+		*/
 
 		[{
 			col:'12',
-			type:'label',
+			type:'html',
 			html:'<hr/>'
 		}],
 
@@ -1582,7 +1637,9 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 			name:'DelayFee',
 			placeholder:'',
 			suffix:'元'
-		},{
+		}],
+
+		[{
 			type:'label',
 			col:3,
 			html:'滞纳金时间'
@@ -1590,7 +1647,14 @@ define.pack("./tpl.finance",[],function(require, exports, module){
 			col:'3',
 			type:'date',
 			name:'DelayTime',
-			placeholder:''
+			placeholder:'',
+			prefix:'开始'
+		},{
+			col:'3',
+			type:'date',
+			name:'DelayTimeEnd',
+			placeholder:'',
+			prefix:'结束'
 		}],
 
 		[{
@@ -2895,8 +2959,6 @@ var __p=[],_p=function(s){__p.push(s)};
 		TplCustomer = require('risk/page/customer/tpl.view');
 	var CanEdit = data.canEdit,
 		GuarantorData = data&&data.data;
-
-	console.log('GuarantorData',GuarantorData);
 __p.push('\n	<div class="list-group-item">\n		<div class="j-guarantor-form">');
 _p(Former.make(TplCustomer,{
 				data:GuarantorData,
@@ -3120,7 +3182,6 @@ __p.push('\n		</div>\n		<div class="form-group">');
 
 				var Joint = PropertyData&&PropertyData.Joint || [],
 					JointLen = Joint.length;
-				console.log('Joint',Joint);
 			__p.push('			<div class="col-sm-2">&nbsp;</div>\n			<div class="col-sm-10">');
 if (data.canEdit) {__p.push('<button type="button" data-hook="joint-add" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> 增加共权人</button>');
 }__p.push('				&nbsp;&nbsp;');

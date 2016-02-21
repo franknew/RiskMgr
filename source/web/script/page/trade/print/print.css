@@ -4,15 +4,54 @@ body {
 	height: auto;
 	background: #fff;
 }
-.trade-printer {width:640px;margin:20px auto;}
+.trade-printer {width:720px;margin:20px auto;}
 	.trade-printer .operate {
-		text-align: right;
+		text-align: center;
 	}
 	.trade-printer .info {
 		font-size: 18px;
 	}
+	.trade-printer .info .sn {
+		float: right;
+		font-size: 14px;
+	}
 
-
+.trade-printer .table {
+	margin: 0;
+}
+.trade-printer table th,.trade-printer table td {
+	padding: 4px !important;
+	font-size: 100% !important;
+}
+.trade-printer table .trade-checklist {
+	padding: 0 !important;
+}
+.trade-printer table th {
+	vertical-align: middle !important;
+	text-align: center;
+}
+.trade-printer p {
+	margin: 0;
+}
+.trade-printer label {
+	font-weight: normal;
+	margin: 0;
+}
+.trade-printer input[type="text"],.trade-printer textarea{
+	border: none;
+	border-bottom: 1px #8A8A8A solid;
+	background: transparent;
+	resize:none;
+	overflow:hidden;
+}
+.trade-printer input.td_input,.trade-printer textarea.td_input {
+	border: none;
+	width: 100%;
+}
+.trade-printer input[type="checkbox"]{
+	margin: 0 0 0 2px;
+	vertical-align: middle;
+}
 @media print {
 	.trade-printer .operate {
 		display: none;

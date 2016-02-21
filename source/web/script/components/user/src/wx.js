@@ -25,6 +25,11 @@ define(function(require, exports, module){
 			//微信登录
 			var params,wxCode,wxState,hasJump;
 
+			//非测试环境先不检测wx
+			if (!~location.host.indexOf(':8080')) {
+				return false;
+			}
+
 			if (browser.client == 'wx') {
 				params = uri(location.href);
 				params = params && params.params || {};
@@ -56,8 +61,8 @@ define(function(require, exports, module){
 		},
 		getUrl:function() {
 			var corp_id = 'wx4fff07646e8c3d22',
-				redirect_uri = 'http://203.195.163.209/?'+WX_HAS_JUMP+'=1',
-				state = Math.ceil(Math.random()*198600),
+				redirect_uri = location.protocol+'//'+location.host+location.pathname+(location.search+(location.search?'&':'?')+WX_HAS_JUMP+'=1')+location.hash;
+			var state = Math.ceil(Math.random()*198600),
 				url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+corp_id+'&redirect_uri='+encodeURIComponent(redirect_uri)+'&response_type=code&scope=snsapi_base&state='+state+'&connect_redirect=1#wechat_redirect';
 
 			cookie.set(WX_STATE,state);	//把state写入cookie，回来时再校验

@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/string","risk/data-dictionary"],function(require,exports,module){
+define(["jquery","risk/unit/string","risk/components/msg/index","risk/data-dictionary"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -41,9 +41,10 @@ define.pack = function(){
  * @date    2015-07-19 16:49:41
  */
 
-define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],function(require, exports, module){
+define.pack("./index",["jquery","risk/unit/string","risk/components/msg/index","risk/data-dictionary"],function(require, exports, module){
 	var $ = require('jquery'),
-		RString = require('risk/unit/string');
+		RString = require('risk/unit/string'),
+		MSG = require('risk/components/msg/index');
 
 	var SelectData = require('risk/data-dictionary');
 
@@ -128,22 +129,22 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 			var groupName = groupInfo.name;
 
-			var rs = ['<div class="panel panel-default clearfix" style="border-color:#EFEFEF;" data-group-box="'+groupName+'">','','</div>'],
+			var removes = !conf.disabled?'<i class="former-group-remove fa fa-times" data-hook="former-group-remove"></i>':'',
+				rs = ['<div class="col-sm-12 former-group-item" style="border-color:#EFEFEF;" data-group-box="'+groupName+'">','',removes,'</div>'],
 				group = [];
 
 			var i=0,cur,cont='';
 			for(;cur=groupList[i++];) {
 				cont = this._makeForm(cur,conf,groupName);
 				if (cont) {	//因为onlyRequired功能，防止生成空div
-					cont = '<div class="col-sm-12" style="padding:5px 0;">'+cont+'</div>';
 					group.push(cont);
 				}
 			}
 
 			rs[1] = (group.join(''));
 
-			if (groupInfo.addText && conf.groupCanAdd) {
-				rs.push('<div class="col-sm-12 text-center"><button class="btn btn-default btn-sm" style="padding:4px 35px;" data-hook="former-group-add" data-group-name="'+groupName+'"><i class="fa fa-plus"></i>'+groupInfo.addText+'</button></div>');
+			if (groupInfo.addText && conf.groupCanAdd && !conf.disabled) {
+				rs.push('<div class="former-group-button"><button class="btn btn-default btn-sm" style="padding:4px 35px;" data-hook="former-group-add" data-group-name="'+groupName+'"><i class="fa fa-plus"></i>增加'+groupInfo.addText+'</button></div>');
 			}
 			rs = rs.join('');
 
@@ -233,6 +234,13 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 					delete attr.required;
 					delete attr.name;
+					break;
+				case 'html':
+					itemState.tag = 'div';
+					delete attr.required;
+					delete attr.name;
+					delete attr.col;
+					delete attr.class;
 					break;
 				case 'select':
 					itemState.tag = 'select';
@@ -367,7 +375,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 
 			//补上前缀、后缀
 			if (item.suffix || item.prefix) {
-				ele = $('<div class="input-group"></div>').append(ele);
+				ele = $('<div class="input-group '+(item.attr&&item.attr.disabled?' input-group-disabled':'')+'"></div>').append(ele);
 				if (item.suffix) {	//后缀
 					ele.append('<div class="input-group-addon">'+item.suffix+'</div>');
 				}
@@ -440,6 +448,17 @@ define.pack("./index",["jquery","risk/unit/string","risk/data-dictionary"],funct
 				var html = MOD._makeGroupItem(data.groups,data,{groupCanAdd:false});
 
 				elem.parent().before(html);
+			}).on('click', '[data-hook="former-group-remove"]', function(ev) {
+				ev.preventDefault();
+				var elem = $(ev.currentTarget),
+					box = elem.parent('.former-group-item');
+				if (box.siblings('.former-group-item').size()<=0) {
+					MSG.error('至少保留一个');
+				}else {
+					box.slideUp('fast',function() {
+						$(this).remove();
+					});
+				}
 			});
 		}
 	};
