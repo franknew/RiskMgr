@@ -1,14 +1,13 @@
 <script type="text/html" id="Printer">
 <%
 	var Type = data&&data.Project.Type;
-	//Type = 3;
 	var TypeTpl = 'PrintType'+Type,
 		TplFn = this[TypeTpl],
 		TplTitle = {
 			'1':'交易类现金赎楼',
 			'2':'首期款垫资',
 			'3':'转贷类现金赎楼',
-			'4':''
+			'4':'贷前垫资'
 		}[Type+''];
 %>
 <div class="trade-printer">

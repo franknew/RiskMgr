@@ -48,7 +48,7 @@ define(function(require, exports, module){
 				},
 				success:function(da) {
 					Msg.success('处理成功.');
-					Route.load('page=workflow');
+					Route.load('page=trade/apply&action=view&tab=Approval&ID='+Params.ID);
 					success && success(da);
 				}
 			});

@@ -5827,6 +5827,30 @@ table.no-border tr.pointer-item:hover {
     text-align: center;
     cursor: pointer;
 }
+.trade-detail .list-group-item,.trade-detail .well {
+  background-color: #fff !important;
+  border: 0;
+  box-shadow: none;
+}
+.trade-detail .trade-approval-box .list-group-item {
+  background-color: #F2F2F2 !important;
+}
+.trade-detail .list-group-item,.trade-detail .well,.trade-detail .form-control {
+  font-size: 14px;
+}
+.trade-detail .form-control[disabled],.trade-detail select[disabled] {
+  border: 0;
+  background-color: transparent;
+  -webkit-appearance:none;
+  box-shadow:none;
+  border-bottom: 1px #E8E8E8 solid;
+}
+.trade-detail  .input-group-disabled .input-group-addon {
+  border: 0;
+  border-bottom: 1px solid #E8E8E8;
+  background: transparent;
+}
+.trade-detail .input-group .form-control {text-align: right;}
 /* risk自定义样式 END  */
 
 

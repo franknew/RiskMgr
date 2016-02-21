@@ -11,7 +11,8 @@ define(function(require, exports, module){
 		Msg = require('risk/components/msg/index'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
-		Types = require('./config.type');
+		Types = require('./config.type'),
+		Data = require('./data');
 
 	var MOD = {
 		initPage:function(params) {
@@ -50,7 +51,6 @@ define(function(require, exports, module){
 			this._shown(params);
 		},
 		_shown:function(params) {
-
 			//显示页面的主入口，先清理缓存
 			require('./data').clearCache();
 
@@ -75,9 +75,7 @@ define(function(require, exports, module){
 
 				var extraText = [];
 
-				if (data&&data.WorkflowComplete) {
-					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
-				}else {
+				if (!(data&&data.WorkflowComplete)) {
 					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
 
@@ -90,7 +88,8 @@ define(function(require, exports, module){
 				Setup.init({
 					mode:params.action,
 					head:head+' <small>'+typeName+'('+id+') '+extraText+'</small>',
-					data:data
+					data:data,
+					showed:params.tab || ''
 				});
 
 				MOD._initEvent();
@@ -102,7 +101,9 @@ define(function(require, exports, module){
 
 			header.find('[data-hook="trade-print"]').bind('click',function(ev) {
 				//打印单据
-				window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+				//window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+				var params = Data.params();
+				window.open(location.protocol+'//'+location.host+'#page=trade/print&ID='+params.ID);
 			});
 
 			header.find('[data-hook="trade-discard"]').bind('click',function(ev) {

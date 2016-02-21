@@ -31,14 +31,6 @@
 				</div>
 			</div>
 		</div>
-	<%}else {%>
-		<div class="alert alert-info" role="alert">
-			<%if (DataView.WorkflowComplete) { %>
-				<i class="fa fa-check-circle"></i> 审批流程已结束
-			<%}else {%>
-			当前审批流程到了<strong><%=CurrentActivity.Name%></strong>，审批人：<strong><%=DataView.Operator||'?'%></strong>，到达时间：<strong><%=RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm:ss")%></strong>
-			<%}%>
-		</div>
 	<%}%>
 
 	<%if (Approvals.length>0) {%>

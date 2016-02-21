@@ -30,6 +30,7 @@ define(function(require, exports, module){
 						Project:Serialize($('#Charge'))
 					},
 					success:function(da) {
+						route.reload('tab=Charge');
 						Msg.success('提交成功.');
 					}
 				});
@@ -38,7 +39,7 @@ define(function(require, exports, module){
 			//自动计算回款时间
 			var chargeBox = route.container.find('#Charge'),
 				ExportTime = 'ExportTime',	//放款时间
-				GuaranteeMonth = 'GuaranteeMonth',	//担保期限
+				GuaranteeMonth = 'GuaranteePeriod',	//担保期限
 				PaymentDate = 'PaymentDate';	//回款时间
 			chargeBox.find('input[name="'+ExportTime+'"],input[name="'+GuaranteeMonth+'"]').bind('keyup change',function(ev) {
 				var time = chargeBox.find('input[name="'+ExportTime+'"]').val(),

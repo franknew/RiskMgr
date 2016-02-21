@@ -274,7 +274,8 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 		Msg = require('risk/components/msg/index'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
-		Types = require('./config.type');
+		Types = require('./config.type'),
+		Data = require('./data');
 
 	var MOD = {
 		initPage:function(params) {
@@ -313,7 +314,6 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 			this._shown(params);
 		},
 		_shown:function(params) {
-
 			//显示页面的主入口，先清理缓存
 			require('./data').clearCache();
 
@@ -338,9 +338,7 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 
 				var extraText = [];
 
-				if (data&&data.WorkflowComplete) {
-					extraText.push('<span class="label label-success"><i class="fa fa-check-circle"></i> 已确认回款</span>');
-				}else {
+				if (!(data&&data.WorkflowComplete)) {
 					extraText.push('<button type="button" class="btn btn-primary" data-hook="trade-print">打印申请单</button>');
 				}
 
@@ -353,7 +351,8 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 				Setup.init({
 					mode:params.action,
 					head:head+' <small>'+typeName+'('+id+') '+extraText+'</small>',
-					data:data
+					data:data,
+					showed:params.tab || ''
 				});
 
 				MOD._initEvent();
@@ -365,7 +364,9 @@ define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/compone
 
 			header.find('[data-hook="trade-print"]').bind('click',function(ev) {
 				//打印单据
-				window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+				//window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+				var params = Data.params();
+				window.open(location.protocol+'//'+location.host+'#page=trade/print&ID='+params.ID);
 			});
 
 			header.find('[data-hook="trade-discard"]').bind('click',function(ev) {
@@ -443,7 +444,7 @@ define.pack("./setup.approval",["jquery","risk/unit/ajax","risk/unit/route","ris
 				},
 				success:function(da) {
 					Msg.success('处理成功.');
-					Route.load('page=workflow');
+					Route.load('page=trade/apply&action=view&tab=Approval&ID='+Params.ID);
 					success && success(da);
 				}
 			});
@@ -483,6 +484,7 @@ define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","r
 						Project:Serialize($('#Charge'))
 					},
 					success:function(da) {
+						route.reload('tab=Charge');
 						Msg.success('提交成功.');
 					}
 				});
@@ -491,7 +493,7 @@ define.pack("./setup.charge",["jquery","risk/unit/serialize","risk/unit/ajax","r
 			//自动计算回款时间
 			var chargeBox = route.container.find('#Charge'),
 				ExportTime = 'ExportTime',	//放款时间
-				GuaranteeMonth = 'GuaranteeMonth',	//担保期限
+				GuaranteeMonth = 'GuaranteePeriod',	//担保期限
 				PaymentDate = 'PaymentDate';	//回款时间
 			chargeBox.find('input[name="'+ExportTime+'"],input[name="'+GuaranteeMonth+'"]').bind('keyup change',function(ev) {
 				var time = chargeBox.find('input[name="'+ExportTime+'"]').val(),
@@ -689,7 +691,7 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 					form:$('#FinanceConfirm'),
 					success:function(da) {
 						Msg.success('已成功确认回款.');
-						Route.reload();
+						Route.reload('tab=FinanceConfirm');
 					}
 				});
 			}).on('click','finance-save',function(ev) {//保存回款
@@ -707,7 +709,7 @@ define.pack("./setup.finance",["jquery","risk/unit/ajax","risk/unit/route","risk
 					form:$('#FinanceConfirm'),
 					success:function(da) {
 						Msg.success('保存成功.');
-						//Route.reload();
+						Route.reload('tab=FinanceConfirm');
 					}
 				});
 
@@ -748,6 +750,7 @@ define.pack("./setup.followup",["jquery","risk/unit/ajax","risk/unit/route","ris
 					form:$('#Followup'),
 					success:function(da) {
 						Msg.success('提交成功.');
+						Route.reload('tab=Followup');
 					}
 				});
 			});
@@ -934,6 +937,7 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 			mode:模式，可选有add、edit、view
 			head:标题文本
 			data:表单数据
+			showed: 默认显示的tab ID
 		 */
 		init:function(opts) {
 			var mode = opts.mode,
@@ -957,7 +961,8 @@ define.pack("./setup",["jquery","risk/unit/route","risk/components/msg/index","r
 				container:'#J_Wizzard',
 				success:function() {
 					that.submit(mode);
-				}
+				},
+				showed:opts.showed
 			});
 
 			this._initEvent();
@@ -2439,6 +2444,7 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 				,btnPrev:'.wizard-previous'	//上一步按钮的选择器
 				,validate:true	//进入下一步时，是否要校验表单
 				//,success:function() {}	//最后一步完成时执行
+				//,showed:''	//默认显示的tab ID
 			}
 		},
 		init:function (setting) {
@@ -2457,6 +2463,12 @@ define.pack("./wizzard",["jquery","risk/unit/class","risk/components/parsley/ind
 
 			this._initBox();
 			this._initButton();
+
+			//显示默认tab
+			var showID = conf.showed;
+			if (showID) {
+				this._show(showID);
+			}
 
 			return this;
 		},
@@ -2672,16 +2684,6 @@ __p.push('\n<div class="step-pane" id="Approval">');
 	 __p.push('		<div class="block-transparent trade-approval-box">\n			<div class="header">\n				<h3>审批意见</h3>\n			</div>\n			<div class="content" style="margin:0 auto;max-width:500px;width:100%;">\n				<div class="form-group">\n					<label class="col-sm-12">');
 _p(CurrentActivity.Name);
 __p.push('</label>\n					<div class="col-sm-12">\n						<textarea class="form-control" name="Remark" rows="5"></textarea>\n					</div>\n				</div>\n				<div class="form-group">\n					<div class="text-center col-sm-12">\n						<button class="btn btn-danger" type="button" data-hook="approval-fail"><i class="fa fa-remove"></i> 不通过</button>\n						&nbsp;&nbsp;\n						<button class="btn btn btn-success" type="button" data-hook="approval-pass"><i class="fa fa-check"></i> 批准</button>\n					</div>\n				</div>\n			</div>\n		</div>');
-}else {__p.push('		<div class="alert alert-info" role="alert">');
-if (DataView.WorkflowComplete) { __p.push('				<i class="fa fa-check-circle"></i> 审批流程已结束');
-}else {__p.push('			当前审批流程到了<strong>');
-_p(CurrentActivity.Name);
-__p.push('</strong>，审批人：<strong>');
-_p(DataView.Operator||'?');
-__p.push('</strong>，到达时间：<strong>');
-_p(RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm:ss"));
-__p.push('</strong>');
-}__p.push('		</div>');
 }if (Approvals.length>0) {__p.push('		<div class="block-transparent trade-approval-box">\n			<div class="content">\n				<ul class="list-group tickets">');
 
 					var i=0,cur;
@@ -3329,10 +3331,12 @@ var __p=[],_p=function(s){__p.push(s)};
 		}
 	}
 
+	var RString = require('risk/unit/string');
 	var DataView = data.data || {},
 		Approvals = DataView.Approvals || {},	//审批信息
 		Charge = DataView.Charge,	//财务信息
-		Followup = DataView.Followup;	//保后跟踪
+		Followup = DataView.Followup,	//保后跟踪
+		CurrentActivity = DataView.CurrentActivity || [];
 
 	//把业务类型放到一级，方便判断
 	DataView.Type = DataView.Type || DataView.Project&&DataView.Project.Type || 1;
@@ -3342,7 +3346,18 @@ var __p=[],_p=function(s){__p.push(s)};
 		ShowFollow = ShowApproval && DataView.DisplayTracking,	//保后
 		ShowFinanceConfirm = DataView.DisplayConfirm;	//显示回款确认
 		//  !!(ShowCharge && ShowFollow && (DataView.ChargeCanEdit || (DataView.DisplayCharge && DataView.Action==2)) );	//回款确认，“收费情况+保后”可见，且有编辑收费情况的权限时，才显示
-__p.push('\n<div class="col-md-12">\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
+__p.push('\n<div class="col-md-12 trade-detail">');
+if (ShowApproval) {__p.push('		');
+if (DataView.WorkflowComplete) { __p.push('			<div class="alert alert-success" role="alert"><i class="fa fa-check-circle"></i> 已确认回款，流程已结束</div>');
+}else {__p.push('			<div class="alert alert-info" role="alert">当前流程到了<strong>');
+_p(CurrentActivity.Name);
+__p.push('</strong>，审批人：<strong>');
+_p(DataView.Operator||'?');
+__p.push('</strong>，到达时间：<strong>');
+_p(RString.date(CurrentActivity.LastUpdateTime,"yyyy-MM-dd HH:mm:ss"));
+__p.push('</strong></div>');
+}__p.push('	');
+}__p.push('\n	<form class="form-horizontal block-wizard" id="J_Wizzard" action="#">\n		<ul class="wizard-steps">');
 if (data.mode=='add') {__p.push('			<li data-hook="cancel" class="pointer-item">选择类型<span class="chevron"></span></li>');
 }__p.push('			<li data-target="Customer" class="active">客户信息<span class="chevron"></span></li>\n			<li data-target="Assets">房产信息<span class="chevron"></span></li>\n			<li data-target="Guarantor">担保人<span class="chevron"></span></li>\n			<li data-target="Project">项目信息<span class="chevron"></span></li>\n			<li data-target="Report">调查报告<span class="chevron"></span></li>');
 if (ShowApproval) {__p.push('				<li data-target="Approval">审批信息<span class="chevron"></span></li>');
