@@ -63,7 +63,7 @@ define(function(require, exports, module){
 			col:'3',
 			type:'number',
 			required:true,
-			name:'GuaranteeMonth',
+			name:'GuaranteePeriod',
 			placeholder:'',
 			suffix:'天'
 		},{
