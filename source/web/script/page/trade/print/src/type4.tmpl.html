@@ -5,72 +5,66 @@
 <table class="table table-bordered table-hover">
 	<tr>
 		<th width="80">借款人</th>
-		<td>&nbsp;</td>
-		<th width="80">借款金额</th>
-		<td width="80" class="text-right">万</td>
+		<td><input type="text" class="td_input" value="" /></td>
+		<th width="80">垫资金额</th>
+		<td width="80" class="text-right"><input type="text" size="5" />万</td>
 		<th width="80">使用期限</th>
-		<td width="80" class="text-right">天</td>
+		<td width="80" class="text-right"><input type="text" size="5" />天</td>
 	</tr>
 	<tr>
 		<th>联系电话</th>
-		<td>&nbsp;</td>
+		<td><input type="text" class="td_input" /></td>
 		<th>身份证号</th>
-		<td colspan="3">&nbsp;</td>
+		<td colspan="3"><input type="text" class="td_input" /></td>
 	</tr>
 	<tr>
-		<th height="60">物业名称</th>
-		<td colspan="2">&nbsp;</td>
+		<th>物业名称</th>
+		<td colspan="2"><textarea row="2"  class="td_input"></textarea></td>
 		<th>房产证号</th>
-		<td colspan="2">&nbsp;</td>
+		<td colspan="2"><textarea row="2"  class="td_input"></textarea></td>
 	</tr>
 	<tr>
 		<th>产权现状</th>
-		<td colspan="5">该物业无抵押或抵押在_____________支行，尚欠银行本息约_______元（经手人及联系电话________________），已委托____________________担保公司赎楼（经手人及联系电话________________）</td>
+		<td colspan="5"><input type="checkbox">未赎楼&nbsp;&nbsp;&nbsp;&nbsp;抵押在<input type="text" size="10" />支行，尚欠银行本息约<input type="text" size="5" />元; &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox">已赎楼&nbsp;&nbsp;&nbsp;&nbsp;赎楼金额：<input type="text" size="5" />元<br/><input type="checkbox">已过户&nbsp;&nbsp;&nbsp;&nbsp;过户日期: <input type="text" size="10" />; &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox">已办理抵押&nbsp;&nbsp;&nbsp;&nbsp;抵押日期: <input type="text" size="10" /></td>
 	</tr>
 	<tr>
 		<th>交易情况</th>
-		<td colspan="5">该物业成交价为_______元，卖方姓名______身份证号码：__________________，通过______地产公司（经手人及联系电话___________________）成交，（或自助成交）。</td>
+		<td colspan="5">该物业成交价为<input type="text" size="5" />元，买方姓名<input type="text" size="10" />身份证号码：<input type="text" size="15" /></td>
 	</tr>
 	<tr>
 		<th>贷款审批</th>
-		<td colspan="5">借款人已交定金_____万，为获得________银行按揭贷款______元，需要监管首期款______元（经手人及联系电话________________）</td>
+		<td colspan="5">已获得<input type="text" size="10" />银行贷款承诺<input type="text" size="5" />万元</td>
 	</tr>
 	<tr>
 		<th>收费标准</th>
-		<td colspan="5">收费比例____%，收费金额_____元；采用<input type="checkbox">前端 <input type="checkbox">后端收费方式，营销费用______。</td>
+		<td colspan="5">收费比例<input type="text" size="3" />%，收费金额<input type="text" size="5" />元；采用<label><input type="checkbox">前端</label> <label><input type="checkbox">后端收费方式，营销费用<input type="text" size="5" />。</td>
 	</tr>
 </table>
 
 <table class="table table-bordered table-hover">
 	<tr>
 		<th width="100">资料接收人</th>
-		<td>&nbsp;</td>
+		<td><input type="text" class="td_input" /></td>
 		<th width="100">接收日期</th>
-		<td>&nbsp;</td>
-		<th width="100">资料保管人</th>
-		<td>&nbsp;</td>
+		<td><input type="text" class="td_input" /></td>
+		<th width="100">保管人签字</th>
+		<td><input type="text" class="td_input" /></td>
 	</tr>
 	<tr>
 		<th width="100">业务发起日期</th>
-		<td>&nbsp;</td>
+		<td><input type="text" class="td_input" /></td>
 		<th width="100">预计办结日期</th>
-		<td>&nbsp;</td>
-		<th width="100">密码修改人</th>
-		<td>&nbsp;</td>
+		<td><input type="text" class="td_input" /></td>
+		<th width="100">密码修改签字</th>
+		<td><input type="text" class="td_input" /></td>
 	</tr>
 	<tr>
-		<th width="100">卖方收款户名</th>
-		<td>&nbsp;</td>
-		<th width="100">卖方收款账号</th>
-		<td>&nbsp;</td>
-		<th width="100" rowspan="2">出款方式</th>
-		<td rowspan="2">&nbsp;</td>
-	</tr>
-	<tr>
-		<th width="100">买方退款户名</th>
-		<td>&nbsp;</td>
-		<th width="100">买方退款账号</th>
-		<td>&nbsp;</td>
+		<th width="100">贷款收取户名</th>
+		<td><input type="text" class="td_input" /></td>
+		<th width="100">贷款收取账号</th>
+		<td><input type="text" class="td_input" /></td>
+		<th width="100">回款金额</th>
+		<td><input type="text" size="10" />万</td>
 	</tr>
 </table>
 <table class="table table-bordered table-hover">
@@ -79,23 +73,55 @@
 		<td>该笔业务已提交如下资料：</td>
 	</tr>
 	<tr>
-		<td>sadfasdf</td>
+		<td class="trade-checklist">
+			<table class="table table-bordered table-hover">
+				<tr>
+					<th rowspan="8" width="20">必选</th>
+					<td><label><input type="checkbox">借款人身份证</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">结婚证复印件</label> <label><input type="checkbox">征信报告</label></td>
+				</tr>
+				<tr>
+					<td><label><input type="checkbox">借款人配偶身份证复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">征信报告</label></td>
+				</tr>
+				<tr>
+					<td><label><input type="checkbox">借款人供楼存折(卡)</label> <label><input type="checkbox">原件</label> <label><input type="checkbox">复印件</label>&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">原借款合同</label> <label><input type="checkbox">还款清单</label> <label><input type="checkbox">房地产证复印件</label> <label><input type="checkbox">查档</label> <br/><label><input type="checkbox">还款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银；</label> </td>
+				</tr>
+				<tr>
+					<td><label><input type="checkbox">买卖合同</label> <label><input type="checkbox">定金收据</label> <label><input type="checkbox">转账凭证</label> <label><input type="checkbox">买方身份证复印件</label> </td>
+				</tr>
+				<tr>
+					<td><label><input type="checkbox">银行资金监管协议</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">监管资金收款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银；</label> </td>
+				</tr>
+				<tr>
+					<td><label><input type="checkbox">银行按揭贷款承诺书</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">贷款资金收款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银</label> </td>
+				</tr>
+				<tr>
+					<td><label><input type="checkbox">服务申请表、服务协议、确认函、借款合同、借据、划款委托书、承诺书</label> <br/><label><input type="checkbox">借款人配偶签字</label></td>
+				</tr>
+				<tr>
+					<td width="160"><label><input type="checkbox">公证书原件</label> <input type="text" size="1" />本</label></td>
+				</tr>
+				<tr>
+					<th>备选</th>
+					<td><label><input type="checkbox">担保保证书</label> <label><input type="checkbox">担保人身份证复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">证信报告</label> <label><input type="checkbox">资产清单</label> <label><input type="checkbox">评估报告或询价单</label> <br/>其他资料：<input type="text" size="65" />；</td>
+				</tr>
+			</table>
+		</td>
 	</tr>
 	<tr>
 		<td>
 			<p>经办人意见：</p>
-			<br/><br/>
+			<textarea disabled row="2"  class="td_input"></textarea>
 			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>
-			<p class="text-right">签名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>
 		</td>
 	</tr>
 	<tr>
 		<th>风控审批意见</th>
-		<td><br/><br/><br/><p class="text-right">签名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></td>
+		<td><textarea disabled row="2"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 	<tr>
 		<th>总经理审批意见</th>
-		<td><br/><br/><br/><p class="text-right">签名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></td>
+		<td><textarea disabled row="2"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 </table>
 </script>

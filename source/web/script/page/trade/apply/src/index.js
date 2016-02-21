@@ -11,7 +11,8 @@ define(function(require, exports, module){
 		Msg = require('risk/components/msg/index'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
-		Types = require('./config.type');
+		Types = require('./config.type'),
+		Data = require('./data');
 
 	var MOD = {
 		initPage:function(params) {
@@ -100,7 +101,9 @@ define(function(require, exports, module){
 
 			header.find('[data-hook="trade-print"]').bind('click',function(ev) {
 				//打印单据
-				window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+				//window.open(location.href.replace(/\b[\&]?action=([^\&]*)\b/,'').replace(/\bpage=([^\&]*)\b/,'page=trade/print'));
+				var params = Data.params();
+				window.open(location.protocol+'//'+location.host+'#page=trade/print&ID='+params.ID);
 			});
 
 			header.find('[data-hook="trade-discard"]').bind('click',function(ev) {

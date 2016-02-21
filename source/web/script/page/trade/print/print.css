@@ -4,7 +4,7 @@ body {
 	height: auto;
 	background: #fff;
 }
-.trade-printer {width:720px;margin:20px auto;}
+.trade-printer {width:210mm;margin:20px auto;}
 	.trade-printer .operate {
 		text-align: center;
 	}
@@ -43,6 +43,9 @@ body {
 	background: transparent;
 	resize:none;
 	overflow:hidden;
+}
+.trade-printer input[type="text"] {
+	text-align: center;
 }
 .trade-printer input.td_input,.trade-printer textarea.td_input {
 	border: none;
