@@ -126,9 +126,11 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 			$(".cl-vnavigation").delegate(".parent > a","click",function(e){
 				e.stopPropagation();
 				e.preventDefault();
+				/** 收起其他的
 				$(".cl-vnavigation .parent.open > ul").not($(this).parent().find("ul")).slideUp(300, 'swing',function(){
 					$(this).parent().removeClass("open");
 				});
+				**/
 
 				var ul = $(this).parent().find("ul");
 				ul.slideToggle(300, 'swing', function () {
