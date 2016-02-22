@@ -315,6 +315,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/components/msg/index","
 					itemState.tag = 'button';
 					break;
 				case 'date':
+					itemState.tag = 'input';
 					if (defaultValue && /^\d{13}$/.test(defaultValue)) {	//如果是纯13位的数字，标示为时间戳进行转化
 						defaultValue = RString.date(defaultValue,'yyyy-MM-dd');
 					}
