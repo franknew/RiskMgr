@@ -79,6 +79,7 @@
     <Compile Include="Dao\PaymentDao.cs" />
     <Compile Include="Dao\PostDao.cs" />
     <Compile Include="Dao\ProjectDao.cs" />
+    <Compile Include="Dao\ReturnBackConfirmDao.cs" />
     <Compile Include="Dao\RoleDao.cs" />
     <Compile Include="Dao\Role_Module_ActionDao.cs" />
     <Compile Include="Dao\TrackingChangeOwnerDao.cs" />
@@ -105,6 +106,7 @@
     <Content Include="SqlMapping\Post.xml" />
     <Content Include="SqlMapping\Project.xml" />
     <Content Include="SqlMapping\Project_ex.xml" />
+    <Content Include="SqlMapping\ReturnBackConfirm.xml" />
     <Content Include="SqlMapping\Role.xml" />
     <Content Include="SqlMapping\Role_ex.xml" />
     <Content Include="SqlMapping\Role_Module_Action.xml">

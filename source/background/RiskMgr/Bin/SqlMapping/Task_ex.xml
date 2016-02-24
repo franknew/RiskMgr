@@ -10,7 +10,7 @@
       <isEqual property="Status" compareValue="1">
       INNER JOIN Activity a ON a.ID=t.ActivityID AND a.`Status`=2
       </isEqual>
-      INNER JOIN Workflow wf ON t.WorkflowID=wf.ID
+      INNER JOIN Workflow wf ON t.WorkflowID=wf.ID AND wf.Status!=4
       INNER JOIN UserInfo AS apply ON apply.ID=wf.Creator
       INNER JOIN UserInfo AS process ON process.ID=t.UserID
       <dynamic prepend="WHERE">

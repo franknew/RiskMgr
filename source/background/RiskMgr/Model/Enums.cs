@@ -48,12 +48,29 @@ namespace RiskMgr.Model
     public enum CustomerAssetType
     {
         /// <summary>
+        /// 房产公权人
+        /// </summary>
+        ShareRight = 1,
+        /// <summary>
+        /// 配偶
+        /// </summary>
+        AnotherHalf = 2,
+        /// <summary>
+        /// 第三方借款人
+        /// </summary>
+        ThirdParty = 3,
+
+        /// <summary>
+        /// 辅助联系人
+        /// </summary>
+        Asssitant = 4,
+        /// <summary>
         /// 房主
         /// </summary>
-        Owner = 1,
+        Owner = 5,
         /// <summary>
-        /// 共权人
+        /// 担保人
         /// </summary>
-        Guarantor = 2,
+        Guarantor = 6,
     }
 }

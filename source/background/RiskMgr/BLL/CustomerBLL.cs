@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SOAFramework.Library;
 
 namespace RiskMgr.BLL
 {
@@ -13,12 +14,15 @@ namespace RiskMgr.BLL
         public string Add(Customer customer)
         {
             CustomerDao dao = new CustomerDao();
+            customer.Enabled = 1;
+            customer.IsDeleted = 0;
             return dao.Add(customer);
         }
 
         public bool Update(CustomerUpdateForm form)
         {
             CustomerDao dao = new CustomerDao();
+            //MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "id:" + form.Entity.ID + " gender:" + form.Entity.Gender }, SOAFramework.Library.CacheEnum.FormMonitor);
             dao.Update(form);
             return true;
         }
@@ -46,11 +50,25 @@ namespace RiskMgr.BLL
         public Customer Save(Customer customer)
         {
             CustomerDao customerdao = new CustomerDao();
-            var c = customerdao.Query(new CustomerQueryForm { ID = customer.ID, IsDeleted = 0, Enabled = 1 }).FirstOrDefault();
-            if (c == null)
+            Customer c = null;
+            if (string.IsNullOrEmpty(customer.ID))
             {
-                c = customerdao.Query(new CustomerQueryForm { IdentityCode = customer.IdentityCode, Enabled = 1 }).FirstOrDefault();
-                if (c != null)
+                customer.IsDeleted = 0;
+                customer.Enabled = 1;
+                customerdao.Add(customer);
+                c = customer;
+            }
+            else
+            {
+                c = customerdao.Query(new CustomerQueryForm { ID = customer.ID, IsDeleted = 0, Enabled = 1 }).FirstOrDefault();
+                if (c == null)
+                {
+                    customer.IsDeleted = 0;
+                    customer.Enabled = 1;
+                    customerdao.Add(customer);
+                    c = customer;
+                }
+                else
                 {
                     customerdao.Update(new CustomerUpdateForm
                     {
@@ -59,31 +77,11 @@ namespace RiskMgr.BLL
                             Name = customer.Name,
                             Phone = customer.Phone,
                             IdentityCode = customer.IdentityCode,
-                            LastUpdator = customer.LastUpdator,
+                            Remark = customer.Remark,
                         },
                         CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
                     });
                 }
-                else
-                {
-                    customer.IsDeleted = 0;
-                    customer.Enabled = 1;
-                    customerdao.Add(customer);
-                    c = customer;
-                }
-            }
-            else
-            {
-                customerdao.Update(new CustomerUpdateForm
-                {
-                    Entity = new Customer
-                    {
-                        Name = customer.Name,
-                        Phone = customer.Phone,
-                        IdentityCode = customer.IdentityCode,
-                    },
-                    CustomerQueryForm = new CustomerQueryForm { ID = c.ID },
-                });
             }
             return c;
         }

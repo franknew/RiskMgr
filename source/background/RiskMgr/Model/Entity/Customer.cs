@@ -78,5 +78,10 @@ namespace RiskMgr.Model
         /// </summary>
         public int? IsDeleted { get; set; }
         
+        /// <summary>
+        /// 账户
+        /// </summary>
+        public string BankAccountName { get; set; }
+        
     }
 }

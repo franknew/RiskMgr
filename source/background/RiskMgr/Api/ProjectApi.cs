@@ -46,24 +46,50 @@ namespace RiskMgr.Api
             if (wf == null)
             {
                 workflow = wfdm.StartNew(user.User.ID, result, new WorkflowAuthority());
+                //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
+                var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
+                if (task != null)
+                {
+                    workflow.ProcessActivity(new Approval
+                    {
+                        Creator = user.User.ID,
+                        LastUpdator = user.User.ID,
+                        Remark = form.Report,
+                        Status = (int)ApprovalStatus.Agree,
+                        ActivityID = workflow.CurrentActivity.Value.ID,
+                        WorkflowID = workflow.Value.ID,
+                    }, user.User.ID, new WorkflowAuthority());
+                }
             }
             else
             {
                 workflow = WorkflowModel.Load(wf.ID);
-            }
-            //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
-            var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
-            if (task != null)
-            {
-                workflow.ProcessActivity(new Approval
+                //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
+                var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
+                if (task != null)
                 {
-                    Creator = user.User.ID,
-                    LastUpdator = user.User.ID,
-                    Remark = form.Report,
-                    Status = (int)ApprovalStatus.Agree,
-                    ActivityID = workflow.CurrentActivity.Value.ID,
-                    WorkflowID = workflow.Value.ID,
-                }, user.User.ID, new WorkflowAuthority());
+                    workflow.ProcessActivity(new Approval
+                    {
+                        Creator = user.User.ID,
+                        LastUpdator = user.User.ID,
+                        Status = (int)ApprovalStatus.None,
+                        ActivityID = workflow.CurrentActivity.Value.ID,
+                        WorkflowID = workflow.Value.ID,
+                    }, user.User.ID, new WorkflowAuthority());
+                    task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid);
+                    if (task != null)
+                    {
+                        workflow.ProcessActivity(new Approval
+                        {
+                            Creator = user.User.ID,
+                            LastUpdator = user.User.ID,
+                            Remark = form.Report,
+                            Status = (int)ApprovalStatus.Agree,
+                            ActivityID = workflow.CurrentActivity.Value.ID,
+                            WorkflowID = workflow.Value.ID,
+                        }, user.User.ID, new WorkflowAuthority());
+                    }
+                }
             }
 
             return result;
@@ -229,9 +255,8 @@ namespace RiskMgr.Api
         {
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.FinanceConfirm(form.ID, userid, form.ReturnBackTime, form.ReturnBackMoney, form.ReturnBackTime2, form.ReturnBackMoney2,
-                form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate, form.DelayFee, form.DelayTime, form.ReturnBackRemark,
-                form.RollFee, form.RollRemark);
+            return bll.FinanceConfirm(form.ID, userid, form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, 
+                form.RefundDate, form.DelayFee, form.DelayTime, form.DelayTimeEnd, form.ReturnBackRemark, form.RollFee, form.RollRemark, form.ReturnBackMoneyInfo);
         }
 
         /// <summary>
@@ -244,9 +269,9 @@ namespace RiskMgr.Api
         {
             UserBLL userbll = new UserBLL();
             string userid = userbll.GetCurrentUser().User.ID;
-            return bll.FinanceConfirmSave(form.WorkflowID, 0, userid, form.ReturnBackTime, form.ReturnBackMoney, form.ReturnBackTime2, form.ReturnBackMoney2,
-                form.RefundName, form.RefundAccount, form.RefundBankName, form.RefundMoney, form.RefundDate, form.DelayFee,
-                form.DelayTime, form.ReturnBackRemark, form.RollFee, form.RollRemark);
+            return bll.FinanceConfirmSave(form.ID, 0, userid,form.RefundName, form.RefundAccount, 
+                form.RefundBankName, form.RefundMoney, form.RefundDate, form.DelayFee, form.DelayTimeEnd,
+                form.DelayTime, form.ReturnBackRemark, form.RollFee, form.RollRemark, form.ReturnBackMoneyInfo);
         }
 
         /// <summary>

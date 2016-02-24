@@ -19,5 +19,8 @@ namespace RiskMgr.Form
         
         public UInt64? IsDeleted { get; set; }
         
+        public string WeiXinID { get; set; }
+        
+        public List<String> WeiXinIDs { get; set;}
     }
 }

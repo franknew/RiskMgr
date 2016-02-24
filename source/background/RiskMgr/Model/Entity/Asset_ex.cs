@@ -10,6 +10,6 @@ namespace RiskMgr.Model
         /// <summary>
         /// 公权人
         /// </summary>
-        public List<Customer> Joint { get; set; }
+        public List<Joint> Joint { get; set; }
     }
 }

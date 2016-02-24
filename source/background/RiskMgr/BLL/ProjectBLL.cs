@@ -58,12 +58,14 @@ namespace RiskMgr.BLL
                     ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
                 });
             }
+            cpdao.Delete(new Customer_ProjectQueryForm { ProjectID = project.ID });
+            cadao.Delete(new Customer_AssetQueryForm { ProjectID = project.ID });
+            apdao.Delete(new Asset_ProjectQueryForm { ProjectID = project.ID });
             #endregion
 
             #region 处理房产信息
             if (assets != null)
             {
-                apdao.Delete(new Asset_ProjectQueryForm { ProjectID = project.ID });
                 foreach (var asset in assets)
                 {
                     asset.Creator = userid;
@@ -71,16 +73,19 @@ namespace RiskMgr.BLL
                     //处理房产和公权人
                     foreach (var j in asset.Joint)
                     {
-                        j.Creator = userid;
-                        var c = customerbll.Save(j);
-                        Customer_Asset ca = new Customer_Asset
+                        var c = customerbll.Save(new Customer {
+                            Creator = userid,
+                            Name = j.Name,
+                            IdentityCode = j.IdentityCode,
+                            Phone = j.Phone,
+                        });
+                        cadao.Add(new Customer_Asset
                         {
                             AssetID = a.ID,
                             CustomerID = c.ID,
                             ProjectID = project.ID,
-                            Type = (int)CustomerAssetType.Owner,
-                        };
-                        cadao.Add(ca);
+                            Type = j.JointType,
+                        });
                     }
                     //处理房产和项目关系
                     Asset_Project ap = new Asset_Project
@@ -94,14 +99,12 @@ namespace RiskMgr.BLL
             #endregion
 
             #region 处理客户信息
-            cpdao.Delete(new Customer_ProjectQueryForm { ProjectID = project.ID });
             ProcessCustomer(buyers, customerdao, cpdao, project.ID, userid, CustomerType.Buyer);
             ProcessCustomer(sellers, customerdao, cpdao, project.ID, userid, CustomerType.Seller);
             ProcessCustomer(thirdpart, customerdao, cpdao, project.ID, userid, CustomerType.ThirdParty);
             #endregion
 
             #region 处理共权人信息
-            cadao.Delete(new Customer_AssetQueryForm { ProjectID = project.ID });
             if (Guarantor != null)
             {
                 foreach (Guarantor g in Guarantor)
@@ -139,7 +142,7 @@ namespace RiskMgr.BLL
             List<Asset> assets, List<Customer_Project> cps, List<Customer_Asset> cas, List<Asset_Project> aps,
             List<Workflow> workflows, List<Activity> activities, List<Approval> approvals, List<Task> tasks,
             List<UserInfo> users, List<User_Role> userroles, List<TrackingChangeOwner> tcolist,
-            List<TrackingMortgage> tmlist, string currentuserid)
+            List<TrackingMortgage> tmlist, List<ReturnBackConfirm> returnBackMoneyInfo, string currentuserid)
         {
             InitApprovalResultForm result = new InitApprovalResultForm();
             var customerids = (from c in cps
@@ -202,13 +205,42 @@ namespace RiskMgr.BLL
                                 where a.AssetID == asset.ID && a.ProjectID == project.ID && a.Type == (int)CustomerType.Joint
                                 select a.CustomerID).ToList();
                 asset.Joint = (from c in customers
-                               where jointids.Exists(t => t == c.ID)
-                               select c).ToList();
+                               join j in cas on c.ID equals j.CustomerID
+                               where j.Type == (int)CustomerAssetType.AnotherHalf || j.Type == (int)CustomerAssetType.Asssitant ||
+                               j.Type == (int)CustomerAssetType.ShareRight || j.Type == (int)CustomerAssetType.ThirdParty
+                               select new Joint { ID = c.ID, IdentityCode = c.IdentityCode, Name = c.Name, Phone = c.Phone, JointType = j.Type  }).ToList();
             }
+
             var creator = users.Find(t => t.ID == project.Creator);
             result.Project = project.ConvertTo<FullProject>();
             result.Report = project.Report;
             result.Creator = creator.CnName;
+
+            //处理回款信息
+            var returnBackMoneyProject = returnBackMoneyInfo.FindAll(t => t.ProjectID.Equals(project.ID));
+            if (returnBackMoneyProject.Count > 0) result.Project.ReturnBackMoneyInfo = returnBackMoneyProject;
+            else
+            {
+                result.Project.ReturnBackMoneyInfo = new List<ReturnBackConfirm>();
+                if (project.ReturnBackMoney.HasValue)
+                {
+                    result.Project.ReturnBackMoneyInfo.Add(new ReturnBackConfirm
+                    {
+                        ProjectID = project.ID,
+                        ReturnBackMoney = project.ReturnBackMoney,
+                        ReturnBackTime = project.ReturnBackTime,
+                    });
+                }
+                if (project.ReturnBackMoney2.HasValue)
+                {
+                    result.Project.ReturnBackMoneyInfo.Add(new ReturnBackConfirm
+                    {
+                        ProjectID = project.ID,
+                        ReturnBackMoney = project.ReturnBackMoney2,
+                        ReturnBackTime = project.ReturnBackTime2,
+                    });
+                }
+            }
 
             //读取保后跟踪的信息
             var TransferInfo = tcolist.FindAll(t => t.ProjectID == project.ID).FirstOrDefault();
@@ -318,6 +350,7 @@ namespace RiskMgr.BLL
             //为财务和保后跟踪特别处理
             var roles = userroles.FindAll(t => t.UserID == userid);
 
+
             Activity trackingActivity = currentactivities.Find(t => t.Name.Contains("保后跟踪"));
             if (trackingActivity != null && trackingActivity.Status == (int)ActivityProcessStatus.Processed)
             {
@@ -378,6 +411,8 @@ namespace RiskMgr.BLL
             TrackingChangeOwnerDao tcodao = new TrackingChangeOwnerDao(mapper);
             TrackingMortgageDao tmdao = new TrackingMortgageDao(mapper);
             LinkDao linkdao = new LinkDao(mapper);
+            Role_Module_ActionDao rmadao = new Role_Module_ActionDao(mapper);
+            ReturnBackConfirmDao rbcdao = new ReturnBackConfirmDao(mapper);
             #endregion
 
             #region 查询数据
@@ -392,8 +427,10 @@ namespace RiskMgr.BLL
             List<string> projectidlist = new List<string>();
             List<string> workflowids = new List<string>();
             List<Link> links = new List<Link>();
+            List<ReturnBackConfirm> returnBackMoneyInfo = new List<ReturnBackConfirm>();
             List<Workflow> workflows = null;
             List<Project> list = null;
+            var rma = rmadao.Query(new Role_Module_ActionQueryForm { });
             if (taskids != null && taskids.Count > 0)
             {
                 tasks = taskdao.Query(new TaskQueryForm { IDs = taskids });
@@ -437,16 +474,28 @@ namespace RiskMgr.BLL
             var userroles = urdao.Query(new User_RoleQueryForm { });
             tco = tcodao.Query(new TrackingChangeOwnerQueryForm { ProjectIDs = projectidlist });
             tm = tmdao.Query(new TrackingMortgageQueryForm { ProjectIDs = projectidlist });
+            returnBackMoneyInfo = rbcdao.Query(new ReturnBackConfirmQueryForm { ProjectIDs = projectidlist });
 
             //从缓存中取得
             var customers = TableCacheHelper.GetDataFromCache<Customer>(typeof(CustomerDao));
             var assets = TableCacheHelper.GetDataFromCache<Asset>(typeof(AssetDao));
             #endregion
 
+            #region 处理废单权限
+
+            //处理废单权限
+            var hasDisplayDiscard = (from ur in userroles
+                                     join r in rma on ur.RoleID equals r.RoleID
+                                     where r.ModuleID == "4" && r.ActionID == "4" && ur.UserID == currentuserid
+                                     select r).FirstOrDefault();
+            #endregion
+
             foreach (Project project in list)
             {
-                result.Add(QueryDetail(project, customers, assets, cps, cas, aps, workflows, activities, approvals, tasks, users, userroles,
-                    tco, tm, currentuserid));
+                var data = QueryDetail(project, customers, assets, cps, cas, aps, workflows, activities, approvals, tasks, users, userroles,
+                    tco, tm, returnBackMoneyInfo, currentuserid);
+                if (hasDisplayDiscard != null) data.DisplayDiscard = true;
+                result.Add(data);
             }
             return result;
         }
@@ -478,7 +527,7 @@ namespace RiskMgr.BLL
             //string userid = "13";
             var tasks = taskdao.Query(new TaskQueryForm { UserID = userid });
             List<string> workflowids = (from t in tasks
-                                        select t.WorkflowID).ToList();
+                                        select t.WorkflowID).Distinct().ToList();
             var workflows = wfdao.Query(new WorkflowQueryForm { IDs = workflowids, Status = (int)processStatus });
             List<string> projectids = (from wf in workflows
                                        select wf.ProcessID).ToList();
@@ -504,6 +553,9 @@ namespace RiskMgr.BLL
                 case 2:
                 case 3:
                     form.WorkflowStatus = form.Status;
+                    break;
+                case 6:
+                    form.Tracking = true;
                     break;
             }
             var users = TableCacheHelper.GetDataFromCache<User>(typeof(UserDao));
@@ -552,6 +604,8 @@ namespace RiskMgr.BLL
                     ExportMoney = project.ExportMoney,
                     ExportTime = project.ExportTime,
                     HasExpired = project.HasExpired,
+                    GuaranteePeriod = project.GuaranteePeriod,
+                    ChargeFinanceRemark = project.ChargeFinanceRemark,
                 },
                 ProjectQueryForm = new ProjectQueryForm { ID = project.ID },
             });
@@ -634,24 +688,24 @@ namespace RiskMgr.BLL
             return true;
         }
 
-        public bool FinanceConfirm(string projectid, string userid, DateTime? returnBackTime,
-            decimal? returnBackMoney, DateTime? returnBackTim2, decimal? returnBackMoney2, string refundName, string refundAccount, 
-            string refundBank, decimal? refundAmount, DateTime? refundTime, decimal? delayFee, DateTime? delayTime, string returnBackRemark, 
-            decimal? rollFee, string rollRemarl)
+        public bool FinanceConfirm(string projectid, string userid, string refundName, string refundAccount, 
+            string refundBank, decimal? refundAmount, DateTime? refundTime, decimal? delayFee, DateTime? delayTime, DateTime? delayTimeEnd, string returnBackRemark, 
+            decimal? rollFee, string rollRemark, List<ReturnBackConfirm> returnBackMoneyInfo)
         {
 
-            FinanceConfirmSave(projectid, 1, userid, returnBackTime, returnBackMoney, returnBackTim2, returnBackMoney2, refundName, refundAccount, refundBank,
-                refundAmount, refundTime, delayFee, delayTime, returnBackRemark, rollFee, rollRemarl);
+            FinanceConfirmSave(projectid, 1, userid, refundName, refundAccount, refundBank,
+                refundAmount, refundTime, delayFee, delayTime, delayTimeEnd, returnBackRemark, rollFee, rollRemark, returnBackMoneyInfo);
             FinanceConfirmAction(projectid, userid);
             return true;
         }
 
-        public bool FinanceConfirmSave(string projectid, int confirm, string userid, DateTime? returnBackTime,
-            decimal? returnBackMoney, DateTime? returnBackTim2, decimal? returnBackMoney2, string refundName, string refundAccount, string refundBank, decimal? refundAmount, DateTime? refundTime, decimal? delayFee, DateTime? delayTime, string returnBackRemark, decimal? rollFee, string rollRemark)
+        public bool FinanceConfirmSave(string projectid, int confirm, string userid, string refundName, string refundAccount, string refundBank, decimal? refundAmount, DateTime? refundTime, decimal? delayFee, DateTime? delayTime, DateTime? delayTimeEnd, string returnBackRemark, decimal? rollFee, string rollRemark, 
+            List<ReturnBackConfirm> returnBackMoneyInfo)
         {
             //处理项目
             ISqlMapper mapper = Common.GetMapperFromSession();
             ProjectDao projectdao = new ProjectDao(mapper);
+            ReturnBackConfirmDao rbcdao = new ReturnBackConfirmDao(mapper);
             Project project = projectdao.Query(new ProjectQueryForm { ID = projectid, IsDeleted = 0 }).FirstOrDefault();
             if (project == null)
             {
@@ -661,13 +715,10 @@ namespace RiskMgr.BLL
             {
                 Entity = new Project
                 {
-                    ReturnBackTime = returnBackTime,
-                    ReturnBackMoney = returnBackMoney,
-                    ReturnBackMoney2 = returnBackMoney2,
-                    ReturnBackTime2 = returnBackTim2,
                     ReturnBackRemark = returnBackRemark,
                     DelayFee = delayFee,
                     DelayTime = delayTime,
+                    DelayTimeEnd = delayTimeEnd,
                     RollFee = rollFee,
                     RollRemark = rollRemark,
                     LastUpdator = userid,
@@ -683,6 +734,15 @@ namespace RiskMgr.BLL
                     ID = projectid,
                 }
             });
+            if (returnBackMoneyInfo != null)
+            {
+                rbcdao.Delete(new ReturnBackConfirmQueryForm { ProjectID = projectid });
+                foreach (var returnback in returnBackMoneyInfo)
+                {
+                    returnback.ProjectID = projectid;
+                    rbcdao.Add(returnback);
+                }
+            }
             return true;
         }
 
@@ -722,6 +782,7 @@ namespace RiskMgr.BLL
             CustomerType type)
         {
             if (customers == null || customers.Count == 0) return;
+            CustomerBLL customerbll = new CustomerBLL();
             foreach (var customer in customers)
             {
                 Customer c = null;
@@ -762,6 +823,7 @@ namespace RiskMgr.BLL
                                 BankCode = customer.BankCode,
                                 BankType = customer.BankType,
                                 WorkUnit = customer.WorkUnit,
+                                Remark = customer.Remark,
                             },
                             CustomerQueryForm = new CustomerQueryForm { ID = customer.ID }
                         });

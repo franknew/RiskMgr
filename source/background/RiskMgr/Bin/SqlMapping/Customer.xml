@@ -108,6 +108,10 @@
         `IsDeleted`=#IsDeleted#
     </isNotNull>
     
+    <isNotNull prepend="AND" property="BankAccountName">
+        `BankAccountName`=#BankAccountName#
+    </isNotNull>
+    
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -138,7 +142,8 @@
     `WorkUnit`,
     `Remark`,
     `Enabled`,
-    `IsDeleted`
+    `IsDeleted`,
+    `BankAccountName`
   )
   VALUES
   (
@@ -161,7 +166,8 @@
         #WorkUnit#,
         #Remark#,
         #Enabled#,
-        #IsDeleted#
+        #IsDeleted#,
+        #BankAccountName#
   )
   </insert>
   <update id="UpdateCustomer" parameterClass="CustomerUpdateForm">
@@ -223,6 +229,9 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.IsDeleted">
         `IsDeleted`=#Entity.IsDeleted#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.BankAccountName">
+        `BankAccountName`=#Entity.BankAccountName#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -291,6 +300,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="CustomerQueryForm.IsDeleted">
         `IsDeleted`=#CustomerQueryForm.IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CustomerQueryForm.BankAccountName">
+        `BankAccountName`=#CustomerQueryForm.BankAccountName#
     </isNotNull>
     </dynamic>
   </update>
@@ -371,6 +383,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountName">
+        `BankAccountName`=#BankAccountName#
     </isNotNull>
   </update>
    <select id="QueryCustomerLastUpdateTime" resultClass="DateTime">
@@ -454,6 +469,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="BankAccountName">
+        `BankAccountName`=#BankAccountName#
     </isNotNull>
     </dynamic>
    </select>

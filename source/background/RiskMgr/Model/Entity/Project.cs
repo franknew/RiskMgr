@@ -388,5 +388,15 @@ namespace RiskMgr.Model
         /// </summary>
         public string RollRemark { get; set; }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? GuaranteePeriod { get; set; }
+        
+        /// <summary>
+        /// 滞纳金结束时间
+        /// </summary>
+        public DateTime? DelayTimeEnd { get; set; }
+        
     }
 }

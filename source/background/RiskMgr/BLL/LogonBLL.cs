@@ -12,6 +12,7 @@ using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using SOAFramework.Library;
+using SOAFramework.Library.WeiXin;
 
 namespace RiskMgr.BLL
 {
@@ -22,62 +23,54 @@ namespace RiskMgr.BLL
         public LogonResultForm Logon(string username, string password)
         {
             var mapper = Common.GetMapperFromSession();
-            LogonResultForm result = new LogonResultForm();
             UserDao userdao = new UserDao(mapper);
+            Model.User user = userdao.Query(new UserQueryForm { Name = username, Password = password }).FirstOrDefault();
+            return GetUserInfo(user);
+        }
+
+        public LogonResultForm Logon(string code)
+        {
+            var response = WeiXinApi.User.GetUserInfo(new User_GetUserInfoQueryString { code = code });
+            if (string.IsNullOrEmpty(response.UserId)) throw new Exception("您在微信系统中没有注册，请联系管理员进行注册");
+            var mapper = Common.GetMapperFromSession();
+            UserDao userdao = new UserDao(mapper);
+            var user = userdao.Query(new UserQueryForm { Name = response.UserId }).FirstOrDefault();
+            return GetUserInfo(user);
+        }
+
+        public LogonResultForm GetUserInfo(Model.User user)
+        {
+            if (user == null) throw new Exception("用户名或者密码错误！请输入正确的用户名和密码！");
+            if (user.Enabled == 0) throw new Exception("该用户已被禁用，请联系管理员！");
+            LogonResultForm result = new LogonResultForm();
+            var mapper = Common.GetMapperFromSession();
             UserInfoDao userInfoDao = new UserInfoDao(mapper);
             RoleDao roleDao = new RoleDao(mapper);
             LogonHistoryDao historyDao = new LogonHistoryDao(mapper);
-            var users = userdao.Query(new UserQueryForm { Name = username, Password = password });
-            if (users.Count > 0)
+            string token = Guid.NewGuid().ToString().Replace("-", "");
+            var userinfo = userInfoDao.Query(new UserInfoQueryForm { ID = user.ID }).FirstOrDefault();
+            UserEntireInfo u = new UserEntireInfo { User = user };
+            if (userinfo != null) u.UserInfo = userinfo;
+            u.Role = roleDao.QueryRoleByUserID(u.User.ID);
+            CacheItem item = new CacheItem(token, u);
+            LogonHistory history = new LogonHistory
             {
-                if (users[0].Enabled == 0)
-                {
-                    throw new Exception("该用户已被禁用，请联系管理员！");
-                }
-                string token = Guid.NewGuid().ToString().Replace("-", "");
-                var userinfo = userInfoDao.Query(new UserInfoQueryForm { ID = users[0].ID });
-                UserEntireInfo u = new UserEntireInfo
-                {
-                    User = users[0],
-                };
-                if (userinfo.Count > 0)
-                {
-                    u.UserInfo = userinfo[0];
-                }
-                u.Role = roleDao.QueryRoleByUserID(u.User.ID);
-                CacheItem item = new CacheItem(token, u);
-                LogonHistory history = new LogonHistory
-                {
-                    LogonTime = DateTime.Now,
-                    Token = token,
-                    UserID = users[0].ID,
-                    ActiveTime = DateTime.Now,
-                };
-                historyDao.Add(history);
-                result.token = token;
-                cache.AddItem(item, 30 * 60);
-                return result;
-            }
-            else
-            {
-                throw new Exception("用户名或者密码错误！请输入正确的用户名和密码！");
-            }
+                LogonTime = DateTime.Now,
+                Token = token,
+                UserID = user.ID,
+                ActiveTime = DateTime.Now,
+            };
+            historyDao.Add(history);
+            result.token = token;
+            cache.AddItem(item, 30 * 60);
+            return result;
         }
 
         public bool Logout()
         {
             string token = ServiceSession.Current.Context.Parameters["token"].ToString();
             var item = cache.GetItem(token);
-            if (item != null)
-            {
-                cache.DelItem(item);
-            }
-            return true;
-        }
-
-        public bool CheckAuth(string token, string module, string action)
-        {
-            Role_Module_ActionDao rmadao = new Role_Module_ActionDao();
+            if (item != null) cache.DelItem(item);
             return true;
         }
     }

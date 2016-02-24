@@ -6,7 +6,7 @@ using SOAFramework.Library.DAL;
 
 namespace RiskMgr.Model
 {
-    public class Role : SimpleEntity
+    public partial class Role : SimpleEntity
     {
         /// <summary>
         /// 
@@ -27,6 +27,11 @@ namespace RiskMgr.Model
         /// 
         /// </summary>
         public int? IsDeleted { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string WeiXinID { get; set; }
         
     }
 }

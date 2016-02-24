@@ -40,31 +40,43 @@ namespace RiskMgr.BLL
         public Asset Save(Asset asset)
         {
             AssetDao dao = new AssetDao();
-            Asset a = dao.Query(new AssetQueryForm
-            {
-                Code = asset.Code,
-            }).FirstOrDefault();
-            if (a != null)
-            {
-                dao.Update(new AssetUpdateForm
-                {
-                    Entity = new Asset
-                    {
-                        Usage = asset.Usage,
-                        Address = asset.Address,
-                        Area = asset.Area,
-                        RegPrice = asset.RegPrice,
-                        LastUpdator = asset.LastUpdator,
-                    },
-                    AssetQueryForm = new AssetQueryForm { ID = a.ID, Enabled = 1 },
-                });
-            }
-            else
+            Asset a = null;
+            if (string.IsNullOrEmpty(asset.ID))
             {
                 asset.Enabled = 1;
                 asset.IsDeleted = 0;
                 dao.Add(asset);
                 a = asset;
+            }
+            else
+            {
+                a = dao.Query(new AssetQueryForm
+                {
+                    ID = asset.ID,
+                }).FirstOrDefault();
+                if (a != null)
+                {
+                    dao.Update(new AssetUpdateForm
+                    {
+                        Entity = new Asset
+                        {
+                            Usage = asset.Usage,
+                            Address = asset.Address,
+                            Area = asset.Area,
+                            RegPrice = asset.RegPrice,
+                            LastUpdator = asset.LastUpdator,
+                            Remark = asset.Remark,
+                        },
+                        AssetQueryForm = new AssetQueryForm { ID = a.ID, Enabled = 1 },
+                    });
+                }
+                else
+                {
+                    asset.Enabled = 1;
+                    asset.IsDeleted = 0;
+                    dao.Add(asset);
+                    a = asset;
+                }
             }
             return a;
         }

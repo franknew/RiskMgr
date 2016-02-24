@@ -73,6 +73,15 @@
         `IsDeleted`=#IsDeleted#
     </isNotNull>
     
+    <isNotNull prepend="AND" property="WeiXinID">
+        `WeiXinID`=#WeiXinID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="WeiXinIDs">
+        <iterate property="WeiXinIDs" open="(" close=")" conjunction="OR">
+         `WeiXinID`=#WeiXinIDs[]#
+        </iterate>
+    </isNotNull>
     </dynamic>
         ORDER BY LastUpdateTime DESC
     <isNotNull property="PageSize">
@@ -93,7 +102,8 @@
     `LastUpdator`,
     `ParentID`,
     `DataAccessType`,
-    `IsDeleted`
+    `IsDeleted`,
+    `WeiXinID`
   )
   VALUES
   (
@@ -106,7 +116,8 @@
         #LastUpdator#,
         #ParentID#,
         #DataAccessType#,
-        #IsDeleted#
+        #IsDeleted#,
+        #WeiXinID#
   )
   </insert>
   <update id="UpdateRole" parameterClass="RoleUpdateForm">
@@ -138,6 +149,9 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.IsDeleted">
         `IsDeleted`=#Entity.IsDeleted#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.WeiXinID">
+        `WeiXinID`=#Entity.WeiXinID#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -176,6 +190,9 @@
     </isNotNull>
     <isNotNull prepend="AND" property="RoleQueryForm.IsDeleted">
         `IsDeleted`=#RoleQueryForm.IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RoleQueryForm.WeiXinID">
+        `WeiXinID`=#RoleQueryForm.WeiXinID#
     </isNotNull>
     </dynamic>
   </update>
@@ -231,6 +248,14 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WeiXinID">
+        `WeiXinID`=#WeiXinID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="WeiXinIDs">
+        <iterate property="WeiXinIDs" open="(" close=")" conjunction="OR">
+         `WeiXinID`=#WeiXinIDs[]#
+        </iterate>
     </isNotNull>
   </update>
    <select id="QueryRoleLastUpdateTime" resultClass="DateTime">
@@ -289,6 +314,14 @@
     </isNotNull>
     <isNotNull prepend="AND" property="IsDeleted">
         `IsDeleted`=#IsDeleted#
+    </isNotNull>
+    <isNotNull prepend="AND" property="WeiXinID">
+        `WeiXinID`=#WeiXinID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="WeiXinIDs">
+        <iterate property="WeiXinIDs" open="(" close=")" conjunction="OR">
+         `WeiXinID`=#WeiXinIDs[]#
+        </iterate>
     </isNotNull>
     </dynamic>
    </select>

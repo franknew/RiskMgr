@@ -16,25 +16,7 @@ namespace RiskMgr.Form
 
         public string TaskID { get; set; }
 
-        /// <summary>
-        /// 回款金额
-        /// </summary>
-        public Decimal? ReturnBackMoney { get; set; }
-
-        /// <summary>
-        /// 回款日期
-        /// </summary>
-        public DateTime? ReturnBackTime { get; set; }
-
-        /// <summary>
-        /// 回款金额
-        /// </summary>
-        public Decimal? ReturnBackMoney2 { get; set; }
-
-        /// <summary>
-        /// 回款日期
-        /// </summary>
-        public DateTime? ReturnBackTime2 { get; set; }
+        public List<ReturnBackConfirm> ReturnBackMoneyInfo { get; set; }
 
         /// <summary>
         /// 退款账号
@@ -80,6 +62,8 @@ namespace RiskMgr.Form
         /// 滞纳金时间
         /// </summary>
         public DateTime? DelayTime { get; set; }
+
+        public DateTime? DelayTimeEnd { get; set; }
 
         /// <summary>
         /// 回款备注

@@ -74,8 +74,9 @@ namespace RiskMgr.BLL
             return u;
         }
 
-        public string Add(User user, UserInfo ui, List<string> roleidlist)
+        public string Add(Model.User user, UserInfo ui, List<string> roleidlist)
         {
+            #region risk user
             ISqlMapper mapper = Common.GetMapperFromSession();
             if (user == null)
             {
@@ -87,6 +88,7 @@ namespace RiskMgr.BLL
             {
                 throw new Exception("已存在用户名：" + user.Name);
             }
+            if (string.IsNullOrEmpty(ui.WX) && string.IsNullOrEmpty(ui.Mobile)) throw new Exception("微信号或者手机不能为空");
             string id = dao.Add(user);
             if (ui == null)
             {
@@ -102,16 +104,72 @@ namespace RiskMgr.BLL
                 User_Role ur = new User_Role { RoleID = role, UserID = user.ID };
                 urdao.Add(ur);
             }
+            #endregion
+
+            #region weixin user
+            RoleDao roledao = new RoleDao(mapper);
+            var roles = roledao.Query(new RoleQueryForm { IDs = roleidlist });
+            var parentids = (from r in roles
+                             select r.WeiXinID).ConvertTo<List<int>>().ToArray();
+            try
+            {
+                SOAFramework.Library.WeiXin.WeiXinApi.User.Create(new SOAFramework.Library.WeiXin.User
+                {
+                    department = parentids,
+                    enable = 1,
+                    mobile = ui.Mobile,
+                    name = ui.CnName,
+                    weixinid = ui.WX,
+                    userid = user.Name,
+                });
+            }
+            catch (SOAFramework.Library.WeiXin.WeiXinException ex)
+            {
+                switch (ex.Code)
+                {
+                    case "60004":
+                    case "60003":
+                        foreach (var role in roles)
+                        {
+                            Role parentrole = null;
+                            if (!string.IsNullOrEmpty(role.ParentID)) roledao.Query(new RoleQueryForm { ID = role.ParentID }).FirstOrDefault();
+                            var department = new SOAFramework.Library.WeiXin.Department
+                            {
+                                name = role.Name,
+                            };
+                            if (parentrole != null) department.parentid = parentrole.WeiXinID;
+                            var response = SOAFramework.Library.WeiXin.WeiXinApi.Department.Create(department);
+                            roledao.Update(new RoleUpdateForm
+                            {
+                                Entity = new Role { WeiXinID = response.id },
+                                RoleQueryForm = new RoleQueryForm { ID = role.ID },
+                            });
+                        }
+                        SOAFramework.Library.WeiXin.WeiXinApi.User.Create(new SOAFramework.Library.WeiXin.User
+                        {
+                            department = parentids,
+                            enable = 1,
+                            mobile = ui.Mobile,
+                            name = ui.CnName,
+                            weixinid = ui.WX,
+                            userid = user.Name,
+                        });
+                        break;
+                    default:
+                        throw ex;
+                }
+            }
+            #endregion
             return id;
         }
 
-        public bool Update(User user, UserInfo ui, List<string> roleidlist)
+        public bool Update(Model.User user, UserInfo ui, List<string> roleidlist)
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             if (user != null)
             {
                 UserDao dao = new UserDao(mapper);
-                User entity = new User
+                Model.User entity = new User
                 {
                     ID = user.ID,
                     Enabled = user.Enabled,
@@ -131,6 +189,20 @@ namespace RiskMgr.BLL
                 User_Role ur = new User_Role { RoleID = role, UserID = user.ID };
                 urdao.Add(ur);
             }
+            #region weixin api
+            RoleDao roledao = new RoleDao(mapper);
+            var roles = roledao.Query(new RoleQueryForm { IDs = roleidlist });
+            var parentids = (from r in roles
+                             select r.WeiXinID).ConvertTo<List<int>>().ToArray();
+            SOAFramework.Library.WeiXin.WeiXinApi.User.Update(new SOAFramework.Library.WeiXin.User
+            {
+                department = parentids,
+                mobile = ui.Mobile,
+                name = ui.CnName,
+                weixinid = ui.WX,
+                userid = user.Name,
+            });
+            #endregion
             return true;
         }
 
@@ -158,6 +230,7 @@ namespace RiskMgr.BLL
                 UserID = user.ID,
             };
             urdao.Delete(urform);
+            SOAFramework.Library.WeiXin.WeiXinApi.User.Delete(user.Name);
             return true;
         }
 
@@ -165,7 +238,7 @@ namespace RiskMgr.BLL
         {
             ISqlMapper mapper = Common.GetMapperFromSession();
             UserDao dao = new UserDao(mapper);
-            User user = new User
+            Model.User user = new User
             {
                 ID = form.UserID,
                 Password = form.NewPassword,
@@ -183,7 +256,7 @@ namespace RiskMgr.BLL
             {
                 throw new Exception("用户名或者旧密码错误！");
             }
-            User user = new User
+            Model.User user = new Model.User
             {
                 ID = form.UserID,
                 Password = form.NewPassword,

@@ -447,8 +447,30 @@
         `ChargeFinanceRemark`=#ChargeFinanceRemark#
     </isNotNull>
     
+    <isNotNull prepend="AND" property="RollFee_Start">
+        `RollFee`&gt;=#RollFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RollFee_End">
+        `RollFee`&lt;=#RollFee_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="RollRemark">
+        `RollRemark`=#RollRemark#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="GuaranteePeriod">
+        `GuaranteePeriod`=#GuaranteePeriod#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="DelayTimeEnd_Start">
+        `DelayTimeEnd`&gt;=#DelayTimeEnd_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTimeEnd_End">
+        `DelayTimeEnd`&lt;=#DelayTimeEnd_End#
+    </isNotNull>
+    
     </dynamic>
-        ORDER BY LastUpdateTime DESC
+        ORDER BY CreateTime DESC
     <isNotNull property="PageSize">
         <isGreaterThan property="PageSize" compareValue="0">
          LIMIT #StartIndex#, #PageSize# 
@@ -537,7 +559,11 @@
     `ReturnBackTime2`,
     `ReturnBackRemark`,
     `CompanyPredepositMoney`,
-    `ChargeFinanceRemark`
+    `ChargeFinanceRemark`,
+    `RollFee`,
+    `RollRemark`,
+    `GuaranteePeriod`,
+    `DelayTimeEnd`
   )
   VALUES
   (
@@ -620,7 +646,11 @@
         #ReturnBackTime2#,
         #ReturnBackRemark#,
         #CompanyPredepositMoney#,
-        #ChargeFinanceRemark#
+        #ChargeFinanceRemark#,
+        #RollFee#,
+        #RollRemark#,
+        #GuaranteePeriod#,
+        #DelayTimeEnd#
   )
   </insert>
   <update id="UpdateProject" parameterClass="ProjectUpdateForm">
@@ -862,6 +892,18 @@
         </isNotNull>
         <isNotNull prepend="," property="Entity.ChargeFinanceRemark">
         `ChargeFinanceRemark`=#Entity.ChargeFinanceRemark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.RollFee">
+        `RollFee`=#Entity.RollFee#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.RollRemark">
+        `RollRemark`=#Entity.RollRemark#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.GuaranteePeriod">
+        `GuaranteePeriod`=#Entity.GuaranteePeriod#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.DelayTimeEnd">
+        `DelayTimeEnd`=#Entity.DelayTimeEnd#
         </isNotNull>
     </dynamic>
     <dynamic prepend="WHERE">
@@ -1209,6 +1251,24 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ProjectQueryForm.ChargeFinanceRemark">
         `ChargeFinanceRemark`=#ProjectQueryForm.ChargeFinanceRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RollFee_Start">
+        `RollFee`&gt;=#ProjectQueryForm.RollFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RollFee_End">
+        `RollFee`&lt;=#ProjectQueryForm.RollFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.RollRemark">
+        `RollRemark`=#ProjectQueryForm.RollRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.GuaranteePeriod">
+        `GuaranteePeriod`=#ProjectQueryForm.GuaranteePeriod#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DelayTimeEnd_Start">
+        `DelayTimeEnd`&gt;=#ProjectQueryForm.DelayTimeEnd_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectQueryForm.DelayTimeEnd_End">
+        `DelayTimeEnd`&lt;=#ProjectQueryForm.DelayTimeEnd_End#
     </isNotNull>
     </dynamic>
   </update>
@@ -1568,6 +1628,24 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ChargeFinanceRemark">
         `ChargeFinanceRemark`=#ChargeFinanceRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RollFee_Start">
+        `RollFee`&gt;=#RollFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RollFee_End">
+        `RollFee`&lt;=#RollFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RollRemark">
+        `RollRemark`=#RollRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="GuaranteePeriod">
+        `GuaranteePeriod`=#GuaranteePeriod#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTimeEnd_Start">
+        `DelayTimeEnd`&gt;=#DelayTimeEnd_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTimeEnd_End">
+        `DelayTimeEnd`&lt;=#DelayTimeEnd_End#
     </isNotNull>
   </update>
    <select id="QueryProjectLastUpdateTime" resultClass="DateTime">
@@ -1930,6 +2008,24 @@
     </isNotNull>
     <isNotNull prepend="AND" property="ChargeFinanceRemark">
         `ChargeFinanceRemark`=#ChargeFinanceRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RollFee_Start">
+        `RollFee`&gt;=#RollFee_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RollFee_End">
+        `RollFee`&lt;=#RollFee_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="RollRemark">
+        `RollRemark`=#RollRemark#
+    </isNotNull>
+    <isNotNull prepend="AND" property="GuaranteePeriod">
+        `GuaranteePeriod`=#GuaranteePeriod#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTimeEnd_Start">
+        `DelayTimeEnd`&gt;=#DelayTimeEnd_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="DelayTimeEnd_End">
+        `DelayTimeEnd`&lt;=#DelayTimeEnd_End#
     </isNotNull>
     </dynamic>
    </select>

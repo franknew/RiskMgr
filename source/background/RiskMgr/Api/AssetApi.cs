@@ -56,6 +56,7 @@ namespace RiskMgr.Api
         [DeleteAction]
         public bool Delete(Asset form)
         {
+            if (string.IsNullOrEmpty(form.ID)) throw new Exception("删除失败，没有房产ID");
             AssetQueryForm deleteform = new AssetQueryForm
             {
                 ID = form.ID,

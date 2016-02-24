@@ -82,22 +82,38 @@ namespace RiskMgr.WinformTest
 
         private void button4_Click(object sender, EventArgs e)
         {
-            AddUserRequest req = new AddUserRequest();
-            req.token = token;
-            req.form = new Form.AddUserServiceForm
+            //AddUserRequest req = new AddUserRequest();
+            //req.token = token;
+            //req.form = new Form.AddUserServiceForm
+            //{
+            //    ID = Guid.NewGuid().ToString().Replace("-", ""),
+            //    Enabled = 1,
+            //    Name = "manualtest",
+            //    Password = "manualtest",
+            //    CnName = "中文测试",
+            //    RoleIDList = new List<string>
+            //    {
+            //        "3",
+            //    }
+            //};
+            //user = new User
+            //{
+            //    ID = req.form.ID,
+            //};
+            //var res = SDKFactory.Client.Execute(req);
+            //MessageBox.Show(res.ResponseBody);
+            Workflow wf = new Workflow();
+            UserBLL bll = new UserBLL();
+            bll.Add(new User
             {
-                ID = Guid.NewGuid().ToString().Replace("-", ""),
-                Enabled = 1,
-                Name = "manualtest",
-                Password = "manualtest",
-                CnName = "中文测试",
-            };
-            user = new User
+                Name = "manualtest4",
+                Password = "123456",
+
+            }, new UserInfo
             {
-                ID = req.form.ID,
-            };
-            var res = SDKFactory.Client.Execute(req);
-            MessageBox.Show(res.ResponseBody);
+                Mobile = "1111111111",
+                CnName = "manualtest4"
+            }, new List<string> { "3" });
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -167,20 +183,26 @@ namespace RiskMgr.WinformTest
                 {
                     Code = "test",
                     Address = "test",
-                    Joint = new List<Customer> { }
+                    Joint = new List<Joint> {
+                        new Joint { Name="test1", JointType = 1 }
+                    },
+                    Remark = "hello"
                 }
             }, new List<Customer>
             {
                 new Customer
                 {
                     Name = "test3",
-
+                    Remark = "world",
+                    Gender = 2,
                 }
             }, new List<Customer>
             {
                 new Customer
                 {
                     Name = "test4",
+                    Remark = "yes",
+                    Gender = 2,
                 }
             }, null, null, "1");
 
@@ -218,8 +240,8 @@ namespace RiskMgr.WinformTest
             Workflow workflow = new Workflow();
             RoleBLL rolebll = new RoleBLL();
             ProjectBLL projectbll = new ProjectBLL();
-            var list = rolebll.GetUserSubUserIDs("1");
-            var data = projectbll.QueryMyApply(new QueryMyApplyServiceForm { CurrentIndex = 2, PageSize = 10, Creators = list });
+            var list = rolebll.GetUserSubUserIDs("14");
+            var data = projectbll.QueryMyApply(new QueryMyApplyServiceForm { Creators = list });
         }
 
         private void button13_Click(object sender, EventArgs e)
@@ -231,12 +253,36 @@ namespace RiskMgr.WinformTest
 
         private void button14_Click(object sender, EventArgs e)
         {
-            WorkflowBLL bll = new WorkflowBLL();
-            bll.Approval("62d03c59b62148248a49806c158e8f9b", "7", new Approval
+            string id = textBox1.Text;
+            string userid = "9";
+            var workflow = WorkflowModel.Load(id);
+            //如果流程当前处理人等于申请人，就直接审批通过，进入下一个流程
+            var task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid && t.Status == (int)TaskProcessStatus.Started);
+            if (task != null)
             {
-                Status = 1,
-                Remark = "test",
-            });
+                workflow.ProcessActivity(new Approval
+                {
+                    Creator = userid,
+                    LastUpdator = userid,
+                    Remark = "111",
+                    Status = (int)ApprovalStatus.Agree,
+                    ActivityID = workflow.CurrentActivity.Value.ID,
+                    WorkflowID = workflow.Value.ID,
+                }, userid, new WorkflowAuthority());
+                task = workflow.CurrentActivity.Tasks.Find(t => t.UserID == userid && t.Status == (int)TaskProcessStatus.Started);
+                if (task != null)
+                {
+                    workflow.ProcessActivity(new Approval
+                    {
+                        Creator = userid,
+                        LastUpdator = userid,
+                        Remark = "1222",
+                        Status = (int)ApprovalStatus.Agree,
+                        ActivityID = workflow.CurrentActivity.Value.ID,
+                        WorkflowID = workflow.Value.ID,
+                    }, userid, new WorkflowAuthority());
+                }
+            }
         }
 
         private void button15_Click(object sender, EventArgs e)
@@ -336,10 +382,10 @@ namespace RiskMgr.WinformTest
             //});
             //var roles = bll.Query(new RoleQueryForm { Name = "testrole" });
             RoleBLL rolebll = new RoleBLL();
-            var roles = rolebll.Query(new RoleQueryForm { Name = "admin" }).ToList<Role>();
+            var roles = rolebll.Query(new RoleQueryForm { ID="14" }).ToList<Role>();
             Role_Module_ActionDao dao = new Role_Module_ActionDao();
-            string actionID = "2";
-            string moduleID = "1";
+            string actionID = "3";
+            string moduleID = "4";
             Role_Module_ActionQueryForm query = new Role_Module_ActionQueryForm
             {
                 ActionID = actionID,

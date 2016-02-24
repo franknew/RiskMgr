@@ -69,6 +69,7 @@
     <Compile Include="Entity\FullUser.cs" />
     <Compile Include="Entity\Asset_ex.cs" />
     <Compile Include="Entity\Guarantor.cs" />
+    <Compile Include="Entity\Joint.cs" />
     <Compile Include="Entity\LogonHistory.cs" />
     <Compile Include="Entity\Menu.cs" />
     <Compile Include="Entity\MenuCache.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Entity\Post.cs" />
     <Compile Include="Entity\Project.cs" />
     <Compile Include="Entity\ProjectTask.cs" />
+    <Compile Include="Entity\ReturnBackConfirm.cs" />
     <Compile Include="Entity\Role.cs" />
     <Compile Include="Entity\Role_Module_Action.cs" />
     <Compile Include="Entity\TrackingChangeOwner.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="QueryForm\FullUserQueryForm.cs" />
     <Compile Include="QueryForm\PaymentQueryForm.cs" />
     <Compile Include="QueryForm\ProjectQueryForm.cs" />
+    <Compile Include="QueryForm\ReturnBackConfirmQueryForm.cs" />
     <Compile Include="QueryForm\TrackingChangeOwnerQueryForm.cs" />
     <Compile Include="QueryForm\TrackingMortgageQueryForm.cs" />
     <Compile Include="ResultForm\CustomerInitResultForm.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="ServiceForm\StopWorkflowServiceForm.cs" />
     <Compile Include="ServiceForm\UpdateTrackingServiceForm.cs" />
     <Compile Include="ServiceForm\UpdateUserServiceForm.cs" />
+    <Compile Include="ServiceForm\WeiXinLogonServiceForm.cs" />
     <Compile Include="UpdateForm\AssetUpdateForm.cs" />
     <Compile Include="UpdateForm\Asset_ProjectUpdateForm.cs" />
     <Compile Include="UpdateForm\BankAccountUpdateForm.cs" />
@@ -150,6 +154,7 @@
     <Compile Include="UpdateForm\PaymentUpdateForm.cs" />
     <Compile Include="UpdateForm\PostUpdateForm.cs" />
     <Compile Include="UpdateForm\ProjectUpdateForm.cs" />
+    <Compile Include="UpdateForm\ReturnBackConfirmUpdateForm.cs" />
     <Compile Include="UpdateForm\RoleUpdateForm.cs" />
     <Compile Include="UpdateForm\Role_Module_ActionUpdateForm.cs" />
     <Compile Include="UpdateForm\TrackingChangeOwnerUpdateForm.cs" />

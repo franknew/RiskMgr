@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="ReturnBackConfirm" type="RiskMgr.Model.ReturnBackConfirm" />
+    <typeAlias alias="ReturnBackConfirmQueryForm" type="RiskMgr.Form.ReturnBackConfirmQueryForm" />
+    <typeAlias alias="ReturnBackConfirmUpdateForm" type="RiskMgr.Form.ReturnBackConfirmUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryReturnBackConfirm" resultClass="ReturnBackConfirm" parameterClass="ReturnBackConfirmQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `ReturnBackConfirm`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_Start">
+        `ReturnBackMoney`&gt;=#ReturnBackMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_End">
+        `ReturnBackMoney`&lt;=#ReturnBackMoney_End#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="ReturnBackTime_Start">
+        `ReturnBackTime`&gt;=#ReturnBackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_End">
+        `ReturnBackTime`&lt;=#ReturnBackTime_End#
+    </isNotNull>
+    
+    </dynamic>
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddReturnBackConfirm" parameterClass="ReturnBackConfirm">
+  INSERT INTO `ReturnBackConfirm`
+  (
+    `ID`,
+    `ProjectID`,
+    `ReturnBackMoney`,
+    `ReturnBackTime`
+  )
+  VALUES
+  (
+        #ID#,
+        #ProjectID#,
+        #ReturnBackMoney#,
+        #ReturnBackTime#
+  )
+  </insert>
+  <update id="UpdateReturnBackConfirm" parameterClass="ReturnBackConfirmUpdateForm">
+  UPDATE `ReturnBackConfirm`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.ProjectID">
+        `ProjectID`=#Entity.ProjectID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ReturnBackMoney">
+        `ReturnBackMoney`=#Entity.ReturnBackMoney#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.ReturnBackTime">
+        `ReturnBackTime`=#Entity.ReturnBackTime#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ReturnBackConfirmQueryForm.ID">
+        `ID`=#ReturnBackConfirmQueryForm.ID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackConfirmQueryForm.ProjectID">
+        `ProjectID`=#ReturnBackConfirmQueryForm.ProjectID#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackConfirmQueryForm.ReturnBackMoney_Start">
+        `ReturnBackMoney`&gt;=#ReturnBackConfirmQueryForm.ReturnBackMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackConfirmQueryForm.ReturnBackMoney_End">
+        `ReturnBackMoney`&lt;=#ReturnBackConfirmQueryForm.ReturnBackMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackConfirmQueryForm.ReturnBackTime_Start">
+        `ReturnBackTime`&gt;=#ReturnBackConfirmQueryForm.ReturnBackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackConfirmQueryForm.ReturnBackTime_End">
+        `ReturnBackTime`&lt;=#ReturnBackConfirmQueryForm.ReturnBackTime_End#
+    </isNotNull>
+    </dynamic>
+  </update>
+  <delete id="DeleteReturnBackConfirm" parameterClass="ReturnBackConfirmQueryForm">
+    DELETE FROM `ReturnBackConfirm` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_Start">
+        `ReturnBackMoney`&gt;=#ReturnBackMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_End">
+        `ReturnBackMoney`&lt;=#ReturnBackMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_Start">
+        `ReturnBackTime`&gt;=#ReturnBackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_End">
+        `ReturnBackTime`&lt;=#ReturnBackTime_End#
+    </isNotNull>
+  </delete>
+   <select id="QueryReturnBackConfirmRecordCount" resultClass="int" parameterClass="ReturnBackConfirmQueryForm">
+   SELECT COUNT(*) FROM `ReturnBackConfirm` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_Start">
+        `ReturnBackMoney`&gt;=#ReturnBackMoney_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackMoney_End">
+        `ReturnBackMoney`&lt;=#ReturnBackMoney_End#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_Start">
+        `ReturnBackTime`&gt;=#ReturnBackTime_Start#
+    </isNotNull>
+    <isNotNull prepend="AND" property="ReturnBackTime_End">
+        `ReturnBackTime`&lt;=#ReturnBackTime_End#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>

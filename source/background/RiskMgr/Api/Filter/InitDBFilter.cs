@@ -14,10 +14,7 @@ namespace RiskMgr.Api
         public override bool OnActionExecuting(ActionContext context)
         {
             ISqlMapper mapper = Mapper.Instance();
-            if (!mapper.IsSessionStarted)
-            {
-                mapper.BeginTransaction();
-            }
+            if (!mapper.IsSessionStarted) mapper.BeginTransaction();
             context.Parameters["_Mapper"] = mapper;
             return base.OnActionExecuting(context);
         }
@@ -25,20 +22,25 @@ namespace RiskMgr.Api
         public override bool OnActionExecuted(ActionContext context)
         {
             ISqlMapper mapper = context.Parameters["_Mapper"] as ISqlMapper;
-            if (mapper.IsSessionStarted)
+            if (mapper == null)
             {
-                mapper.CommitTransaction();
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "在OnActionExecuted中mapper为null" }, SOAFramework.Library.CacheEnum.FormMonitor);
+                return base.OnActionExecuted(context);
             }
+            if (mapper.IsSessionStarted) mapper.CommitTransaction();
             return base.OnActionExecuted(context);
         }
 
         public override void OnExceptionOccurs(ActionContext context)
         {
             ISqlMapper mapper = context.Parameters["_Mapper"] as ISqlMapper;
-            if (mapper.IsSessionStarted)
+            if (mapper == null)
             {
-                mapper.RollBackTransaction();
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "在OnExceptionOccurs中mapper为null" }, SOAFramework.Library.CacheEnum.FormMonitor);
+                base.OnExceptionOccurs(context);
+                return;
             }
+            if (mapper.IsSessionStarted) mapper.RollBackTransaction();
             if (context.Response != null) MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = context.Response.ErrorMessage }, SOAFramework.Library.CacheEnum.FormMonitor);
             base.OnExceptionOccurs(context);
         }

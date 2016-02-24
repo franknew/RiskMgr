@@ -56,7 +56,8 @@ namespace RiskMgr.Api
         [DeleteAction]
         public bool Delete(CustomerQueryForm form)
         {
-            return bll.Delete(form);
+            if (string.IsNullOrEmpty(form.ID)) throw new Exception("删除失败，没有客户ID");
+            return bll.Delete(new CustomerQueryForm { ID = form.ID });
         }
 
         /// <summary>

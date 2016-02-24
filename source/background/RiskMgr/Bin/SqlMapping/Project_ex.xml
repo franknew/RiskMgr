@@ -15,7 +15,7 @@
       LEFT JOIN Customer AS s ON bs.CustomerID=s.ID AND s.Enabled=1 AND s.IsDeleted=0
       LEFT JOIN Asset_Project AS ap ON ap.ProjectID=p.ID
       LEFT JOIN Asset AS a ON a.ID=ap.AssetID AND a.Enabled=1 AND a.IsDeleted=0
-      LEFT JOIN Workflow wf ON wf.ProcessID=p.ID
+      LEFT JOIN Workflow wf ON wf.ProcessID=p.ID and wf.Status!=4
       LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID AND ac.Status=2
       <dynamic prepend="WHERE">
         <isNotNull prepend="AND" property="TaskProcessStatus">
@@ -260,7 +260,7 @@
       LEFT JOIN Customer AS s ON bs.CustomerID=s.ID AND s.Enabled=1 AND s.IsDeleted=0
       LEFT JOIN Asset_Project AS ap ON ap.ProjectID=p.ID
       LEFT JOIN Asset AS a ON a.ID=ap.AssetID AND a.Enabled=1 AND a.IsDeleted=0
-      LEFT JOIN Workflow wf ON wf.ProcessID=p.ID
+      LEFT JOIN Workflow wf ON wf.ProcessID=p.ID and wf.Status!=4
       LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID AND ac.Status=2
       <dynamic prepend="WHERE">
         <isNotNull prepend="AND" property="TaskProcessStatus">
@@ -530,27 +530,31 @@
         LEFT JOIN Customer_Project bp ON bp.ProjectID=p.ID AND (bp.Type=1 OR bp.Type=2)
         LEFT JOIN Customer AS b ON bp.CustomerID=b.ID AND b.Enabled=1 AND b.IsDeleted=0
       </isNotNull>
+      <isNotNull property="Operator">
+        LEFT JOIN UserInfo AS b ON p.Creator=b.ID
+      </isNotNull>
 
       <isNotNull property="IdentityCode">
         LEFT JOIN Asset_Project AS ap ON ap.ProjectID=p.ID
         LEFT JOIN Asset AS a ON a.ID=ap.AssetID AND a.Enabled=1 AND a.IsDeleted=0
       </isNotNull>
-      LEFT JOIN Workflow wf ON wf.ProcessID=p.ID
+      LEFT JOIN Workflow wf ON wf.ProcessID=p.ID and wf.Status!=4
       <isEqual property="ManagerAppvoal" compareValue="true">
-        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID
-        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.`Name`='经理审批'
+        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID AND ac.Status=3
+        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.ID='3'
         INNER JOIN Task task ON ac.ID=task.ActivityID
         INNER JOIN Approval app ON app.ActivityID=ac.ID
       </isEqual>
       <isEqual property="Tracking" compareValue="true">
-        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID
-        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.`Name`='保后跟踪'
-        INNER JOIN Task task ON ac.ID=task.ActivityID
-        INNER JOIN Approval app ON app.ActivityID=ac.ID
+        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID AND ac.Status=2
+        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.ID='6'
       </isEqual>
       <dynamic prepend="WHERE">
         <isNotNull prepend="AND" property="Name">
           b.Name LIKE '%$Name$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="Operator">
+          b.CnName LIKE '%$Operator$%'
         </isNotNull>
         <isNotNull prepend="AND" property="CreatorName">
           ui.CnName LIKE '%$CreatorName$%'
@@ -570,9 +574,6 @@
           wf.Status=#WorkflowStatus#
         </isNotNull>
         <isEqual property="ManagerAppvoal" compareValue="true" prepend="AND">
-          app.`status`=1
-        </isEqual>
-        <isEqual property="Tracking" compareValue="true" prepend="AND">
           app.`status`=1
         </isEqual>
       </dynamic>
@@ -589,27 +590,32 @@
         LEFT JOIN Customer_Project bp ON bp.ProjectID=p.ID AND (bp.Type=1 OR bp.Type=2)
         LEFT JOIN Customer AS b ON bp.CustomerID=b.ID AND b.Enabled=1 AND b.IsDeleted=0
       </isNotNull>
+      <isNotNull property="Operator">
+        LEFT JOIN UserInfo AS b ON p.Creator=b.ID 
+      </isNotNull>
+
 
       <isNotNull property="IdentityCode">
         LEFT JOIN Asset_Project AS ap ON ap.ProjectID=p.ID
         LEFT JOIN Asset AS a ON a.ID=ap.AssetID AND a.Enabled=1 AND a.IsDeleted=0
       </isNotNull>
-      LEFT JOIN Workflow wf ON wf.ProcessID=p.ID
+      LEFT JOIN Workflow wf ON wf.ProcessID=p.ID and wf.Status!=4
       <isEqual property="ManagerAppvoal" compareValue="true">
-        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID
-        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.`Name`='经理审批'
+        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID AND ac.Status=3
+        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.ID='3'
         INNER JOIN Task task ON ac.ID=task.ActivityID
         INNER JOIN Approval app ON app.ActivityID=ac.ID
       </isEqual>
       <isEqual property="Tracking" compareValue="true">
-        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID
-        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.`Name`='保后跟踪'
-        INNER JOIN Task task ON ac.ID=task.ActivityID
-        INNER JOIN Approval app ON app.ActivityID=ac.ID
+        LEFT JOIN Activity ac ON wf.ID = ac.WorkflowID AND ac.Status=2
+        INNER JOIN ActivityDefinition ad ON ac.ActivityDefinitionID=ad.ID AND ad.ID='6'
       </isEqual>
       <dynamic prepend="WHERE">
         <isNotNull prepend="AND" property="Name">
           b.Name LIKE '%$Name$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="Operator">
+          b.CnName LIKE '%$Operator$%'
         </isNotNull>
         <isNotNull prepend="AND" property="CreatorName">
           ui.CnName LIKE '%$CreatorName$%'
@@ -629,9 +635,6 @@
           wf.Status=#WorkflowStatus#
         </isNotNull>
         <isEqual property="ManagerAppvoal" compareValue="true" prepend="AND">
-          app.`status`=1
-        </isEqual>
-        <isEqual property="Tracking" compareValue="true" prepend="AND">
           app.`status`=1
         </isEqual>
       </dynamic>

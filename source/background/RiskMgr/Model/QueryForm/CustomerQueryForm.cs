@@ -38,5 +38,7 @@ namespace RiskMgr.Form
         
         public UInt64? IsDeleted { get; set; }
         
+        public string BankAccountName { get; set; }
+        
     }
 }

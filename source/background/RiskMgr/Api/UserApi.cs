@@ -36,6 +36,12 @@ namespace RiskMgr.Api
             UserInfo ui = new UserInfo
             {
                 CnName = form.CnName,
+                WX = form.WX,
+                Mobile = form.Mobile,
+                Identity = form.Identity,
+                QQ = form.QQ,
+                Remark = form.Remark,
+                Address = form.Address,
             };
             return bll.Add(u, ui, form.RoleIDList);
         }

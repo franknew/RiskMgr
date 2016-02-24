@@ -230,5 +230,11 @@ namespace RiskMgr.Form
         
         public string RollRemark { get; set; }
         
+        public Int32? GuaranteePeriod { get; set; }
+        
+        public DateTime? DelayTimeEnd_Start { get; set; }
+        
+        public DateTime? DelayTimeEnd_End { get; set; }
+        
     }
 }

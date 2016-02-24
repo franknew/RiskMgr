@@ -48,13 +48,8 @@ namespace RiskMgr.Model
         public DateTime? MortgageOverTime { get; set; }
 
         /// <summary>
-        /// 保后追踪，过户信息
+        /// 回款信息
         /// </summary>
-        //public TrackingChangeOwner TransferInfo { get; set; }
-
-        /// <summary>
-        /// 保后追踪，贷款信息
-        /// </summary>
-        //public TrackingMortgage Mortgage { get; set; }
+        public List<ReturnBackConfirm> ReturnBackMoneyInfo { get; set; }
     }
 }
