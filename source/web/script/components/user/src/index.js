@@ -26,7 +26,7 @@ define(function(require, exports, module){
 				error = opts.error,
 				message = opts.message;
 
-			if (!WX.login()) {
+			if (!WX.login(opts)) {
 				modal.show({
 					width:'430px',
 					'title':'登录',
