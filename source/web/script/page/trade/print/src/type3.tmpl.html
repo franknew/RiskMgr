@@ -1,35 +1,38 @@
 <script type="text/html" id="PrintType3">
 <%
 //转贷类现金赎楼  IMG_6124
+var ProjectData = data.Project;
+
+var Borrowers = data.ThirdParty.length>0?data.ThirdPartyList:data.BuyersList;
 %>
 <table class="table table-bordered table-hover">
 	<tr>
 		<th width="80">借款人</th>
-		<td><input type="text" class="td_input" /></td>
+		<td><input type="text" class="td_input" value="<%=data.BuyersList.Name%>" /></td>
 		<th width="80">借款金额</th>
-		<td width="80" class="text-right"><input type="text" size="5" />万</td>
+		<td width="80" class="text-right"><input type="text" size="5" value="<%=ProjectData.AssetRansomMoney%>" />万</td>
 		<th width="80">使用期限</th>
-		<td width="80" class="text-right"><input type="text" size="5" />天</td>
+		<td width="80" class="text-right"><input type="text" size="5" value="<%=ProjectData.GuaranteeMonth%>" />天</td>
 	</tr>
 	<tr>
 		<th>联系电话</th>
-		<td><input type="text" class="td_input" /></td>
+		<td><textarea rows="<%=(data.BuyersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.BuyersList.Phone%></textarea></td>
 		<th>身份证号</th>
-		<td colspan="3"><input type="text" class="td_input" /></td>
+		<td colspan="3"><textarea rows="<%=(data.BuyersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.BuyersList.IdentityCode%></textarea></td>
 	</tr>
 	<tr>
 		<th>物业名称</th>
-		<td colspan="2"><textarea row="2"  class="td_input"></textarea></td>
+		<td colspan="2"><textarea rows="<%=(data.AssetsList.Address.split('、').length)%>"  class="td_input"><%=data.AssetsList.Address%></textarea></td>
 		<th>房产证号</th>
-		<td colspan="2"><textarea row="2"  class="td_input"></textarea></td>
+		<td colspan="2"><textarea rows="<%=(data.AssetsList.Code.split('、').length)%>"  class="td_input"><%=data.AssetsList.Code%></textarea></td>
 	</tr>
 	<tr>
 		<th>产权现状</th>
-		<td colspan="5">该物业现抵押在<input type="text" size="10" />支行，尚欠银行本息约<input type="text" size="5" />元，经手人及联系电话<input type="text" size="20" />。</td>
+		<td colspan="5">该物业现抵押在<input type="text" size="23" value="<%=ProjectData.OrignalMortgageBank%> <%=ProjectData.OrignalMortgageBranch%>" />支行，尚欠银行本息约<input type="text" size="5" value="<%=ProjectData.AssetRansomMoney%>" />元，经手人及联系电话<input type="text" size="20" value="<%=[ProjectData.AssetRansomCustomerManager,ProjectData.AssetRansomContactPhone].join(' ')%>" />。</td>
 	</tr>
 	<tr>
 		<th>贷款审批</th>
-		<td colspan="5">借款人以<label><input type="checkbox">自身</label> <label><input type="checkbox">第三人</label><input type="text" size="15" />的名义，在<input type="text" size="15" />银行获得<input type="text" size="5" />万元的贷款承诺，银行承诺将贷款发放至<label><input type="checkbox">自身</label> <label><input type="checkbox">第三人</label> <label><input type="checkbox">我方</label> <label><input type="checkbox">贷款用途收款方</label> （经手人及联系电话<input type="text" size="15" />）。</td>
+		<td colspan="5">借款人以<label><input type="checkbox" <%=(data.ThirdParty.length>0?'':'checked="checked"')%>>自身</label> <label><input type="checkbox" <%=(data.ThirdParty.length>0?'checked="checked"':'')%>>第三人</label><input type="text" size="<%=Borrowers.Name.split('、').length*8%>" value="<%=Borrowers.Name%>" />的名义，在<input type="text" size="15" value="<%=ProjectData.NewCreditBank%>" />银行获得<input type="text" size="5" />万元的贷款承诺，银行承诺将贷款发放至<label><input type="checkbox">自身</label> <label><input type="checkbox">第三人</label> <label><input type="checkbox">我方</label> <label><input type="checkbox">贷款用途收款方</label> （经手人及联系电话<input type="text" size="15" />）。</td>
 	</tr>
 	<tr>
 		<th>收费标准</th>

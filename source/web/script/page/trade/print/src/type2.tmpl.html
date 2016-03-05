@@ -1,39 +1,40 @@
 <script type="text/html" id="PrintType2">
 <%
 //首期款垫资(表IMG<input type="text" size="15" />6126.JPG)
+var ProjectData = data.Project;
 %>
 <table class="table table-bordered table-hover">
 	<tr>
 		<th width="80">借款人</th>
-		<td><input type="text" class="td_input" /></td>
+		<td><input type="text" class="td_input" value="<%=data.SellersList.Name%>" /></td>
 		<th width="80">借款金额</th>
-		<td width="80" class="text-right"><input type="text" size="5" />万</td>
+		<td width="80" class="text-right"><input value="<%=ProjectData.SupervisionMoney%>" type="text" size="5" />万</td>
 		<th width="80">使用期限</th>
-		<td width="80" class="text-right"><input type="text" size="5" />天</td>
+		<td width="80" class="text-right"><input value="" type="text" size="5" />天</td>
 	</tr>
 	<tr>
 		<th>联系电话</th>
-		<td><input type="text" class="td_input" /></td>
+		<td><textarea rows="<%=(data.SellersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.SellersList.Phone%></textarea></td>
 		<th>身份证号</th>
-		<td colspan="3"><input type="text" class="td_input" /></td>
+		<td colspan="3"><textarea rows="<%=(data.SellersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.SellersList.IdentityCode%></textarea></td>
 	</tr>
 	<tr>
-		<th height="52">物业名称</th>
-		<td colspan="2"><textarea row="2"  class="td_input"></textarea></td>
+		<th>物业名称</th>
+		<td colspan="2"><textarea rows="<%=(data.AssetsList.Address.split('、').length)%>"  class="td_input"><%=data.AssetsList.Address%></textarea></td>
 		<th>房产证号</th>
-		<td colspan="2"><textarea row="2"  class="td_input"></textarea></td>
+		<td colspan="2"><textarea rows="<%=(data.AssetsList.Code.split('、').length)%>"  class="td_input"><%=data.AssetsList.Code%></textarea></td>
 	</tr>
 	<tr>
 		<th>产权现状</th>
-		<td colspan="5">该物业无抵押或抵押在<input type="text" size="7" />支行，尚欠银行本息约<input type="text" size="5" />元（经手人及联系电话<input type="text" size="15" />），已委托<input type="text" size="15" />担保公司赎楼（经手人及联系电话<input type="text" size="15" />）</td>
+		<td colspan="5">该物业无抵押或抵押在<input type="text" size="7" value="<%=ProjectData.OrignalMortgageBank%>" />支行，尚欠银行本息约<input type="text" size="5" value="<%=ProjectData.AssetRansomMoney%>" />元（经手人及联系电话<input type="text" size="23" value="<%=[ProjectData.AssetRansomCustomerManager,ProjectData.AssetRansomContactPhone].join(' ')%>" />），已委托<input type="text" size="15" />担保公司赎楼（经手人及联系电话<input type="text" size="15" />）</td>
 	</tr>
 	<tr>
 		<th>交易情况</th>
-		<td colspan="5">该物业成交价为<input type="text" size="5" />元，卖方姓名<input type="text" size="5" />身份证号码：<input type="text" size="15" />，通过<input type="text" size="10" />地产公司（经手人及联系电话<input type="text" size="15" />）成交，（或自助成交）。</td>
+		<td colspan="5">该物业成交价为<input value="<%=ProjectData.DealMoney%>" type="text" size="5" />元，买方姓名<input type="text" size="<%=(data.BuyersList.Name.split('、').length*8)%>" value="<%=data.BuyersList.Name%>" />身份证号码：<input type="text" size="<%=(data.BuyersList.IdentityCode.split('、').length*23)%>" value="<%=data.BuyersList.IdentityCode%>" />，通过<input type="text" size="15" value="<%=ProjectData.AgentName%>" />地产公司成交，（或自助成交），经手人及联系电话<input type="text" size="20" value="<%=ProjectData.AgentContact%>" />。</td>
 	</tr>
 	<tr>
 		<th>贷款审批</th>
-		<td colspan="5">借款人已交定金<input type="text" size="5" />万，为获得<input type="text" size="7" />银行按揭贷款<input type="text" size="5" />元，需要监管首期款<input type="text" size="5" />元（经手人及联系电话<input type="text" size="15" />）</td>
+		<td colspan="5">借款人已交定金<input type="text" size="5" value="<%=ProjectData.EarnestMoney%>" />万，为获得<input value="<%=ProjectData.NewCreditBank%>" type="text" size="7" />银行按揭贷款<input type="text" size="5" value="<%=((ProjectData.BuyerCreditCommerceMoney||0)*1+(ProjectData.BuyerCreditFundMoney||0)*1)%>" />元，需要监管首期款<input value="<%=ProjectData.SupervisionMoney%>" type="text" size="5" />元（经手人及联系电话<input type="text" size="15" />）</td>
 	</tr>
 	<tr>
 		<th>收费标准</th>

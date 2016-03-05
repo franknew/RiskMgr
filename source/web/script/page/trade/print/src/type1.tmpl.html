@@ -14,7 +14,7 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<th>联系电话</th>
-		<td><input type="text" class="td_input" value="<%=data.SellersList.Phone%>" /></td>
+		<td><textarea rows="<%=(data.SellersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.SellersList.Phone%></textarea></td>
 		<th>身份证号</th>
 		<td colspan="3"><textarea rows="<%=(data.SellersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.SellersList.IdentityCode%></textarea></td>
 	</tr>
@@ -26,7 +26,7 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<th>产权现状</th>
-		<td colspan="5">该物业现抵押在<input value="<%=ProjectData.OrignalMortgageBank%>" type="text" size="10" />支行，尚欠银行本息约<input type="text" value="<%=ProjectData.AssetRansomMoney%>" size="5" />元，经手人及联系电话<input value="<%=[ProjectData.AssetRansomCustomerManager,ProjectData.AssetRansomContactPhone].join(' ')%>" type="text" size="20" />。</td>
+		<td colspan="5">该物业现抵押在<input value="<%=ProjectData.OrignalMortgageBank%>" type="text" size="10" />支行，尚欠银行本息约<input type="text" value="<%=ProjectData.AssetRansomMoney%>" size="5" />元，经手人及联系电话<input value="<%=[ProjectData.AssetRansomCustomerManager,ProjectData.AssetRansomContactPhone].join(' ')%>" type="text" size="23" />。</td>
 	</tr>
 	<tr>
 		<th>交易情况</th>

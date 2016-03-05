@@ -1,39 +1,40 @@
 <script type="text/html" id="PrintType4">
 <%
 //贷前垫资
+var ProjectData = data.Project;
 %>
 <table class="table table-bordered table-hover">
 	<tr>
 		<th width="80">借款人</th>
-		<td><input type="text" class="td_input" value="" /></td>
+		<td><input type="text" class="td_input" value="<%=data.BuyersList.Name%>" /></td>
 		<th width="80">垫资金额</th>
-		<td width="80" class="text-right"><input type="text" size="5" />万</td>
+		<td width="80" class="text-right"><input value="<%=ProjectData.CompanyPredepositMoney%>" type="text" size="5" />万</td>
 		<th width="80">使用期限</th>
-		<td width="80" class="text-right"><input type="text" size="5" />天</td>
+		<td width="80" class="text-right"><input value="" type="text" size="5" />天</td>
 	</tr>
 	<tr>
 		<th>联系电话</th>
-		<td><input type="text" class="td_input" /></td>
+		<td><textarea rows="<%=(data.BuyersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.BuyersList.Phone%></textarea></td>
 		<th>身份证号</th>
-		<td colspan="3"><input type="text" class="td_input" /></td>
+		<td colspan="3"><textarea rows="<%=(data.BuyersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.BuyersList.IdentityCode%></textarea></td>
 	</tr>
 	<tr>
 		<th>物业名称</th>
-		<td colspan="2"><textarea row="2"  class="td_input"></textarea></td>
+		<td colspan="2"><textarea rows="<%=(data.AssetsList.Address.split('、').length)%>"  class="td_input"><%=data.AssetsList.Address%></textarea></td>
 		<th>房产证号</th>
-		<td colspan="2"><textarea row="2"  class="td_input"></textarea></td>
+		<td colspan="2"><textarea rows="<%=(data.AssetsList.Code.split('、').length)%>"  class="td_input"><%=data.AssetsList.Code%></textarea></td>
 	</tr>
 	<tr>
 		<th>产权现状</th>
-		<td colspan="5"><input type="checkbox">未赎楼&nbsp;&nbsp;&nbsp;&nbsp;抵押在<input type="text" size="10" />支行，尚欠银行本息约<input type="text" size="5" />元; &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox">已赎楼&nbsp;&nbsp;&nbsp;&nbsp;赎楼金额：<input type="text" size="5" />元<br/><input type="checkbox">已过户&nbsp;&nbsp;&nbsp;&nbsp;过户日期: <input type="text" size="10" />; &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox">已办理抵押&nbsp;&nbsp;&nbsp;&nbsp;抵押日期: <input type="text" size="10" /></td>
+		<td colspan="5"><input type="checkbox">未赎楼&nbsp;&nbsp;&nbsp;&nbsp;抵押在<input type="text" size="10" value="<%=ProjectData.OrignalMortgageBank%>" />支行，尚欠银行本息约<input type="text" size="5" value="<%=ProjectData.AssetRansomMoney%>" />元; &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox">已赎楼&nbsp;&nbsp;&nbsp;&nbsp;赎楼金额：<input type="text" size="5" AssetRansomMoney />元<br/><input type="checkbox">已过户&nbsp;&nbsp;&nbsp;&nbsp;过户日期: <input type="text" size="10" />; &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox">已办理抵押&nbsp;&nbsp;&nbsp;&nbsp;抵押日期: <input type="text" size="10" /></td>
 	</tr>
 	<tr>
 		<th>交易情况</th>
-		<td colspan="5">该物业成交价为<input type="text" size="5" />元，买方姓名<input type="text" size="10" />身份证号码：<input type="text" size="15" /></td>
+		<td colspan="5">该物业成交价为<input type="text" size="5" value="<%=ProjectData.DealMoney%>" />元，买方姓名<input type="text" size="10" />身份证号码：<input type="text" size="15" /></td>
 	</tr>
 	<tr>
 		<th>贷款审批</th>
-		<td colspan="5">已获得<input type="text" size="10" />银行贷款承诺<input type="text" size="5" />万元</td>
+		<td colspan="5">已获得<input type="text" size="10"  value="<%=ProjectData.NewCreditBank%>" />银行贷款承诺<input type="text" size="5"  value="<%=((ProjectData.BuyerCreditCommerceMoney||0)*1+(ProjectData.BuyerCreditFundMoney||0)*1)%>" />万元</td>
 	</tr>
 	<tr>
 		<th>收费标准</th>
