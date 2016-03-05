@@ -43,6 +43,7 @@ body {
 	background: transparent;
 	resize:none;
 	overflow:hidden;
+	color:#2000C5;
 }
 .trade-printer input[type="text"] {
 	text-align: center;
@@ -58,5 +59,8 @@ body {
 @media print {
 	.trade-printer .operate {
 		display: none;
+	}
+	.trade-printer input[type="text"],.trade-printer textarea {
+		color:#000;
 	}
 }

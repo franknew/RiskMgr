@@ -66,7 +66,7 @@ define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","
 				error = opts.error,
 				message = opts.message;
 
-			if (!WX.login()) {
+			if (!WX.login(opts)) {
 				modal.show({
 					width:'430px',
 					'title':'登录',
@@ -182,9 +182,16 @@ define.pack("./wx",["risk/components/modal/index","risk/unit/ajax","jquery","./t
 	var MOD = {
 		/*
 		* 微信登录
+		* param opts {Object} 与index.js里的login参数含义一致
 		* return {Boolen} true则表示走了微信登录，false表示没走
 		*/
-		login:function() {
+		login:function(opts) {
+			opts = opts || {};
+
+			var success = opts.success,
+				error = opts.error,
+				message = opts.message;
+
 			//微信登录
 			var params,wxCode,wxState,hasJump;
 
@@ -202,9 +209,8 @@ define.pack("./wx",["risk/components/modal/index","risk/unit/ajax","jquery","./t
 
 				if (wxCode) {
 					if (wxState == cookie.get(WX_STATE)) {//校验微信state
-						msg.info('正在登录微信中，请稍后...<br/>开发中复制下面的code来校验你的接口: <br/>'+wxCode,false);
+						msg.info('正在登录微信中，请稍后...<br/>开发中复制下面的code来校验你的接口: <br/>'+wxCode+'<br/>cookie:<br/>'+document.cookie,false);
 						//发起请求登录微信
-
 					}else{
 						alert('你从哪里来，要到哪里去？');
 						return false;

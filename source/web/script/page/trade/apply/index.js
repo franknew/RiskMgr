@@ -1171,7 +1171,6 @@ define.pack("./setup.property",["jquery","risk/unit/route","risk/components/form
 					}
 				});
 			}
-			console.log('ddd',data);
 
 			var html = Tmpl.PropertyItem({
 					type:$('input[name="Type"]').val()*1,

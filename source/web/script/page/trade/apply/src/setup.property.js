@@ -117,7 +117,6 @@ define(function(require, exports, module){
 					}
 				});
 			}
-			console.log('ddd',data);
 
 			var html = Tmpl.PropertyItem({
 					type:$('input[name="Type"]').val()*1,
