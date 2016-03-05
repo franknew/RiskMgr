@@ -38,6 +38,7 @@ define(function(require, exports, module){
 			var rs = $.extend({},data);
 			rs.BuyersList = this._joinString(data.Buyers,['IdentityCode','Name','Phone']);
 			rs.SellersList = this._joinString(data.Sellers,['IdentityCode','Name','Phone']);
+			rs.ThirdPartyList = this._joinString(data.ThirdParty,['IdentityCode','Name','Phone']);
 			rs.AssetsList = this._joinString(data.Assets,['Address','Code']);
 
 			return rs;

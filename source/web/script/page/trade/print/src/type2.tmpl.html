@@ -26,15 +26,15 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<th>产权现状</th>
-		<td colspan="5">该物业无抵押或抵押在<input type="text" size="7" value="<%=ProjectData.OrignalMortgageBank%>" />支行，尚欠银行本息约<input type="text" size="5" value="<%=ProjectData.AssetRansomMoney%>" />元（经手人及联系电话<input type="text" size="23" value="<%=[ProjectData.AssetRansomCustomerManager,ProjectData.AssetRansomContactPhone].join(' ')%>" />），已委托<input type="text" size="15" />担保公司赎楼（经手人及联系电话<input type="text" size="15" />）</td>
+		<td colspan="5">该物业无抵押或抵押在<input type="text" size="7" value="<%=ProjectData.OrignalMortgageBank%>" />支行，尚欠银行本息约<input type="text" size="5" value="<%=((ProjectData.OrignalCreditCommerceMoney||0)*1+(ProjectData.OrignalCreditFundMoney||0)*1)%>" />万元（经手人及联系电话<input type="text" size="23" value="<%=[ProjectData.AssetRansomCustomerManager,ProjectData.AssetRansomContactPhone].join(' ')%>" />），已委托<input type="text" size="15" />担保公司赎楼（经手人及联系电话<input type="text" size="15" />）</td>
 	</tr>
 	<tr>
 		<th>交易情况</th>
-		<td colspan="5">该物业成交价为<input value="<%=ProjectData.DealMoney%>" type="text" size="5" />元，买方姓名<input type="text" size="<%=(data.BuyersList.Name.split('、').length*8)%>" value="<%=data.BuyersList.Name%>" />身份证号码：<input type="text" size="<%=(data.BuyersList.IdentityCode.split('、').length*23)%>" value="<%=data.BuyersList.IdentityCode%>" />，通过<input type="text" size="15" value="<%=ProjectData.AgentName%>" />地产公司成交，（或自助成交），经手人及联系电话<input type="text" size="20" value="<%=ProjectData.AgentContact%>" />。</td>
+		<td colspan="5">该物业成交价为<input value="<%=ProjectData.DealMoney%>" type="text" size="5" />万元，买方姓名<input type="text" size="<%=(data.BuyersList.Name.split('、').length*8)%>" value="<%=data.BuyersList.Name%>" />身份证号码：<input type="text" size="<%=(data.BuyersList.IdentityCode.split('、').length*23)%>" value="<%=data.BuyersList.IdentityCode%>" />，通过<input type="text" size="15" value="<%=ProjectData.AgentName%>" />地产公司成交，（或自助成交），经手人及联系电话<input type="text" size="20" value="<%=ProjectData.AgentContact%>" />。</td>
 	</tr>
 	<tr>
 		<th>贷款审批</th>
-		<td colspan="5">借款人已交定金<input type="text" size="5" value="<%=ProjectData.EarnestMoney%>" />万，为获得<input value="<%=ProjectData.NewCreditBank%>" type="text" size="7" />银行按揭贷款<input type="text" size="5" value="<%=((ProjectData.BuyerCreditCommerceMoney||0)*1+(ProjectData.BuyerCreditFundMoney||0)*1)%>" />元，需要监管首期款<input value="<%=ProjectData.SupervisionMoney%>" type="text" size="5" />元（经手人及联系电话<input type="text" size="15" />）</td>
+		<td colspan="5">借款人已交定金<input type="text" size="5" value="<%=ProjectData.EarnestMoney%>" />万，为获得<input value="<%=ProjectData.NewCreditBank%>" type="text" size="7" />银行按揭贷款<input type="text" size="5" value="<%=(parseFloat(ProjectData.BuyerCreditCommerceMoney||0)+parseFloat(ProjectData.BuyerCreditFundMoney||0))%>" />万元，需要监管首期款<input value="<%=ProjectData.SupervisionMoney%>" type="text" size="5" />元（经手人及联系电话<input type="text" size="15" />）</td>
 	</tr>
 	<tr>
 		<th>收费标准</th>
