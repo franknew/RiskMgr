@@ -64,7 +64,6 @@ define.pack("./index",["risk/page/trade/print/print.css","jquery","risk/unit/str
 
 			require.async('risk/page/trade/apply/data',function(Data) {
 				Data.get().done(function(d) {
-					console.log('dd',d);
 					var html = Tmpl.Printer(MOD.filterData(d));
 					container.html(html);
 
