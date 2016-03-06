@@ -476,14 +476,15 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/componen
 		 *      current: 拉取第几页
 		 *      form: 搜索的表单
 		 */
-		query:function(conf) {
+		query:function(conf,dropForm) {
+			var dataForm = dropForm?false:$('#J_CustomerSearchForm');
 			return ajax.post({
 				url:'RiskMgr.Api.RoleApi/QueryRole',
 				data:{
 					PageSize:conf.size||0,
 					CurrentIndex:conf.current || 1
 				},
-				form:$('#J_CustomerSearchForm'),
+				form:dataForm,
 				formDropEmpty:true,
 				success:conf.success,
 				error:conf.error
@@ -564,7 +565,7 @@ define.pack("./selector",["jquery","risk/unit/class","risk/components/msg/index"
 							msg = '<div class="alert alert-danger">'+(msg||'请求出错，请重试')+'</div>';
 							content.html(msg);
 						}
-					});
+					},true);
 				},
 				ok:function() {
 					var list = [],

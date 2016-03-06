@@ -70,7 +70,7 @@ define(function(require, exports, module){
 							msg = '<div class="alert alert-danger">'+(msg||'请求出错，请重试')+'</div>';
 							content.html(msg);
 						}
-					});
+					},true);
 				},
 				ok:function() {
 					var list = [],

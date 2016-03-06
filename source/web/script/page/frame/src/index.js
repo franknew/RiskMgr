@@ -19,7 +19,14 @@ define(function(require, exports, module){
 
 		User.login({
 			success:function() {
-				location.reload();
+				User.info().done(function(info) {
+					var phone = info.Mobile;
+					if (!phone || phone.length!=11) {	//判断没有填手机号，就强制要求
+						location.href = '/?'+Math.random()+'#page=user&message=填上您的手机号，以便绑定您的微信';
+						return ;
+					}
+					location.reload();
+				});
 			}
 		});
 		return ;

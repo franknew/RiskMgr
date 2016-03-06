@@ -28,26 +28,9 @@ define(function(require, exports, module){
 			html:'职位'
 		},{
 			col:7,
-			type:'select',
+			type:'text',
 			name:'Role',
-			required:true,
-			disabled:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'业务员',
-				value:1
-			},{
-				name:'业务员组长',
-				value:2
-			},{
-				name:'风控',
-				value:3
-			},{
-				name:'总经理',
-				value:4
-			}]
+			disabled:true
 		}],
 
 		[{

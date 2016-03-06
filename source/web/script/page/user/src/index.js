@@ -17,12 +17,13 @@ define(function(require, exports, module){
 
 
 	var MOD = {
-		initPage:function() {
+		initPage:function(arg) {
 			User.info().done(function(data) {
 				var html = Tmpl.Info({
 					tpl:Former.make(TplInfo,{
 						data:data
-					})
+					}),
+					message:arg&&arg.message
 				});
 				Route.show({
 					head:'个人资料',
