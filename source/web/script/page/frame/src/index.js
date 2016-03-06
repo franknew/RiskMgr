@@ -21,10 +21,10 @@ define(function(require, exports, module){
 			success:function() {
 				User.info().done(function(info) {
 					var phone = info.Mobile;
-					if (!phone || phone.length!=11) {	//判断没有填手机号，就强制要求
-						location.href = '/?'+Math.random()+'#page=user&message=填上您的手机号，以便绑定您的微信';
-						return ;
-					}
+					//if (!phone || phone.length!=11) {	//判断没有填手机号，就强制要求
+					//	location.href = '/?'+Math.random()+'#page=user&message=填上您的手机号，以便绑定您的微信。（务必填写真实在用的手机号码，否则无法绑定微信）';
+					//	return ;
+					//}
 					location.reload();
 				});
 			}
