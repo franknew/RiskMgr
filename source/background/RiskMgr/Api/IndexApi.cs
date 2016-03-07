@@ -10,6 +10,7 @@ using System.Text;
 using DreamWorkflow.Engine.DAL;
 using DreamWorkflow.Engine.Form;
 using DreamWorkflow.Engine;
+using SOAFramework.Library;
 
 namespace RiskMgr.Api
 {
@@ -44,6 +45,31 @@ namespace RiskMgr.Api
             });
             form.ProcessingTask = task;
             return form;
+        }
+
+
+        [EditAction]
+        public bool UpdateUser(UpdateUserServiceForm form)
+        {
+            UserBLL bll = new UserBLL();
+            var currentUser = bll.GetCurrentUser();
+            User u = new User
+            {
+                ID = currentUser.User.ID,
+                LastUpdator = currentUser.User.ID,
+                Enabled = form.Enabled,
+            };
+            UserInfo ui = new UserInfo
+            {
+                ID = currentUser.User.ID,
+                Address = form.Address,
+                CnName = form.CnName,
+                Identity = form.Identity,
+                Mobile = form.Mobile,
+                QQ = form.QQ,
+                Remark = form.Remark
+            };
+            return bll.Update(u, ui, null);
         }
     }
 }

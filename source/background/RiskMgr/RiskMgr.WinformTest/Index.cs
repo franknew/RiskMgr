@@ -106,14 +106,14 @@ namespace RiskMgr.WinformTest
             UserBLL bll = new UserBLL();
             bll.Add(new User
             {
-                Name = "manualtest4",
+                Name = "manualtest8",
                 Password = "123456",
 
             }, new UserInfo
             {
                 Mobile = "1111111111",
-                CnName = "manualtest4"
-            }, new List<string> { "3" });
+                CnName = "manualtest8"
+            }, new List<string> { "14" });
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -139,16 +139,19 @@ namespace RiskMgr.WinformTest
 
         private void button7_Click(object sender, EventArgs e)
         {
-            UpdateUserRequest request = new UpdateUserRequest();
-            request.token = token;
-            request.form = new Form.UpdateUserServiceForm
-            {
-                ID = user.ID,
-                CnName = "测试",
-                Remark = "hello world",
-            };
-            var response = SDKFactory.Client.Execute(request);
-            MessageBox.Show(response.ResponseBody);
+            Workflow wf = new Workflow();
+            //UpdateUserRequest request = new UpdateUserRequest();
+            //request.token = token;
+            //request.form = new Form.UpdateUserServiceForm
+            //{
+            //    ID = user.ID,
+            //    CnName = "测试",
+            //    Remark = "hello world",
+            //};
+            //var response = SDKFactory.Client.Execute(request);
+            //MessageBox.Show(response.ResponseBody);
+            UserBLL bll = new UserBLL();
+            var result = bll.Update(new User { ID = "9", Name = "xiyimei" }, new UserInfo { ID = "9", Mobile = "11111111111" }, new List<string> { "7" });
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -463,6 +466,13 @@ namespace RiskMgr.WinformTest
                 ID = "3",
             });
             var roles = bll.Query(new RoleQueryForm { ID = "3" });
+        }
+
+        private void button26_Click(object sender, EventArgs e)
+        {
+            Workflow wf = new Workflow();
+            LogonBLL bll = new LogonBLL();
+            var result = bll.Logon(textBox1.Text);
         }
     }
 

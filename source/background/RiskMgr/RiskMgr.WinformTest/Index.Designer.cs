@@ -54,6 +54,7 @@
             this.button23 = new System.Windows.Forms.Button();
             this.button24 = new System.Windows.Forms.Button();
             this.button25 = new System.Windows.Forms.Button();
+            this.button26 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -312,11 +313,22 @@
             this.button25.UseVisualStyleBackColor = true;
             this.button25.Click += new System.EventHandler(this.button25_Click);
             // 
+            // button26
+            // 
+            this.button26.Location = new System.Drawing.Point(174, 12);
+            this.button26.Name = "button26";
+            this.button26.Size = new System.Drawing.Size(75, 23);
+            this.button26.TabIndex = 26;
+            this.button26.Text = "微信登录";
+            this.button26.UseVisualStyleBackColor = true;
+            this.button26.Click += new System.EventHandler(this.button26_Click);
+            // 
             // Index
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 462);
+            this.Controls.Add(this.button26);
             this.Controls.Add(this.button25);
             this.Controls.Add(this.button24);
             this.Controls.Add(this.button23);
@@ -378,6 +390,7 @@
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.Button button24;
         private System.Windows.Forms.Button button25;
+        private System.Windows.Forms.Button button26;
     }
 }
 

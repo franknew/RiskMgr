@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Configuration;
 using RiskMgr.BLL;
 using RiskMgr.Form;
 using RiskMgr.Model;
@@ -26,6 +27,9 @@ namespace RiskMgr.Api
             UserBLL userbll = new UserBLL();
             var user = userbll.GetCurrentUser();
             form.Creator = user.User.ID;
+            string weixinid = "20";
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["WeiXinDepartmentID"])) weixinid = ConfigurationManager.AppSettings["WeiXinDepartmentID"];
+            form.WeiXinID = weixinid;
             return bll.AddRole(form);
         }
 

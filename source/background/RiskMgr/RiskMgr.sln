@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiskMgr.Model", "Model\RiskMgr.Model.csproj", "{D4979401-DAB1-4043-9AA2-3FBA238103E0}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{D5CC4C6E-6FDC-492D-8152-013016246C2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiskMgr.WinformTest", "RiskMgr.WinformTest\RiskMgr.WinformTest.csproj", "{D36A7985-9AC7-4933-8AA4-739351708DB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiskMgr.WeiXinSignIn", "WeiXinSignIn\RiskMgr.WeiXinSignIn.csproj", "{1C2CAE71-8CDD-4C27-B12D-99E0E73B8F0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{D36A7985-9AC7-4933-8AA4-739351708DB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D36A7985-9AC7-4933-8AA4-739351708DB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D36A7985-9AC7-4933-8AA4-739351708DB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C2CAE71-8CDD-4C27-B12D-99E0E73B8F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2CAE71-8CDD-4C27-B12D-99E0E73B8F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C2CAE71-8CDD-4C27-B12D-99E0E73B8F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2CAE71-8CDD-4C27-B12D-99E0E73B8F0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

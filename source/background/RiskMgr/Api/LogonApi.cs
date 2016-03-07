@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using SOAFramework.Service.Filter;
 using SOAFramework.Library;
+using SOAFramework.Library.WeiXin;
 
 namespace RiskMgr.Api
 {
@@ -24,27 +25,22 @@ namespace RiskMgr.Api
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        [AuthFilter]
         [NoneAuthFilter]
         public LogonResultForm Logon(LogonServiceForm form)
         {
             if (form == null) throw new Exception("没有传form");
             if (string.IsNullOrEmpty(form.username) || string.IsNullOrEmpty(form.password)) throw new Exception("用户名或者密码不能为空");
             var result = bll.Logon(form.username, form.password);
-            MenuBLL menubll = new MenuBLL();
-            result.Menu = menubll.GetCurrentUserMenu(result.token);
             return result;
         }
-
-        [AuthFilter]
+        
         [NoneAuthFilter]
         public LogonResultForm WeiXinLogon(WeiXinLogonServiceForm form)
         {
             if (form == null) throw new Exception("没有传form");
             if (string.IsNullOrEmpty(form.code)) throw new Exception("code不能为空");
+            //ApiHelper.SetTokenIntoCache(form.access_token);
             var result = bll.Logon(form.code);
-            MenuBLL menubll = new MenuBLL();
-            result.Menu = menubll.GetCurrentUserMenu(result.token);
             return result;
         }
 

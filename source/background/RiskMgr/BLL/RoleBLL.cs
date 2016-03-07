@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SOAFramework.Library;
-using SOAFramework.Library.WeiXin;
 
 namespace RiskMgr.BLL
 {
@@ -135,7 +134,6 @@ namespace RiskMgr.BLL
 
         public string AddRole(AddRoleServiceForm form)
         {
-
             Role role = new Role
             {
                 DataAccessType = form.DataAccessType,
@@ -148,19 +146,6 @@ namespace RiskMgr.BLL
             //新增角色
             ISqlMapper mapper = Common.GetMapperFromSession();
             RoleDao dao = new RoleDao(mapper);
-
-            #region weixin department
-            Role parentrole = null;
-            if (!string.IsNullOrEmpty(role.ParentID)) parentrole = dao.Query(new RoleQueryForm { ID = role.ParentID }).FirstOrDefault();
-            var department = new Department
-            {
-                name = role.Name,
-            };
-            if (parentrole != null) department.parentid = parentrole.WeiXinID;
-
-            var response = WeiXinApi.Department.Create(department);
-            role.WeiXinID = response.id;
-            #endregion
 
             #region risk role
             string id = dao.Add(role);
@@ -178,19 +163,6 @@ namespace RiskMgr.BLL
             ISqlMapper mapper = Common.GetMapperFromSession();
             RoleDao dao = new RoleDao(mapper);
             Role_Module_ActionDao rmadao = new Role_Module_ActionDao(mapper);
-            #region weixin department
-            Role parentrole = null;
-            Role currentrole = dao.Query(new RoleQueryForm { ID = form.ID }).FirstOrDefault();
-            if (!string.IsNullOrEmpty(form.ParentID)) parentrole = dao.Query(new RoleQueryForm { ID = form.ParentID }).FirstOrDefault();
-            var department = new Department
-            {
-                name = form.Name,
-                id = currentrole.WeiXinID,
-            };
-            if (parentrole != null) department.parentid = parentrole.WeiXinID;
-
-            WeiXinApi.Department.Update(department);
-            #endregion
             rmadao.Delete(new Role_Module_ActionQueryForm { RoleID = form.ID });
             AddRoleAuth(mapper, form, form.ID);
 
@@ -219,7 +191,6 @@ namespace RiskMgr.BLL
             Role_Module_ActionDao rmadao = new Role_Module_ActionDao(mapper);
             rmadao.Delete(new Role_Module_ActionQueryForm { RoleID = id });
             Role currentrole = dao.Query(new RoleQueryForm { ID = id }).FirstOrDefault();
-            WeiXinApi.Department.Delete(currentrole.WeiXinID);
             return dao.Delete(new RoleQueryForm { ID = id });
         }
         #endregion

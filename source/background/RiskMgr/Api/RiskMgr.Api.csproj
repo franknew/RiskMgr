@@ -60,6 +60,10 @@
     <Reference Include="SOAFramework.Library.Json">
       <HintPath>..\CommonDll\SOAFramework.Library.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SOAFramework.Library.WeiXin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonDll\SOAFramework.Library.WeiXin.dll</HintPath>
+    </Reference>
     <Reference Include="SOAFramework.Service.Core">
       <HintPath>..\CommonDll\SOAFramework.Service.Core.dll</HintPath>
     </Reference>

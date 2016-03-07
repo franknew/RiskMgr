@@ -8,5 +8,7 @@ namespace RiskMgr.Form
     public class WeiXinLogonServiceForm
     {
         public string code { get; set; }
+
+        public string access_token { get; set; }
     }
 }

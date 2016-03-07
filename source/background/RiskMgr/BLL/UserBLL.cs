@@ -55,6 +55,7 @@ namespace RiskMgr.BLL
             var u = GetUserEntireInfoFromCache(token);
             if (u == null)
             {
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "user is null" }, SOAFramework.Library.CacheEnum.FormMonitor);
                 UserDao userdao = new UserDao(mapper);
                 RoleDao roledao = new RoleDao(mapper);
                 UserInfoDao uidao = new UserInfoDao(mapper);
@@ -84,10 +85,7 @@ namespace RiskMgr.BLL
             }
             UserDao dao = new UserDao(mapper);
             var exist = dao.Query(new UserQueryForm { Name = user.Name });
-            if (exist.Count > 0)
-            {
-                throw new Exception("已存在用户名：" + user.Name);
-            }
+            if (exist.Count > 0) throw new Exception("已存在用户名：" + user.Name);
             if (string.IsNullOrEmpty(ui.WX) && string.IsNullOrEmpty(ui.Mobile)) throw new Exception("微信号或者手机不能为空");
             string id = dao.Add(user);
             if (ui == null)
@@ -109,13 +107,14 @@ namespace RiskMgr.BLL
             #region weixin user
             RoleDao roledao = new RoleDao(mapper);
             var roles = roledao.Query(new RoleQueryForm { IDs = roleidlist });
-            var parentids = (from r in roles
-                             select r.WeiXinID).ConvertTo<List<int>>().ToArray();
+            var weixinids = (from r in roles
+                             where !string.IsNullOrEmpty(r.WeiXinID)
+                             select Convert.ToInt32(r.WeiXinID)).ToArray();
             try
             {
                 SOAFramework.Library.WeiXin.WeiXinApi.User.Create(new SOAFramework.Library.WeiXin.User
                 {
-                    department = parentids,
+                    department = weixinids,
                     enable = 1,
                     mobile = ui.Mobile,
                     name = ui.CnName,
@@ -147,8 +146,18 @@ namespace RiskMgr.BLL
                         }
                         SOAFramework.Library.WeiXin.WeiXinApi.User.Create(new SOAFramework.Library.WeiXin.User
                         {
-                            department = parentids,
+                            department = weixinids,
                             enable = 1,
+                            mobile = ui.Mobile,
+                            name = ui.CnName,
+                            weixinid = ui.WX,
+                            userid = user.Name,
+                        });
+                        break;
+                    case "60102"://用户已存在
+                        SOAFramework.Library.WeiXin.WeiXinApi.User.Update(new SOAFramework.Library.WeiXin.User
+                        {
+                            department = weixinids,
                             mobile = ui.Mobile,
                             name = ui.CnName,
                             weixinid = ui.WX,
@@ -165,43 +174,73 @@ namespace RiskMgr.BLL
 
         public bool Update(Model.User user, UserInfo ui, List<string> roleidlist)
         {
+            #region risk update
             ISqlMapper mapper = Common.GetMapperFromSession();
+            UserDao udao = new UserDao(mapper);
+            UserInfoDao uidao = new UserInfoDao(mapper);
             if (user != null)
             {
-                UserDao dao = new UserDao(mapper);
                 Model.User entity = new User
                 {
                     ID = user.ID,
                     Enabled = user.Enabled,
                 };
-                dao.Update(new UserUpdateForm { Entity = entity, UserQueryForm = new UserQueryForm { ID = user.ID } });
+                udao.Update(new UserUpdateForm { Entity = entity, UserQueryForm = new UserQueryForm { ID = user.ID } });
             }
             if (ui != null)
             {
-                UserInfoDao dao = new UserInfoDao(mapper);
-                dao.Update(new UserInfoUpdateForm { Entity = ui, UserInfoQueryForm = new UserInfoQueryForm { ID = ui.ID } });
+                uidao.Update(new UserInfoUpdateForm { Entity = ui, UserInfoQueryForm = new UserInfoQueryForm { ID = ui.ID } });
             }
-            if (roleidlist == null) return true;
-            User_RoleDao urdao = new User_RoleDao(mapper);
-            urdao.Delete(new User_RoleQueryForm { UserID = user.ID });
-            foreach (var role in roleidlist)
+            if (roleidlist != null)
             {
-                User_Role ur = new User_Role { RoleID = role, UserID = user.ID };
-                urdao.Add(ur);
+                User_RoleDao urdao = new User_RoleDao(mapper);
+                urdao.Delete(new User_RoleQueryForm { UserID = user.ID });
+                foreach (var role in roleidlist)
+                {
+                    User_Role ur = new User_Role { RoleID = role, UserID = user.ID };
+                    urdao.Add(ur);
+                }
             }
+            #endregion
+
             #region weixin api
             RoleDao roledao = new RoleDao(mapper);
             var roles = roledao.Query(new RoleQueryForm { IDs = roleidlist });
-            var parentids = (from r in roles
-                             select r.WeiXinID).ConvertTo<List<int>>().ToArray();
-            SOAFramework.Library.WeiXin.WeiXinApi.User.Update(new SOAFramework.Library.WeiXin.User
+            var weixinids = (from r in roles
+                             where !string.IsNullOrEmpty(r.WeiXinID)
+                             select Convert.ToInt32(r.WeiXinID)).ToArray();
+            var user_temp = udao.Query(new UserQueryForm { ID = user.ID }).FirstOrDefault();
+            var ui_temp = uidao.Query(new UserInfoQueryForm { ID = user.ID }).FirstOrDefault();
+            try
             {
-                department = parentids,
-                mobile = ui.Mobile,
-                name = ui.CnName,
-                weixinid = ui.WX,
-                userid = user.Name,
-            });
+                SOAFramework.Library.WeiXin.WeiXinApi.User.Update(new SOAFramework.Library.WeiXin.User
+                {
+                    department = weixinids,
+                    mobile = ui_temp.Mobile,
+                    name = ui_temp.CnName,
+                    weixinid = ui_temp.WX,
+                    userid = user_temp.Name,
+                });
+            }
+            catch (SOAFramework.Library.WeiXin.WeiXinException ex)
+            {
+                switch (ex.Code)
+                {
+                    case "60111"://如果微信上不存在用户，就新建
+                        SOAFramework.Library.WeiXin.WeiXinApi.User.Create(new SOAFramework.Library.WeiXin.User
+                        {
+                            enable = 1,
+                            userid = user_temp.Name,
+                            name = ui_temp.CnName,
+                            mobile = ui_temp.Mobile,
+                            weixinid = ui_temp.WX,
+                            department = weixinids,
+                        });
+                        break;
+                    default:
+                        throw ex;
+                }
+            }
             #endregion
             return true;
         }

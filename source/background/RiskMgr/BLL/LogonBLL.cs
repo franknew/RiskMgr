@@ -5,6 +5,7 @@ using RiskMgr.Model;
 using SOAFramework.Library.Cache;
 using SOAFramework.Service.Core.Model;
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
@@ -25,25 +26,27 @@ namespace RiskMgr.BLL
             var mapper = Common.GetMapperFromSession();
             UserDao userdao = new UserDao(mapper);
             Model.User user = userdao.Query(new UserQueryForm { Name = username, Password = password }).FirstOrDefault();
-            return GetUserInfo(user);
+            if (user == null) throw new Exception("用户名或者密码错误！");
+            return GetUserInfo(user.Name);
         }
 
         public LogonResultForm Logon(string code)
         {
-            var response = WeiXinApi.User.GetUserInfo(new User_GetUserInfoQueryString { code = code });
+            string agentid = "1";
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["AgentID"])) agentid = ConfigurationManager.AppSettings["AgentID"];
+            var response = WeiXinApi.User.GetUserInfo(new User_GetUserInfoQueryString { code = code, agentid = agentid });
             if (string.IsNullOrEmpty(response.UserId)) throw new Exception("您在微信系统中没有注册，请联系管理员进行注册");
-            var mapper = Common.GetMapperFromSession();
-            UserDao userdao = new UserDao(mapper);
-            var user = userdao.Query(new UserQueryForm { Name = response.UserId }).FirstOrDefault();
-            return GetUserInfo(user);
+            return GetUserInfo(response.UserId);
         }
 
-        public LogonResultForm GetUserInfo(Model.User user)
+        public LogonResultForm GetUserInfo(string userid)
         {
-            if (user == null) throw new Exception("用户名或者密码错误！请输入正确的用户名和密码！");
+            var mapper = Common.GetMapperFromSession();
+            UserDao userdao = new UserDao(mapper);
+            var user = userdao.Query(new UserQueryForm { Name = userid }).FirstOrDefault();
+            if (user == null) throw new Exception("用户：" + userid + "在系统中不存在！");
             if (user.Enabled == 0) throw new Exception("该用户已被禁用，请联系管理员！");
             LogonResultForm result = new LogonResultForm();
-            var mapper = Common.GetMapperFromSession();
             UserInfoDao userInfoDao = new UserInfoDao(mapper);
             RoleDao roleDao = new RoleDao(mapper);
             LogonHistoryDao historyDao = new LogonHistoryDao(mapper);
@@ -62,7 +65,10 @@ namespace RiskMgr.BLL
             };
             historyDao.Add(history);
             result.token = token;
+            result.UserInfo = userinfo;
             cache.AddItem(item, 30 * 60);
+            MenuBLL menubll = new MenuBLL();
+            result.Menu = menubll.GetCurrentUserMenu(result.token);
             return result;
         }
 
