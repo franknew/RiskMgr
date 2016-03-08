@@ -75,7 +75,8 @@ var tmpl = {
 
 var __p=[],_p=function(s){__p.push(s)};
 
-	var RString = require('risk/unit/string');
+	var RString = require('risk/unit/string'),
+		Browser = require('risk/unit/browser');
 	var Task = data || [],
 		StatusText = {
 			'1':'审批中',
@@ -109,8 +110,9 @@ __p.push('</span>--></a>');
 						}
 						__p.push('					');
 }else{__p.push('					暂无');
-}__p.push('				</div>\n			</div>\n		</div>\n	</div>\n\n	<div class="col-sm-6 col-md-6">\n\n		<div class="block-flat">\n			<div class="header">\n				<h3>关注微信企业号</h3>\n			</div>\n			<div class="content">\n				<p>按以下步骤操作：</p>\n				<ol>\n					<li>在<a href="/#page=user" target="_blank">个人资料</a>里填写自己的手机号码，<a href="/#page=user" target="_blank">点此进入填写</a></li>\n					<li>用微信扫描二维码：<br/><img src="/images/wx_qrcode.jpg" width="120" height="120" /></li>\n					<li>关注成功后，就能在微信企业号里面直接进入系统，查看、审批等</li>\n				</ol>\n			</div>\n		</div>\n	</div>');
- /*
+}__p.push('				</div>\n			</div>\n		</div>\n	</div>');
+if(Browser.client!='wx'){__p.push('	<div class="col-sm-6 col-md-6">\n		<div class="block-flat">\n			<div class="header">\n				<h3>关注微信企业号</h3>\n			</div>\n			<div class="content">\n				<p>按以下步骤操作：</p>\n				<ol>\n					<li>在<a href="/#page=user" target="_blank">个人资料</a>里填写自己的手机号码，<a href="/#page=user" target="_blank">点此进入填写</a></li>\n					<li>用微信扫描二维码：<br/><img src="/images/wx_qrcode.jpg" width="120" height="120" /></li>\n					<li>关注成功后，就能在微信企业号里面直接进入系统，查看、审批等</li>\n				</ol>\n			</div>\n		</div>\n	</div>');
+} /*
 	<div class="col-sm-6 col-md-6">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#home" data-toggle="tab">待办事</a></li>

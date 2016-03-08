@@ -1,6 +1,7 @@
 <script type="text/html" id="home">
 <%
-	var RString = require('risk/unit/string');
+	var RString = require('risk/unit/string'),
+		Browser = require('risk/unit/browser');
 	var Task = data || [],
 		StatusText = {
 			'1':'审批中',
@@ -32,9 +33,8 @@
 			</div>
 		</div>
 	</div>
-
+	<%if(Browser.client!='wx'){%>
 	<div class="col-sm-6 col-md-6">
-
 		<div class="block-flat">
 			<div class="header">
 				<h3>关注微信企业号</h3>
@@ -49,6 +49,7 @@
 			</div>
 		</div>
 	</div>
+	<%}%>
 
 	<% /*
 	<div class="col-sm-6 col-md-6">

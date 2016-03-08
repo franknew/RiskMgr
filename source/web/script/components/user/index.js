@@ -44,7 +44,7 @@ define.pack = function(){
  * @date    2015-07-14 19:34:09
  */
 
-define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","./tmpl","risk/components/msg/index","risk/unit/uri","risk/unit/cookie","risk/unit/browser","./wx"],function(require, exports, module){
+define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","./tmpl","risk/components/msg/index","risk/unit/uri","risk/unit/cookie","risk/unit/browser"],function(require, exports, module){
 	var modal = require('risk/components/modal/index'),
 		Ajax = require('risk/unit/ajax'),
 		$ = require('jquery'),
@@ -53,8 +53,6 @@ define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","
 		uri = require('risk/unit/uri'),
 		cookie = require('risk/unit/cookie'),
 		browser = require('risk/unit/browser');
-
-	var WX = require('./wx');
 
 	var SKEY_NAME = 'skey';
 
@@ -66,40 +64,38 @@ define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","
 				error = opts.error,
 				message = opts.message;
 
-			if (!WX.login(opts)) {
-				modal.show({
-					width:'430px',
-					'title':'登录',
-					content:tmpl.login({
-						message:message
-					}),
-					cancel:false,
-					onshow:function() {
-						this.dialog.find('input[name="username"]').get(0).focus();
-					},
-					ok:function() {
-						var that = this;
-						Ajax.post({
-							url:'RiskMgr.Api.LogonApi/Logon',
-							form:this.form,
-							success:function(data, oriData, jqXHR) {
-								//坑爹的，cookie得前台写
-								var skey = data&&data.token;
-								if (skey) {
-									cookie.set(SKEY_NAME,skey);
-									msg.success('登录成功');
-									success && success();
-									that.close();
-								}else {
-									msg.error('未知后台错误，导致无法登录');
-									error && error();
-								}
+			modal.show({
+				width:'430px',
+				'title':'登录',
+				content:tmpl.login({
+					message:message
+				}),
+				cancel:false,
+				onshow:function() {
+					this.dialog.find('input[name="username"]').get(0).focus();
+				},
+				ok:function() {
+					var that = this;
+					Ajax.post({
+						url:'RiskMgr.Api.LogonApi/Logon',
+						form:this.form,
+						success:function(data, oriData, jqXHR) {
+							//坑爹的，cookie得前台写
+							var skey = data&&data.token;
+							if (skey) {
+								cookie.set(SKEY_NAME,skey);
+								msg.success('登录成功');
+								success && success();
+								that.close();
+							}else {
+								msg.error('未知后台错误，导致无法登录');
+								error && error();
 							}
-						});
-						return true;
-					}
-				});
-			}
+						}
+					});
+					return true;
+				}
+			});
 		},
 		logout:function() {
 			cookie.del(SKEY_NAME);
@@ -196,9 +192,9 @@ define.pack("./wx",["risk/components/modal/index","risk/unit/ajax","jquery","./t
 			var params,wxCode,wxState,hasJump;
 
 			//非测试环境先不检测wx
-			if (!~location.host.indexOf(':8080')) {
-				return false;
-			}
+			//if (!~location.host.indexOf(':8080')) {
+			//	return false;
+			//}
 
 			if (browser.client == 'wx') {
 				params = uri(location.href);
@@ -227,15 +223,6 @@ define.pack("./wx",["risk/components/modal/index","risk/unit/ajax","jquery","./t
 			}
 
 			return false;
-		},
-		getUrl:function() {
-			var corp_id = 'wx4fff07646e8c3d22',
-				redirect_uri = location.protocol+'//'+location.host+location.pathname+(location.search+(location.search?'&':'?')+WX_HAS_JUMP+'=1')+location.hash;
-			var state = Math.ceil(Math.random()*198600),
-				url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+corp_id+'&redirect_uri='+encodeURIComponent(redirect_uri)+'&response_type=code&scope=snsapi_base&state='+state+'&connect_redirect=1#wechat_redirect';
-
-			cookie.set(WX_STATE,state);	//把state写入cookie，回来时再校验
-			return url;
 		}
 	};
 
