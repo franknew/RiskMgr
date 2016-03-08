@@ -61,6 +61,9 @@ define.pack("./index",["jquery","risk/unit/route","risk/unit/ajax","risk/compone
 	var MOD = {
 		initPage:function(arg) {
 			User.info().done(function(data) {
+				data = $.extend({},data);
+				data.Role = data.Role.Name.join(', ');
+
 				var html = Tmpl.Info({
 					tpl:Former.make(TplInfo,{
 						data:data

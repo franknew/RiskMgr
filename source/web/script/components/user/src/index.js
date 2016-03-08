@@ -91,8 +91,27 @@ define(function(require, exports, module){
 						url:'RiskMgr.Api.IndexApi/InitPage',
 						success:function(da) {
 							var userinfo = da&&da.User || {},
-								menuinfo = da&&da.Menu || {};
-							userinfo = $.extend({},userinfo.UserInfo,userinfo.User);
+								menuinfo = da&&da.Menu || {},
+								role = userinfo&&userinfo.Role || {};
+
+							//合并数据
+							userinfo = $.extend({
+								RoleInfo:role,	//原始职位信息
+								Role:(function(role) {//解析成方便使用的数据
+									var rs = {
+										Name:[],
+										ID:[]
+									};
+
+									var i=0, l = role.length;
+									for(; i < l; ++i) {
+										rs.Name.push(role[i].Name);
+										rs.ID.push(role[i].ID);
+									}
+									return rs;
+								})(role)
+							},userinfo.UserInfo,userinfo.User);
+
 							if (userinfo) {
 								CACHE = userinfo;
 								CACHE_MENU = menuinfo;

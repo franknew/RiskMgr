@@ -775,7 +775,7 @@ body.modal-open,
 }
 .cl-sidebar .collapse-button {
   background: #1F2126;
-  position: fixed;
+  position: absolute;
   width: 216px;
   bottom: 0;
   border-top: 1px solid #131519;
@@ -803,7 +803,7 @@ body.modal-open,
   background: #23252A;
 }
 #cl-wrapper.fixed-menu .menu-space {
-  position: fixed;
+  /*position: fixed;*/
   width: 216px;
   background: #272930;
 }
@@ -5623,9 +5623,6 @@ ul.timeline li > .date {
 
 
 /* risk自定义样式  */
-  #cl-wrapper {
-    min-width: 998px; /*PC 最小宽度*/
-  }
   .table-container {
     width: 100%;
     overflow:auto;
@@ -5857,7 +5854,12 @@ table.no-border tr.pointer-item:hover {
 }
 /* risk自定义样式 END  */
 
-
+/*PC适配*/
+@media (min-width:768px) {
+  #cl-wrapper {
+    min-width: 1160px; /*PC 最小宽度*/
+  }
+}
 /* 手机适配  */
 @media (max-width: 767px) {
   body {
@@ -5869,9 +5871,6 @@ table.no-border tr.pointer-item:hover {
   .body-handle {
     margin-left:15px;
     margin-right: 15px;
-  }
-  #cl-wrapper {
-    min-width:inherit;
   }
   .navbar-collapse {
     display: block;
