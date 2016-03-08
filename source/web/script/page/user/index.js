@@ -77,7 +77,7 @@ define.pack("./index",["jquery","risk/unit/route","risk/unit/ajax","risk/compone
 					var elem = $(ev.currentTarget),
 						form = elem.parents('form:first');
 					Ajax.post({
-						url:'RiskMgr.Api.UserApi/Update',
+						url:'RiskMgr.Api.IndexApi/UpdateUser',
 						form:form,
 						success:function() {
 							Msg.success('修改成功');
@@ -276,8 +276,6 @@ var tmpl = {
 'Info': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-
-console.log(data);
 __p.push('<div class="block-flat">');
 if (data.message) {__p.push('	<div class="alert alert-info" role="alert">');
 _p(data.message);

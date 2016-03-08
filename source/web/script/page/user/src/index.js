@@ -35,7 +35,7 @@ define(function(require, exports, module){
 					var elem = $(ev.currentTarget),
 						form = elem.parents('form:first');
 					Ajax.post({
-						url:'RiskMgr.Api.UserApi/Update',
+						url:'RiskMgr.Api.IndexApi/UpdateUser',
 						form:form,
 						success:function() {
 							Msg.success('修改成功');
