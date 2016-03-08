@@ -5644,6 +5644,7 @@ ul.timeline li > .date {
   .table-container>table {
     width:inherit;
     max-width: inherit;
+    min-width:650px;
   }
   table tbody td.nopadding {
     padding: 0;
@@ -5851,6 +5852,9 @@ table.no-border tr.pointer-item:hover {
   background: transparent;
 }
 .trade-detail .input-group .form-control {text-align: right;}
+.body-handle {
+  margin:20px 0px;
+}
 /* risk自定义样式 END  */
 
 
@@ -5861,6 +5865,10 @@ table.no-border tr.pointer-item:hover {
   }
   body ,.form-control {
     font-size: 14px;
+  }
+  .body-handle {
+    margin-left:15px;
+    margin-right: 15px;
   }
   #cl-wrapper {
     min-width:inherit;

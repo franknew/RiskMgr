@@ -2,7 +2,7 @@
 包含list页所需所有tmpl
 -->
 <script type="text/html" id="list">
-<div class="spacer spacer-bottom">
+<div class="body-handle">
 	<button type="button" class="btn btn-primary" data-hook="add">新增员工</button>
 </div>
 
@@ -34,6 +34,7 @@
 </script>
 
 <script type="text/html" id="ListBox">
+	<div class="table-container">
 	<table class="no-border">
 		<thead class="no-border">
 			<tr>
@@ -48,6 +49,7 @@
 			<%=this.ListItem(data)%>
 		</tbody>
 	</table>
+	</div>
 
 	<div class="j-pager"></div>
 

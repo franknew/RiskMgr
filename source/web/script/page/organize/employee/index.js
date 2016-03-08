@@ -654,7 +654,7 @@ var tmpl = {
 'list': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="spacer spacer-bottom">\n	<button type="button" class="btn btn-primary" data-hook="add">新增员工</button>\n</div>\n\n<div class="block-flat">');
+__p.push('<div class="body-handle">\n	<button type="button" class="btn btn-primary" data-hook="add">新增员工</button>\n</div>\n\n<div class="block-flat">');
 _p(this.ListContainer());
 __p.push('</div>');
 
@@ -672,9 +672,9 @@ return __p.join("");
 'ListBox': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>姓名</th>\n				<th>账号</th>\n				<th>职位</th>\n				<th>电话</th>\n				<th>证件号</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
+__p.push('	<div class="table-container">\n	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>姓名</th>\n				<th>账号</th>\n				<th>职位</th>\n				<th>电话</th>\n				<th>证件号</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
 _p(this.ListItem(data));
-__p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
+__p.push('		</tbody>\n	</table>\n	</div>\n\n	<div class="j-pager"></div>\n');
 
 return __p.join("");
 },

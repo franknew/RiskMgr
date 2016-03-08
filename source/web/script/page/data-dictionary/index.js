@@ -603,7 +603,7 @@ var tmpl = {
 'list': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="spacer spacer-bottom">\n	<button type="button" class="btn btn-primary" data-hook="add">新增员工</button>\n</div>\n\n<div class="block-flat">');
+__p.push('<div class="body-handle">\n	<button type="button" class="btn btn-primary" data-hook="add">新增员工</button>\n</div>\n\n<div class="block-flat">');
 _p(this.ListContainer());
 __p.push('</div>');
 

@@ -1,4 +1,4 @@
-//create by jsc 
+//create by jsc
 (function(){
 var mods = [],version = parseFloat(seajs.version);
 define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/data-dictionary","risk/components/pager/index","risk/unit/class"],function(require,exports,module){
@@ -709,11 +709,11 @@ define.pack("./tpl.view",[],function(require, exports, module){
 //position/src/list.tmpl.html
 //position/src/selector.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
-var tmpl = { 
+var tmpl = {
 'list': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="spacer spacer-bottom">\n	<button type="button" class="btn btn-primary" data-hook="add">新增职位</button>\n</div>\n\n<div class="block-flat">');
+__p.push('<div class="body-handle">\n	<button type="button" class="btn btn-primary" data-hook="add">新增职位</button>\n</div>\n\n<div class="block-flat">');
 _p(this.ListContainer());
 __p.push('</div>');
 
@@ -731,9 +731,9 @@ return __p.join("");
 'ListBox': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th width="20%">职位</th>\n				<th>职位说明</th>\n				<th>上级职位</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
+__p.push('	<div class="table-container">\n	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th width="20%">职位</th>\n				<th>职位说明</th>\n				<th>上级职位</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
 _p(this.ListItem(data));
-__p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
+__p.push('		</tbody>\n	</table>\n	</div>\n\n	<div class="j-pager"></div>\n');
 
 return __p.join("");
 },
