@@ -6,6 +6,8 @@
 
 define(function(require, exports, module){
 	require('bootstrap');
+	require('risk/config');
+
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
 		Modal = require('risk/components/modal/index'),

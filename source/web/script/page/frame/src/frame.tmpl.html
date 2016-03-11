@@ -1,11 +1,12 @@
 <script type="text/html" id="Frame">
 <%
+	var SiteConfig = require('risk/config');
 	data.avatar = data.avatar || 'about:blank'; //防止空src
 %>
 <div id="head-nav" class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/"><span>风险管理系统</span></a>
+			<a class="navbar-brand" href="/"><span><%=SiteConfig.name%></span></a>
 		</div>
 		<div class="navbar-collapse collapse">
 			<!--
