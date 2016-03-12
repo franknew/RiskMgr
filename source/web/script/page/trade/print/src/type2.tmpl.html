@@ -6,7 +6,7 @@ var ProjectData = data.Project;
 <table class="table table-bordered table-hover">
 	<tr>
 		<th width="80">借款人</th>
-		<td><input type="text" class="td_input" value="<%=data.SellersList.Name%>" /></td>
+		<td><input type="text" class="td_input" value="<%=data.BuyersList.Name%>" /></td>
 		<th width="80">借款金额</th>
 		<td width="80" class="text-right"><input value="<%=ProjectData.SupervisionMoney%>" type="text" size="5" />万</td>
 		<th width="80">使用期限</th>
@@ -26,7 +26,7 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<th>产权现状</th>
-		<td colspan="5">该物业无抵押或抵押在<input type="text" size="7" value="<%=ProjectData.OrignalMortgageBank%>" />支行，尚欠银行本息约<input type="text" size="5" value="<%=((ProjectData.OrignalCreditCommerceMoney||0)*1+(ProjectData.OrignalCreditFundMoney||0)*1)%>" />万元（经手人及联系电话<input type="text" size="23" value="<%=[ProjectData.AssetRansomCustomerManager,ProjectData.AssetRansomContactPhone].join(' ')%>" />），已委托<input type="text" size="15" />担保公司赎楼（经手人及联系电话<input type="text" size="15" />）</td>
+		<td colspan="5">该物业无抵押或抵押在<input type="text" size="7" value="<%=ProjectData.OrignalMortgageBank%>" />支行，尚欠银行本息约<input type="text" size="5" value="<%=((ProjectData.OrignalCreditCommerceMoney||0)*1+(ProjectData.OrignalCreditFundMoney||0)*1)%>" />万元（经手人及联系电话<input type="text" size="15" value="<%=[ProjectData.AssetRansomCustomerManager,ProjectData.AssetRansomContactPhone].join(' ')%>" />），已委托<input type="text" size="15" />担保公司赎楼（经手人及联系电话<input type="text" size="15" />）</td>
 	</tr>
 	<tr>
 		<th>交易情况</th>
@@ -34,7 +34,7 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<th>贷款审批</th>
-		<td colspan="5">借款人已交定金<input type="text" size="5" value="<%=ProjectData.EarnestMoney%>" />万，为获得<input value="<%=ProjectData.NewCreditBank%>" type="text" size="7" />银行按揭贷款<input type="text" size="5" value="<%=(parseFloat(ProjectData.BuyerCreditCommerceMoney||0)+parseFloat(ProjectData.BuyerCreditFundMoney||0))%>" />万元，需要监管首期款<input value="<%=ProjectData.SupervisionMoney%>" type="text" size="5" />元（经手人及联系电话<input type="text" size="15" />）</td>
+		<td colspan="5">借款人已交定金<input type="text" size="5" value="<%=ProjectData.EarnestMoney%>" />万，为获得<input value="<%=ProjectData.NewCreditBank%>" type="text" size="7" />银行按揭贷款<input type="text" size="5" value="<%=(parseFloat(ProjectData.BuyerCreditCommerceMoney||0)+parseFloat(ProjectData.BuyerCreditFundMoney||0))%>" />万元，需要监管首期款<input value="<%=ProjectData.SupervisionMoney%>" type="text" size="5" />元</td>
 	</tr>
 	<tr>
 		<th>收费标准</th>
@@ -107,10 +107,7 @@ var ProjectData = data.Project;
 				</tr>
 				<tr>
 					<th rowspan="3">备选</th>
-					<td colspan="2"><label><input type="checkbox">卖方委托公证书（受托人中必须有我司指定人员）</label></td>
-				</tr>
-				<tr>
-					<td colspan="2"><label><input type="checkbox">中介资金监管协议</label><label><input type="checkbox">转账凭证</label></td>
+					<td colspan="2"><label><input type="checkbox">卖方委托公证书（受托人中必须有我司指定人员）</label><label><input type="checkbox">中介资金监管协议</label><label><input type="checkbox">转账凭证</label></td>
 				</tr>
 				<tr>
 					<td colspan="2">其他资料：<input type="text" size="65" />；<br/><strong>备注：真实交易高贷需提供真假两份合同以及多余首期款退回的补充协议;假交易则需买卖双方共同签署资料</strong></td>
@@ -121,18 +118,18 @@ var ProjectData = data.Project;
 	<tr>
 		<td>
 			<p>经办人意见：</p>
-			<textarea disabled row="2"  class="td_input"></textarea>
+			<textarea disabled rows="1"  class="td_input"></textarea>
 			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>
 			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>
 		</td>
 	</tr>
 	<tr>
 		<th>风控审批意见</th>
-		<td><textarea disabled row="2"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<td><textarea disabled rows="2"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 	<tr>
 		<th>总经理审批意见</th>
-		<td><textarea disabled row="2"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<td><textarea disabled rows="1"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 </table>
 </script>
