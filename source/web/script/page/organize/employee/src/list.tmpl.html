@@ -65,7 +65,7 @@
 
 		for(;Cur=List[i++];) {
 %>
-	<tr data-hook="view" class="pointer-item" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
+	<tr data-hook="view" class="pointer-item <%=(Cur.Enabled?'':' text-delete')%>" data-id="<%=Cur.ID%>" data-data='<%=JSON.stringify(Cur)%>'>
 		<%
 			var ii=0,CurII;
 			for(;CurII=ShowInfos[ii++];) {

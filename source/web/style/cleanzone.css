@@ -5851,6 +5851,11 @@ table.no-border tr.pointer-item:hover {
 .body-handle {
   margin:20px 0px;
 }
+
+.text-delete {
+  font-style:italic;
+  text-decoration:line-through;
+}
 /* risk自定义样式 END  */
 
 /*PC适配*/
