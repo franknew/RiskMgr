@@ -40,6 +40,23 @@ define(function(require, exports, module){
 			rs.ThirdPartyList = this._joinString(data.ThirdParty,['IdentityCode','Name','Phone']);
 			rs.AssetsList = this._joinString(data.Assets,['Address','Code']);
 
+			rs.ApprovalsInfo = (function(da) {
+				var rs = {};
+
+				var i=0,cur;
+				for(;cur=da[i++];) {
+					//只记录一次，因为最新审批的在数组前面，所以直接判断“逻辑非”
+					if (cur.ActivityName=='风控审批' && cur.Status==1 && !rs.fengkong) {
+						rs.fengkong = cur.Remark;
+					}
+					if (cur.ActivityName=='经理审批' && cur.Status==1 && !rs.jingli) {
+						rs.jingli = cur.Remark;
+					}
+				}
+
+				return rs;
+			})(rs.Approvals);
+
 			return rs;
 		},
 		_joinString:function(data,keys,separator) {

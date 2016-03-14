@@ -109,21 +109,11 @@ var Borrowers = data.ThirdParty.length>0?data.ThirdPartyList:data.BuyersList;
 	</tr>
 	<tr>
 		<th>风控审批意见</th>
-		<%
-			var Approvals1 = data.Approvals && data.Approvals[1];
-			//防止流程改了，这里校验ActivityName
-			Approvals1 = (Approvals1&&Approvals1.ActivityName=='风控审批')?Approvals1.Remark:'';
-		%>
-		<td><p contenteditable="true" class="text-write"><%=Approvals1%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<td><p contenteditable="true" class="text-write"><%=(data.ApprovalsInfo.fengkong||'')%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 	<tr>
 		<th>总经理审批意见</th>
-		<%
-			var Approvals0 = data.Approvals && data.Approvals[0];
-			//防止流程改了，这里校验ActivityName
-			Approvals0 = (Approvals0&&Approvals0.ActivityName=='经理审批')?Approvals0.Remark:'';
-		%>
-		<td><p contenteditable="true" class="text-write"><%=Approvals0%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<td><p contenteditable="true" class="text-write"><%=(data.ApprovalsInfo.jingli||'')%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 </table>
 </script>

@@ -82,6 +82,23 @@ define.pack("./index",["risk/page/trade/print/print.css","jquery","risk/unit/str
 			rs.ThirdPartyList = this._joinString(data.ThirdParty,['IdentityCode','Name','Phone']);
 			rs.AssetsList = this._joinString(data.Assets,['Address','Code']);
 
+			rs.ApprovalsInfo = (function(da) {
+				var rs = {};
+
+				var i=0,cur;
+				for(;cur=da[i++];) {
+					//只记录一次，因为最新审批的在数组前面，所以直接判断“逻辑非”
+					if (cur.ActivityName=='风控审批' && cur.Status==1 && !rs.fengkong) {
+						rs.fengkong = cur.Remark;
+					}
+					if (cur.ActivityName=='经理审批' && cur.Status==1 && !rs.jingli) {
+						rs.jingli = cur.Remark;
+					}
+				}
+
+				return rs;
+			})(rs.Approvals);
+
 			return rs;
 		},
 		_joinString:function(data,keys,separator) {
@@ -210,20 +227,10 @@ __p.push('" class="td_input" /></td>\n		<th width="100">贷款收取账号</th>\
 _p(ProjectData.CreditReceiverAccount);
 __p.push('" class="td_input" /></td>\n		<th width="100">回款金额</th>\n		<td><input type="text" size="10" />万</td>\n	</tr>\n</table>\n<table class="table table-bordered table-hover">\n	<tr>\n		<th rowspan="3" width="100">经办人意见</th>\n		<td>该笔业务已提交如下资料：</td>\n	</tr>\n	<tr>\n		<td class="trade-checklist">\n			<table class="table table-bordered table-hover">\n				<tr>\n					<th rowspan="8" width="20">必选</th>\n					<td><label><input type="checkbox">借款人身份证</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">结婚证复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">借款人配偶身份证复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">借款人供楼存折(卡)</label> <label><input type="checkbox">原件</label> <label><input type="checkbox">复印件</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">原借款合同</label> <label><input type="checkbox">还款清单</label> <label><input type="checkbox">房地产证复印件</label> <label><input type="checkbox">查档</label> <br/><label><input type="checkbox">还款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银；</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">买卖合同</label> <label><input type="checkbox">定金收据</label> <label><input type="checkbox">转账凭证</label> <label><input type="checkbox">买方身份证复印件</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">银行资金监管协议</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">监管资金收款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银；</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">银行按揭贷款承诺书</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">贷款资金收款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">服务申请表、服务协议、确认函、借款合同、借据、划款委托书、承诺书</label> <br/><label><input type="checkbox">借款人配偶签字</label></td>\n				</tr>\n				<tr>\n					<td width="160"><label><input type="checkbox">买方公证书原件</label> <input type="text" size="1" />本</label></td>\n				</tr>\n				<tr>\n					<th>备选</th>\n					<td><label><input type="checkbox">担保保证书</label> <label><input type="checkbox">担保人身份证复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">证信报告</label> <label><input type="checkbox">资产清单</label> <label><input type="checkbox">评估报告或询价单</label> <br/>其他资料：<input type="text" size="65" />；</td>\n				</tr>\n			</table>\n		</td>\n	</tr>\n	<tr>\n		<td>\n			<p contenteditable="true" class="text-write"><strong class="not-write" onclick="return false;" tabindex="-1" contenteditable="false">经办人意见：</strong>');
 _p(data.Report);
-__p.push('</p>\n			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>\n			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>\n		</td>\n	</tr>\n	<tr>\n		<th>风控审批意见</th>');
-
-			var Approvals1 = data.Approvals && data.Approvals[1];
-			//防止流程改了，这里校验ActivityName
-			Approvals1 = (Approvals1&&Approvals1.ActivityName=='风控审批')?Approvals1.Remark:'';
-		__p.push('		<td><p contenteditable="true" class="text-write">');
-_p(Approvals1);
-__p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n	<tr>\n		<th>总经理审批意见</th>');
-
-			var Approvals0 = data.Approvals && data.Approvals[0];
-			//防止流程改了，这里校验ActivityName
-			Approvals0 = (Approvals0&&Approvals0.ActivityName=='经理审批')?Approvals0.Remark:'';
-		__p.push('		<td><p contenteditable="true" class="text-write">');
-_p(Approvals0);
+__p.push('</p>\n			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>\n			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>\n		</td>\n	</tr>\n	<tr>\n		<th>风控审批意见</th>\n		<td><p contenteditable="true" class="text-write">');
+_p((data.ApprovalsInfo.fengkong||''));
+__p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n	<tr>\n		<th>总经理审批意见</th>\n		<td><p contenteditable="true" class="text-write">');
+_p((data.ApprovalsInfo.jingli||''));
 __p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n</table>');
 
 return __p.join("");
@@ -235,7 +242,6 @@ var __p=[],_p=function(s){__p.push(s)};
 
 //首期款垫资(表IMG<input type="text" size="15" />6126.JPG)
 var ProjectData = data.Project;
-console.log('dd.',data);
 __p.push('<table class="table table-bordered table-hover">\n	<tr>\n		<th width="80">借款人</th>\n		<td><input type="text" class="td_input" value="');
 _p(data.BuyersList.Name);
 __p.push('" /></td>\n		<th width="80">借款金额</th>\n		<td width="80" class="text-right"><input value="');
@@ -286,20 +292,10 @@ __p.push('" />万元，需要监管首期款<input value="');
 _p(ProjectData.SupervisionMoney);
 __p.push('" type="text" size="5" />元</td>\n	</tr>\n	<tr>\n		<th>收费标准</th>\n		<td colspan="5">收费比例<input type="text" size="3" />%，收费金额<input type="text" size="5" />元；采用<label><input type="checkbox">前端</label> <label><input type="checkbox">后端收费方式，营销费用<input type="text" size="5" />。</td>\n	</tr>\n</table>\n\n<table class="table table-bordered table-hover">\n	<tr>\n		<th width="100">资料接收人</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">接收日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">资料保管人</th>\n		<td><input type="text" class="td_input" /></td>\n	</tr>\n	<tr>\n		<th width="100">业务发起日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">预计办结日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">密码修改人</th>\n		<td><input type="text" class="td_input" /></td>\n	</tr>\n	<tr>\n		<th width="100">卖方收款户名</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">卖方收款账号</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100" rowspan="2">出款方式</th>\n		<td rowspan="2"><textarea row="2"  class="td_input"></textarea></td>\n	</tr>\n	<tr>\n		<th width="100">买方退款户名</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">买方退款账号</th>\n		<td><input type="text" class="td_input" /></td>\n	</tr>\n</table>\n<table class="table table-bordered table-hover">\n	<tr>\n		<th rowspan="3" width="100">经办人意见</th>\n		<td>该笔业务已提交如下资料：</td>\n	</tr>\n	<tr>\n		<td class="trade-checklist">\n			<table class="table table-bordered table-hover">\n				<tr>\n					<th rowspan="7">必选</th>\n					<td colspan="2"><label><input type="checkbox">借款人身份证</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">结婚证复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td colspan="2"><label><input type="checkbox">借款人配偶身份证复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td colspan="2"><label><input type="checkbox">买卖合同</label> <label><input type="checkbox">定金收据</label> <label><input type="checkbox">转账凭证</label> <label><input type="checkbox">房地产证复印件</label> <label><input type="checkbox">查档</label><br/><label><input type="checkbox">原借款合同</label> <label><input type="checkbox">还款清单</label> <label><input type="checkbox">交易房产市值</label></td>\n				</tr>\n				<tr>\n					<td colspan="2"><label><input type="checkbox">卖方身份证原件</label> <label><input type="checkbox">复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td colspan="2"><label><input type="checkbox">买方收款卡</label> <label><input type="checkbox">原件</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">卖方收款卡</label> <label><input type="checkbox">原件</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银</label></td>\n				</tr>\n				<tr>\n					<td colspan="2"><label><input type="checkbox">服务申请表、服务协议、确认函、借款合同、借据、划款委托书、声明书</label> <br/><label><input type="checkbox">借款人配偶签字</label> <label><input type="checkbox">卖方划款委托书</label> <label><input type="checkbox">业主担保</label></td>\n				</tr>\n				<tr>\n					<td width="160"><label><input type="checkbox">买方公证书原件<input type="text" size="1" />本</label></td>\n					<td>后补资料：<label><input type="checkbox">资金监管协议</label> <label><input type="checkbox">资金监管进账单</label> <label><input type="checkbox">贷款承诺书</label> <label><input type="checkbox">账户确认书</label></td>\n				</tr>\n				<tr>\n					<th rowspan="3">备选</th>\n					<td colspan="2"><label><input type="checkbox">卖方委托公证书（受托人中必须有我司指定人员）</label><label><input type="checkbox">中介资金监管协议</label><label><input type="checkbox">转账凭证</label></td>\n				</tr>\n				<tr>\n					<td colspan="2">其他资料：<input type="text" size="65" />；<br/><strong>备注：真实交易高贷需提供真假两份合同以及多余首期款退回的补充协议;假交易则需买卖双方共同签署资料</strong></td>\n				</tr>\n			</table>\n		</td>\n	</tr>\n	<tr>\n		<td>\n			<p contenteditable="true" class="text-write"><strong class="not-write" onclick="return false;" tabindex="-1" contenteditable="false">经办人意见：</strong>');
 _p(data.Report);
-__p.push('</p>\n			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>\n			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>\n		</td>\n	</tr>\n	<tr>\n		<th>风控审批意见</th>');
-
-			var Approvals1 = data.Approvals && data.Approvals[1];
-			//防止流程改了，这里校验ActivityName
-			Approvals1 = (Approvals1&&Approvals1.ActivityName=='风控审批')?Approvals1.Remark:'';
-		__p.push('		<td><p contenteditable="true" class="text-write">');
-_p(Approvals1);
-__p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n	<tr>\n		<th>总经理审批意见</th>');
-
-			var Approvals0 = data.Approvals && data.Approvals[0];
-			//防止流程改了，这里校验ActivityName
-			Approvals0 = (Approvals0&&Approvals0.ActivityName=='经理审批')?Approvals0.Remark:'';
-		__p.push('		<td><p contenteditable="true" class="text-write">');
-_p(Approvals0);
+__p.push('</p>\n			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>\n			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>\n		</td>\n	</tr>\n	<tr>\n		<th>风控审批意见</th>\n		<td><p contenteditable="true" class="text-write">');
+_p((data.ApprovalsInfo.fengkong||''));
+__p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n	<tr>\n		<th>总经理审批意见</th>\n		<td><p contenteditable="true" class="text-write">');
+_p((data.ApprovalsInfo.jingli||''));
 __p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n</table>');
 
 return __p.join("");
@@ -355,20 +351,10 @@ __p.push('" />的名义，在<input type="text" size="15" value="');
 _p(ProjectData.NewCreditBank);
 __p.push('" />银行获得<input type="text" size="5" />万元的贷款承诺，银行承诺将贷款发放至<label><input type="checkbox">自身</label> <label><input type="checkbox">第三人</label> <label><input type="checkbox">我方</label> <label><input type="checkbox">贷款用途收款方</label> （经手人及联系电话<input type="text" size="15" />）。</td>\n	</tr>\n	<tr>\n		<th>收费标准</th>\n		<td colspan="5">收费比例<input type="text" size="3" />%，收费金额<input type="text" size="5" />元；采用<label><input type="checkbox">前端</label> <label><input type="checkbox">后端收费方式，营销费用<input type="text" size="5" />。</td>\n	</tr>\n</table>\n\n<table class="table table-bordered table-hover">\n	<tr>\n		<th width="100">资料接收人</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">接收日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">资料保管人</th>\n		<td><input type="text" class="td_input" /></td>\n	</tr>\n	<tr>\n		<th width="100">业务发起日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">预计办结日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">密码修改人</th>\n		<td><input type="text" class="td_input" /></td>\n	</tr>\n	<tr>\n		<th width="100">贷款收取户名</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">贷款收取账号</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">回款金额</th>\n		<td><input type="text" size="10" />万</td>\n	</tr>\n</table>\n<table class="table table-bordered table-hover">\n	<tr>\n		<th rowspan="3" width="100">经办人意见</th>\n		<td>该笔业务已提交如下资料：</td>\n	</tr>\n	<tr>\n		<td class="trade-checklist">\n			<table class="table table-bordered table-hover">\n				<tr>\n					<th rowspan="4" width="20">可选</th>\n					<td><label><input type="checkbox">借款人身份证</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">结婚证复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">借款人配偶身份证复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">借款人供楼存折(卡)</label> <label><input type="checkbox">原件</label> <label><input type="checkbox">复印件</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">原借款合同</label> <label><input type="checkbox">还款清单</label> <label><input type="checkbox">房地产证复印件</label> <label><input type="checkbox">查档</label> <br/><label><input type="checkbox">还款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银；</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">新贷款银行审批意见或承诺书</label> <label><input type="checkbox">放款用购销合同</label> <label><input type="checkbox">银行贷款收款账(卡)号</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银；</label> </td>\n				</tr>\n				<tr>\n					<th>备选</th>\n					<td>\n					<label><input type="checkbox">抵押贷款申请人身份证</label> <label><input type="checkbox">原件</label> <label><input type="checkbox">复印件</label> <br/>\n					<label><input type="checkbox">贷款用途收款方身份证</label> <label><input type="checkbox">原件</label> <label><input type="checkbox">复印件</label> <br/>\n					<label><input type="checkbox">房产市值：<input type="text" size="15" /></label> <br/>\n					<label><input type="checkbox">余款收取账号确认书</label> <br/>\n					其他资料：<input type="text" size="65" />\n					</td>\n				</tr>\n			</table>\n		</td>\n	</tr>\n	<tr>\n		<td>\n			<p contenteditable="true" class="text-write"><strong class="not-write" onclick="return false;" tabindex="-1" contenteditable="false">经办人意见：</strong>');
 _p(data.Report);
-__p.push('</p>\n			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>\n			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>\n		</td>\n	</tr>\n	<tr>\n		<th>风控审批意见</th>');
-
-			var Approvals1 = data.Approvals && data.Approvals[1];
-			//防止流程改了，这里校验ActivityName
-			Approvals1 = (Approvals1&&Approvals1.ActivityName=='风控审批')?Approvals1.Remark:'';
-		__p.push('		<td><p contenteditable="true" class="text-write">');
-_p(Approvals1);
-__p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n	<tr>\n		<th>总经理审批意见</th>');
-
-			var Approvals0 = data.Approvals && data.Approvals[0];
-			//防止流程改了，这里校验ActivityName
-			Approvals0 = (Approvals0&&Approvals0.ActivityName=='经理审批')?Approvals0.Remark:'';
-		__p.push('		<td><p contenteditable="true" class="text-write">');
-_p(Approvals0);
+__p.push('</p>\n			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>\n			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>\n		</td>\n	</tr>\n	<tr>\n		<th>风控审批意见</th>\n		<td><p contenteditable="true" class="text-write">');
+_p((data.ApprovalsInfo.fengkong||''));
+__p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n	<tr>\n		<th>总经理审批意见</th>\n		<td><p contenteditable="true" class="text-write">');
+_p((data.ApprovalsInfo.jingli||''));
 __p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n</table>');
 
 return __p.join("");
@@ -414,20 +400,10 @@ __p.push('" />银行贷款承诺<input type="text" size="5"  value="');
 _p(((ProjectData.BuyerCreditCommerceMoney||0)*1+(ProjectData.BuyerCreditFundMoney||0)*1));
 __p.push('" />万元</td>\n	</tr>\n	<tr>\n		<th>收费标准</th>\n		<td colspan="5">收费比例<input type="text" size="3" />%，收费金额<input type="text" size="5" />元；采用<label><input type="checkbox">前端</label> <label><input type="checkbox">后端收费方式，营销费用<input type="text" size="5" />。</td>\n	</tr>\n</table>\n\n<table class="table table-bordered table-hover">\n	<tr>\n		<th width="100">资料接收人</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">接收日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">保管人签字</th>\n		<td><input type="text" class="td_input" /></td>\n	</tr>\n	<tr>\n		<th width="100">业务发起日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">预计办结日期</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">密码修改签字</th>\n		<td><input type="text" class="td_input" /></td>\n	</tr>\n	<tr>\n		<th width="100">贷款收取户名</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">贷款收取账号</th>\n		<td><input type="text" class="td_input" /></td>\n		<th width="100">回款金额</th>\n		<td><input type="text" size="10" />万</td>\n	</tr>\n</table>\n<table class="table table-bordered table-hover">\n	<tr>\n		<th rowspan="3" width="100">经办人意见</th>\n		<td>该笔业务已提交如下资料：</td>\n	</tr>\n	<tr>\n		<td class="trade-checklist">\n			<table class="table table-bordered table-hover">\n				<tr>\n					<th rowspan="8" width="20">必选</th>\n					<td><label><input type="checkbox">借款人身份证</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">结婚证复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">借款人配偶身份证复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">征信报告</label></td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">借款人供楼存折(卡)</label> <label><input type="checkbox">原件</label> <label><input type="checkbox">复印件</label>&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">原借款合同</label> <label><input type="checkbox">还款清单</label> <label><input type="checkbox">房地产证复印件</label> <label><input type="checkbox">查档</label> <br/><label><input type="checkbox">还款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银；</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">买卖合同</label> <label><input type="checkbox">定金收据</label> <label><input type="checkbox">转账凭证</label> <label><input type="checkbox">买方身份证复印件</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">银行资金监管协议</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">监管资金收款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银；</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">银行按揭贷款承诺书</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox">贷款资金收款卡</label> <label><input type="checkbox">密码</label> <label><input type="checkbox">网银</label> </td>\n				</tr>\n				<tr>\n					<td><label><input type="checkbox">服务申请表、服务协议、确认函、借款合同、借据、划款委托书、承诺书</label> <br/><label><input type="checkbox">借款人配偶签字</label></td>\n				</tr>\n				<tr>\n					<td width="160"><label><input type="checkbox">公证书原件</label> <input type="text" size="1" />本</label></td>\n				</tr>\n				<tr>\n					<th>备选</th>\n					<td><label><input type="checkbox">担保保证书</label> <label><input type="checkbox">担保人身份证复印件</label> <label><input type="checkbox">户口本复印件</label> <label><input type="checkbox">证信报告</label> <label><input type="checkbox">资产清单</label> <label><input type="checkbox">评估报告或询价单</label> <br/>其他资料：<input type="text" size="65" />；</td>\n				</tr>\n			</table>\n		</td>\n	</tr>\n	<tr>\n		<td>\n			<p contenteditable="true" class="text-write"><strong class="not-write" onclick="return false;" tabindex="-1" contenteditable="false">经办人意见：</strong>');
 _p(data.Report);
-__p.push('</p>\n			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>\n			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>\n		</td>\n	</tr>\n	<tr>\n		<th>风控审批意见</th>');
-
-			var Approvals1 = data.Approvals && data.Approvals[1];
-			//防止流程改了，这里校验ActivityName
-			Approvals1 = (Approvals1&&Approvals1.ActivityName=='风控审批')?Approvals1.Remark:'';
-		__p.push('		<td><p contenteditable="true" class="text-write">');
-_p(Approvals1);
-__p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n	<tr>\n		<th>总经理审批意见</th>');
-
-			var Approvals0 = data.Approvals && data.Approvals[0];
-			//防止流程改了，这里校验ActivityName
-			Approvals0 = (Approvals0&&Approvals0.ActivityName=='经理审批')?Approvals0.Remark:'';
-		__p.push('		<td><p contenteditable="true" class="text-write">');
-_p(Approvals0);
+__p.push('</p>\n			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>\n			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>\n		</td>\n	</tr>\n	<tr>\n		<th>风控审批意见</th>\n		<td><p contenteditable="true" class="text-write">');
+_p((data.ApprovalsInfo.fengkong||''));
+__p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n	<tr>\n		<th>总经理审批意见</th>\n		<td><p contenteditable="true" class="text-write">');
+_p((data.ApprovalsInfo.jingli||''));
 __p.push('</p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>\n	</tr>\n</table>');
 
 return __p.join("");
