@@ -2,6 +2,7 @@
 <%
 //首期款垫资(表IMG<input type="text" size="15" />6126.JPG)
 var ProjectData = data.Project;
+console.log('dd.',data);
 %>
 <table class="table table-bordered table-hover">
 	<tr>
@@ -117,19 +118,28 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<td>
-			<p>经办人意见：</p>
-			<textarea disabled rows="1"  class="td_input"></textarea>
+			<p contenteditable="true" class="text-write"><strong class="not-write" onclick="return false;" tabindex="-1" contenteditable="false">经办人意见：</strong><%=data.Report%></p>
 			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>
 			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>
 		</td>
 	</tr>
 	<tr>
 		<th>风控审批意见</th>
-		<td><textarea disabled rows="2"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<%
+			var Approvals1 = data.Approvals && data.Approvals[1];
+			//防止流程改了，这里校验ActivityName
+			Approvals1 = (Approvals1&&Approvals1.ActivityName=='风控审批')?Approvals1.Remark:'';
+		%>
+		<td><p contenteditable="true" class="text-write"><%=Approvals1%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 	<tr>
 		<th>总经理审批意见</th>
-		<td><textarea disabled rows="1"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<%
+			var Approvals0 = data.Approvals && data.Approvals[0];
+			//防止流程改了，这里校验ActivityName
+			Approvals0 = (Approvals0&&Approvals0.ActivityName=='经理审批')?Approvals0.Remark:'';
+		%>
+		<td><p contenteditable="true" class="text-write"><%=Approvals0%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 </table>
 </script>
