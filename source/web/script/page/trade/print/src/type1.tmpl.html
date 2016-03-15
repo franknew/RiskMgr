@@ -117,7 +117,7 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<th>风控审批意见</th>
-		<td><p contenteditable="true" class="text-write"><%=(data.ApprovalsInfo.fengkong||'')%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<td><p contenteditable="true" class="text-write <%=(data.ApprovalsInfo.fengkong?'':' write-fengkong')%>"><%=(data.ApprovalsInfo.fengkong||'')%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 	<tr>
 		<th>总经理审批意见</th>

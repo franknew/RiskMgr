@@ -63,6 +63,10 @@ body {
 .not-write {
 	font-family: 'Microsoft Yahei', Arial,sans-serif;
 }
+.write-fengkong {
+	line-height: 1.5em;
+	min-height: 6em;
+}
 
 @media print {
 	.trade-printer .operate {
