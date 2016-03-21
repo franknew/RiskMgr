@@ -244,18 +244,19 @@ var __p=[],_p=function(s){__p.push(s)};
 
 //首期款垫资(表IMG<input type="text" size="15" />6126.JPG)
 var ProjectData = data.Project;
+console.log('dd',data);
 __p.push('<table class="table table-bordered table-hover">\n	<tr>\n		<th width="80">借款人</th>\n		<td><input type="text" class="td_input" value="');
-_p(data.SellersList.Name);
+_p(data.BuyersList.Name);
 __p.push('" /></td>\n		<th width="80">借款金额</th>\n		<td width="80" class="text-right"><input value="');
 _p(ProjectData.SupervisionMoney);
 __p.push('" type="text" size="5" />万</td>\n		<th width="80">使用期限</th>\n		<td width="80" class="text-right"><input value="" type="text" size="5" />天</td>\n	</tr>\n	<tr>\n		<th>联系电话</th>\n		<td><textarea rows="');
-_p((data.SellersList.IdentityCode.split('、').length));
+_p((data.BuyersList.IdentityCode.split('、').length));
 __p.push('"  class="td_input">');
-_p(data.SellersList.Phone);
+_p(data.BuyersList.Phone);
 __p.push('</textarea></td>\n		<th>身份证号</th>\n		<td colspan="3"><textarea rows="');
-_p((data.SellersList.IdentityCode.split('、').length));
+_p((data.BuyersList.IdentityCode.split('、').length));
 __p.push('"  class="td_input">');
-_p(data.SellersList.IdentityCode);
+_p(data.BuyersList.IdentityCode);
 __p.push('</textarea></td>\n	</tr>\n	<tr>\n		<th>物业名称</th>\n		<td colspan="2"><textarea rows="');
 _p((data.AssetsList.Address.split('、').length));
 __p.push('"  class="td_input">');

@@ -2,11 +2,12 @@
 <%
 //首期款垫资(表IMG<input type="text" size="15" />6126.JPG)
 var ProjectData = data.Project;
+console.log('dd',data);
 %>
 <table class="table table-bordered table-hover">
 	<tr>
 		<th width="80">借款人</th>
-		<td><input type="text" class="td_input" value="<%=data.SellersList.Name%>" /></td>
+		<td><input type="text" class="td_input" value="<%=data.BuyersList.Name%>" /></td>
 		<th width="80">借款金额</th>
 		<td width="80" class="text-right"><input value="<%=ProjectData.SupervisionMoney%>" type="text" size="5" />万</td>
 		<th width="80">使用期限</th>
@@ -14,9 +15,9 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<th>联系电话</th>
-		<td><textarea rows="<%=(data.SellersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.SellersList.Phone%></textarea></td>
+		<td><textarea rows="<%=(data.BuyersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.BuyersList.Phone%></textarea></td>
 		<th>身份证号</th>
-		<td colspan="3"><textarea rows="<%=(data.SellersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.SellersList.IdentityCode%></textarea></td>
+		<td colspan="3"><textarea rows="<%=(data.BuyersList.IdentityCode.split('、').length)%>"  class="td_input"><%=data.BuyersList.IdentityCode%></textarea></td>
 	</tr>
 	<tr>
 		<th>物业名称</th>
