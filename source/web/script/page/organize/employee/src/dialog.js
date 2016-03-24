@@ -64,6 +64,35 @@ define(function(require, exports, module){
 					};
 				}
 
+				var buttonDelete = null;
+				if (false) {	//测试用的
+					buttonDelete = {
+						value:'删除',
+						style:'danger',
+						callback:function() {
+							var dialog = this;
+							ajax.post({
+								url:'RiskMgr.Api.UserApi/Delete',
+								form:this.form,
+								success:function(data, textStatus, jqXHR) {
+									msg.success('删除成功');
+									dialog.close();
+
+									$(oriBox).css('background-color','red').slideUp('fast',function() {
+										$(this).remove();
+									});
+								}
+							});
+						}
+					};
+				}
+
+				var buttons = [buttonAbort];
+
+				if (buttonDelete) {
+					buttons.push(buttonDelete);
+				}
+
 
 				modal.show({
 					title:'员工详情'+(data.Enabled?'':' <small style="color:#F9FF00"><已禁用></small>'),
@@ -77,7 +106,7 @@ define(function(require, exports, module){
 					ok: function() {
 						MOD.edit(id);
 					},
-					button: [buttonAbort]
+					button: buttons
 				});
 			});
 		},
@@ -126,6 +155,9 @@ define(function(require, exports, module){
 					ajax.post({
 						url:'RiskMgr.Api.UserApi/Add',
 						form:this.form,
+						data:{
+							Enabled:1
+						},
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');
 							dialog.close();
