@@ -249,9 +249,12 @@ namespace RiskMgr.WinformTest
 
         private void button13_Click(object sender, EventArgs e)
         {
-            TaskBLL bll = new TaskBLL();
-            string userid = "10";
-            var response = bll.Query(new QueryMyTaskServiceForm { UserID = userid, Status = (int)TaskProcessStatus.Started });
+            //TaskBLL bll = new TaskBLL();
+            //string userid = "10";
+            //var response = bll.Query(new QueryMyTaskServiceForm { UserID = userid, Status = (int)TaskProcessStatus.Started });
+            ProjectBLL projectbll = new ProjectBLL();
+            var list = projectbll.QueryMyApply(new QueryMyApplyServiceForm { Status = 3, PageSize = 10, CurrentIndex = 1 });
+            var projectids = (from p in list select p.ID).Distinct().ToList();
         }
 
         private void button14_Click(object sender, EventArgs e)

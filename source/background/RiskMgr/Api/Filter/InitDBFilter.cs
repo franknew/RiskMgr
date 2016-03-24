@@ -14,10 +14,18 @@ namespace RiskMgr.Api
     {
         public override bool OnActionExecuting(ActionContext context)
         {
-            ISqlMapper mapper = Mapper.Instance();
-            if (!mapper.IsSessionStarted) mapper.BeginTransaction();
-            context.Parameters[Common.MapperKey] = mapper;
-            return base.OnActionExecuting(context);
+            try
+            {
+                ISqlMapper mapper = Mapper.Instance();
+                if (!mapper.IsSessionStarted) mapper.BeginTransaction();
+                context.Parameters[Common.MapperKey] = mapper;
+                return base.OnActionExecuting(context);
+            }
+            catch (Exception ex)
+            {
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "在OnActionExecuting中报错--Message:" + ex.Message }, SOAFramework.Library.CacheEnum.FormMonitor);
+                throw ex;
+            }
         }
 
         public override bool OnActionExecuted(ActionContext context)
@@ -29,11 +37,6 @@ namespace RiskMgr.Api
                     return base.OnActionExecuted(context);
                 }
                 ISqlMapper mapper = context.Parameters[Common.MapperKey] as ISqlMapper;
-                if (mapper == null)
-                {
-                    MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "在OnActionExecuted中mapper为null" }, SOAFramework.Library.CacheEnum.FormMonitor);
-                    return base.OnActionExecuted(context);
-                }
                 try
                 {
                     if (mapper.IsSessionStarted) mapper.CommitTransaction();
@@ -43,30 +46,36 @@ namespace RiskMgr.Api
                 }
                 return base.OnActionExecuted(context);
             }
-            catch
+            catch (Exception ex)
             {
-                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "OnActionExecuted" }, SOAFramework.Library.CacheEnum.FormMonitor);
-                throw;
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "在OnExceptionOccurs中报错--Message:" + ex.Message }, SOAFramework.Library.CacheEnum.FormMonitor);
+                throw ex;
             }
         }
 
         public override void OnExceptionOccurs(ActionContext context)
         {
-            if (!context.Parameters.ContainsKey(Common.MapperKey))
+            try
             {
+                if (!context.Parameters.ContainsKey(Common.MapperKey))
+                {
+                    base.OnExceptionOccurs(context);
+                    return;
+                }
+                ISqlMapper mapper = context.Parameters[Common.MapperKey] as ISqlMapper;
+                try
+                {
+                    if (mapper.IsSessionStarted) mapper.RollBackTransaction();
+                }
+                catch (NullReferenceException ex)
+                {
+                }
                 base.OnExceptionOccurs(context);
-                return;
             }
-            ISqlMapper mapper = context.Parameters[Common.MapperKey] as ISqlMapper;
-            if (mapper == null)
+            catch (Exception ex)
             {
-                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "在OnExceptionOccurs中mapper为null" }, SOAFramework.Library.CacheEnum.FormMonitor);
-                base.OnExceptionOccurs(context);
-                return;
+                MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = "在OnExceptionOccurs中报错--Message:" + ex.Message }, SOAFramework.Library.CacheEnum.FormMonitor);
             }
-            if (mapper.IsSessionStarted) mapper.RollBackTransaction();
-            if (context.Response != null) MonitorCache.GetInstance().PushMessage(new CacheMessage { Message = context.Response.ErrorMessage }, SOAFramework.Library.CacheEnum.FormMonitor);
-            base.OnExceptionOccurs(context);
         }
     }
 }

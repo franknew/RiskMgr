@@ -531,7 +531,7 @@
         LEFT JOIN Customer AS b ON bp.CustomerID=b.ID AND b.Enabled=1 AND b.IsDeleted=0
       </isNotNull>
       <isNotNull property="Operator">
-        LEFT JOIN UserInfo AS b ON p.Creator=b.ID
+        LEFT JOIN UserInfo AS c ON p.Creator=c.ID
       </isNotNull>
 
       <isNotNull property="IdentityCode">
@@ -554,7 +554,7 @@
           b.Name LIKE '%$Name$%'
         </isNotNull>
         <isNotNull prepend="AND" property="Operator">
-          b.CnName LIKE '%$Operator$%'
+          c.CnName LIKE '%$Operator$%'
         </isNotNull>
         <isNotNull prepend="AND" property="CreatorName">
           ui.CnName LIKE '%$CreatorName$%'
@@ -591,7 +591,7 @@
         LEFT JOIN Customer AS b ON bp.CustomerID=b.ID AND b.Enabled=1 AND b.IsDeleted=0
       </isNotNull>
       <isNotNull property="Operator">
-        LEFT JOIN UserInfo AS b ON p.Creator=b.ID 
+        LEFT JOIN UserInfo AS c ON p.Creator=c.ID 
       </isNotNull>
 
 
@@ -615,7 +615,7 @@
           b.Name LIKE '%$Name$%'
         </isNotNull>
         <isNotNull prepend="AND" property="Operator">
-          b.CnName LIKE '%$Operator$%'
+          c.CnName LIKE '%$Operator$%'
         </isNotNull>
         <isNotNull prepend="AND" property="CreatorName">
           ui.CnName LIKE '%$CreatorName$%'

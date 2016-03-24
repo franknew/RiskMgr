@@ -67,7 +67,8 @@ namespace RiskMgr.Api
                 Identity = form.Identity,
                 Mobile = form.Mobile,
                 QQ = form.QQ,
-                Remark = form.Remark
+                Remark = form.Remark,
+                WX = form.WX,
             };
             return bll.Update(u, ui, null);
         }

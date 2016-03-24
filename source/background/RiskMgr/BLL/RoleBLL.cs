@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SOAFramework.Library;
+using System.Configuration;
 
 namespace RiskMgr.BLL
 {
@@ -134,6 +135,8 @@ namespace RiskMgr.BLL
 
         public string AddRole(AddRoleServiceForm form)
         {
+            string weixinid = Common.WeiXinDepartmentID;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["WeiXinDepartmentID"])) weixinid = ConfigurationManager.AppSettings["WeiXinDepartmentID"];
             Role role = new Role
             {
                 DataAccessType = form.DataAccessType,
@@ -142,6 +145,7 @@ namespace RiskMgr.BLL
                 Name = form.Name,
                 ParentID = form.ParentID,
                 Remark = form.Remark,
+                WeiXinID = weixinid,
             };
             //新增角色
             ISqlMapper mapper = Common.GetMapperFromSession();

@@ -214,7 +214,7 @@ namespace RiskMgr.BLL
             var creator = users.Find(t => t.ID == project.Creator);
             result.Project = project.ConvertTo<FullProject>();
             result.Report = project.Report;
-            result.Creator = creator.CnName;
+            result.Creator = creator?.CnName;
 
             //处理回款信息
             var returnBackMoneyProject = returnBackMoneyInfo.FindAll(t => t.ProjectID.Equals(project.ID));

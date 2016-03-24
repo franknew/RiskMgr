@@ -130,6 +130,7 @@ namespace RiskMgr.BLL
                     case "60003":
                         foreach (var role in roles)
                         {
+                            //部门不存在就新建部门
                             Role parentrole = null;
                             if (!string.IsNullOrEmpty(role.ParentID)) roledao.Query(new RoleQueryForm { ID = role.ParentID }).FirstOrDefault();
                             var department = new SOAFramework.Library.WeiXin.Department
@@ -220,6 +221,7 @@ namespace RiskMgr.BLL
                     name = ui_temp.CnName,
                     weixinid = ui_temp.WX,
                     userid = user_temp.Name,
+                    enable = 1,
                 });
             }
             catch (SOAFramework.Library.WeiXin.WeiXinException ex)
