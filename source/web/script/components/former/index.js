@@ -82,6 +82,8 @@ define.pack("./index",["jquery","risk/unit/string","risk/components/msg/index","
 			rs[1] = group.join('');
 			rs = rs.join('');
 
+			this._initEvent();
+
 			return rs;
 		},
 		//生成group整体
@@ -316,6 +318,7 @@ define.pack("./index",["jquery","risk/unit/string","risk/components/msg/index","
 					break;
 				case 'date':
 					itemState.tag = 'input';
+					attr['data-hook'] = 'former-date';
 					if (defaultValue && /^\d{13}$/.test(defaultValue)) {	//如果是纯13位的数字，标示为时间戳进行转化
 						defaultValue = RString.date(defaultValue,'yyyy-MM-dd');
 					}
@@ -466,7 +469,28 @@ define.pack("./index",["jquery","risk/unit/string","risk/components/msg/index","
 					});
 				}
 			});
-		}
+		},
+		_initEvent:(function() {
+			var _has_init = false;
+			return function() {
+				if (_has_init) {return ;}
+				_has_init = true;
+
+				$(document.documentElement).on('focus','[data-hook="former-date"]',function(ev) {
+					ev.preventDefault();
+					var elem = $(ev.currentTarget),
+						name = elem.data('group-name'),
+						data = GROUP_CACHE[name];
+					if (!data) {
+						alert('没有找到对应的分组缓存，请联系开发人员');
+						return ;
+					}
+					var html = MOD._makeGroupItem(data.groups,data,{groupCanAdd:false});
+
+					elem.parent().before(html);
+				});
+			};
+		})()
 	};
 
 	return MOD;
