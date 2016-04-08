@@ -16,8 +16,86 @@ define(function(require, exports, module){
 	var MOD = {
 		view:function(id,oriBox) {
 			this._getData(id,function(data) {
+
+				var buttonAbort;
+				if (data.Enabled) { //当前是启用状态
+					buttonAbort = {
+						value:'禁用',
+						style:'danger',
+						callback:function() {
+							if (!confirm('确认禁用员工“'+data.CnName+'('+data.Name+')”？')) {
+								return ;
+							}
+							var dialog = this;
+							ajax.post({
+								url:'RiskMgr.Api.UserApi/Update',
+								form:this.form,
+								data:{
+									Enabled:0
+								},
+								success:function(data, textStatus, jqXHR) {
+									msg.success('禁用成功');
+									$(oriBox).addClass('text-delete');
+									dialog.close();
+								}
+							});
+						}
+					};
+				}else {	//当前账户已经被注销
+					buttonAbort = {
+						value:'启用',
+						style:'success',
+						callback:function() {
+							var dialog = this;
+							ajax.post({
+								url:'RiskMgr.Api.UserApi/Update',
+								form:this.form,
+								data:{
+									Enabled:1
+								},
+								success:function(data, textStatus, jqXHR) {
+									msg.success('启用成功');
+									dialog.close();
+
+									$(oriBox).removeClass('text-delete');
+								}
+							});
+						}
+					};
+				}
+
+				var buttonDelete = null;
+				if (false) {	//测试用的
+					buttonDelete = {
+						value:'删除',
+						style:'danger',
+						callback:function() {
+							var dialog = this;
+							ajax.post({
+								url:'RiskMgr.Api.UserApi/Delete',
+								form:this.form,
+								success:function(data, textStatus, jqXHR) {
+									msg.success('删除成功');
+									dialog.close();
+
+									$(oriBox).css('background-color','red').slideUp('fast',function() {
+										$(this).remove();
+									});
+								}
+							});
+						}
+					};
+				}
+
+				var buttons = [buttonAbort];
+
+				if (buttonDelete) {
+					buttons.push(buttonDelete);
+				}
+
+
 				modal.show({
-					title:'员工详情',
+					title:'员工详情'+(data.Enabled?'':' <small style="color:#F9FF00"><已禁用></small>'),
 					content:former.make(viewTpl,{
 						data:data,
 						disabled:true
@@ -28,28 +106,7 @@ define(function(require, exports, module){
 					ok: function() {
 						MOD.edit(id);
 					},
-					button: [{
-						value:'删除',
-						style:'danger',
-						callback:function() {
-							if (!confirm('确认删除员工“'+data.CnName+'('+data.Name+')”？')) {
-								return ;
-							}
-							var dialog = this;
-							ajax.post({
-								url:'RiskMgr.Api.UserApi/Delete',
-								form:this.form,
-								success:function(data, textStatus, jqXHR) {
-									msg.success('删除成功.');
-									dialog.close();
-
-									$(oriBox).css('background-color','red').slideUp('fast',function() {
-										$(this).remove();
-									});
-								}
-							});
-						}
-					}]
+					button: buttons
 				});
 			});
 		},
@@ -98,6 +155,9 @@ define(function(require, exports, module){
 					ajax.post({
 						url:'RiskMgr.Api.UserApi/Add',
 						form:this.form,
+						data:{
+							Enabled:1
+						},
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');
 							dialog.close();

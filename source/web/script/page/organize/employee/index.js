@@ -63,8 +63,86 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 	var MOD = {
 		view:function(id,oriBox) {
 			this._getData(id,function(data) {
+
+				var buttonAbort;
+				if (data.Enabled) { //当前是启用状态
+					buttonAbort = {
+						value:'禁用',
+						style:'danger',
+						callback:function() {
+							if (!confirm('确认禁用员工“'+data.CnName+'('+data.Name+')”？')) {
+								return ;
+							}
+							var dialog = this;
+							ajax.post({
+								url:'RiskMgr.Api.UserApi/Update',
+								form:this.form,
+								data:{
+									Enabled:0
+								},
+								success:function(data, textStatus, jqXHR) {
+									msg.success('禁用成功');
+									$(oriBox).addClass('text-delete');
+									dialog.close();
+								}
+							});
+						}
+					};
+				}else {	//当前账户已经被注销
+					buttonAbort = {
+						value:'启用',
+						style:'success',
+						callback:function() {
+							var dialog = this;
+							ajax.post({
+								url:'RiskMgr.Api.UserApi/Update',
+								form:this.form,
+								data:{
+									Enabled:1
+								},
+								success:function(data, textStatus, jqXHR) {
+									msg.success('启用成功');
+									dialog.close();
+
+									$(oriBox).removeClass('text-delete');
+								}
+							});
+						}
+					};
+				}
+
+				var buttonDelete = null;
+				if (false) {	//测试用的
+					buttonDelete = {
+						value:'删除',
+						style:'danger',
+						callback:function() {
+							var dialog = this;
+							ajax.post({
+								url:'RiskMgr.Api.UserApi/Delete',
+								form:this.form,
+								success:function(data, textStatus, jqXHR) {
+									msg.success('删除成功');
+									dialog.close();
+
+									$(oriBox).css('background-color','red').slideUp('fast',function() {
+										$(this).remove();
+									});
+								}
+							});
+						}
+					};
+				}
+
+				var buttons = [buttonAbort];
+
+				if (buttonDelete) {
+					buttons.push(buttonDelete);
+				}
+
+
 				modal.show({
-					title:'员工详情',
+					title:'员工详情'+(data.Enabled?'':' <small style="color:#F9FF00"><已禁用></small>'),
 					content:former.make(viewTpl,{
 						data:data,
 						disabled:true
@@ -75,28 +153,7 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 					ok: function() {
 						MOD.edit(id);
 					},
-					button: [{
-						value:'删除',
-						style:'danger',
-						callback:function() {
-							if (!confirm('确认删除员工“'+data.CnName+'('+data.Name+')”？')) {
-								return ;
-							}
-							var dialog = this;
-							ajax.post({
-								url:'RiskMgr.Api.UserApi/Delete',
-								form:this.form,
-								success:function(data, textStatus, jqXHR) {
-									msg.success('删除成功.');
-									dialog.close();
-
-									$(oriBox).css('background-color','red').slideUp('fast',function() {
-										$(this).remove();
-									});
-								}
-							});
-						}
-					}]
+					button: buttons
 				});
 			});
 		},
@@ -145,6 +202,9 @@ define.pack("./dialog",["jquery","risk/unit/ajax","risk/unit/route","risk/compon
 					ajax.post({
 						url:'RiskMgr.Api.UserApi/Add',
 						form:this.form,
+						data:{
+							Enabled:1
+						},
 						success:function(data, textStatus, jqXHR) {
 							msg.success('添加成功');
 							dialog.close();
@@ -626,21 +686,6 @@ define.pack("./tpl.view",[],function(require, exports, module){
 			type:'text',
 			name:'Address',
 			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:' '
-		},{
-			col:'7',
-			type:'checkbox',
-			name:'Enabled',
-			options:[{
-				selected:true,
-				value:"1",
-				name:"启用该帐号"
-			}]
 		}]
 	];
 
@@ -654,7 +699,7 @@ var tmpl = {
 'list': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="spacer spacer-bottom">\n	<button type="button" class="btn btn-primary" data-hook="add">新增员工</button>\n</div>\n\n<div class="block-flat">');
+__p.push('<div class="body-handle">\n	<button type="button" class="btn btn-primary" data-hook="add">新增员工</button>\n</div>\n\n<div class="block-flat">');
 _p(this.ListContainer());
 __p.push('</div>');
 
@@ -672,9 +717,9 @@ return __p.join("");
 'ListBox': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>姓名</th>\n				<th>账号</th>\n				<th>职位</th>\n				<th>电话</th>\n				<th>证件号</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
+__p.push('	<div class="table-container">\n	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>姓名</th>\n				<th>账号</th>\n				<th>职位</th>\n				<th>电话</th>\n				<th>证件号</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
 _p(this.ListItem(data));
-__p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
+__p.push('		</tbody>\n	</table>\n	</div>\n\n	<div class="j-pager"></div>\n');
 
 return __p.join("");
 },
@@ -690,7 +735,9 @@ var __p=[],_p=function(s){__p.push(s)};
 	if (List.length>0) {
 
 		for(;Cur=List[i++];) {
-__p.push('	<tr data-hook="view" class="pointer-item" data-id="');
+__p.push('	<tr data-hook="view" class="pointer-item ');
+_p((Cur.Enabled?'':' text-delete'));
+__p.push('" data-id="');
 _p(Cur.ID);
 __p.push('" data-data=\'');
 _p(JSON.stringify(Cur));

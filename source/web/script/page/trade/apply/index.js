@@ -2650,7 +2650,7 @@ var __p=[],_p=function(s){__p.push(s)};
 	var Types = require('./config.type'),
 		List = Types.data,
 		Colors = ['primary','success','info','warning','danger'];
-__p.push('<div class="block-flat">\n	<h3 class="hthin">请选择业务类型</h3>\n	<div class="spacer spacer-bottom">');
+__p.push('<div class="block-flat">\n	<h3 class="hthin">请选择业务类型</h3>\n	<div class="body-handle">');
 
 		for(var key in List) {
 			if(List.hasOwnProperty(key)) {

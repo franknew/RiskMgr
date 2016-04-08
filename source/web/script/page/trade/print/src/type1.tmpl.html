@@ -99,7 +99,7 @@ var ProjectData = data.Project;
 					<td><label><input type="checkbox">服务申请表、服务协议、确认函、借款合同、借据、划款委托书、承诺书</label> <br/><label><input type="checkbox">借款人配偶签字</label></td>
 				</tr>
 				<tr>
-					<td width="160"><label><input type="checkbox">买方公证书原件</label> <input type="text" size="1" />本</label></td>
+					<td width="160"><label><input type="checkbox">公证书原件</label> <input type="text" size="1" />本</label></td>
 				</tr>
 				<tr>
 					<th>备选</th>
@@ -110,19 +110,18 @@ var ProjectData = data.Project;
 	</tr>
 	<tr>
 		<td>
-			<p>经办人意见：</p>
-			<textarea disabled rows="2"  class="td_input"></textarea>
+			<p contenteditable="true" class="text-write"><strong class="not-write" onclick="return false;" tabindex="-1" contenteditable="false">经办人意见：</strong><%=data.Report%></p>
 			<p><strong>经办人声明：申请人资料完整、真实，所有签字均在本人面签，有关复印件与原件相符，本人已在职责范围内做尽职调查。</strong></p>
 			<p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p>
 		</td>
 	</tr>
 	<tr>
 		<th>风控审批意见</th>
-		<td><textarea disabled rows="2"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<td><p contenteditable="true" class="text-write <%=(data.ApprovalsInfo.fengkong?'':' write-fengkong')%>"><%=(data.ApprovalsInfo.fengkong||'')%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 	<tr>
 		<th>总经理审批意见</th>
-		<td><textarea disabled rows="2"  class="td_input"></textarea><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
+		<td><p contenteditable="true" class="text-write"><%=(data.ApprovalsInfo.jingli||'')%></p><p class="text-right">签名：<input disabled type="text" size="15" />日期：<input disabled type="text" size="15" /></p></td>
 	</tr>
 </table>
 </script>

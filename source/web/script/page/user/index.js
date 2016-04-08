@@ -59,12 +59,16 @@ define.pack("./index",["jquery","risk/unit/route","risk/unit/ajax","risk/compone
 
 
 	var MOD = {
-		initPage:function() {
+		initPage:function(arg) {
 			User.info().done(function(data) {
+				data = $.extend({},data);
+				data.Role = data.Role.Name.join(', ');
+
 				var html = Tmpl.Info({
 					tpl:Former.make(TplInfo,{
 						data:data
-					})
+					}),
+					message:arg&&arg.message
 				});
 				Route.show({
 					head:'个人资料',
@@ -76,7 +80,7 @@ define.pack("./index",["jquery","risk/unit/route","risk/unit/ajax","risk/compone
 					var elem = $(ev.currentTarget),
 						form = elem.parents('form:first');
 					Ajax.post({
-						url:'RiskMgr.Api.UserApi/Update',
+						url:'RiskMgr.Api.IndexApi/UpdateUser',
 						form:form,
 						success:function() {
 							Msg.success('修改成功');
@@ -147,26 +151,9 @@ define.pack("./tpl.info",[],function(require, exports, module){
 			html:'职位'
 		},{
 			col:7,
-			type:'select',
+			type:'text',
 			name:'Role',
-			required:true,
-			disabled:true,
-			options:[{
-				name:'请选择',
-				value:''
-			},{
-				name:'业务员',
-				value:1
-			},{
-				name:'业务员组长',
-				value:2
-			},{
-				name:'风控',
-				value:3
-			},{
-				name:'总经理',
-				value:4
-			}]
+			disabled:true
 		}],
 
 		[{
@@ -292,7 +279,11 @@ var tmpl = {
 'Info': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="block-flat">\n	<form class="form-horizontal">');
+__p.push('<div class="block-flat">');
+if (data.message) {__p.push('	<div class="alert alert-info" role="alert">');
+_p(data.message);
+__p.push('</div>');
+}__p.push('	<form class="form-horizontal">');
 _p(data.tpl);
 __p.push('	<div class="row">\n		<div class="col-sm-3">&nbsp;</div>\n		<div class="col-sm-7"><button class="btn btn-primary" data-hook="info-modify">提交</button></div>\n	</div>\n	</form>\n</div>');
 

@@ -1,4 +1,4 @@
-//create by jsc 
+//create by jsc
 (function(){
 var mods = [],version = parseFloat(seajs.version);
 define(["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","risk/components/modal/index","risk/components/former/index","risk/components/pager/index","risk/data-dictionary","risk/unit/class","risk/page/customer/index","risk/page/customer/src/tpl.view"],function(require,exports,module){
@@ -560,7 +560,7 @@ define.pack("./tpl.view",["risk/page/customer/index","risk/page/customer/src/tpl
 //property/src/form.tmpl.html
 //property/src/list.tmpl.html
 define.pack("./tmpl",[],function(require, exports, module){
-var tmpl = { 
+var tmpl = {
 'Form': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
@@ -575,7 +575,7 @@ return __p.join("");
 'list': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('<div class="spacer spacer-bottom">\n	<button type="button" class="btn btn-primary" data-hook="add">新增房产</button>\n</div>\n\n<div class="block-flat">');
+__p.push('<div class="body-handle">\n	<button type="button" class="btn btn-primary" data-hook="add">新增房产</button>\n</div>\n\n<div class="block-flat">');
 _p(this.ListContainer());
 __p.push('</div>');
 
@@ -593,9 +593,9 @@ return __p.join("");
 'ListBox': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('\n	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>房产证号</th>\n				<th colspan="2">房产地址</th>\n				<th>面积(㎡)</th>\n				<th>登记价(元)</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
+__p.push('\n	<div class="table-container">\n	<table class="no-border">\n		<thead class="no-border">\n			<tr>\n				<th>房产证号</th>\n				<th colspan="2">房产地址</th>\n				<th>面积(㎡)</th>\n				<th>登记价(元)</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_ListBox">');
 _p(this.ListItem(data));
-__p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
+__p.push('		</tbody>\n	</table>\n	</div>\n\n	<div class="j-pager"></div>\n');
 
 return __p.join("");
 },

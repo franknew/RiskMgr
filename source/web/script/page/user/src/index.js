@@ -17,12 +17,16 @@ define(function(require, exports, module){
 
 
 	var MOD = {
-		initPage:function() {
+		initPage:function(arg) {
 			User.info().done(function(data) {
+				data = $.extend({},data);
+				data.Role = data.Role.Name.join(', ');
+
 				var html = Tmpl.Info({
 					tpl:Former.make(TplInfo,{
 						data:data
-					})
+					}),
+					message:arg&&arg.message
 				});
 				Route.show({
 					head:'个人资料',
@@ -34,7 +38,7 @@ define(function(require, exports, module){
 					var elem = $(ev.currentTarget),
 						form = elem.parents('form:first');
 					Ajax.post({
-						url:'RiskMgr.Api.UserApi/Update',
+						url:'RiskMgr.Api.IndexApi/UpdateUser',
 						form:form,
 						success:function() {
 							Msg.success('修改成功');

@@ -1,6 +1,7 @@
 <script type="text/html" id="home">
 <%
-	var RString = require('risk/unit/string');
+	var RString = require('risk/unit/string'),
+		Browser = require('risk/unit/browser');
 	var Task = data || [],
 		StatusText = {
 			'1':'审批中',
@@ -32,6 +33,23 @@
 			</div>
 		</div>
 	</div>
+	<%if(Browser.client!='wx'){%>
+	<div class="col-sm-6 col-md-6">
+		<div class="block-flat">
+			<div class="header">
+				<h3>关注微信企业号</h3>
+			</div>
+			<div class="content">
+				<p>按以下步骤操作：</p>
+				<ol>
+					<li>在<a href="/#page=user" target="_blank">个人资料</a>里填写自己的手机号码，<a href="/#page=user" target="_blank">点此进入填写</a></li>
+					<li>用微信扫描二维码：<br/><img src="/images/wx_qrcode.jpg" width="120" height="120" /></li>
+					<li>关注成功后，就能在微信企业号里面直接进入系统，查看、审批等</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+	<%}%>
 
 	<% /*
 	<div class="col-sm-6 col-md-6">

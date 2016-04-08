@@ -105,21 +105,6 @@ define(function(require, exports, module){
 			type:'text',
 			name:'Address',
 			placeholder:''
-		}],
-
-		[{
-			type:'label',
-			col:'3',
-			html:' '
-		},{
-			col:'7',
-			type:'checkbox',
-			name:'Enabled',
-			options:[{
-				selected:true,
-				value:"1",
-				name:"启用该帐号"
-			}]
 		}]
 	];
 

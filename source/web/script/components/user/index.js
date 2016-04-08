@@ -32,19 +32,17 @@ define.pack = function(){
 })();
 //all file list:
 //user/src/index.js
-//user/src/wx.js
 //user/src/login.tmpl.html
 
 //js file list:
 //user/src/index.js
-//user/src/wx.js
 /**
  * 登录者信息组件
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-14 19:34:09
  */
 
-define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","./tmpl","risk/components/msg/index","risk/unit/uri","risk/unit/cookie","risk/unit/browser","./wx"],function(require, exports, module){
+define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","./tmpl","risk/components/msg/index","risk/unit/uri","risk/unit/cookie","risk/unit/browser"],function(require, exports, module){
 	var modal = require('risk/components/modal/index'),
 		Ajax = require('risk/unit/ajax'),
 		$ = require('jquery'),
@@ -53,8 +51,6 @@ define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","
 		uri = require('risk/unit/uri'),
 		cookie = require('risk/unit/cookie'),
 		browser = require('risk/unit/browser');
-
-	var WX = require('./wx');
 
 	var SKEY_NAME = 'skey';
 
@@ -66,40 +62,38 @@ define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","
 				error = opts.error,
 				message = opts.message;
 
-			if (!WX.login(opts)) {
-				modal.show({
-					width:'430px',
-					'title':'登录',
-					content:tmpl.login({
-						message:message
-					}),
-					cancel:false,
-					onshow:function() {
-						this.dialog.find('input[name="username"]').get(0).focus();
-					},
-					ok:function() {
-						var that = this;
-						Ajax.post({
-							url:'RiskMgr.Api.LogonApi/Logon',
-							form:this.form,
-							success:function(data, oriData, jqXHR) {
-								//坑爹的，cookie得前台写
-								var skey = data&&data.token;
-								if (skey) {
-									cookie.set(SKEY_NAME,skey);
-									msg.success('登录成功');
-									success && success();
-									that.close();
-								}else {
-									msg.error('未知后台错误，导致无法登录');
-									error && error();
-								}
+			modal.show({
+				width:'430px',
+				'title':'登录',
+				content:tmpl.login({
+					message:message
+				}),
+				cancel:false,
+				onshow:function() {
+					this.dialog.find('input[name="username"]').get(0).focus();
+				},
+				ok:function() {
+					var that = this;
+					Ajax.post({
+						url:'RiskMgr.Api.LogonApi/Logon',
+						form:this.form,
+						success:function(data, oriData, jqXHR) {
+							//坑爹的，cookie得前台写
+							var skey = data&&data.token;
+							if (skey) {
+								cookie.set(SKEY_NAME,skey);
+								msg.success('登录成功');
+								success && success();
+								that.close();
+							}else {
+								msg.error('未知后台错误，导致无法登录');
+								error && error();
 							}
-						});
-						return true;
-					}
-				});
-			}
+						}
+					});
+					return true;
+				}
+			});
 		},
 		logout:function() {
 			cookie.del(SKEY_NAME);
@@ -135,8 +129,27 @@ define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","
 						url:'RiskMgr.Api.IndexApi/InitPage',
 						success:function(da) {
 							var userinfo = da&&da.User || {},
-								menuinfo = da&&da.Menu || {};
-							userinfo = $.extend({},userinfo.UserInfo,userinfo.User);
+								menuinfo = da&&da.Menu || {},
+								role = userinfo&&userinfo.Role || {};
+
+							//合并数据
+							userinfo = $.extend({
+								RoleInfo:role,	//原始职位信息
+								Role:(function(role) {//解析成方便使用的数据
+									var rs = {
+										Name:[],
+										ID:[]
+									};
+
+									var i=0, l = role.length;
+									for(; i < l; ++i) {
+										rs.Name.push(role[i].Name);
+										rs.ID.push(role[i].ID);
+									}
+									return rs;
+								})(role)
+							},userinfo.UserInfo,userinfo.User);
+
 							if (userinfo) {
 								CACHE = userinfo;
 								CACHE_MENU = menuinfo;
@@ -157,85 +170,6 @@ define.pack("./index",["risk/components/modal/index","risk/unit/ajax","jquery","
 				num = sex%2?10:7,
 				pic = 'images/avatar/'+num+'.png';
 			return pic;
-		}
-	};
-
-	return MOD;
-});/**
- * 登录微信
- */
-
-define.pack("./wx",["risk/components/modal/index","risk/unit/ajax","jquery","./tmpl","risk/components/msg/index","risk/unit/uri","risk/unit/cookie","risk/unit/browser"],function(require, exports, module){
-	var modal = require('risk/components/modal/index'),
-		Ajax = require('risk/unit/ajax'),
-		$ = require('jquery'),
-		tmpl = require('./tmpl'),
-		msg = require('risk/components/msg/index'),
-		uri = require('risk/unit/uri'),
-		cookie = require('risk/unit/cookie'),
-		browser = require('risk/unit/browser');
-
-	var SKEY_NAME = 'skey',
-		WX_STATE = 'wxst',
-		WX_HAS_JUMP = '_wxjump';	//标记微信跳转过一次，防止重复302
-
-	var MOD = {
-		/*
-		* 微信登录
-		* param opts {Object} 与index.js里的login参数含义一致
-		* return {Boolen} true则表示走了微信登录，false表示没走
-		*/
-		login:function(opts) {
-			opts = opts || {};
-
-			var success = opts.success,
-				error = opts.error,
-				message = opts.message;
-
-			//微信登录
-			var params,wxCode,wxState,hasJump;
-
-			//非测试环境先不检测wx
-			if (!~location.host.indexOf(':8080')) {
-				return false;
-			}
-
-			if (browser.client == 'wx') {
-				params = uri(location.href);
-				params = params && params.params || {};
-				wxCode = params.code;
-				wxState = params.state;
-				hasJump = params[WX_HAS_JUMP];
-
-				if (wxCode) {
-					if (wxState == cookie.get(WX_STATE)) {//校验微信state
-						msg.info('正在登录微信中，请稍后...<br/>开发中复制下面的code来校验你的接口: <br/>'+wxCode+'<br/>cookie:<br/>'+document.cookie,false);
-						//发起请求登录微信
-					}else{
-						alert('你从哪里来，要到哪里去？');
-						return false;
-					}
-				}else{	//没有code
-					if (hasJump) {	//跳转过了就不再跳转
-						return false;
-					}
-
-					location.replace(MOD.getUrl());
-				}
-
-				return true;
-			}
-
-			return false;
-		},
-		getUrl:function() {
-			var corp_id = 'wx4fff07646e8c3d22',
-				redirect_uri = location.protocol+'//'+location.host+location.pathname+(location.search+(location.search?'&':'?')+WX_HAS_JUMP+'=1')+location.hash;
-			var state = Math.ceil(Math.random()*198600),
-				url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+corp_id+'&redirect_uri='+encodeURIComponent(redirect_uri)+'&response_type=code&scope=snsapi_base&state='+state+'&connect_redirect=1#wechat_redirect';
-
-			cookie.set(WX_STATE,state);	//把state写入cookie，回来时再校验
-			return url;
 		}
 	};
 

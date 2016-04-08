@@ -212,9 +212,9 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<table class="no-border">\n		<thead class="no-border">\n			<th>项目名</th>\n			<th>说明</th>\n			<th>申请人</th>\n			<th>申请时间</th>\n			<th>审批状态</th>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<div class="table-container">\n	<table class="no-border">\n		<thead class="no-border">\n			<th>项目名</th>\n			<th>说明</th>\n			<th>申请人</th>\n			<th>申请时间</th>\n			<th>审批状态</th>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
-__p.push('		</tbody>\n	</table>\n\n	<div class="j-pager"></div>\n');
+__p.push('		</tbody>\n	</table>\n	</div>\n\n	<div class="j-pager"></div>\n');
 
 return __p.join("");
 },

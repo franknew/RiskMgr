@@ -14,8 +14,6 @@ define(function(require, exports, module){
 		cookie = require('risk/unit/cookie'),
 		browser = require('risk/unit/browser');
 
-	var WX = require('./wx');
-
 	var SKEY_NAME = 'skey';
 
 	var MOD = {
@@ -26,40 +24,38 @@ define(function(require, exports, module){
 				error = opts.error,
 				message = opts.message;
 
-			if (!WX.login(opts)) {
-				modal.show({
-					width:'430px',
-					'title':'登录',
-					content:tmpl.login({
-						message:message
-					}),
-					cancel:false,
-					onshow:function() {
-						this.dialog.find('input[name="username"]').get(0).focus();
-					},
-					ok:function() {
-						var that = this;
-						Ajax.post({
-							url:'RiskMgr.Api.LogonApi/Logon',
-							form:this.form,
-							success:function(data, oriData, jqXHR) {
-								//坑爹的，cookie得前台写
-								var skey = data&&data.token;
-								if (skey) {
-									cookie.set(SKEY_NAME,skey);
-									msg.success('登录成功');
-									success && success();
-									that.close();
-								}else {
-									msg.error('未知后台错误，导致无法登录');
-									error && error();
-								}
+			modal.show({
+				width:'430px',
+				'title':'登录',
+				content:tmpl.login({
+					message:message
+				}),
+				cancel:false,
+				onshow:function() {
+					this.dialog.find('input[name="username"]').get(0).focus();
+				},
+				ok:function() {
+					var that = this;
+					Ajax.post({
+						url:'RiskMgr.Api.LogonApi/Logon',
+						form:this.form,
+						success:function(data, oriData, jqXHR) {
+							//坑爹的，cookie得前台写
+							var skey = data&&data.token;
+							if (skey) {
+								cookie.set(SKEY_NAME,skey);
+								msg.success('登录成功');
+								success && success();
+								that.close();
+							}else {
+								msg.error('未知后台错误，导致无法登录');
+								error && error();
 							}
-						});
-						return true;
-					}
-				});
-			}
+						}
+					});
+					return true;
+				}
+			});
 		},
 		logout:function() {
 			cookie.del(SKEY_NAME);
@@ -95,8 +91,27 @@ define(function(require, exports, module){
 						url:'RiskMgr.Api.IndexApi/InitPage',
 						success:function(da) {
 							var userinfo = da&&da.User || {},
-								menuinfo = da&&da.Menu || {};
-							userinfo = $.extend({},userinfo.UserInfo,userinfo.User);
+								menuinfo = da&&da.Menu || {},
+								role = userinfo&&userinfo.Role || {};
+
+							//合并数据
+							userinfo = $.extend({
+								RoleInfo:role,	//原始职位信息
+								Role:(function(role) {//解析成方便使用的数据
+									var rs = {
+										Name:[],
+										ID:[]
+									};
+
+									var i=0, l = role.length;
+									for(; i < l; ++i) {
+										rs.Name.push(role[i].Name);
+										rs.ID.push(role[i].ID);
+									}
+									return rs;
+								})(role)
+							},userinfo.UserInfo,userinfo.User);
+
 							if (userinfo) {
 								CACHE = userinfo;
 								CACHE_MENU = menuinfo;

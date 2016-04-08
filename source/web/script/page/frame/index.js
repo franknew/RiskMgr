@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","risk/unit/string","risk/unit/ajax","risk/unit/browser"],function(require,exports,module){
+define(["bootstrap","risk/config","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","risk/unit/string","risk/unit/ajax","risk/unit/browser"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -46,8 +46,10 @@ define.pack = function(){
  * @date    2015-07-10 21:05:28
  */
 
-define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","./tmpl","./userinfo","risk/unit/string"],function(require, exports, module){
+define.pack("./index",["bootstrap","risk/config","jquery","risk/unit/route","risk/components/modal/index","risk/components/user/index","./tmpl","./userinfo","risk/unit/string"],function(require, exports, module){
 	require('bootstrap');
+	require('risk/config');
+
 	var $ = require('jquery'),
 		route = require('risk/unit/route'),
 		Modal = require('risk/components/modal/index'),
@@ -61,7 +63,14 @@ define.pack("./index",["bootstrap","jquery","risk/unit/route","risk/components/m
 
 		User.login({
 			success:function() {
-				location.reload();
+				User.info().done(function(info) {
+					var phone = info.Mobile;
+					if (!phone || phone.length!=11) {	//判断没有填手机号，就强制要求
+						location.href = '/?'+Math.random()+'#page=user&message=填上您的手机号，以便绑定您的微信。（务必填写真实在用的手机号码，否则无法绑定微信）';
+						return ;
+					}
+					location.reload();
+				});
 			}
 		});
 		return ;
@@ -270,8 +279,11 @@ var tmpl = {
 
 var __p=[],_p=function(s){__p.push(s)};
 
+	var SiteConfig = require('risk/config');
 	data.avatar = data.avatar || 'about:blank'; //防止空src
-__p.push('<div id="head-nav" class="navbar navbar-default navbar-fixed-top">\n	<div class="container-fluid">\n		<div class="navbar-header">\n			<a class="navbar-brand" href="/"><span>风险管理系统</span></a>\n		</div>\n		<div class="navbar-collapse collapse">\n			<!--\n			<ul class="nav navbar-nav">\n			<li><a href="#page=apply-amount">申请额度</a></li>\n			<li><a href="#about">快捷连接22</a></li>\n			</ul>\n			-->\n			<ul class="nav navbar-nav navbar-right user-nav" id="J_UserNav">\n				<li class="dropdown profile_menu">\n					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="');
+__p.push('<div id="head-nav" class="navbar navbar-default navbar-fixed-top">\n	<div class="container-fluid">\n		<div class="navbar-header">\n			<a class="navbar-brand" href="/"><span>');
+_p(SiteConfig.name);
+__p.push('</span></a>\n		</div>\n		<div class="navbar-collapse collapse">\n			<!--\n			<ul class="nav navbar-nav">\n			<li><a href="#page=apply-amount">申请额度</a></li>\n			<li><a href="#about">快捷连接22</a></li>\n			</ul>\n			-->\n			<ul class="nav navbar-nav navbar-right user-nav" id="J_UserNav">\n				<li class="dropdown profile_menu">\n					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="Avatar" src="');
 _p(data.avatar);
 __p.push('" width="30" height="30" />');
 _p(data.name);
