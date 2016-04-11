@@ -39,11 +39,11 @@ define(function(require, exports, module){
 			//自动计算回款时间
 			var chargeBox = route.container.find('#Charge'),
 				ExportTime = 'ExportTime',	//放款时间
-				GuaranteeMonth = 'GuaranteePeriod',	//担保期限
+				GuaranteePeriod = 'GuaranteePeriod',	//担保期限
 				PaymentDate = 'PaymentDate';	//回款时间
-			chargeBox.find('input[name="'+ExportTime+'"],input[name="'+GuaranteeMonth+'"]').bind('keyup change',function(ev) {
+			chargeBox.find('input[name="'+ExportTime+'"],input[name="'+GuaranteePeriod+'"]').bind('keyup change',function(ev) {
 				var time = chargeBox.find('input[name="'+ExportTime+'"]').val(),
-					limit = chargeBox.find('input[name="'+GuaranteeMonth+'"]').val() *1,
+					limit = chargeBox.find('input[name="'+GuaranteePeriod+'"]').val() *1 + 1,	//需要把放款当天也算进来
 					rs;
 				if (time && limit && !isNaN(limit)) {
 					time = new Date(time);
