@@ -436,21 +436,17 @@ define(function(require, exports, module){
 		_initEvent:(function() {
 			var _has_init = false;
 			return function() {
+				//只初始化一次
 				if (_has_init) {return ;}
 				_has_init = true;
 
 				$(document.documentElement).on('focus','[data-hook="former-date"]',function(ev) {
-					ev.preventDefault();
-					var elem = $(ev.currentTarget),
-						name = elem.data('group-name'),
-						data = GROUP_CACHE[name];
-					if (!data) {
-						alert('没有找到对应的分组缓存，请联系开发人员');
-						return ;
+					var keyEV = document.createEvent&&document.createEvent('KeyboardEvent'),
+						inputDateElem = $(ev.currentTarget).get(0);
+					if (keyEV&&keyEV.initKeyboardEvent && inputDateElem) {
+						keyEV.initKeyboardEvent('keydown', true, true, document.defaultView, 'F4', 0);
+						inputDateElem.dispatchEvent(keyEV);
 					}
-					var html = MOD._makeGroupItem(data.groups,data,{groupCanAdd:false});
-
-					elem.parent().before(html);
 				});
 			};
 		})()
