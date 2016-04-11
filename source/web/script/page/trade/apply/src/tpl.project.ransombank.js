@@ -62,7 +62,7 @@ define(function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'赎楼期限'
+			html:'用款期限'
 		},{
 			col:'3',
 			type:'number',

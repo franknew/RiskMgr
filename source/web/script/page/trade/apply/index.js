@@ -2297,7 +2297,7 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'赎楼期限'
+			html:'用款期限'
 		},{
 			col:'3',
 			type:'number',
@@ -3019,7 +3019,7 @@ _p(Former.make(require('./tpl.project.ransombank'),{
 						switch(type) {
 							case 2: //首期款垫付
 								//首期款垫付没有这些字段
-								if ($.inArray(name, ['赎楼期限','GuaranteeMonth','赎楼金额','AssetRansomMoney']) != -1) {
+								if ($.inArray(name, ['用款期限','GuaranteeMonth','赎楼金额','AssetRansomMoney']) != -1) {
 									rs = false;
 								}
 								break;
