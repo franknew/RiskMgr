@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["risk/unit/route","jquery","risk/unit/ajax","risk/unit/string","risk/components/pager/index"],function(require,exports,module){
+define(["risk/unit/route","risk/page/trade/config","jquery","risk/unit/ajax","risk/unit/string","risk/components/pager/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -44,10 +44,12 @@ define.pack = function(){
  * @date    2015-08-30 14:17:40
  */
 
-define.pack("./index",["risk/unit/route","./list","./tmpl"],function(require, exports, module){
+define.pack("./index",["risk/unit/route","./list","./tmpl","risk/page/trade/config"],function(require, exports, module){
 	var Route = require('risk/unit/route');
 	var List = require('./list'),
 		Tmpl = require('./tmpl');
+
+	var Configs = require('risk/page/trade/config');//模板用到
 
 	var MOD = {
 		//默认查询入口
@@ -202,7 +204,7 @@ return __p.join("");
 'List': function(data){
 
 var __p=[],_p=function(s){__p.push(s)};
-__p.push('	<div class="table-container">\n	<table class="table no-border" style="min-width:650px;">\n		<thead class="no-border">\n			<tr>\n				<th width="70">编号</th>\n				<th width="70">业务员</th>\n				<th width="120">客户名称</th>\n				<th>房产地址</th>\n				<th width="140">申请时间</th>\n				<th width="70">状态</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
+__p.push('	<div class="table-container">\n	<table class="table no-border" style="min-width:650px;">\n		<thead class="no-border">\n			<tr>\n				<th width="70">编号</th>\n				<th width="70">业务员</th>\n				<th width="110">类型</th>\n				<th width="120">客户名称</th>\n				<th>房产地址</th>\n				<th width="140">申请时间</th>\n				<th width="70">状态</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n	</div>\n\n	<div class="j-pager"></div>\n');
 
@@ -213,6 +215,8 @@ return __p.join("");
 
 var __p=[],_p=function(s){__p.push(s)};
 
+	var Configs = require('risk/page/trade/config'),
+		Types = Configs.type;
 	var RString = require('risk/unit/string');
 	var List = data||[];
 
@@ -232,6 +236,8 @@ __p.push('">\n		<td>');
 _p(Cur.Project.Name);
 __p.push('</td>\n		<td>');
 _p(Cur.Creator||'&nbsp;');
+__p.push('</td>\n		<td>');
+_p(Types.get(Cur.Project.Type)||'&nbsp;');
 __p.push('</td>\n		<td>\n			<table class="no-strip">');
 
 			var bi=0,CurBuyer,

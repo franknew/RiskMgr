@@ -5,13 +5,14 @@
  */
 define(function(require, exports, module){
 
+	var Configs = require('risk/page/trade/config');//模板用到
 	var $ = require('jquery'),
 		Ajax = require('risk/unit/ajax'),
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
-		Types = require('./config.type'),
+		Types = Configs.type,
 		Data = require('./data');
 
 	var MOD = {

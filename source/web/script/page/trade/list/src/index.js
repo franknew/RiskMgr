@@ -9,6 +9,8 @@ define(function(require, exports, module){
 	var List = require('./list'),
 		Tmpl = require('./tmpl');
 
+	var Configs = require('risk/page/trade/config');//模板用到
+
 	var MOD = {
 		//默认查询入口
 		initPage:function(params) {

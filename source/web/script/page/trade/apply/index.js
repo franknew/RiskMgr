@@ -1,7 +1,7 @@
 //create by jsc 
 (function(){
 var mods = [],version = parseFloat(seajs.version);
-define(["jquery","risk/unit/ajax","risk/components/msg/index","risk/components/modal/index","risk/unit/uri","risk/unit/route","risk/unit/serialize","risk/unit/string","risk/components/former/index","risk/page/customer/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
+define(["jquery","risk/unit/ajax","risk/components/msg/index","risk/components/modal/index","risk/unit/uri","risk/page/trade/config","risk/unit/route","risk/unit/serialize","risk/unit/string","risk/components/former/index","risk/page/customer/index","risk/page/Property/index","risk/unit/class","risk/components/parsley/index"],function(require,exports,module){
 
 	var uri		= module.uri || module.id,
 		m		= uri.split('?')[0].match(/^(.+\/)([^\/]*?)(?:\.js)?$/i),
@@ -32,7 +32,6 @@ define.pack = function(){
 })();
 //all file list:
 //apply/src/autoComplete.js
-//apply/src/config.type.js
 //apply/src/data.js
 //apply/src/index.js
 //apply/src/setup.approval.js
@@ -67,7 +66,6 @@ define.pack = function(){
 
 //js file list:
 //apply/src/autoComplete.js
-//apply/src/config.type.js
 //apply/src/data.js
 //apply/src/index.js
 //apply/src/setup.approval.js
@@ -169,31 +167,6 @@ define.pack("./autoComplete",["jquery","risk/unit/ajax"],function(require, expor
 
 	return autoComplete;
 });/**
- * 交易类型对应关系
- * @authors viktorli (i@lizhenwen.com)
- */
-
-define.pack("./config.type",[],function(require, exports, module){
-
-	var MOD = {
-		data:{
-			'1':'二手楼买卖交易',
-			'2':'首期款垫付',
-			'3':'同名转按',
-			'4':'贷前垫资'
-		},
-		get:function(typeID) {
-			typeID = typeID+'';
-			var types = MOD.data;
-
-			var rs = types[typeID] || types['1'];
-
-			return rs;
-		}
-	};
-
-	return MOD;
-});/**
  * 获取数据
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-08-29 16:07:24
@@ -266,15 +239,16 @@ define.pack("./data",["jquery","risk/components/msg/index","risk/components/moda
  * @authors viktorli (i@lizhenwen.com)
  * @date    2015-07-15 21:41:52
  */
-define.pack("./index",["jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./tmpl","./setup","./config.type","./data"],function(require, exports, module){
+define.pack("./index",["risk/page/trade/config","jquery","risk/unit/ajax","risk/unit/route","risk/components/msg/index","./tmpl","./setup","./data"],function(require, exports, module){
 
+	var Configs = require('risk/page/trade/config');//模板用到
 	var $ = require('jquery'),
 		Ajax = require('risk/unit/ajax'),
 		Route = require('risk/unit/route'),
 		Msg = require('risk/components/msg/index'),
 		Tmpl = require('./tmpl'),
 		Setup = require('./setup'),
-		Types = require('./config.type'),
+		Types = Configs.type,
 		Data = require('./data');
 
 	var MOD = {
@@ -2647,8 +2621,8 @@ var tmpl = {
 
 var __p=[],_p=function(s){__p.push(s)};
 
-	var Types = require('./config.type'),
-		List = Types.data,
+	var Configs = require('risk/page/trade/config'),
+		List = Configs.type.data,
 		Colors = ['primary','success','info','warning','danger'];
 __p.push('<div class="block-flat">\n	<h3 class="hthin">请选择业务类型</h3>\n	<div class="body-handle">');
 
