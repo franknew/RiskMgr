@@ -30,6 +30,9 @@ define(function(require, exports, module){
 		},{
 			value:"8",
 			name:"士兵证"
+		},{
+			value:"9",
+			name:"营业执照"
 		}],
 
 		"性别":[{
