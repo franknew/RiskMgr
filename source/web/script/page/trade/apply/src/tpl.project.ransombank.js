@@ -9,6 +9,22 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:3,
+			html:'是否红本房产'
+		},{
+			col:"3",
+			type:'select',
+			name:'HouseRedState',
+			options:[{
+				value:'0',
+				name:'否'
+			},{
+				value:'1',
+				name:'是'
+			}]
+		}],
+		[{
+			type:'label',
+			col:3,
 			required:true,
 			html:'原按揭银行'
 		},{

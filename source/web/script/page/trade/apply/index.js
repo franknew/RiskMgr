@@ -1022,7 +1022,35 @@ define.pack("./setup.project",["risk/unit/serialize","risk/components/former/ind
 
 			return data;
 		},
-		init:function() {}
+		init:function() {
+			//红本的时候隐藏部分资料
+			var box = $('#Project'),
+				redElem = box.find('select[name="HouseRedState"]'),
+				ransomBox = redElem.parents('.form-horizontal:first');
+
+			redElem.bind('change',function(ev) {
+				var elem = $(ev.currentTarget),
+					val = elem.val(),
+					isRed = !!(val==1);
+
+				var showed = ['HouseRedState','AssetRansomCustomerManager','AssetRansomContactPhone'];
+
+				ransomBox.find('[name]').each(function(i,ele) {
+					var $ele = $(ele),
+						name = $ele.attr('name'),
+						parentBox = $ele.parents('div.form-group:first'),
+						inRedList = !!(showed.indexOf(name)!=-1);
+
+					if (isRed) {
+						if (!inRedList) {
+							parentBox.hide();
+						}
+					}else {
+						parentBox.show();
+					}
+				});
+			});
+		}
 	};
 
 	return MOD;
@@ -2241,6 +2269,22 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 
 define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 	var MOD = [//赎楼行
+		[{
+			type:'label',
+			col:3,
+			html:'是否红本房产'
+		},{
+			col:"3",
+			type:'select',
+			name:'HouseRedState',
+			options:[{
+				value:'0',
+				name:'否'
+			},{
+				value:'1',
+				name:'是'
+			}]
+		}],
 		[{
 			type:'label',
 			col:3,

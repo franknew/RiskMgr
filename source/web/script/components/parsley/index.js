@@ -1537,6 +1537,9 @@ var Validator = ( function ( ) {
         factory,
         curRS;
       for(;cur=nodes[i++];) {
+        if (!$(cur).is(':visible')) {//只有显示的元素才去判断
+          continue;
+        }
         factory = new Parsley.Factory(cur,{},this);
         curRS = factory.validate();
         if (curRS!==true) {
