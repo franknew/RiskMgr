@@ -2235,28 +2235,35 @@ define.pack("./tpl.project.newloan",[],function(require, exports, module){
 		}],
 
 		[{
-			type:'label',
-			col:3,
-			required:true,
-			html:'贷款接收账户'
-		},{
-			col:"3",
-			type:'text',
-			name:'CreditReceiverName',
-			placeholder:'姓名',
-			required:true
-		},{
-			col:"3",
-			type:'text',
-			name:'CreditReceiverBank',
-			placeholder:'开户行',
-			required:true
-		},{
-			col:"3",
-			type:'text',
-			name:'CreditReceiverAccount',
-			placeholder:'账号',
-			required:true
+			type:'group',
+			name:'CreditReceiverInfo',
+			addText:'贷款接收账户',
+			groups:[
+				[{
+					type:'label',
+					col:3,
+					required:true,
+					html:'贷款接收账户'
+				},{
+					col:"3",
+					type:'text',
+					name:'CreditReceiverName',
+					placeholder:'姓名',
+					required:true
+				},{
+					col:"3",
+					type:'text',
+					name:'CreditReceiverBank',
+					placeholder:'开户行',
+					required:true
+				},{
+					col:"3",
+					type:'text',
+					name:'CreditReceiverAccount',
+					placeholder:'账号',
+					required:true
+				}]
+			]
 		}]
 	];
 
@@ -2349,6 +2356,16 @@ define.pack("./tpl.project.ransombank",[],function(require, exports, module){
 			name:'GuaranteeMonth',
 			placeholder:'',
 			suffix:'天'
+		}],
+
+		[{
+			type:'label',
+			col:'3',
+			html:'预计出款时间'
+		},{
+			col:'3',
+			type:'date',
+			name:'GuaranteePredictTime',
 		}],
 
 		[{

@@ -91,6 +91,16 @@ define(function(require, exports, module){
 		[{
 			type:'label',
 			col:'3',
+			html:'预计出款时间'
+		},{
+			col:'3',
+			type:'date',
+			name:'GuaranteePredictTime',
+		}],
+
+		[{
+			type:'label',
+			col:'3',
 			required:true,
 			html:'原贷款金额'
 		},{

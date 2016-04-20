@@ -118,28 +118,35 @@ define(function(require, exports, module){
 		}],
 
 		[{
-			type:'label',
-			col:3,
-			required:true,
-			html:'贷款接收账户'
-		},{
-			col:"3",
-			type:'text',
-			name:'CreditReceiverName',
-			placeholder:'姓名',
-			required:true
-		},{
-			col:"3",
-			type:'text',
-			name:'CreditReceiverBank',
-			placeholder:'开户行',
-			required:true
-		},{
-			col:"3",
-			type:'text',
-			name:'CreditReceiverAccount',
-			placeholder:'账号',
-			required:true
+			type:'group',
+			name:'CreditReceiverInfo',
+			addText:'贷款接收账户',
+			groups:[
+				[{
+					type:'label',
+					col:3,
+					required:true,
+					html:'贷款接收账户'
+				},{
+					col:"3",
+					type:'text',
+					name:'CreditReceiverName',
+					placeholder:'姓名',
+					required:true
+				},{
+					col:"3",
+					type:'text',
+					name:'CreditReceiverBank',
+					placeholder:'开户行',
+					required:true
+				},{
+					col:"3",
+					type:'text',
+					name:'CreditReceiverAccount',
+					placeholder:'账号',
+					required:true
+				}]
+			]
 		}]
 	];
 
