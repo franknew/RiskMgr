@@ -32,7 +32,7 @@ define(function(require, exports, module){
 			type:'label',
 			col:'3',
 			required:true,
-			html:'买方贷款金额'
+			html:'贷款金额'
 		},{
 			col:'3',
 			type:'decimal',

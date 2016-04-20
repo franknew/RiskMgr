@@ -58,20 +58,22 @@
 					tplFilter:function(tpl) {
 						var rs = $.extend({},tpl);
 							name = tpl.name || (tpl.type=='label' && tpl.html),
-							type = FormData.Type*1,
-							//同名转贷、贷前垫资的不同的字段
-							specKeys = ['买方贷款金额','BuyerCreditCommerceMoney','BuyerCreditFundMoney','成交金额','DealMoney','交易定金','EarnestMoney','资金监管','SupervisionMoney','资金监管银行','SupervisionBank'];	//同名转按没有这些，贷前垫资这些改为非必填
+							type = FormData.Type*1;
 
-						if ($.inArray(name, specKeys) != -1) {
 							switch(type) {
 								case 3: //同名转按
-									rs = false;
+									//隐藏这些
+									if ($.inArray(name, ['成交金额','DealMoney','交易定金','EarnestMoney','资金监管','SupervisionMoney','资金监管银行','SupervisionBank']) != -1) {
+										rs = false;
+									}
 									break;
 								case 4: //贷前垫资
-									rs.required = false;
+									//非必填
+									if ($.inArray(name, ['贷款金额','BuyerCreditCommerceMoney','BuyerCreditFundMoney','成交金额','DealMoney','交易定金','EarnestMoney','资金监管','SupervisionMoney','资金监管银行','SupervisionBank']) != -1) {
+										rs.required = false;
+									}
 									break;
 							}
-						}
 
 						//只有贷前垫资才显示“垫资金额”
 						if (type!=4 && !!~$.inArray(name,['垫资金额','CompanyPredepositMoney'])) {
