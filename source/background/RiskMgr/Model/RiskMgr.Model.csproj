@@ -58,6 +58,7 @@
     <Compile Include="Entity\AuthorityMappingNode.cs" />
     <Compile Include="Entity\AuthorityNodeForCheck.cs" />
     <Compile Include="Entity\BankAccount.cs" />
+    <Compile Include="Entity\CreditReceiverInfo.cs" />
     <Compile Include="Entity\Customer.cs" />
     <Compile Include="Entity\Customer_Asset.cs" />
     <Compile Include="Entity\Customer_Project.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="QueryForm\AssetQueryForm.cs" />
     <Compile Include="QueryForm\Asset_ProjectQueryForm.cs" />
     <Compile Include="QueryForm\BankAccountQueryForm.cs" />
+    <Compile Include="QueryForm\CreditReceiverInfoQueryForm.cs" />
     <Compile Include="QueryForm\CustomerQueryForm.cs" />
     <Compile Include="QueryForm\Customer_AssetQueryForm.cs" />
     <Compile Include="QueryForm\Customer_ProjectQueryForm.cs" />
@@ -144,6 +146,7 @@
     <Compile Include="QueryForm\User_PostQueryForm.cs" />
     <Compile Include="QueryForm\User_RoleQueryForm.cs" />
     <Compile Include="UpdateForm\ActionUpdateForm.cs" />
+    <Compile Include="UpdateForm\CreditReceiverInfoUpdateForm.cs" />
     <Compile Include="UpdateForm\CustomerUpdateForm.cs" />
     <Compile Include="UpdateForm\Customer_AssetUpdateForm.cs" />
     <Compile Include="UpdateForm\Customer_ProjectUpdateForm.cs" />

@@ -12,9 +12,19 @@ namespace RiskMgr.Form
         public List<String> Creators { get; set;}
         public Int32? Type { get; set; }
         
+        public Int32? Type_Start { get; set; }
+        
+        public Int32? Type_End { get; set; }
+        
         public Int32? Source { get; set; }
         
+        public Int32? Source_Start { get; set; }
+        
+        public Int32? Source_End { get; set; }
+        
         public string AgentName { get; set; }
+        
+        public DateTime? CertificateData { get; set; }
         
         public DateTime? CertificateData_Start { get; set; }
         
@@ -36,13 +46,17 @@ namespace RiskMgr.Form
         
         public string OrignalFundBranch { get; set; }
         
-        public DateTime? OrignalCreditCommerceMoney_Start { get; set; }
+        public Decimal? OrignalCreditCommerceMoney { get; set; }
         
-        public DateTime? OrignalCreditCommerceMoney_End { get; set; }
+        public Decimal? OrignalCreditCommerceMoney_Start { get; set; }
         
-        public DateTime? OrignalCreditFundMoney_Start { get; set; }
+        public Decimal? OrignalCreditCommerceMoney_End { get; set; }
         
-        public DateTime? OrignalCreditFundMoney_End { get; set; }
+        public Decimal? OrignalCreditFundMoney { get; set; }
+        
+        public Decimal? OrignalCreditFundMoney_Start { get; set; }
+        
+        public Decimal? OrignalCreditFundMoney_End { get; set; }
         
         public string AssetRansomCustomerManager { get; set; }
         
@@ -54,35 +68,53 @@ namespace RiskMgr.Form
         
         public Int32? GuaranteeMonth { get; set; }
         
-        public DateTime? BuyerCreditCommerceMoney_Start { get; set; }
+        public Int32? GuaranteeMonth_Start { get; set; }
         
-        public DateTime? BuyerCreditCommerceMoney_End { get; set; }
+        public Int32? GuaranteeMonth_End { get; set; }
         
-        public DateTime? BuyerCreditFundMoney_Start { get; set; }
+        public Decimal? BuyerCreditCommerceMoney { get; set; }
         
-        public DateTime? BuyerCreditFundMoney_End { get; set; }
+        public Decimal? BuyerCreditCommerceMoney_Start { get; set; }
         
-        public DateTime? DealMoney_Start { get; set; }
+        public Decimal? BuyerCreditCommerceMoney_End { get; set; }
         
-        public DateTime? DealMoney_End { get; set; }
+        public Decimal? BuyerCreditFundMoney { get; set; }
         
-        public DateTime? EarnestMoney_Start { get; set; }
+        public Decimal? BuyerCreditFundMoney_Start { get; set; }
         
-        public DateTime? EarnestMoney_End { get; set; }
+        public Decimal? BuyerCreditFundMoney_End { get; set; }
         
-        public DateTime? SupervisionMoney_Start { get; set; }
+        public Decimal? DealMoney { get; set; }
         
-        public DateTime? SupervisionMoney_End { get; set; }
+        public Decimal? DealMoney_Start { get; set; }
+        
+        public Decimal? DealMoney_End { get; set; }
+        
+        public Decimal? EarnestMoney { get; set; }
+        
+        public Decimal? EarnestMoney_Start { get; set; }
+        
+        public Decimal? EarnestMoney_End { get; set; }
+        
+        public Decimal? SupervisionMoney { get; set; }
+        
+        public Decimal? SupervisionMoney_Start { get; set; }
+        
+        public Decimal? SupervisionMoney_End { get; set; }
         
         public string SupervisionBank { get; set; }
         
-        public DateTime? AssetRansomMoney_Start { get; set; }
+        public Decimal? AssetRansomMoney { get; set; }
         
-        public DateTime? AssetRansomMoney_End { get; set; }
+        public Decimal? AssetRansomMoney_Start { get; set; }
         
-        public DateTime? CustomerPredepositMoney_Start { get; set; }
+        public Decimal? AssetRansomMoney_End { get; set; }
         
-        public DateTime? CustomerPredepositMoney_End { get; set; }
+        public Decimal? CustomerPredepositMoney { get; set; }
+        
+        public Decimal? CustomerPredepositMoney_Start { get; set; }
+        
+        public Decimal? CustomerPredepositMoney_End { get; set; }
         
         public string CreditReceiverName { get; set; }
         
@@ -92,47 +124,81 @@ namespace RiskMgr.Form
         
         public Int32? AssetRansomType { get; set; }
         
+        public Int32? AssetRansomType_Start { get; set; }
+        
+        public Int32? AssetRansomType_End { get; set; }
+        
         public Int32? PredictDays { get; set; }
+        
+        public Int32? PredictDays_Start { get; set; }
+        
+        public Int32? PredictDays_End { get; set; }
         
         public Int32? ChargeType { get; set; }
         
+        public Int32? ChargeType_Start { get; set; }
+        
+        public Int32? ChargeType_End { get; set; }
+        
         public Int32? Index { get; set; }
         
-        public DateTime? InsuranceFee_Start { get; set; }
+        public Int32? Index_Start { get; set; }
         
-        public DateTime? InsuranceFee_End { get; set; }
+        public Int32? Index_End { get; set; }
+        
+        public Decimal? InsuranceFee { get; set; }
+        
+        public Decimal? InsuranceFee_Start { get; set; }
+        
+        public Decimal? InsuranceFee_End { get; set; }
+        
+        public DateTime? InsuranceTime { get; set; }
         
         public DateTime? InsuranceTime_Start { get; set; }
         
         public DateTime? InsuranceTime_End { get; set; }
         
-        public DateTime? ExportMoney_Start { get; set; }
+        public Decimal? ExportMoney { get; set; }
         
-        public DateTime? ExportMoney_End { get; set; }
+        public Decimal? ExportMoney_Start { get; set; }
+        
+        public Decimal? ExportMoney_End { get; set; }
+        
+        public DateTime? ExportTime { get; set; }
         
         public DateTime? ExportTime_Start { get; set; }
         
         public DateTime? ExportTime_End { get; set; }
         
-        public DateTime? ReturnBackMoney_Start { get; set; }
+        public Decimal? ReturnBackMoney { get; set; }
         
-        public DateTime? ReturnBackMoney_End { get; set; }
+        public Decimal? ReturnBackMoney_Start { get; set; }
+        
+        public Decimal? ReturnBackMoney_End { get; set; }
+        
+        public DateTime? ReturnBackTime { get; set; }
         
         public DateTime? ReturnBackTime_Start { get; set; }
         
         public DateTime? ReturnBackTime_End { get; set; }
         
-        public DateTime? DelayFee_Start { get; set; }
+        public Decimal? DelayFee { get; set; }
         
-        public DateTime? DelayFee_End { get; set; }
+        public Decimal? DelayFee_Start { get; set; }
+        
+        public Decimal? DelayFee_End { get; set; }
+        
+        public DateTime? DelayTime { get; set; }
         
         public DateTime? DelayTime_Start { get; set; }
         
         public DateTime? DelayTime_End { get; set; }
         
-        public DateTime? HasExpired_Start { get; set; }
+        public Decimal? HasExpired { get; set; }
         
-        public DateTime? HasExpired_End { get; set; }
+        public Decimal? HasExpired_Start { get; set; }
+        
+        public Decimal? HasExpired_End { get; set; }
         
         public string NewAssetCode { get; set; }
         
@@ -141,6 +207,8 @@ namespace RiskMgr.Form
         public string MortgagePerson { get; set; }
         
         public string MortgageRemark { get; set; }
+        
+        public DateTime? InsuranceFreeTime { get; set; }
         
         public DateTime? InsuranceFreeTime_Start { get; set; }
         
@@ -154,9 +222,13 @@ namespace RiskMgr.Form
         
         public string RefundBankName { get; set; }
         
-        public DateTime? RefundMoney_Start { get; set; }
+        public Decimal? RefundMoney { get; set; }
         
-        public DateTime? RefundMoney_End { get; set; }
+        public Decimal? RefundMoney_Start { get; set; }
+        
+        public Decimal? RefundMoney_End { get; set; }
+        
+        public DateTime? RefundDate { get; set; }
         
         public DateTime? RefundDate_Start { get; set; }
         
@@ -168,9 +240,13 @@ namespace RiskMgr.Form
         
         public string PaymentBankName { get; set; }
         
-        public DateTime? PaymentMoney_Start { get; set; }
+        public Decimal? PaymentMoney { get; set; }
         
-        public DateTime? PaymentMoney_End { get; set; }
+        public Decimal? PaymentMoney_Start { get; set; }
+        
+        public Decimal? PaymentMoney_End { get; set; }
+        
+        public DateTime? PaymentDate { get; set; }
         
         public DateTime? PaymentDate_Start { get; set; }
         
@@ -180,37 +256,57 @@ namespace RiskMgr.Form
         
         public Int32? InsurancePeriod { get; set; }
         
+        public Int32? InsurancePeriod_Start { get; set; }
+        
+        public Int32? InsurancePeriod_End { get; set; }
+        
         public UInt64? FinanceConfirm { get; set; }
         
         public string Report { get; set; }
+        
+        public DateTime? PredictReturnBackMoneyTime { get; set; }
         
         public DateTime? PredictReturnBackMoneyTime_Start { get; set; }
         
         public DateTime? PredictReturnBackMoneyTime_End { get; set; }
         
+        public DateTime? PickNumberTime { get; set; }
+        
         public DateTime? PickNumberTime_Start { get; set; }
         
         public DateTime? PickNumberTime_End { get; set; }
+        
+        public DateTime? LogoutAssetTime { get; set; }
         
         public DateTime? LogoutAssetTime_Start { get; set; }
         
         public DateTime? LogoutAssetTime_End { get; set; }
         
+        public DateTime? ChangeOwnerReceiptTime { get; set; }
+        
         public DateTime? ChangeOwnerReceiptTime_Start { get; set; }
         
         public DateTime? ChangeOwnerReceiptTime_End { get; set; }
+        
+        public DateTime? ChangeOwnerHandleTime { get; set; }
         
         public DateTime? ChangeOwnerHandleTime_Start { get; set; }
         
         public DateTime? ChangeOwnerHandleTime_End { get; set; }
         
+        public DateTime? PickNewAssetCodeTime { get; set; }
+        
         public DateTime? PickNewAssetCodeTime_Start { get; set; }
         
         public DateTime? PickNewAssetCodeTime_End { get; set; }
         
-        public DateTime? ReturnBackMoney2_Start { get; set; }
+        public Decimal? ReturnBackMoney2 { get; set; }
         
-        public DateTime? ReturnBackMoney2_End { get; set; }
+        public Decimal? ReturnBackMoney2_Start { get; set; }
+        
+        public Decimal? ReturnBackMoney2_End { get; set; }
+        
+        public DateTime? ReturnBackTime2 { get; set; }
         
         public DateTime? ReturnBackTime2_Start { get; set; }
         
@@ -218,23 +314,39 @@ namespace RiskMgr.Form
         
         public string ReturnBackRemark { get; set; }
         
-        public DateTime? CompanyPredepositMoney_Start { get; set; }
+        public Decimal? CompanyPredepositMoney { get; set; }
         
-        public DateTime? CompanyPredepositMoney_End { get; set; }
+        public Decimal? CompanyPredepositMoney_Start { get; set; }
+        
+        public Decimal? CompanyPredepositMoney_End { get; set; }
         
         public string ChargeFinanceRemark { get; set; }
         
-        public DateTime? RollFee_Start { get; set; }
+        public Decimal? RollFee { get; set; }
         
-        public DateTime? RollFee_End { get; set; }
+        public Decimal? RollFee_Start { get; set; }
+        
+        public Decimal? RollFee_End { get; set; }
         
         public string RollRemark { get; set; }
         
         public Int32? GuaranteePeriod { get; set; }
         
+        public Int32? GuaranteePeriod_Start { get; set; }
+        
+        public Int32? GuaranteePeriod_End { get; set; }
+        
+        public DateTime? DelayTimeEnd { get; set; }
+        
         public DateTime? DelayTimeEnd_Start { get; set; }
         
         public DateTime? DelayTimeEnd_End { get; set; }
+        
+        public DateTime? GuaranteePredictTime { get; set; }
+        
+        public DateTime? GuaranteePredictTime_Start { get; set; }
+        
+        public DateTime? GuaranteePredictTime_End { get; set; }
         
     }
 }

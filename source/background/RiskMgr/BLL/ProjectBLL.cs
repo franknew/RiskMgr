@@ -19,7 +19,7 @@ namespace RiskMgr.BLL
     {
         #region action
         public string Save(Project project, List<Asset> assets, List<Customer> buyers, List<Customer> sellers, List<Customer> thirdpart,
-            List<Guarantor> Guarantor, string userid)
+            List<Guarantor> Guarantor, List<CreditReceiverInfo> creditInfo, string userid)
         {
             #region 初始化变量
             ISqlMapper mapper = Common.GetMapperFromSession();
@@ -29,6 +29,7 @@ namespace RiskMgr.BLL
             Customer_ProjectDao cpdao = new Customer_ProjectDao(mapper);
             CustomerDao customerdao = new CustomerDao(mapper);
             Customer_AssetDao cadao = new Customer_AssetDao(mapper);
+            CreditReceiverInfoDao cridao = new CreditReceiverInfoDao(mapper);
             AssetBLL assetbll = new AssetBLL();
             CustomerBLL customerbll = new CustomerBLL();
             #endregion
@@ -46,10 +47,7 @@ namespace RiskMgr.BLL
             project.Creator = project.LastUpdator = userid;
             project.IsDeleted = 0;
             var projecttemp = projectdao.Query(new ProjectQueryForm { ID = project.ID }).FirstOrDefault();
-            if (projecttemp == null)
-            {
-                projectdao.Add(project);
-            }
+            if (projecttemp == null) projectdao.Add(project); 
             else
             {
                 projectdao.Update(new ProjectUpdateForm
@@ -134,7 +132,19 @@ namespace RiskMgr.BLL
                 }
             }
             #endregion
-            
+
+            #region 处理贷款接收账号信息
+            cridao.Delete(new CreditReceiverInfoQueryForm { ProjectID = project.ID });
+            if (creditInfo != null)
+            {
+                foreach (var c in creditInfo)
+                {
+                    c.ProjectID = project.ID;
+                    cridao.Add(c);
+                }
+            }
+            #endregion
+
             return project.ID;
         }
 
@@ -142,7 +152,8 @@ namespace RiskMgr.BLL
             List<Asset> assets, List<Customer_Project> cps, List<Customer_Asset> cas, List<Asset_Project> aps,
             List<Workflow> workflows, List<Activity> activities, List<Approval> approvals, List<Task> tasks,
             List<UserInfo> users, List<User_Role> userroles, List<TrackingChangeOwner> tcolist,
-            List<TrackingMortgage> tmlist, List<ReturnBackConfirm> returnBackMoneyInfo, string currentuserid)
+            List<TrackingMortgage> tmlist, List<ReturnBackConfirm> returnBackMoneyInfo, List<CreditReceiverInfo> creditInfo,
+            string currentuserid)
         {
             InitApprovalResultForm result = new InitApprovalResultForm();
             var customerids = (from c in cps
@@ -259,17 +270,25 @@ namespace RiskMgr.BLL
                 result.Project.MortgageOverTime = Mortgage.MortgageOverTime;
                 result.Project.MortgagePredictTime = Mortgage.MortgagePredictTime;
             }
+            //处理贷款账户信息
+            var criProject = creditInfo.FindAll(t => t.ProjectID.Equals(project.ID));
+            result.Project.CreditReceiverInfo = new List<CreditReceiverInfo>();
+            if (criProject.Count == 0)
+            {
+                result.Project.CreditReceiverInfo.Add(new CreditReceiverInfo
+                {
+                    ProjectID = project.ID,
+                    CreditReceiverAccount = project.CreditReceiverAccount,
+                    CreditReceiverBank = project.CreditReceiverBank,
+                    CreditReceiverName = project.CreditReceiverName,
+                });
+            }
+            else result.Project.CreditReceiverInfo = criProject;
 
-            //处理流程
+           //处理流程
             var workflow = workflows.Find(t => t.ProcessID == project.ID);
-            if (workflow == null)
-            {
-                return result;
-            }
-            if (workflow.Status == (int)WorkflowProcessStatus.Processed)
-            {
-                result.WorkflowComplete = true;
-            }
+            if (workflow == null) return result; 
+            if (workflow.Status == (int)WorkflowProcessStatus.Processed) result.WorkflowComplete = true; 
             result.WorkflowID = workflow.ID;
             var currentactivities = activities.FindAll(t => t.WorkflowID == workflow.ID);
             var currentapprovals = approvals.FindAll(t => t.WorkflowID == workflow.ID).ToDataTable().ToList<ApprovalInfo>().ToList();
@@ -278,15 +297,9 @@ namespace RiskMgr.BLL
             foreach (var a in currentapprovals)
             {
                 var activity = currentactivities.Find(t => t.ID == a.ActivityID);
-                if (activity != null)
-                {
-                    a.ActivityName = activity.Name;
-                }
+                if (activity != null) a.ActivityName = activity.Name; 
                 var approvaluser = users.Find(t => t.ID == a.Creator);
-                if (approvaluser != null)
-                {
-                    a.Processor = approvaluser.CnName;
-                }
+                if (approvaluser != null) a.Processor = approvaluser.CnName; 
             }
             result.Approvals = currentapprovals;
 
@@ -331,34 +344,21 @@ namespace RiskMgr.BLL
                 result.TaskID = task.ID;
                 //如果是自己申请的单，写死了。如果以后加了流程就要改。
                 if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid && workflow.Creator == task.UserID
-                    && processingActivity.ActivityDefinitionID == "1")
-                {
-                    result.Action = ActionStatus.Editable;
-                }
-                else if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid)
-                {
-                    result.Action = ActionStatus.Approvalable;
-                }
+                    && processingActivity.ActivityDefinitionID == "1") result.Action = ActionStatus.Editable; 
+                else if (task.Status != (int)TaskProcessStatus.Processed && task.UserID == userid) result.Action = ActionStatus.Approvalable; 
             }
             //如果审批前，申请人可以修改单
-            if (userid == project.Creator && !approvals.Exists(t => t.WorkflowID == workflow.ID))
-            {
-                result.Action = ActionStatus.Editable;
-            }
+            if (userid == project.Creator && !approvals.Exists(t => t.WorkflowID == workflow.ID)) result.Action = ActionStatus.Editable; 
             #region 为财务和保后跟踪特别处理
 
             //为财务和保后跟踪特别处理
             var roles = userroles.FindAll(t => t.UserID == userid);
-
-
+            
             Activity trackingActivity = currentactivities.Find(t => t.Name.Contains("保后跟踪"));
             if (trackingActivity != null && trackingActivity.Status == (int)ActivityProcessStatus.Processed)
             {
                 result.DisplayConfirm = true;
-                if (roles.Exists(t => t.RoleID == "5"))//处理财务
-                {
-                    result.ConfirmCanEdit = true;
-                }
+                if (roles.Exists(t => t.RoleID == "5")) result.ConfirmCanEdit = true; //处理财务
             }
             if (roles.Exists(t => t.RoleID == "5"))//处理财务
             {
@@ -374,6 +374,7 @@ namespace RiskMgr.BLL
             {
                 if (financeActivity != null && financeActivity.Status == (int)ActivityProcessStatus.Processed)
                 {
+                    result.ChargeCanEdit = true;
                     result.FollowupCanEdit = true;
                     result.Action = ActionStatus.Queryable;
                 }
@@ -413,6 +414,7 @@ namespace RiskMgr.BLL
             LinkDao linkdao = new LinkDao(mapper);
             Role_Module_ActionDao rmadao = new Role_Module_ActionDao(mapper);
             ReturnBackConfirmDao rbcdao = new ReturnBackConfirmDao(mapper);
+            CreditReceiverInfoDao cridao = new CreditReceiverInfoDao(mapper);
             #endregion
 
             #region 查询数据
@@ -426,6 +428,7 @@ namespace RiskMgr.BLL
             List<TrackingMortgage> tm = new List<TrackingMortgage>();
             List<string> projectidlist = new List<string>();
             List<string> workflowids = new List<string>();
+            List<CreditReceiverInfo> criList = new List<CreditReceiverInfo>();
             List<Link> links = new List<Link>();
             List<ReturnBackConfirm> returnBackMoneyInfo = new List<ReturnBackConfirm>();
             List<Workflow> workflows = null;
@@ -442,6 +445,7 @@ namespace RiskMgr.BLL
                 projectidlist = (from w in workflows
                                  select w.ProcessID).ToList();
                 list = dao.Query(new ProjectQueryForm { IDs = projectidlist });
+                
             }
             else if (projectids != null && projectids.Count > 0)
             {
@@ -472,6 +476,7 @@ namespace RiskMgr.BLL
 
             var users = uidao.Query(new UserInfoQueryForm { });
             var userroles = urdao.Query(new User_RoleQueryForm { });
+            criList = cridao.Query(new CreditReceiverInfoQueryForm { ProjectIDs = projectids });
             tco = tcodao.Query(new TrackingChangeOwnerQueryForm { ProjectIDs = projectidlist });
             tm = tmdao.Query(new TrackingMortgageQueryForm { ProjectIDs = projectidlist });
             returnBackMoneyInfo = rbcdao.Query(new ReturnBackConfirmQueryForm { ProjectIDs = projectidlist });
@@ -493,7 +498,7 @@ namespace RiskMgr.BLL
             foreach (Project project in list)
             {
                 var data = QueryDetail(project, customers, assets, cps, cas, aps, workflows, activities, approvals, tasks, users, userroles,
-                    tco, tm, returnBackMoneyInfo, currentuserid);
+                    tco, tm, returnBackMoneyInfo, criList, currentuserid);
                 if (hasDisplayDiscard != null) data.DisplayDiscard = true;
                 result.Add(data);
             }

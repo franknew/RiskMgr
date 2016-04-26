@@ -51,5 +51,7 @@ namespace RiskMgr.Model
         /// 回款信息
         /// </summary>
         public List<ReturnBackConfirm> ReturnBackMoneyInfo { get; set; }
+
+        public List<CreditReceiverInfo> CreditReceiverInfo { get; set; }
     }
 }

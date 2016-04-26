@@ -37,7 +37,7 @@ namespace RiskMgr.Api
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
             form.Project.Report = form.Report;
-            var result = bll.Save(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdParty, form.Guarantor, userid);
+            var result = bll.Save(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdParty, form.Guarantor, form.Project.CreditReceiverInfo, userid);
 
             //处理流程
             WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
@@ -107,7 +107,7 @@ namespace RiskMgr.Api
             var user = userbll.GetCurrentUser();
             string userid = user.User.ID;
             form.Project.Report = form.Report;
-            return bll.Save(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdParty, form.Guarantor, userid);
+            return bll.Save(form.Project, form.Assets, form.Buyers, form.Sellers, form.ThirdParty, form.Guarantor, form.Project.CreditReceiverInfo, userid);
         }
 
         /// <summary>

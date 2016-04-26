@@ -207,7 +207,7 @@ namespace RiskMgr.WinformTest
                     Remark = "yes",
                     Gender = 2,
                 }
-            }, null, null, "1");
+            }, null, null, null, "1");
 
             //WorkflowDefinitionModel wfdm = WorkflowDefinitionModel.LoadByName("额度申请");
             //var workflow = wfdm.StartNew(userid, "", new WorkflowAuthority());

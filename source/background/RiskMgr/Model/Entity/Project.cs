@@ -398,5 +398,10 @@ namespace RiskMgr.Model
         /// </summary>
         public DateTime? DelayTimeEnd { get; set; }
         
+        /// <summary>
+        /// 预计出款时间
+        /// </summary>
+        public DateTime? GuaranteePredictTime { get; set; }
+        
     }
 }

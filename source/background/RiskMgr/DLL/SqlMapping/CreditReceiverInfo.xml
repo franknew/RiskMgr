@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="post" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <alias>
+    <typeAlias alias="CreditReceiverInfo" type="RiskMgr.Model.CreditReceiverInfo" />
+    <typeAlias alias="CreditReceiverInfoQueryForm" type="RiskMgr.Form.CreditReceiverInfoQueryForm" />
+    <typeAlias alias="CreditReceiverInfoUpdateForm" type="RiskMgr.Form.CreditReceiverInfoUpdateForm" />
+  </alias>
+  <statements>
+  <select id="QueryCreditReceiverInfo" resultClass="CreditReceiverInfo" parameterClass="CreditReceiverInfoQueryForm">
+    <isGreaterThan compareProperty="PageSize" compareValue="0">
+    
+    </isGreaterThan>
+    SELECT * FROM `CreditReceiverInfo`
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreditReceiverBank">
+        `CreditReceiverBank`=#CreditReceiverBank#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="CreditReceiverAccount">
+        `CreditReceiverAccount`=#CreditReceiverAccount#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="CreditReceiverName">
+        `CreditReceiverName`=#CreditReceiverName#
+    </isNotNull>
+    
+    </dynamic>
+    <isNotNull property="PageSize">
+        <isGreaterThan property="PageSize" compareValue="0">
+         LIMIT #StartIndex#, #PageSize# 
+        </isGreaterThan>
+    </isNotNull>
+  </select>
+  <insert id="AddCreditReceiverInfo" parameterClass="CreditReceiverInfo">
+  INSERT INTO `CreditReceiverInfo`
+  (
+    <isNotNull prepend="," property="ID">
+    `ID`
+    </isNotNull>
+    <isNotNull prepend="," property="ProjectID">
+    `ProjectID`
+    </isNotNull>
+    <isNotNull prepend="," property="CreditReceiverBank">
+    `CreditReceiverBank`
+    </isNotNull>
+    <isNotNull prepend="," property="CreditReceiverAccount">
+    `CreditReceiverAccount`
+    </isNotNull>
+    <isNotNull prepend="," property="CreditReceiverName">
+    `CreditReceiverName`
+    </isNotNull>
+  )
+  VALUES
+  (
+    <isNotNull prepend="," property="ID">
+    #ID#
+    </isNotNull>
+        <isNotNull prepend="," property="ProjectID">
+    #ProjectID#
+    </isNotNull>
+        <isNotNull prepend="," property="CreditReceiverBank">
+    #CreditReceiverBank#
+    </isNotNull>
+        <isNotNull prepend="," property="CreditReceiverAccount">
+    #CreditReceiverAccount#
+    </isNotNull>
+        <isNotNull prepend="," property="CreditReceiverName">
+    #CreditReceiverName#
+    </isNotNull>
+    >
+  )
+  </insert>
+  <update id="UpdateCreditReceiverInfo" parameterClass="CreditReceiverInfoUpdateForm">
+  UPDATE `CreditReceiverInfo`
+    <dynamic prepend="SET">
+        <isNotNull prepend="," property="Entity.ProjectID">
+        `ProjectID`=#Entity.ProjectID#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreditReceiverBank">
+        `CreditReceiverBank`=#Entity.CreditReceiverBank#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreditReceiverAccount">
+        `CreditReceiverAccount`=#Entity.CreditReceiverAccount#
+        </isNotNull>
+        <isNotNull prepend="," property="Entity.CreditReceiverName">
+        `CreditReceiverName`=#Entity.CreditReceiverName#
+        </isNotNull>
+    </dynamic>
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="CreditReceiverInfoQueryForm.ID">
+        `ID`=#CreditReceiverInfoQueryForm.ID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="CreditReceiverInfoQueryForm.IDs">
+        <iterate property="CreditReceiverInfoQueryForm.IDs" open="(" close=")" conjunction="OR">
+         `ID`=#CreditReceiverInfoQueryForm.IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreditReceiverInfoQueryForm.ProjectID">
+        `ProjectID`=#CreditReceiverInfoQueryForm.ProjectID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="CreditReceiverInfoQueryForm.ProjectIDs">
+        <iterate property="CreditReceiverInfoQueryForm.ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#CreditReceiverInfoQueryForm.ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreditReceiverInfoQueryForm.CreditReceiverBank">
+        `CreditReceiverBank`=#CreditReceiverInfoQueryForm.CreditReceiverBank#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="CreditReceiverInfoQueryForm.CreditReceiverAccount">
+        `CreditReceiverAccount`=#CreditReceiverInfoQueryForm.CreditReceiverAccount#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="CreditReceiverInfoQueryForm.CreditReceiverName">
+        `CreditReceiverName`=#CreditReceiverInfoQueryForm.CreditReceiverName#
+    </isNotNull>
+    
+    </dynamic>
+  </update>
+  
+  <delete id="DeleteCreditReceiverInfo" parameterClass="CreditReceiverInfoQueryForm">
+    DELETE FROM `CreditReceiverInfo` WHERE 1=1
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+    
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreditReceiverBank">
+        `CreditReceiverBank`=#CreditReceiverBank#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="CreditReceiverAccount">
+        `CreditReceiverAccount`=#CreditReceiverAccount#
+    </isNotNull>
+    
+    <isNotNull prepend="AND" property="CreditReceiverName">
+        `CreditReceiverName`=#CreditReceiverName#
+    </isNotNull>
+    
+  </delete>
+   <select id="QueryCreditReceiverInfoRecordCount" resultClass="int" parameterClass="CreditReceiverInfoQueryForm">
+   SELECT COUNT(*) FROM `CreditReceiverInfo` 
+    <dynamic prepend="WHERE">
+    <isNotNull prepend="AND" property="ID">
+        `ID`=#ID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="IDs">
+        <iterate property="IDs" open="(" close=")" conjunction="OR">
+         `ID`=#IDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="ProjectID">
+        `ProjectID`=#ProjectID#
+    </isNotNull>
+        <isNotNull prepend="AND"  property="ProjectIDs">
+        <iterate property="ProjectIDs" open="(" close=")" conjunction="OR">
+         `ProjectID`=#ProjectIDs[]#
+        </iterate>
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreditReceiverBank">
+        `CreditReceiverBank`=#CreditReceiverBank#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreditReceiverAccount">
+        `CreditReceiverAccount`=#CreditReceiverAccount#
+    </isNotNull>
+    <isNotNull prepend="AND" property="CreditReceiverName">
+        `CreditReceiverName`=#CreditReceiverName#
+    </isNotNull>
+    </dynamic>
+   </select>
+  </statements>
+</sqlMap>
