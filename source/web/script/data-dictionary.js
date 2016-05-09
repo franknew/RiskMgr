@@ -233,6 +233,9 @@ define(function(require, exports, module){
 		}],
 
 		"赎楼方式":[{
+			value:"2",
+			name:"不需要"
+		},{
 			value:"1",
 			name:"现金",
 			selected:true
