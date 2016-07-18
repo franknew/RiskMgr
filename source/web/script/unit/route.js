@@ -52,7 +52,7 @@ define(function(require, exports, module) {
 				head,
 				headHtml;
 
-			var newBody = $('<div></div>');	//用来事件委托的容器
+			var newBody = $('<div style="clear: both;overflow: hidden;"></div>');	//用来事件委托的容器
 
 			if (typeof con == 'string') {	//纯字符串，则单做content
 				content = con;

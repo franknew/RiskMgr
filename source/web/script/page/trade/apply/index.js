@@ -1033,20 +1033,32 @@ define.pack("./setup.project",["risk/unit/serialize","risk/components/former/ind
 					val = elem.val(),
 					isRed = !!(val==1);
 
-				var showed = ['HouseRedState','AssetRansomCustomerManager','AssetRansomContactPhone'];
+				//红本状态，需要显示的部分
+				var showed = ['HouseRedState','AssetRansomCustomerManager','AssetRansomContactPhone','GuaranteeMonth'];
 
 				ransomBox.find('[name]').each(function(i,ele) {
 					var $ele = $(ele),
 						name = $ele.attr('name'),
-						parentBox = $ele.parents('div.form-group:first'),
+						parentBox = $ele.parent(),
 						inRedList = !!(showed.indexOf(name)!=-1);
+
+					while(!/col\-sm\-[0-9]/.test(parentBox.attr('class'))){
+						parentBox = parentBox.parent();
+					}
+
+					var labelBox = parentBox.prev();
+					if (labelBox.find('> label').size()<=0) {
+						labelBox = null;
+					}
 
 					if (isRed) {
 						if (!inRedList) {
 							parentBox.hide();
+							labelBox && labelBox.hide();
 						}
 					}else {
 						parentBox.show();
+						labelBox && labelBox.show();
 					}
 				});
 			});
@@ -2680,7 +2692,7 @@ define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'choose': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var Configs = require('risk/page/trade/config'),
 		List = Configs.type.data,
@@ -2706,7 +2718,7 @@ return __p.join("");
 
 'SetupApproval': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var RString = require('risk/unit/string');
 	var DataView = data.data || {},
@@ -2743,7 +2755,7 @@ return __p.join("");
 
 'SetupCharge': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var DataView = data.data || {},
 		ChargeData = DataView.Project,	//财务信息
@@ -2762,7 +2774,7 @@ return __p.join("");
 
 'SetupCustomer': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 __p.push('	');
 
 		var FormData = data.data || {},
@@ -2870,7 +2882,7 @@ return __p.join("");
 
 'CustomerItem': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 __p.push('	<div class="list-group-item">');
 _p(data.tpl(data.data,data.canEdit));
 __p.push('		');
@@ -2886,7 +2898,7 @@ return __p.join("");
 
 'SetupFinanceConfirm': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var Former = require('risk/components/former/index'),
 		TplFinance = require('./tpl.finance');
@@ -2905,7 +2917,7 @@ return __p.join("");
 
 'SetupFollowup': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var DataView = data.data || {},
 		FollowupCanEdit = DataView.FollowupCanEdit || (DataView.DisplayTracking && DataView.Action==2),
@@ -2944,7 +2956,7 @@ return __p.join("");
 
 'SetupGuarantor': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var FormData = data.data || {};
 __p.push('<div class="step-pane" id="Guarantor">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>担保人 ');
@@ -2962,7 +2974,7 @@ return __p.join("");
 
 'GuarantorItemsBox': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var FormData = data.data || {},
 		Guarantors = FormData.Guarantor,
@@ -2989,7 +3001,7 @@ return __p.join("");
 
 'GuarantorItem': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var Former = require('risk/components/former/index'),
 		TplCustomer = require('risk/page/customer/tpl.view');
@@ -3030,7 +3042,7 @@ return __p.join("");
 
 'GuarantorPropertyItem': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var Former = require('risk/components/former/index'),
 		TplProperty = require('risk/page/Property/tpl.view');
@@ -3057,7 +3069,7 @@ return __p.join("");
 
 'SetupProject': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var Former = require('risk/components/former/index'),
 		FormData = data.data||{},
@@ -3142,7 +3154,7 @@ return __p.join("");
 
 'SetupProperty': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var FormData = data.data || {};
 __p.push('<div class="step-pane" id="Assets">\n	<div class="block-transparent">\n		<div class="header">\n			<h3>房产 ');
@@ -3172,7 +3184,7 @@ return __p.join("");
 
 'PropertyItem': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	//这个模板在setup.property.js里面也有用到，不好直接传FormData，改的时候注意
 	var Former = require('risk/components/former/index');
@@ -3247,7 +3259,7 @@ return __p.join("");
 
 'PropertyJointItem': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 __p.push('	');
 
 		var FormData = data.data || {};
@@ -3300,7 +3312,7 @@ return __p.join("");
 
 'SetupReport': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var Former = require('risk/components/former/index');
 	var FormData = data.data||{};
@@ -3326,7 +3338,7 @@ return __p.join("");
 
 'Setup': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	//测试数据
 	if (location.href.indexOf('testdata')!=-1) {

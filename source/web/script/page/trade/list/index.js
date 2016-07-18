@@ -157,7 +157,8 @@ define.pack("./list",["jquery","risk/unit/ajax","risk/unit/route","risk/unit/str
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
 				var act = 'view';
-				route.load('page=trade/apply&action='+act+'&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
+				//由于查询后，进入单据详情，再返回，查询条件会重置。这里新开窗口临时规避这个问题
+				window.open('/#page=trade/apply&action='+act+'&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();
@@ -195,7 +196,7 @@ define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'ListContainer': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 __p.push('<div class="block-flat">\n	<form id="J_SearchForm" class="form-horizontal">\n			<div class="form-group">\n				<label class="col-sm-2 control-label">单据状态</label>\n				<div class="col-sm-2">\n					<select class="form-control" name="Status">\n						<option value="">全部</option>\n						<option value="2" selected="selected">流程中</option>\n						<option value="6">保后跟踪中</option>\n						<option value="4">已终审（经理通过）</option>\n						<option value="5">审批不通过</option>\n						<option value="3">已确认回款</option>\n					</select>\n				</div>\n				<label class="col-sm-2 control-label">编号</label>\n				<div class="col-sm-2">\n					<input type="text" name="BusinessCode" class="form-control" placeholder="">\n				</div>\n			</div>\n			<div class="form-group">\n				<label class="col-sm-2 control-label">业务员</label>\n				<div class="col-sm-2">\n					<input type="text" name="Operator" class="form-control" placeholder="">\n				</div>\n				<label class="col-sm-2 control-label">客户姓名</label>\n				<div class="col-sm-2">\n					<input type="text" name="Name" class="form-control" placeholder="">\n				</div>\n				<label class="col-sm-2 control-label">房产证号</label>\n				<div class="col-sm-2">\n					<input type="text" name="IdentityCode" class="form-control" placeholder="">\n				</div>\n			</div>\n			<div class="form-group">\n				<div class="col-md-2 col-md-offset-2"><button type="submit" class="btn btn-default btn-flat" data-hook="search">查找</button></div>\n			</div>\n	</form>\n	<hr/>\n	<div id="ListContainer">\n		<div class="loading">Loading...</div>\n	</div>\n</div>');
 
 return __p.join("");
@@ -203,7 +204,7 @@ return __p.join("");
 
 'List': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 __p.push('	<div class="table-container">\n	<table class="table no-border" style="min-width:650px;">\n		<thead class="no-border">\n			<tr>\n				<th width="70">编号</th>\n				<th width="70">业务员</th>\n				<th width="110">类型</th>\n				<th width="120">客户名称</th>\n				<th>房产地址</th>\n				<th width="140">申请时间</th>\n				<th width="70">状态</th>\n			</tr>\n		</thead>\n		<tbody class="no-border-x no-border-y" id="J_Lister">');
 _p(this.ListItem(data));
 __p.push('		</tbody>\n	</table>\n	</div>\n\n	<div class="j-pager"></div>\n');
@@ -213,7 +214,7 @@ return __p.join("");
 
 'ListItem': function(data){
 
-var __p=[],_p=function(s){__p.push(s)};
+var __p=[],_p=function(s){__p.push(s)},out=_p;
 
 	var Configs = require('risk/page/trade/config'),
 		Types = Configs.type;

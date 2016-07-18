@@ -88,7 +88,8 @@ define(function(require, exports, module){
 				var elem = $(ev.currentTarget),
 					id = elem.data('id');
 				var act = 'view';
-				route.load('page=trade/apply&action='+act+'&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
+				//由于查询后，进入单据详情，再返回，查询条件会重置。这里新开窗口临时规避这个问题
+				window.open('/#page=trade/apply&action='+act+'&ID='+id+'&WorkflowID='+elem.data('workflowid')+'&ActivityID='+elem.data('activityid')+'&TaskID='+elem.data('taskid'));
 			});
 			container.parent().on('click', '[data-hook="search"]', function(ev) {//搜索
 				ev.preventDefault();

@@ -28,20 +28,32 @@ define(function(require, exports, module){
 					val = elem.val(),
 					isRed = !!(val==1);
 
-				var showed = ['HouseRedState','AssetRansomCustomerManager','AssetRansomContactPhone'];
+				//红本状态，需要显示的部分
+				var showed = ['HouseRedState','AssetRansomCustomerManager','AssetRansomContactPhone','GuaranteeMonth'];
 
 				ransomBox.find('[name]').each(function(i,ele) {
 					var $ele = $(ele),
 						name = $ele.attr('name'),
-						parentBox = $ele.parents('div.form-group:first'),
+						parentBox = $ele.parent(),
 						inRedList = !!(showed.indexOf(name)!=-1);
+
+					while(!/col\-sm\-[0-9]/.test(parentBox.attr('class'))){
+						parentBox = parentBox.parent();
+					}
+
+					var labelBox = parentBox.prev();
+					if (labelBox.find('> label').size()<=0) {
+						labelBox = null;
+					}
 
 					if (isRed) {
 						if (!inRedList) {
 							parentBox.hide();
+							labelBox && labelBox.hide();
 						}
 					}else {
 						parentBox.show();
+						labelBox && labelBox.show();
 					}
 				});
 			});
