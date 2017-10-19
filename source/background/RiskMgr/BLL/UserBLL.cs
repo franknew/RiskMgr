@@ -25,23 +25,13 @@ namespace RiskMgr.BLL
             {
                 token = ServiceSession.Current.Context.Parameters["token"].ToString();
             }
-            CacheItem item = cache.GetItem(token);
-            if (item == null)
-            {
-                return null;
-            }
-            UserEntireInfo u = item.Value as UserEntireInfo;
+            var u = cache.GetItem<UserEntireInfo>(token);
             return u;
         }
 
         public UserEntireInfo GetUserEntireInfoFromCache(string token)
         {
-            var item = cache.GetItem(token);
-            UserEntireInfo u = null;
-            if (item != null)
-            {
-                u = item.Value as UserEntireInfo;
-            }
+            UserEntireInfo u = cache.GetItem<UserEntireInfo>(token); 
             return u;
         }
 

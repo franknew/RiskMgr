@@ -55,7 +55,6 @@ namespace RiskMgr.BLL
             UserEntireInfo u = new UserEntireInfo { User = user };
             if (userinfo != null) u.UserInfo = userinfo;
             u.Role = roleDao.QueryRoleByUserID(u.User.ID);
-            CacheItem item = new CacheItem(token, u);
             LogonHistory history = new LogonHistory
             {
                 LogonTime = DateTime.Now,
@@ -66,7 +65,7 @@ namespace RiskMgr.BLL
             historyDao.Add(history);
             result.token = token;
             result.UserInfo = userinfo;
-            cache.AddItem(item, 30 * 60);
+            cache.AddItem(token, u, 30 * 60);
             MenuBLL menubll = new MenuBLL();
             result.Menu = menubll.GetCurrentUserMenu(result.token);
             return result;
@@ -75,8 +74,7 @@ namespace RiskMgr.BLL
         public bool Logout()
         {
             string token = ServiceSession.Current.Context.Parameters["token"].ToString();
-            var item = cache.GetItem(token);
-            if (item != null) cache.DelItem(item);
+            cache.DelItem(token);
             return true;
         }
     }
